@@ -10,7 +10,7 @@ gulp.task('browserify', ['ts'], function() {
     })
     .add('./js/index.js')
     .bundle()
-    .pipe(source('bundle.js'))
+    .pipe(source('dist/bundle.js'))
     .pipe(gulp.dest('./'));
 });
 
@@ -21,7 +21,7 @@ gulp.task('mocha', ['ts'], function() {
 
 gulp.task('ts', function() {
   var project = ts.createProject(
-    './ts/tsconfig.json',
+    'ts/tsconfig.json',
     { typescript: require('typescript') });
 
   return project.src()
