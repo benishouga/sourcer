@@ -1,0 +1,55 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "noLib": false,
+        "outDir": "../js/"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "../typings/**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./libs/chainchomp.d.ts",
+        "./main/Actor.ts",
+        "./main/Command.ts",
+        "./main/Configs.ts",
+        "./main/Consts.ts",
+        "./main/Controller.ts",
+        "./main/Field.ts",
+        "./main/Laser.ts",
+        "./main/Missile.ts",
+        "./main/MissileCommand.ts",
+        "./main/MissileController.ts",
+        "./main/Shot.ts",
+        "./main/ShotParam.ts",
+        "./main/Sourcer.ts",
+        "./main/SourcerCommand.ts",
+        "./main/SourcerController.ts",
+        "./main/Team.ts",
+        "./main/Utils.ts",
+        "./main/V.ts",
+        "./test/test-Utils.ts",
+        "../typings/chai/chai.d.ts",
+        "../typings/mocha/mocha.d.ts"
+    ],
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2,
+        "newLineCharacter": "\n",
+        "convertTabsToSpaces": true,
+        "insertSpaceAfterCommaDelimiter": true,
+        "insertSpaceAfterSemicolonInForStatements": true,
+        "insertSpaceBeforeAndAfterBinaryOperators": true,
+        "insertSpaceAfterKeywordsInControlFlowStatements": true,
+        "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+        "placeOpenBraceOnNewLineForFunctions": false,
+        "placeOpenBraceOnNewLineForControlBlocks": false
+    }
+}

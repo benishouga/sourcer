@@ -1,0 +1,15 @@
+{
+  "name": "sourcer",
+  "author": "moriki",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "browserify": "^9.0.8",
+    "vinyl-source-stream": "^1.1.0",
+    "gulp-mocha": "^2.0.1",
+    "chai": "^2.3.0",
+    "gulp-typescript": "^2.7.4",
+    "mocha": "^2.2.5",
+    "typescript": "^1.5.0-beta"
+  },
+  "dependencies": {}
+}

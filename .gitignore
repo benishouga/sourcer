@@ -1,0 +1,9 @@
+node_modules
+*.log
+.DS_Store
+
+bundle.js
+typings
+
+js/main/*
+js/test/*
