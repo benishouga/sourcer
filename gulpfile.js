@@ -4,6 +4,12 @@ var source = require('vinyl-source-stream');
 var mocha = require('gulp-mocha');
 var ts = require('gulp-typescript');
 
+// for power-assert
+require('espower-loader')({
+    cwd: process.cwd(),
+    pattern: 'js/test/**/*.js'
+});
+
 gulp.task('browserify', ['ts'], function() {
   return browserify({
       debug: true,
@@ -15,7 +21,7 @@ gulp.task('browserify', ['ts'], function() {
 });
 
 gulp.task('mocha', ['ts'], function() {
-  return gulp.src(['js/test/*.js'], { read: false })
+  return gulp.src(['js/test/**/*.js'], { read: false })
     .pipe(mocha({ reporter: 'tap'}));
 });
 

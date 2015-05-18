@@ -1,7 +1,5 @@
 import Utils = require('../main/Utils');
-import chai = require('chai');
-
-var assert = chai.assert;
+import assert = require('power-assert');
 
 describe('Utils', function() {
   describe('#side()', function() {
