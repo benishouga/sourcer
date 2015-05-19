@@ -1,7 +1,7 @@
 import V = require('./V');
 import Consts = require('./Consts');
 
-var EPS = 10e-12;
+var EPSILON = 10e-12;
 
 class Utils {
   public static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
@@ -36,13 +36,13 @@ class Utils {
   public static calcDistance(f: V, t: V, p: V): number {
     var toFrom = t.subtract(f);
     var pFrom = p.subtract(f);
-    if (toFrom.dot(pFrom) < EPS) {
+    if (toFrom.dot(pFrom) < EPSILON) {
       return pFrom.length();
     }
 
     var fromTo = f.subtract(t);
     var pTo = p.subtract(t);
-    if (fromTo.dot(pTo) < EPS) {
+    if (fromTo.dot(pTo) < EPSILON) {
       return pTo.length();
     }
 
