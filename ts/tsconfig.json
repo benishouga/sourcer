@@ -35,8 +35,8 @@
         "./main/Utils.ts",
         "./main/V.ts",
         "./test/test-Utils.ts",
+        "./test/test-V.ts",
         "../typings/assert/assert.d.ts",
-        "../typings/chai/chai.d.ts",
         "../typings/mocha/mocha.d.ts",
         "../typings/tsd.d.ts"
     ],

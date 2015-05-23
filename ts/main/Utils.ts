@@ -29,6 +29,7 @@ class Utils {
     var d = p2.x + p3.x;
 
     return (p1: V) => {
+      console.log(p1, a, d, b);
       return 0 <= p1.x * a - d * p1.y + b;
     };
   }

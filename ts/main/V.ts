@@ -89,6 +89,12 @@ class V {
   public cross(point: V): number {
     return this.x * point.y - this.y * point.x
   }
+  public rotate(degree: number) {
+    var radian = degree * (Math.PI / 180);
+    var cos = Math.cos(radian);
+    var sin = Math.sin(radian);
+    return new V(cos * this.x - sin * this.y, cos * this.y + sin * this.x);
+  }
 }
 
 export = V;
