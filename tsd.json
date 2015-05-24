@@ -10,6 +10,9 @@
     },
     "assert/assert.d.ts": {
       "commit": "e42bef3a8f9024a50468b12202df69519315b023"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "aadd63ecae3feb76ea2d4be80511e266b5c2c4a7"
     }
   }
 }

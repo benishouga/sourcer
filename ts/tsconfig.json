@@ -7,7 +7,7 @@
         "noImplicitAny": true,
         "removeComments": true,
         "noLib": false,
-        "outDir": "../js/"
+        "outDir": "../dest/"
     },
     "filesGlob": [
         "./**/*.ts",
@@ -36,7 +36,9 @@
         "./main/V.ts",
         "./test/test-Utils.ts",
         "./test/test-V.ts",
+        "./test2d.ts",
         "../typings/assert/assert.d.ts",
+        "../typings/jquery/jquery.d.ts",
         "../typings/mocha/mocha.d.ts",
         "../typings/tsd.d.ts"
     ],

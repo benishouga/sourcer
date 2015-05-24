@@ -15,22 +15,18 @@ class Utils {
     var checkRight = Utils.side(c, direction + 180 - angle / 2)
 
     if (angle < 180) {
-      return (t) => checkDistance(t) && checkLeft(t) && checkRight(t);
+      return (t) => checkLeft(t) && checkRight(t) && checkDistance(t);
     } else {
-      return (t) => checkDistance(t) && (checkLeft(t) || checkRight(t));
+      return (t) => (checkLeft(t) || checkRight(t)) && checkDistance(t);
     }
   }
 
-  public static side(p2: V, degree: number): (t: V) => boolean {
+  public static side(base: V, degree: number): (t: V) => boolean {
     var radian = Utils.toRadian(degree);
-    var p3 = new V(p2.x + Math.cos(radian), p2.y + Math.sin(radian));
-    var a = p2.y - p3.y;
-    var b = p2.x * p3.y - p3.x * p2.y;
-    var d = p2.x + p3.x;
-
-    return (p1: V) => {
-      console.log(p1, a, d, b);
-      return 0 <= p1.x * a - d * p1.y + b;
+    var direction = new V(Math.cos(radian), Math.sin(radian));
+    var previously = base.x * direction.y - base.y * direction.x - EPSILON;
+    return (target: V) => {
+      return 0 <= target.x * direction.y - target.y * direction.x - previously;
     };
   }
 

@@ -7,4 +7,5 @@ typings
 js/main/*
 js/test/*
 
-dist/*
+dest/*
+bundle/*

@@ -13,5 +13,11 @@
     "espower-loader": "^0.11.0",
     "power-assert": "^0.11.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jQuery": "^1.7.4",
+    "jsdom": "^5.4.3",
+    "xmlhttprequest": "^1.7.0",
+    "location": "0.0.1",
+    "navigator": "^1.0.1"
+  }
 }
