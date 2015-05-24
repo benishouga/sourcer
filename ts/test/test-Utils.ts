@@ -5,7 +5,7 @@ import assert = require('power-assert');
 describe('Utils', () => {
 
   describe('#side()', () => {
-    var RENGE = 0;
+    var RENGE = 5;
     var generateTestTable = () => {
       var result: V[] = [];
       for (var i = -RENGE; i <= RENGE; i++) {
@@ -17,7 +17,7 @@ describe('Utils', () => {
     };
 
     var testWithTable = (table: V[], test: (degree: number, sp: (x: number, y: number) => V) => void) => {
-      for (var degree = 0; degree <= 30; degree += 10) {
+      for (var degree = -360; degree <= 360; degree += 15) {
         (() => {
           var radian = Utils.toRadian(degree);
           for (var i = 0; i < table.length; i++) {
@@ -41,19 +41,15 @@ describe('Utils', () => {
         assert.ok(!side(sp(1, 1)));
         assert.ok(!side(sp(0, 1)));
         assert.ok(!side(sp(-1, 1)));
-        // assert.ok(side(sp(1, 0)));
-        // assert.ok(side(sp(0, 0)));
-        // assert.ok(side(sp(-1, 0)));
+        assert.ok(side(sp(1, 0)));
+        assert.ok(side(sp(0, 0)));
+        assert.ok(side(sp(-1, 0)));
         assert.ok(side(sp(1, -1)));
         assert.ok(side(sp(0, -1)));
         assert.ok(side(sp(-1, -1)));
       });
     });
 
-    it.only("aa", () =>{
-      var side = Utils.side(new V(0, 0), 30);
-      assert.ok(!side(new V(-1, 1).rotate(30)));
-    });
   });
 
 });
