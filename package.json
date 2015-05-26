@@ -11,13 +11,19 @@
     "mocha": "^2.2.5",
     "typescript": "^1.5.0-beta",
     "espower-loader": "^0.11.0",
-    "power-assert": "^0.11.0"
+    "power-assert": "^0.11.0",
+    "browserify-shim": "^3.8.7"
   },
-  "dependencies": {
-    "jQuery": "^1.7.4",
-    "jsdom": "^5.4.3",
-    "xmlhttprequest": "^1.7.0",
-    "location": "0.0.1",
-    "navigator": "^1.0.1"
+  "dependencies": {},
+  "browser": {
+    "jquery": "./libs/jquery.js"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:$"
   }
 }
