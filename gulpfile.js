@@ -1,20 +1,24 @@
+'use strict';
+
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var mocha = require('gulp-mocha');
 var ts = require('gulp-typescript');
+var react = require('gulp-react');
+var del = require('del');
 
 // for power-assert
 require('espower-loader')({
   cwd: process.cwd(),
-  pattern: 'dest/test/**/*.js'
+  pattern: 'intermediate/test/**/*.js'
 });
 
-gulp.task('browserify', ['ts', 'js'], function() {
+gulp.task('browserify', ['ts', 'js', 'react'], function() {
   return browserify({
       debug: true,
     })
-    .add('./dest/index.js')
+    .add('./intermediate/index.js')
     .bundle()
     .pipe(source('bundle/bundle.js'))
     .pipe(gulp.dest('./'));
@@ -24,15 +28,14 @@ gulp.task('test2d', ['ts', 'js'], function() {
   return browserify({
       debug: true,
     })
-    .add('./dest/test2d.js')
+    .add('./intermediate/test2d.js')
     .bundle()
     .pipe(source('bundle/test2d.js'))
     .pipe(gulp.dest('./'));
 });
 
-
 gulp.task('mocha', ['ts', 'js'], function() {
-  return gulp.src(['dest/test/**/*.js'], {
+  return gulp.src(['intermediate/test/**/*.js'], {
       read: false
     })
     .pipe(mocha({
@@ -48,13 +51,21 @@ gulp.task('ts', function() {
 
   return project.src()
     .pipe(ts(project))
-    .js.pipe(gulp.dest('dest'));
+    .js.pipe(gulp.dest('intermediate'));
 });
 
 gulp.task('js', function() {
   return gulp.src(['src/**/*.js'], {
     base: 'src'
-  }).pipe(gulp.dest('dest'));
+  }).pipe(gulp.dest('intermediate'));
 });
+
+gulp.task('react', function() {
+  return gulp.src('src/**/*.jsx')
+    .pipe(react())
+    .pipe(gulp.dest('intermediate'));
+});
+
+gulp.task('clean', del.bind(null, ['intermediate', 'bundle']));
 
 gulp.task('default', ["browserify"]);

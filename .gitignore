@@ -4,8 +4,5 @@
 node_modules
 typings
 
-js/main/*
-js/test/*
-
-dest/*
+intermediate/*
 bundle/*
