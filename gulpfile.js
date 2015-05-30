@@ -42,7 +42,7 @@ gulp.task('mocha', ['ts', 'js'], function() {
 
 gulp.task('ts', function() {
   var project = ts.createProject(
-    'ts/tsconfig.json', {
+    'src/tsconfig.json', {
       typescript: require('typescript')
     });
 
@@ -52,8 +52,8 @@ gulp.task('ts', function() {
 });
 
 gulp.task('js', function() {
-  return gulp.src(['js/**'], {
-    base: 'js'
+  return gulp.src(['src/**/*.js'], {
+    base: 'src'
   }).pipe(gulp.dest('dest'));
 });
 
