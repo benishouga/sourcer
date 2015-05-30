@@ -1,4 +1,4 @@
-import V = require('../main/V');
+import V = require('../core/V');
 import assert = require('power-assert');
 
 describe('V', () => {

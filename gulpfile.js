@@ -20,7 +20,7 @@ gulp.task('browserify', ['ts', 'js', 'react'], function() {
     })
     .add('./intermediate/index.js')
     .bundle()
-    .pipe(source('bundle/bundle.js'))
+    .pipe(source('dist/bundle.js'))
     .pipe(gulp.dest('./'));
 });
 
@@ -30,7 +30,7 @@ gulp.task('test2d', ['ts', 'js'], function() {
     })
     .add('./intermediate/test2d.js')
     .bundle()
-    .pipe(source('bundle/test2d.js'))
+    .pipe(source('dist/test2d.js'))
     .pipe(gulp.dest('./'));
 });
 
@@ -66,6 +66,6 @@ gulp.task('react', function() {
     .pipe(gulp.dest('intermediate'));
 });
 
-gulp.task('clean', del.bind(null, ['intermediate', 'bundle']));
+gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
 
 gulp.task('default', ["browserify"]);

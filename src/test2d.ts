@@ -1,5 +1,5 @@
-import Utils = require('./main/Utils');
-import V = require('./main/V');
+import Utils = require('./core/Utils');
+import V = require('./core/V');
 import $ = require('jquery');
 
 class Test2d {
