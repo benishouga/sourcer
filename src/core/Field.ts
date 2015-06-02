@@ -13,6 +13,9 @@ class Field {
   public center: number;
 
   constructor() {
+    this.sourcers = [];
+    this.actors = [];
+    this.shots = [];
   }
 
   public addSourcer(sourcer: Sourcer) {
