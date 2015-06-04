@@ -1,5 +1,0 @@
-class Team {
-
-}
-
-export = Team;

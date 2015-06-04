@@ -2,7 +2,6 @@ import chainchomp = require('../libs/chainchomp');
 
 import Actor = require('./Actor');
 import Field = require('./Field');
-import Team = require('./Team');
 import SourcerCommand = require('./SourcerCommand');
 import SourcerController = require('./SourcerController');
 import ShotParam = require('./ShotParam');
@@ -16,7 +15,6 @@ import Missile = require('./Missile');
 
 class Sourcer extends Actor {
   public alive = true;
-  public team: Team;
   public temperature = 0;
   public shield = Configs.INITIAL_SHIELD;
   public missileAmmo = Configs.INITIAL_MISSILE_AMMO;

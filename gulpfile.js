@@ -24,6 +24,16 @@ gulp.task('browserify', ['ts', 'js', 'react'], function() {
     .pipe(gulp.dest('./'));
 });
 
+gulp.task('standalone', ['ts', 'js'], function() {
+  return browserify({
+      debug: true,
+    })
+    .add('./intermediate/standalone.js')
+    .bundle()
+    .pipe(source('dist/standalone.js'))
+    .pipe(gulp.dest('./'));
+});
+
 gulp.task('test2d', ['ts', 'js'], function() {
   return browserify({
       debug: true,

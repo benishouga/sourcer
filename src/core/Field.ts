@@ -60,7 +60,7 @@ class Field {
   public scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
     for (var i = 0; i < this.sourcers.length; i++) {
       var sourcer = this.sourcers[i];
-      if (sourcer.alive && sourcer.team !== owner.team && radar(sourcer.position)) {
+      if (sourcer.alive && sourcer !== owner && radar(sourcer.position)) {
         return true;
       }
     }
@@ -120,6 +120,16 @@ class Field {
       }
     });
     return sumX / count;
+  }
+
+  public isFinish(): boolean {
+    for (var i = 0; i < this.sourcers.length; i++) {
+      var sourcer = this.sourcers[i];
+      if (!sourcer.alive) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
