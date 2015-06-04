@@ -228,5 +228,5 @@ chainchomp.callback = function(callback, args, options){
 };
 
 // **** support node.js start ****
-exports.chainchomp = chainchomp;
+module.exports = chainchomp;
 // **** support node.js end ****
