@@ -9,7 +9,6 @@ class Actor {
   public size = Configs.COLLISION_SIZE;
   public position: V;
   public speed: V;
-  public fuel = Configs.INITIAL_FUEL;
   public direction: number;
   public wait = 0;
 
@@ -40,6 +39,14 @@ class Actor {
   }
 
   public onHit(shot: Shot) {
+  }
+
+  public dump(): any {
+    return {
+      position: this.position,
+      speed: this.speed,
+      direction: this.direction
+    }
   }
 }
 export = Actor;

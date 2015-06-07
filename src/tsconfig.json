@@ -15,6 +15,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./arena.ts",
         "./core/Actor.ts",
         "./core/Command.ts",
         "./core/Configs.ts",

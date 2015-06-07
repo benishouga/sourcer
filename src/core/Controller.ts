@@ -21,7 +21,6 @@ class Controller {
         actor.wait += frame;
       }
     };
-    this.fuel = () => actor.fuel;
   }
 }
 

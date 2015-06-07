@@ -26,6 +26,12 @@ class Shot extends Actor {
 
   public onAction() {
   }
+
+  public dump(): any {
+    var dump = super.dump();
+    dump.type = typeof this.constructor;
+    return dump;
+  }
 }
 
 export = Shot;

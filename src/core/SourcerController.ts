@@ -28,6 +28,7 @@ class SourcerController extends Controller {
     this.shield = () => sourcer.shield;
     this.temperature = () => sourcer.temperature;
     this.missileAmmo = () => sourcer.missileAmmo;
+    this.fuel = () => sourcer.fuel;
 
     var field = sourcer.field;
     var command = sourcer.command;

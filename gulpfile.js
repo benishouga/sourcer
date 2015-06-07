@@ -24,7 +24,17 @@ gulp.task('browserify', ['ts', 'js', 'react'], function() {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('standalone', ['ts', 'js'], function() {
+gulp.task('standalone-worker', ['ts', 'js'], function() {
+  return browserify({
+      debug: true,
+    })
+    .add('./intermediate/arena.js')
+    .bundle()
+    .pipe(source('dist/arena.js'))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('standalone', ['ts', 'js', 'standalone-worker'], function() {
   return browserify({
       debug: true,
     })

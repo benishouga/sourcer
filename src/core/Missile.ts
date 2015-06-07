@@ -44,10 +44,9 @@ class Missile extends Shot {
     this.command.reset();
   }
 
-  public onHit(attack: Actor) {
-    // TODO: removeShot ?
-    this.field.removeActor(this);
-    this.field.removeActor(attack);
+  public onHit(attack: Shot) {
+    this.field.removeShot(this);
+    this.field.removeShot(attack);
   }
 
   public opposite(direction: number): number {

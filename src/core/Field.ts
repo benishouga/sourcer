@@ -6,38 +6,30 @@ import Utils = require('./Utils');
 
 class Field {
   public sourcers: Sourcer[];
-  public actors: Actor[];
   public shots: Shot[];
   public actorCounter: number;
   public frame: number;
   public center: number;
 
   constructor() {
+    this.frame = 0;
     this.sourcers = [];
-    this.actors = [];
     this.shots = [];
   }
 
   public addSourcer(sourcer: Sourcer) {
     this.sourcers.push(sourcer);
-    this.addActor(sourcer);
-  }
-
-  public addActor(actor: Actor) {
-    actor.id = "actor" + this.actors.length;
-    this.actors.push(actor);
   }
 
   public addShot(shot: Shot) {
     this.shots.push(shot);
-    this.actors.push(shot);
   }
 
-  public removeActor(target: Actor) {
-    for (var i = 0; i < this.actors.length; i++) {
-      var actor = this.actors[i];
+  public removeShot(target: Shot) {
+    for (var i = 0; i < this.shots.length; i++) {
+      var actor = this.shots[i];
       if (actor === target) {
-        this.actors.splice(i, 1);
+        this.shots.splice(i, 1);
         return;
       }
     }
@@ -46,15 +38,26 @@ class Field {
   public tick() {
     this.center = this.computeCenter();
 
-    this.actors.forEach((actor: Actor) => {
+    this.sourcers.forEach((actor: Actor) => {
       actor.think();
     });
-    this.actors.forEach((actor: Actor) => {
+    this.shots.forEach((actor: Actor) => {
+      actor.think();
+    });
+    this.sourcers.forEach((actor: Actor) => {
       actor.action();
     });
-    this.actors.forEach((actor: Actor) => {
+    this.shots.forEach((actor: Actor) => {
+      actor.action();
+    });
+    this.sourcers.forEach((actor: Actor) => {
       actor.move();
     });
+    this.shots.forEach((actor: Actor) => {
+      actor.move();
+    });
+
+    this.frame++;
   }
 
   public scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
@@ -130,6 +133,24 @@ class Field {
       }
     }
     return false;
+  }
+
+  public dump() : any {
+    var sourcersDump : any[] = [];
+    var shotsDump : any[] = [];
+
+    this.sourcers.forEach((actor: Actor) => {
+      sourcersDump.push(actor.dump());
+    });
+    this.shots.forEach((actor: Actor) => {
+      shotsDump.push(actor.dump());
+    });
+
+    return {
+      frame: this.frame,
+      sourcers: sourcersDump,
+      shots: shotsDump
+    };
   }
 }
 

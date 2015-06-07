@@ -18,6 +18,8 @@ class Sourcer extends Actor {
   public temperature = 0;
   public shield = Configs.INITIAL_SHIELD;
   public missileAmmo = Configs.INITIAL_MISSILE_AMMO;
+  public fuel = Configs.INITIAL_FUEL;
+
   public command: SourcerCommand;
   public controller: SourcerController;
   public ai: Function;
@@ -92,13 +94,13 @@ class Sourcer extends Actor {
   }
 
   public fire(param: ShotParam) {
-    if(param.shotType === "Laser") {
+    if (param.shotType === "Laser") {
       var direction = this.opposite(param.direction);
       var shot = new Laser(this.field, this, direction, param.power);
       shot.reaction(this);
     }
 
-    if(param.shotType === 'Missile') {
+    if (param.shotType === 'Missile') {
       this.missileAmmo--;
       var missile = new Missile(this.field, this, param.ai);
       missile.reaction(this);
@@ -106,7 +108,7 @@ class Sourcer extends Actor {
   }
 
   public opposite(direction: number): number {
-    if(this.direction === Consts.DIRECTION_LEFT) {
+    if (this.direction === Consts.DIRECTION_LEFT) {
       return Utils.toOpposite(direction);
     } else {
       return direction;
@@ -116,7 +118,16 @@ class Sourcer extends Actor {
   public onHit(shot: Shot) {
     this.speed = this.speed.add(shot.speed.multiply(Configs.ON_HIT_SPEED_GIVEN_RATE));
     this.shield -= shot.damage();
-    this.field.removeActor(shot);
+    this.field.removeShot(shot);
+  }
+
+  public dump(): any {
+    var dump = super.dump();
+    dump.shield = this.shield;
+    dump.temperature = this.temperature;
+    dump.missileAmmo = this.missileAmmo;
+    dump.fuel = this.fuel;
+    return dump;
   }
 }
 

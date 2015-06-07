@@ -18,6 +18,8 @@ class MissileController extends Controller {
     var field = missile.field;
     var command = missile.command;
 
+    this.fuel = () => missile.fuel;
+    
     this.scanEnemy = (direction, angle, renge) => {
       command.validate();
       missile.wait += 1.5;
