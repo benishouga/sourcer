@@ -14,7 +14,7 @@ onmessage = function(e) {
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);
 
-  for (var i = 0; i < 100 && !field.isFinish(); i++) {
+  for (var i = 0; i < 1000 && !field.isFinish(); i++) {
     field.tick();
     postMessage(field.dump());
   }

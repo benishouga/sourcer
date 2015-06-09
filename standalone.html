@@ -6,7 +6,9 @@
   <script src="./libs/jquery.js"></script>
 </head>
 
-<body>
+<body style="background-color: #eee;">
+  <div id="screen"></div>
+
   <textarea id="player" rows="22">// **** ミサイル用のAIを定義 ****
 var missileAi = function(controller) {
 
@@ -31,11 +33,9 @@ var missileAi = function(controller) {
 
 // **** 本体用のAIを定義 ****
 var ai = function(controller) {
-
     // 前方からの攻撃を避ける
     // （相手の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
     if (controller.scanAttack(0, 60, 60)) {
-
         // 後退しながら、高度を下げる
         controller.back();
         controller.descent();
@@ -45,7 +45,6 @@ var ai = function(controller) {
 
     // 自機の高度が高さ 100 以下になっていた場合
     if (controller.altitude() < 100) {
-
         // 高度を上げる
         controller.ascent();
 
@@ -54,7 +53,6 @@ var ai = function(controller) {
 
     // 敵が後方に居た場合 (前方180度内に居なかった場合)
     if (!controller.scanEnemy(0, 180, 10000)) {
-
         // 現在向いている方向と逆方向を向く
         controller.turn();
 
@@ -64,7 +62,6 @@ var ai = function(controller) {
     // 敵が前方近くに居た場合、攻撃する
     // 向き 0度、30度, 距離 200の範囲内に存在していた場合、攻撃する
     if (controller.scanEnemy(0, 30, 200)) {
-
         // 機体の温度が高い場合は、攻撃しない
         if (80 < controller.temperature()) {
             return;
@@ -88,7 +85,6 @@ var ai = function(controller) {
 
     // 敵が前方すぐ近くに居た場合、後退する
     if (controller.scanEnemy(0, 180, 60)) {
-
         controller.back();
 
         return;
@@ -96,7 +92,6 @@ var ai = function(controller) {
 
     // 敵が前方の遠い位置に居た場合、前進する
     if (controller.scanEnemy(0, 30, 10000)) {
-
         controller.ahead();
 
         return;
@@ -105,7 +100,6 @@ var ai = function(controller) {
 
     // 敵が自分より下方向に居た場合、下降する
     if (controller.scanEnemy(-45, 90, 10000)) {
-
         controller.descent();
 
         return;
@@ -119,7 +113,7 @@ var ai = function(controller) {
 
 // 定義した AI を return し登録する。
 return ai;</textarea>
-<script src="./dist/standalone.js"></script>
+  <script src="./dist/standalone.js"></script>
 </body>
 
 </html>

@@ -34,7 +34,6 @@
         "./core/Utils.ts",
         "./core/V.ts",
         "./libs/chainchomp.d.ts",
-        "./standalone.ts",
         "./test/test-Utils.ts",
         "./test/test-V.ts",
         "./test2d.ts",

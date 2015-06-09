@@ -5,7 +5,7 @@ var SourcerTag = React.createClass({
   render: function() {
     var model = this.props.model;
     return (
-      <g id="ship" transform={"translate(" + model.position.x + "," + model.position.y + ") rotate(0, 8, 8)"}>
+      <g id="ship" transform={"translate(" + model.position.x + "," + model.position.y + ") scale(" + model.direction + ", -1) translate(-16, -16)"}>
         <rect class="b" transform="rotate(45, 16, 16)" ry="2" y="14" x="0" height="4" width="18" fill="#fff" />
         <rect class="m" transform="rotate(45, 16, 16)" ry="1" y="15" x="1" height="2" width="16" fill="#000" />
         <rect class="b" transform="rotate(-45, 16, 16)" ry="2" y="14" x="0" height="4" width="18" fill="#fff" />

@@ -56,11 +56,11 @@ class SourcerController extends Controller {
     };
     this.ascent = () => {
       command.validate();
-      command.ahead = 0.9;
+      command.ascent = 0.9;
     };
     this.descent = () => {
       command.validate();
-      command.ahead = -0.9;
+      command.ascent = -0.9;
     };
     this.turn = () => {
       command.validate();

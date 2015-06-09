@@ -1,5 +1,4 @@
 import chainchomp = require('../libs/chainchomp');
-
 import Actor = require('./Actor');
 import Field = require('./Field');
 import SourcerCommand = require('./SourcerCommand');
