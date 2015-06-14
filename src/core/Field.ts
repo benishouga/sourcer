@@ -36,6 +36,7 @@ class Field {
   }
 
   public tick() {
+    // To be used in the invisible hand.
     this.center = this.computeCenter();
 
     this.sourcers.forEach((actor: Actor) => {

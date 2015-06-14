@@ -9,14 +9,30 @@ var FieldTag = React.createClass({
     var field = this.props.field;
     var width = this.props.width;
     var height = this.props.height;
+    var center = 0;
+    var maxTop = Number.MIN_VALUE;
+    var maxLeft = Number.MAX_VALUE;
+    var maxRight = Number.MIN_VALUE;
+    var sumX = 0;
 
     // TODO: ID を振って、key に設定する
     var sourcers = field.sourcers.map(function(b){
+      sumX += b.position.x;
+      maxTop = Math.max(maxTop, b.position.y);
+      maxRight = Math.max(maxRight, b.position.x);
+      maxLeft = Math.min(maxLeft, b.position.x);
       return <SourcerTag model={b} />
     });
-    if(field.shots) {
+
+    if (sourcers.length != 0) {
+      center = sumX / sourcers.length;
+    }
+
+    console.log(center, maxTop, maxRight, maxLeft);
+
+    if (field.shots) {
       var shots = field.shots.map(function(b){
-        if(b.type === "Missile") {
+        if (b.type === "Missile") {
           return <MissileTag model={b} />
         } else {
           return <LaserTag model={b} />
@@ -24,7 +40,7 @@ var FieldTag = React.createClass({
       });
     }
     return (
-      <g transform={"translate(0," + (height - 24) +") scale(1, -1)"}>
+      <g transform={"translate(" + (-center) + "," + (height - 24) +") scale(1, -1)"}>
         {sourcers}
         {shots}
       </g>

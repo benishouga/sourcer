@@ -7,7 +7,6 @@ var log = [];
 var frame = 0;
 
 worker.onmessage = function(e) {
-  // console.log(e.data);
   log.push(e.data);
 };
 
