@@ -15,6 +15,12 @@ onmessage = function(e) {
 
   for (var i = 0; i < 1000 && !field.isFinish(); i++) {
     field.tick();
-    postMessage(field.dump());
+    postMessage({
+      command: "Frame",
+      field: field.dump()
+    });
   }
+  postMessage({
+    command: "EndOfGame"
+  });
 };
