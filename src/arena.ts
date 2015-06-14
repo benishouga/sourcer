@@ -1,15 +1,14 @@
 import Field = require('./core/Field');
 import Sourcer = require('./core/Sourcer');
+import Utils = require('./core/Utils');
 
 declare function postMessage(message: any): void;
 
 onmessage = function(e) {
-  console.log("start arena");
-
   var field = new Field();
 
-  var sourcer1 = new Sourcer(field, -128, 128, e.data.sources[0]);
-  var sourcer2 = new Sourcer(field,  128, 128, e.data.sources[1]);
+  var sourcer1 = new Sourcer(field, Utils.rand(320), Utils.rand(320) - 160, e.data.sources[0]);
+  var sourcer2 = new Sourcer(field, Utils.rand(320), Utils.rand(320) - 160, e.data.sources[1]);
 
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);
@@ -18,5 +17,4 @@ onmessage = function(e) {
     field.tick();
     postMessage(field.dump());
   }
-
 };

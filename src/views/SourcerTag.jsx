@@ -11,8 +11,8 @@ var SourcerTag = React.createClass({
         <rect className="b" transform="rotate(-45, 16, 16)" ry="2" y="14" x="0" height="4" width="18" fill="#fff" />
         <rect className="m" transform="rotate(-45, 16, 16)" ry="1" y="15" x="1" height="2" width="16" fill="#000" />
         <circle className="b" r="12" cy="16" cx="16" fill="#fff" />
-        <circle className="m" r="11" cy="16" cx="16" id="path4136" fill="#000" />
-        <circle className="b" r="9" cy="16" cx="16" id="path4140" fill="#fff" />
+        <circle className="m" r="11" cy="16" cx="16" fill="#000" />
+        <circle className="b" r="9" cy="16" cx="16"  fill="#fff" />
         <rect className="b" ry="2" y="14" x="0" height="4" width="31" fill="#fff" />
         <rect className="m" ry="1" y="15" x="1" height="2" width="29" fill="#000" />
         <circle className="b" r="4" cy="16" cx="20" fill="#fff" />

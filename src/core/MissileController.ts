@@ -5,7 +5,7 @@ import Utils = require('./Utils');
 
 class MissileController extends Controller {
   public direction: () => number;
-  public scanEnemy: (direction: number, angle: number, renge: number) => boolean;
+  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
   public speedUp: () => void;
   public speedDown: () => void;
   public turnRight: () => void;
@@ -24,6 +24,7 @@ class MissileController extends Controller {
       command.validate();
       missile.wait += 1.5;
       direction = missile.opposite(direction);
+      renge = renge || Number.MAX_VALUE;
       var radar = Utils.createRadar(missile.position, direction, angle, renge);
       return missile.field.scanEnemy(missile.owner, radar);
     };

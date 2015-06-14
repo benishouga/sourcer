@@ -61,6 +61,10 @@ class Utils {
       return (270 - degree) * 2 + degree;
     }
   }
+
+  public static rand(renge: number): number {
+    return Math.random() * renge;
+  }
 }
 
 export = Utils;

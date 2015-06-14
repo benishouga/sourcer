@@ -42,6 +42,7 @@ class Actor {
 
   public dump(): any {
     return {
+      id: this.id,
       position: this.position,
       speed: this.speed,
       direction: this.direction

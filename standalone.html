@@ -9,12 +9,12 @@
 <body style="background-color: #eee;">
   <div id="screen"></div>
 
-  <textarea id="player" rows="22">// **** ミサイル用のAIを定義 ****
+  <textarea id="player" rows="22" style="width: 512px">// **** ミサイル用のAIを定義 ****
 var missileAi = function(controller) {
 
     // 相手が左側にいるか判定する
     // （左90度の角度から、180度の範囲、距離10000以内に敵が存在するか判定）
-    if(controller.scanEnemy(90, 180, 10000)) {
+    if(controller.scanEnemy(90, 180)) {
 
         // 左側にいる場合は、左へ回転
         controller.turnLeft();
@@ -52,7 +52,7 @@ var ai = function(controller) {
     }
 
     // 敵が後方に居た場合 (前方180度内に居なかった場合)
-    if (!controller.scanEnemy(0, 180, 10000)) {
+    if (!controller.scanEnemy(0, 180)) {
         // 現在向いている方向と逆方向を向く
         controller.turn();
 
@@ -90,14 +90,14 @@ var ai = function(controller) {
     }
 
     // 敵が前方の遠い位置に居た場合、前進する
-    if (controller.scanEnemy(0, 30, 10000)) {
+    if (controller.scanEnemy(0, 30)) {
         controller.ahead();
 
         return;
     }
 
     // 敵が自分より下方向に居た場合、下降する
-    if (controller.scanEnemy(-45, 90, 10000)) {
+    if (controller.scanEnemy(-45, 90)) {
         controller.descent();
 
         return;

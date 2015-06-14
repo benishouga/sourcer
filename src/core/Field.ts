@@ -5,6 +5,7 @@ import Shot = require('./Shot');
 import Utils = require('./Utils');
 
 class Field {
+  private id = 0;
   public sourcers: Sourcer[];
   public shots: Shot[];
   public actorCounter: number;
@@ -18,10 +19,12 @@ class Field {
   }
 
   public addSourcer(sourcer: Sourcer) {
+    sourcer.id = "sourcer" + (this.id++);
     this.sourcers.push(sourcer);
   }
 
   public addShot(shot: Shot) {
+    shot.id = "shot" + (this.id++);
     this.shots.push(shot);
   }
 
@@ -140,9 +143,9 @@ class Field {
     return false;
   }
 
-  public dump() : any {
-    var sourcersDump : any[] = [];
-    var shotsDump : any[] = [];
+  public dump(): any {
+    var sourcersDump: any[] = [];
+    var shotsDump: any[] = [];
 
     this.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());

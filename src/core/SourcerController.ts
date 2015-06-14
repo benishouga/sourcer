@@ -10,8 +10,8 @@ class SourcerController extends Controller {
   public temperature: () => number;
   public missileAmmo: () => number;
 
-  public scanEnemy: (direction: number, angle: number, renge: number) => boolean;
-  public scanAttack: (direction: number, angle: number, renge: number) => boolean;
+  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
+  public scanAttack: (direction: number, angle: number, renge?: number) => boolean;
 
   public ahead: () => void;
   public back: () => void;
@@ -36,6 +36,7 @@ class SourcerController extends Controller {
       command.validate();
       sourcer.wait += Configs.SCAN_WAIT;
       direction = sourcer.opposite(direction);
+      renge = renge || Number.MAX_VALUE;
       var radar = Utils.createRadar(sourcer.position, direction, angle, renge);
       return field.scanEnemy(sourcer, radar);
     };
@@ -43,6 +44,7 @@ class SourcerController extends Controller {
       command.validate();
       sourcer.wait += Configs.SCAN_WAIT;
       direction = sourcer.opposite(direction);
+      renge = renge || Number.MAX_VALUE;
       var radar = Utils.createRadar(sourcer.position, direction, angle, renge);
       return field.scanAttack(sourcer, radar);
     };
