@@ -13,7 +13,6 @@ class Actor {
   public wait = 0;
 
   constructor(public field: Field, x: number, y: number) {
-    this.direction = Consts.DIRECTION_RIGHT;
     this.wait = 0;
     this.position = new V(x, y);
     this.speed = new V(0, 0);

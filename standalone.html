@@ -76,10 +76,9 @@ var ai = function(controller) {
         } else {
 
             // 前方（0度）へ向けて 強さ8で アサルト弾を発射する
-            controller.fireAssault(0, 8);
+            controller.fireLaser(0, 8);
 
         }
-
         return;
     }
 
@@ -95,7 +94,6 @@ var ai = function(controller) {
         controller.ahead();
 
         return;
-
     }
 
     // 敵が自分より下方向に居た場合、下降する

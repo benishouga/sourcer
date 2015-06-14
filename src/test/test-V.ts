@@ -1,6 +1,8 @@
 import V = require('../core/V');
 import assert = require('power-assert');
 
+var EPSILON = 10e-12;
+
 describe('V', () => {
   describe('add', () => {
     it('two number arguments', () => {
@@ -185,6 +187,29 @@ describe('V', () => {
       var point = new V(2, 3);
       var result = point.cross(new V(4, 5));
       assert.ok(result === -2);
+    });
+  });
+
+  describe.only('direction', () => {
+    it('zero', () => {
+      var result = V.direction(0);
+      assert.ok(Math.abs(result.x - 1) < EPSILON);
+      assert.ok(Math.abs(result.y) < EPSILON);
+    });
+    it('positive', () => {
+      var result = V.direction(90);
+      assert.ok(Math.abs(result.x) < EPSILON);
+      assert.ok(Math.abs(result.y - 1) < EPSILON);
+    });
+    it('180', () => {
+      var result = V.direction(180);
+      assert.ok(Math.abs(result.x + 1) < EPSILON);
+      assert.ok(Math.abs(result.y) < EPSILON);
+    });
+    it('negative', () => {
+      var result = V.direction(-90);
+      assert.ok(Math.abs(result.x) < EPSILON);
+      assert.ok(Math.abs(result.y + 1) < EPSILON);
     });
   });
 });

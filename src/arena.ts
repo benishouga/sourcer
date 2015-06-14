@@ -8,8 +8,8 @@ onmessage = function(e) {
 
   var field = new Field();
 
-  var sourcer1 = new Sourcer(field, 10, 50, e.data.sources[0]);
-  var sourcer2 = new Sourcer(field, 30, 50, e.data.sources[1]);
+  var sourcer1 = new Sourcer(field, -128, 128, e.data.sources[0]);
+  var sourcer2 = new Sourcer(field,  128, 128, e.data.sources[1]);
 
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);

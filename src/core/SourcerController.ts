@@ -20,7 +20,7 @@ class SourcerController extends Controller {
   public turn: () => void;
 
   public fireLaser: (direction: number, power: number) => void;
-  public fireMissile: (ai: string) => void;
+  public fireMissile: (ai: Function) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);

@@ -95,6 +95,9 @@ class V {
     var sin = Math.sin(radian);
     return new V(cos * this.x - sin * this.y, cos * this.y + sin * this.x);
   }
+  public static direction(degree: number) {
+    return new V(1, 0).rotate(degree);
+  }
 }
 
 export = V;

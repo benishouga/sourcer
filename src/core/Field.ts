@@ -113,6 +113,10 @@ class Field {
     return null;
   }
 
+  public checkCollisionEnviroment(shot: Shot): boolean {
+    return shot.position.y < 0;
+  }
+
   private computeCenter(): number {
     var count = 0;
     var sumX = 0;

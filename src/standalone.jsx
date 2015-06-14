@@ -21,7 +21,7 @@ var ScreenTag = React.createClass({
   },
   render: function() {
     return (
-      <svg width="512" height="512" viewBox="0 0 512 512">
+      <svg width="512" height="512" viewBox="-256 0 512 512">
         <FieldTag field={this.state.field} width="512" height="512" />
       </svg>
     );
@@ -41,5 +41,4 @@ var ScreenTag = React.createClass({
 });
 
 var output = document.getElementById("screen");
-
-React.render( <ScreenTag width="512" height="512" /> , output);
+React.render(<ScreenTag width="512" height="512" /> , output);

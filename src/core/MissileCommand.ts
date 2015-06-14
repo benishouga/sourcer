@@ -11,6 +11,7 @@ class MissileCommand extends Command {
 
   constructor(public missile: Missile) {
     super();
+    this.reset();
   }
 
   public reset() {
@@ -22,8 +23,7 @@ class MissileCommand extends Command {
   public execute() {
     if (0 < this.missile.fuel) {
       this.missile.direction += this.turn;
-      var radian = Utils.toRadian(this.missile.direction);
-      var normalized = new V(Math.cos(radian), Math.sin(radian));
+      var normalized = V.direction(this.missile.direction);
       this.missile.speed = this.missile.speed.add(normalized.multiply(this.speedUp));
       this.missile.speed = this.missile.speed.multiply(1 - this.speedDown);
       this.missile.fuel -= (this.speedUp + this.speedDown * 5) * Configs.FUEL_COST;

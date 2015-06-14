@@ -25,6 +25,7 @@ class Sourcer extends Actor {
 
   constructor(field: Field, x: number, y: number, ai: string) {
     super(field, x, y);
+    this.direction = Consts.DIRECTION_RIGHT;
     this.command = new SourcerCommand(this);
     this.controller = new SourcerController(this);
 
@@ -97,12 +98,14 @@ class Sourcer extends Actor {
       var direction = this.opposite(param.direction);
       var shot = new Laser(this.field, this, direction, param.power);
       shot.reaction(this);
+      this.field.addShot(shot);
     }
 
     if (param.shotType === 'Missile') {
-      this.missileAmmo--;
       var missile = new Missile(this.field, this, param.ai);
       missile.reaction(this);
+      this.missileAmmo--;
+      this.field.addShot(missile);
     }
   }
 

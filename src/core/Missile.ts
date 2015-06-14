@@ -12,7 +12,7 @@ import Consts = require('./Consts');
 class Missile extends Shot {
   public temperature = 5;
   public damage = () => 10 + this.speed.length() * 2;
-  public fuel = 30;
+  public fuel = 100;
   public breakable = true;
 
   public ai: Function;
@@ -20,15 +20,18 @@ class Missile extends Shot {
   public command: MissileCommand;
   public controller: MissileController;
 
-  constructor(field: Field, owner: Sourcer, ai: string) {
-    super(field, owner);
+  constructor(field: Field, owner: Sourcer, ai: Function) {
+    super(field, owner, "Missile");
+    this.ai = ai;
     this.direction = owner.direction === Consts.DIRECTION_RIGHT ? 0 : 180;
     this.speed = owner.speed;
     this.command = new MissileCommand(this);
+    this.command.reset();
     this.controller = new MissileController(this);
   }
 
   public onThink() {
+    this.command.reset();
     try {
       this.command.accept();
       this.ai(this.controller);

@@ -1,5 +1,5 @@
 class ShotParam {
-  public ai: string;
+  public ai: Function;
   public direction: number;
   public power: number;
   public shotType: string;

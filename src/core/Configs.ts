@@ -1,6 +1,6 @@
 class Configs {
   public static INITIAL_SHIELD = 100;
-  public static INITIAL_FUEL = 100;
+  public static INITIAL_FUEL = 200;
   public static INITIAL_MISSILE_AMMO = 20;
   public static FUEL_COST = 1;
   public static COLLISION_SIZE = 3;
