@@ -46,7 +46,7 @@ class Actor {
       position: this.position,
       speed: this.speed,
       direction: this.direction
-    }
+    };
   }
 }
 export = Actor;

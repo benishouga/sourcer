@@ -23,8 +23,8 @@ var ScreenTag = React.createClass({
   render: function() {
     if(endOfGame) {
       return (
-        <svg width="512" height="512" viewBox="-256 0 512 512">
-          <FieldTag field={this.state.field} width="512" height="512" />
+        <svg width="512" height="384" viewBox="-256 0 512 384">
+          <FieldTag field={this.state.field} width="512" height="384" />
         </svg>
       );
     } else {
@@ -50,4 +50,4 @@ var ScreenTag = React.createClass({
 });
 
 var output = document.getElementById("screen");
-React.render(<ScreenTag width="512" height="512" /> , output);
+React.render(<ScreenTag width="512" height="384" /> , output);

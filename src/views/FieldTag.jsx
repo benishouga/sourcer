@@ -4,7 +4,9 @@ var SourcerTag = require('./SourcerTag');
 var LaserTag = require('./LaserTag');
 var MissileTag = require('./MissileTag');
 var TreeTag = require('./TreeTag');
+var StatusHudTag = require('./StatusHudTag');
 var Utils = require('../core/Utils');
+var V = require('../core/V');
 
 var FieldTag = React.createClass({
   getInitialState: function(){
@@ -44,6 +46,12 @@ var FieldTag = React.createClass({
       center = sumX / sourcers.length;
     }
 
+    var hudPosition = [new V(-width / 2, 0), new V(width / 2 - StatusHudTag.width, 0)];
+    var index = 0;
+    var huds = field.sourcers.map(function(b){
+      return <StatusHudTag key={b.id + "_hud"} model={b} screenHeight={height} screenWidth={width} position={hudPosition[index++]} />
+    });
+
     if (field.shots) {
       var shots = field.shots.map(function(b){
         if (b.type === "Missile") {
@@ -59,11 +67,17 @@ var FieldTag = React.createClass({
     });
 
     return (
-      <g transform={"translate(" + (-center) + "," + (height - 24) +") scale(1, -1)"}>
-        {trees}
-        {sourcers}
-        {shots}
-      </g>
+      <g>
+        <g transform={"translate(" + (-center) + "," + (height - 24) +") scale(1, -1)"}>
+          <defs dangerouslySetInnerHTML={{__html:'<filter id="f1" x="-1" y="-1" width="300%" height="300%"><feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>'}} />
+          {trees}
+          <g>
+            {sourcers}
+            {shots}
+          </g>
+        </g>
+        {huds}
+    </g>
     );
   }
 });
