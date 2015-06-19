@@ -22,6 +22,7 @@
         "./core/Consts.ts",
         "./core/Controller.ts",
         "./core/Field.ts",
+        "./core/Fx.ts",
         "./core/Laser.ts",
         "./core/Missile.ts",
         "./core/MissileCommand.ts",

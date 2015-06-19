@@ -26,7 +26,8 @@ class MissileCommand extends Command {
       var normalized = V.direction(this.missile.direction);
       this.missile.speed = this.missile.speed.add(normalized.multiply(this.speedUp));
       this.missile.speed = this.missile.speed.multiply(1 - this.speedDown);
-      this.missile.fuel -= (this.speedUp + this.speedDown * 5) * Configs.FUEL_COST;
+      this.missile.fuel -= (this.speedUp + this.speedDown * 3) * Configs.FUEL_COST;
+      this.missile.fuel = Math.max(0, this.missile.fuel);
     }
   }
 }

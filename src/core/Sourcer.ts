@@ -73,7 +73,7 @@ class Sourcer extends Actor {
 
     // go into the ground
     if (this.position.y < 0) {
-      this.shield += this.speed.y * Configs.GROUND_DAMAGE_SCALE;
+      this.shield -= (-this.speed.y * Configs.GROUND_DAMAGE_SCALE);
       this.position = new V(this.position.x, 0);
       this.speed = new V(this.speed.x, 0);
     }
@@ -88,6 +88,7 @@ class Sourcer extends Actor {
       var powerDamage = Math.pow(overheat * Configs.OVERHEAT_DAMAGE_POWER_WEIGHT, 2);
       this.shield -= (linearDamage + powerDamage);
     }
+    this.shield = Math.max(0, this.shield);
 
     this.command.execute()
     this.command.reset()
@@ -120,6 +121,7 @@ class Sourcer extends Actor {
   public onHit(shot: Shot) {
     this.speed = this.speed.add(shot.speed.multiply(Configs.ON_HIT_SPEED_GIVEN_RATE));
     this.shield -= shot.damage();
+    this.shield = Math.max(0, this.shield);
     this.field.removeShot(shot);
   }
 

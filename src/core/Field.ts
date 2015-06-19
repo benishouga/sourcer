@@ -2,12 +2,14 @@ import V = require('./V');
 import Actor = require('./Actor');
 import Sourcer = require('./Sourcer');
 import Shot = require('./Shot');
+import Fx = require('./Fx');
 import Utils = require('./Utils');
 
 class Field {
   private id = 0;
   public sourcers: Sourcer[];
   public shots: Shot[];
+  public fxs: Fx[];
   public actorCounter: number;
   public frame: number;
   public center: number;
@@ -16,6 +18,7 @@ class Field {
     this.frame = 0;
     this.sourcers = [];
     this.shots = [];
+    this.fxs = [];
   }
 
   public addSourcer(sourcer: Sourcer) {
@@ -38,6 +41,21 @@ class Field {
     }
   }
 
+  public addFx(fx: Fx) {
+    fx.id = "fx" + (this.id++);
+    this.fxs.push(fx);
+  }
+
+  public removeFx(target: Fx) {
+    for (var i = 0; i < this.fxs.length; i++) {
+      var fx = this.fxs[i];
+      if (fx === target) {
+        this.fxs.splice(i, 1);
+        return;
+      }
+    }
+  }
+
   public tick() {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
@@ -48,17 +66,25 @@ class Field {
     this.shots.forEach((actor: Actor) => {
       actor.think();
     });
+
     this.sourcers.forEach((actor: Actor) => {
       actor.action();
     });
     this.shots.forEach((actor: Actor) => {
       actor.action();
     });
+    this.fxs.forEach((fx: Fx) => {
+      fx.action();
+    });
+
     this.sourcers.forEach((actor: Actor) => {
       actor.move();
     });
     this.shots.forEach((actor: Actor) => {
       actor.move();
+    });
+    this.fxs.forEach((fx: Fx) => {
+      fx.move();
     });
 
     this.frame++;
@@ -146,6 +172,7 @@ class Field {
   public dump(): any {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
+    var fxDump: any[] = [];
 
     this.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());
@@ -153,11 +180,15 @@ class Field {
     this.shots.forEach((actor: Actor) => {
       shotsDump.push(actor.dump());
     });
+    this.fxs.forEach((fx: Fx) => {
+      fxDump.push(fx.dump());
+    });
 
     return {
       frame: this.frame,
       sourcers: sourcersDump,
-      shots: shotsDump
+      shots: shotsDump,
+      fxs: fxDump
     };
   }
 }

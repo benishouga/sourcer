@@ -22,9 +22,12 @@ worker.postMessage({
 var ScreenTag = React.createClass({
   render: function() {
     if(endOfGame) {
+      var onValueChanged = function(newFrame) {
+        frame = Math.floor(newFrame);
+      };
       return (
         <svg width="512" height="384" viewBox="-256 0 512 384">
-          <FieldTag field={this.state.field} width="512" height="384" />
+          <FieldTag field={this.state.field} width="512" height="384" length={frames.length} onValueChanged={onValueChanged} />
         </svg>
       );
     } else {
@@ -44,6 +47,7 @@ var ScreenTag = React.createClass({
       }
     }
   },
+
   componentWillMount : function(){
     requestAnimationFrame( this.tick );
   }

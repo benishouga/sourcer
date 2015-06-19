@@ -4,6 +4,7 @@ import Field = require('./Field');
 import Sourcer = require('./Sourcer');
 import Utils = require('./Utils');
 import V = require('./V');
+import Fx = require('./Fx');
 import Configs = require('./Configs');
 import MissileCommand = require('./MissileCommand');
 import MissileController = require('./MissileController');

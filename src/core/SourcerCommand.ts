@@ -33,6 +33,7 @@ class SourcerCommand extends Command {
     if (0 < this.sourcer.fuel) {
       this.sourcer.speed = this.sourcer.speed.add(this.ahead * this.sourcer.direction, this.ascent);
       this.sourcer.fuel -= (Math.abs(this.ahead) + Math.abs(this.ascent)) * Configs.FUEL_COST;
+      this.sourcer.fuel = Math.max(0, this.sourcer.fuel);
     }
   }
 }

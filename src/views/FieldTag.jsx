@@ -3,8 +3,10 @@ var React = require('react');
 var SourcerTag = require('./SourcerTag');
 var LaserTag = require('./LaserTag');
 var MissileTag = require('./MissileTag');
+var FxTag = require('./FxTag');
 var TreeTag = require('./TreeTag');
 var StatusHudTag = require('./StatusHudTag');
+var ControllerHudTag = require('./ControllerHudTag');
 var Utils = require('../core/Utils');
 var V = require('../core/V');
 
@@ -26,6 +28,7 @@ var FieldTag = React.createClass({
 
   render: function() {
     var field = this.props.field;
+    var length = this.props.length;
     var width = this.props.width;
     var height = this.props.height;
     var center = 0;
@@ -33,6 +36,12 @@ var FieldTag = React.createClass({
     var maxLeft = Number.MAX_VALUE;
     var maxRight = Number.MIN_VALUE;
     var sumX = 0;
+
+    var onValueChanged = this.props.onValueChanged;
+
+    var trees = this.state.trees.map(function(b) {
+      return <TreeTag key={b.id} model={b} />
+    });
 
     var sourcers = field.sourcers.map(function(b){
       sumX += b.position.x;
@@ -46,12 +55,6 @@ var FieldTag = React.createClass({
       center = sumX / sourcers.length;
     }
 
-    var hudPosition = [new V(-width / 2, 0), new V(width / 2 - StatusHudTag.width, 0)];
-    var index = 0;
-    var huds = field.sourcers.map(function(b){
-      return <StatusHudTag key={b.id + "_hud"} model={b} screenHeight={height} screenWidth={width} position={hudPosition[index++]} />
-    });
-
     if (field.shots) {
       var shots = field.shots.map(function(b){
         if (b.type === "Missile") {
@@ -62,9 +65,16 @@ var FieldTag = React.createClass({
       });
     }
 
-    var trees = this.state.trees.map(function(b) {
-      return <TreeTag key={b.id} model={b} />
+    var fxs = field.fxs.map(function(b) {
+      return <FxTag key={b.id} model={b} />
     });
+    var hudPosition = [new V(-width / 2, 0), new V(width / 2 - StatusHudTag.width, 0)];
+    var index = 0;
+    var statusHuds = field.sourcers.map(function(b){
+      return <StatusHudTag key={b.id + "_hud"} model={b} screenHeight={height} screenWidth={width} position={hudPosition[index++]} />
+    });
+
+    var controller = <ControllerHudTag screenHeight={height} screenWidth={width} frame={field.frame} length={length} onValueChanged={onValueChanged} />;
 
     return (
       <g>
@@ -75,8 +85,10 @@ var FieldTag = React.createClass({
             {sourcers}
             {shots}
           </g>
+          {fxs}
         </g>
-        {huds}
+        {statusHuds}
+        {controller}
     </g>
     );
   }
