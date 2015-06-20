@@ -12,6 +12,7 @@ class Field {
   public fxs: Fx[];
   public actorCounter: number;
   public frame: number;
+  public finishedFrame: number;
   public center: number;
 
   constructor() {
@@ -166,12 +167,23 @@ class Field {
   }
 
   public isFinish(): boolean {
-    for (var i = 0; i < this.sourcers.length; i++) {
-      var sourcer = this.sourcers[i];
-      if (!sourcer.alive) {
-        return true;
+    var finished = false;
+
+    if (!this.finishedFrame) {
+      for (var i = 0; i < this.sourcers.length; i++) {
+        var sourcer = this.sourcers[i];
+        if (!sourcer.alive) {
+          finished = true;
+          this.finishedFrame = this.frame;
+        }
       }
+      return false;
     }
+
+    if (this.finishedFrame < this.frame - 50) {
+      return true;
+    }
+
     return false;
   }
 

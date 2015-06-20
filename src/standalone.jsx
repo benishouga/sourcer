@@ -16,7 +16,7 @@ worker.onmessage = function(e) {
 };
 
 worker.postMessage({
-  sources: [$("#player").val(), $("#player").val()]
+  sources: [$("#player1").val(), $("#player2").val()]
 });
 
 var ScreenTag = React.createClass({

@@ -2,11 +2,11 @@ class Configs {
   public static INITIAL_SHIELD = 100;
   public static INITIAL_FUEL = 100;
   public static INITIAL_MISSILE_AMMO = 20;
-  public static FUEL_COST = 0.16;
-  public static COLLISION_SIZE = 3;
+  public static FUEL_COST = 0.24;
+  public static COLLISION_SIZE = 4;
   public static SCAN_WAIT = 0.35;
   public static SPEED_RESISTANCE = 0.96;
-  public static GRAVITY = 0.18;
+  public static GRAVITY = 0.08;
   public static TOP_INVISIBLE_HAND = 480;
   public static DISTANCE_BORDAR = 400;
   public static DISTANCE_INVISIBLE_HAND = 0.008;

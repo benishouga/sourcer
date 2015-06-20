@@ -37,7 +37,7 @@ class Sourcer extends Actor {
   }
 
   public onThink() {
-    if (this.ai === null) {
+    if (this.ai === null || !this.alive) {
       return;
     }
 
