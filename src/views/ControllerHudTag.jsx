@@ -23,7 +23,9 @@ var ControllerHudTag = React.createClass({
 
   onMouseMove: function(e) {
     if (this.state.drag) {
-      this.onValueChanged(this.convert(e));
+      var screenWidth = this.props.screenWidth;
+      var length = screenWidth - PADDING * 2;
+      this.onValueChanged(this.convert(e) / length * this.props.length);
     }
   },
 

@@ -7,8 +7,8 @@ declare function postMessage(message: any): void;
 onmessage = function(e) {
   var field = new Field();
 
-  var sourcer1 = new Sourcer(field, Utils.rand(320), Utils.rand(320) - 160, e.data.sources[0]);
-  var sourcer2 = new Sourcer(field, Utils.rand(320), Utils.rand(320) - 160, e.data.sources[1]);
+  var sourcer1 = new Sourcer(field, Utils.rand(320) - 160, Utils.rand(320) - 160, e.data.sources[0]);
+  var sourcer2 = new Sourcer(field, Utils.rand(320) - 160, Utils.rand(320) - 160, e.data.sources[1]);
 
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);

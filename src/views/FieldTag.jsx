@@ -32,9 +32,9 @@ var FieldTag = React.createClass({
     var width = this.props.width;
     var height = this.props.height;
     var center = 0;
-    var maxTop = Number.MIN_VALUE;
     var maxLeft = Number.MAX_VALUE;
-    var maxRight = Number.MIN_VALUE;
+    var maxRight = -Number.MAX_VALUE;
+    var maxTop = -Number.MAX_VALUE;
     var sumX = 0;
 
     var onValueChanged = this.props.onValueChanged;
@@ -50,6 +50,11 @@ var FieldTag = React.createClass({
       maxLeft = Math.min(maxLeft, b.position.x);
       return <SourcerTag key={b.id} model={b} />
     });
+
+    var screenLeft = maxLeft - 100;
+    var screenRight = maxRight + 100;
+    var screenTop = maxTop + 100;
+    var screenScale = Math.min(1, Math.min(height / screenTop, width / (screenRight - screenLeft)));
 
     if (sourcers.length != 0) {
       center = sumX / sourcers.length;
@@ -78,7 +83,7 @@ var FieldTag = React.createClass({
 
     return (
       <g>
-        <g transform={"translate(" + (-center) + "," + (height - 24) +") scale(1, -1)"}>
+        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
           <defs dangerouslySetInnerHTML={{__html:'<filter id="f1" x="-1" y="-1" width="300%" height="300%"><feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>'}} />
           {trees}
           <g>
@@ -89,7 +94,7 @@ var FieldTag = React.createClass({
         </g>
         {statusHuds}
         {controller}
-    </g>
+      </g>
     );
   }
 });
