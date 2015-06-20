@@ -88,4 +88,8 @@ gulp.task('react', function() {
 
 gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
 
+gulp.task('watch', function() {
+  gulp.watch(['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts'], ['standalone']);
+});
+
 gulp.task('default', ["browserify"]);

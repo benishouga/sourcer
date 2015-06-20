@@ -87,6 +87,12 @@ class Field {
       fx.move();
     });
 
+    this.sourcers.forEach((sourcer: Sourcer) => {
+      if (sourcer.shield <= 0) {
+        sourcer.alive = false;
+      }
+    });
+
     this.frame++;
   }
 

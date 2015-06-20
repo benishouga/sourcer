@@ -13,7 +13,7 @@ onmessage = function(e) {
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);
 
-  for (var i = 0; i < 1000 && !field.isFinish(); i++) {
+  for (var i = 0; i < 2000 && !field.isFinish(); i++) {
     field.tick();
     postMessage({
       command: "Frame",
