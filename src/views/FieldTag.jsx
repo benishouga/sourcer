@@ -51,21 +51,35 @@ var FieldTag = React.createClass({
       return <SourcerTag key={b.id} model={b} />
     });
 
-    var screenLeft = maxLeft - 100;
-    var screenRight = maxRight + 100;
-    var screenTop = maxTop + 100;
-    var screenScale = Math.min(1, Math.min(height / screenTop, width / (screenRight - screenLeft)));
-
     if (sourcers.length != 0) {
       center = sumX / sourcers.length;
     }
 
+    var screenLeft = maxLeft - 100;
+    var screenRight = maxRight + 100;
+    var screenTop = maxTop + 100;
+
+    if(width > screenRight - screenLeft) {
+      screenRight = center + width / 2;
+      screenLeft = center - width / 2;
+    }
+
+    var screenScale = Math.min(1, Math.min(height / screenTop, width / (screenRight - screenLeft)));
+
+    var viewLeft = (screenLeft - center) / screenScale + center;
+    var viewRight = (screenRight - center) / screenScale + center;
+    var viewTop = (height - 24) / screenScale;
+
     if (field.shots) {
       var shots = field.shots.map(function(b){
-        if (b.type === "Missile") {
-          return <MissileTag key={b.id} model={b} />
-        } else {
-          return <LaserTag key={b.id} model={b} />
+        var x = b.position.x;
+        var y = b.position.y;
+        if(viewLeft < x && x < viewRight && y < viewTop) {
+          if (b.type === "Missile") {
+            return <MissileTag key={b.id} model={b} />
+          } else {
+            return <LaserTag key={b.id} model={b} />
+          }
         }
       });
     }
@@ -83,7 +97,7 @@ var FieldTag = React.createClass({
 
     return (
       <g>
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
+        <g transform={"scale(" + screenScale + ", " + screenScale  + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
           <defs dangerouslySetInnerHTML={{__html:'<filter id="f1" x="-1" y="-1" width="300%" height="300%"><feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>'}} />
           {trees}
           <g>
