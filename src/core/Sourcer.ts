@@ -103,10 +103,12 @@ class Sourcer extends Actor {
     }
 
     if (param.shotType === 'Missile') {
-      var missile = new Missile(this.field, this, param.ai);
-      missile.reaction(this);
-      this.missileAmmo--;
-      this.field.addShot(missile);
+      if (0 < this.missileAmmo) {
+        var missile = new Missile(this.field, this, param.ai);
+        missile.reaction(this);
+        this.missileAmmo--;
+        this.field.addShot(missile);
+      }
     }
   }
 

@@ -180,7 +180,7 @@ class Field {
       return false;
     }
 
-    if (this.finishedFrame < this.frame - 50) {
+    if (this.finishedFrame < this.frame - 90) {
       return true;
     }
 

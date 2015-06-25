@@ -94,11 +94,16 @@ var FieldTag = React.createClass({
     });
 
     var controller = <ControllerHudTag screenHeight={height} screenWidth={width} frame={field.frame} length={length} onValueChanged={onValueChanged} />;
+    var filter = '<filter id="f1" x="-1" y="-1" width="300%" height="300%">' +
+      '  <feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" />' +
+      '  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" />' +
+      '  <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />' +
+      '</filter>';
 
     return (
       <g>
+        <defs dangerouslySetInnerHTML={{__html:filter}} />
         <g transform={"scale(" + screenScale + ", " + screenScale  + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
-          <defs dangerouslySetInnerHTML={{__html:'<filter id="f1" x="-1" y="-1" width="300%" height="300%"><feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>'}} />
           {trees}
           <g>
             {sourcers}
