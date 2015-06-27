@@ -13,7 +13,7 @@ class Configs {
   public static OVERHEAT_BORDER = 100;
   public static OVERHEAT_DAMAGE_LINEAR_WEIGHT = 0.05;
   public static OVERHEAT_DAMAGE_POWER_WEIGHT = 0.012;
-  public static GROUND_DAMAGE_SCALE = 0.3;
+  public static GROUND_DAMAGE_SCALE = 1;
   public static COOL_DOWN = 0.5;
   public static ON_HIT_SPEED_GIVEN_RATE = 0.4;
 }

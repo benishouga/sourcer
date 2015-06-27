@@ -13,13 +13,15 @@ var V = require('../core/V');
 var FieldTag = React.createClass({
   getInitialState: function(){
     var trees = [];
-    for(var i = 0; i < 10; i++) {
-      trees.push({
+    var patternWidth = 1024 * 4;
+    for(var i = 0; i < 128; i++) {
+      var tree = {
         id: "tree" + i,
-        x: Utils.rand(512) - 256,
+        x: Utils.rand(patternWidth) - patternWidth / 2,
         height: Utils.rand(360) + 24,
         size: Utils.rand(16) + 8
-      });
+      };
+      trees.push(tree);
     }
     return {
       trees : trees
@@ -38,10 +40,6 @@ var FieldTag = React.createClass({
     var sumX = 0;
 
     var onValueChanged = this.props.onValueChanged;
-
-    var trees = this.state.trees.map(function(b) {
-      return <TreeTag key={b.id} model={b} />
-    });
 
     var sourcers = field.sourcers.map(function(b){
       sumX += b.position.x;
@@ -69,6 +67,12 @@ var FieldTag = React.createClass({
     var viewLeft = (screenLeft - center) / screenScale + center;
     var viewRight = (screenRight - center) / screenScale + center;
     var viewTop = (height - 24) / screenScale;
+
+    var trees = this.state.trees.map(function(b) {
+      if(viewLeft < b.x + b.size && b.x - b.size < viewRight) {
+        return <TreeTag key={b.id} model={b} />
+      }
+    });
 
     if (field.shots) {
       var shots = field.shots.map(function(b){
@@ -103,7 +107,8 @@ var FieldTag = React.createClass({
     return (
       <g>
         <defs dangerouslySetInnerHTML={{__html:filter}} />
-        <g transform={"scale(" + screenScale + ", " + screenScale  + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
+
+        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
           {trees}
           <g>
             {sourcers}
