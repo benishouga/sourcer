@@ -1,6 +1,7 @@
 import Field = require('./core/Field');
 import Sourcer = require('./core/Sourcer');
 import Utils = require('./core/Utils');
+import TickEventListener = require('./core/TickEventListener');
 
 declare function postMessage(message: any): void;
 
@@ -13,8 +14,23 @@ onmessage = function(e) {
   field.addSourcer(sourcer1);
   field.addSourcer(sourcer2);
 
+  var listener: TickEventListener = {
+    onPreThink: function(sourcerId: string) {
+      postMessage({
+        command: "PreThink",
+        index: sourcer1.id == sourcerId ? 0 : 1
+      });
+    },
+    onPostThink: function(sourcerId: string) {
+      postMessage({
+        command: "PostThink",
+        index: sourcer1.id == sourcerId ? 0 : 1
+      });
+    }
+  };
+
   for (var i = 0; i < 2000 && !field.isFinish(); i++) {
-    field.tick();
+    field.tick(listener);
     postMessage({
       command: "Frame",
       field: field.dump()

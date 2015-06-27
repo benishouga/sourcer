@@ -4,6 +4,7 @@ import Sourcer = require('./Sourcer');
 import Shot = require('./Shot');
 import Fx = require('./Fx');
 import Utils = require('./Utils');
+import TickEventListener = require('./TickEventListener');
 
 class Field {
   private id = 0;
@@ -57,15 +58,19 @@ class Field {
     }
   }
 
-  public tick() {
+  public tick(listener: TickEventListener) {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
-    this.sourcers.forEach((actor: Actor) => {
-      actor.think();
+    this.sourcers.forEach((sourcer: Sourcer) => {
+      listener.onPreThink(sourcer.id);
+      sourcer.think();
+      listener.onPostThink(sourcer.id);
     });
-    this.shots.forEach((actor: Actor) => {
-      actor.think();
+    this.shots.forEach((shot: Shot) => {
+      listener.onPreThink(shot.owner.id);
+      shot.think();
+      listener.onPostThink(shot.owner.id);
     });
 
     this.sourcers.forEach((actor: Actor) => {
