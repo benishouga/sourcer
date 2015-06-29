@@ -46,7 +46,7 @@ var ScreenTag = React.createClass({
       };
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-          <FieldTag field={this.state.field} width={width} height={height} length={frames.length} onValueChanged={onValueChanged} />
+          <FieldTag field={this.state.field} width={width} height={height} frameLength={frames.length} onValueChanged={onValueChanged} />
         </svg>
       );
     } else {

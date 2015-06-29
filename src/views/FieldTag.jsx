@@ -4,33 +4,14 @@ var SourcerTag = require('./SourcerTag');
 var LaserTag = require('./LaserTag');
 var MissileTag = require('./MissileTag');
 var FxTag = require('./FxTag');
-var TreeTag = require('./TreeTag');
-var StatusHudTag = require('./StatusHudTag');
-var ControllerHudTag = require('./ControllerHudTag');
+var HudTag = require('./HudTag');
+var BackgroundTag = require('./BackgroundTag');
 var Utils = require('../core/Utils');
-var V = require('../core/V');
 
 var FieldTag = React.createClass({
-  getInitialState: function(){
-    var trees = [];
-    var patternWidth = 1024 * 4;
-    for(var i = 0; i < 128; i++) {
-      var tree = {
-        id: "tree" + i,
-        x: Utils.rand(patternWidth) - patternWidth / 2,
-        height: Utils.rand(360) + 24,
-        size: Utils.rand(16) + 8
-      };
-      trees.push(tree);
-    }
-    return {
-      trees : trees
-    };
-  },
-
   render: function() {
     var field = this.props.field;
-    var length = this.props.length;
+    var frameLength = this.props.frameLength;
     var width = this.props.width;
     var height = this.props.height;
     var center = 0;
@@ -68,12 +49,6 @@ var FieldTag = React.createClass({
     var viewRight = (screenRight - center) / screenScale + center;
     var viewTop = (height - 24) / screenScale;
 
-    var trees = this.state.trees.map(function(b) {
-      if(viewLeft < b.x + b.size && b.x - b.size < viewRight) {
-        return <TreeTag key={b.id} model={b} />
-      }
-    });
-
     if (field.shots) {
       var shots = field.shots.map(function(b){
         var x = b.position.x;
@@ -91,13 +66,6 @@ var FieldTag = React.createClass({
     var fxs = field.fxs.map(function(b) {
       return <FxTag key={b.id} model={b} />
     });
-    var hudPosition = [new V(-width / 2, 0), new V(width / 2 - StatusHudTag.width, 0)];
-    var index = 0;
-    var statusHuds = field.sourcers.map(function(b){
-      return <StatusHudTag key={b.id + "_hud"} model={b} screenHeight={height} screenWidth={width} position={hudPosition[index++]} />
-    });
-
-    var controller = <ControllerHudTag screenHeight={height} screenWidth={width} frame={field.frame} length={length} onValueChanged={onValueChanged} />;
     var filter = '<filter id="f1" x="-1" y="-1" width="300%" height="300%">' +
       '  <feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" />' +
       '  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" />' +
@@ -108,16 +76,17 @@ var FieldTag = React.createClass({
       <g>
         <defs dangerouslySetInnerHTML={{__html:filter}} />
 
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale +") scale(1, -1)"}>
-          {trees}
+        <BackgroundTag screenScale={screenScale} center={center} screenHeight={height} screenLeft={screenLeft} screenRight={screenRight} />
+
+        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale + ") scale(1, -1)"}>
           <g>
             {sourcers}
             {shots}
           </g>
           {fxs}
         </g>
-        {statusHuds}
-        {controller}
+
+        <HudTag screenHeight={height} screenWidth={width} field={field} frameLength={frameLength} onValueChanged={onValueChanged} />
       </g>
     );
   }
