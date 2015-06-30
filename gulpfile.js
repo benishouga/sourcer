@@ -14,16 +14,6 @@ require('espower-loader')({
   pattern: 'intermediate/test/**/*.js'
 });
 
-gulp.task('browserify', ['ts', 'js', 'react'], function() {
-  return browserify({
-      debug: true,
-    })
-    .add('./intermediate/index.js')
-    .bundle()
-    .pipe(source('dist/bundle.js'))
-    .pipe(gulp.dest('./'));
-});
-
 gulp.task('standalone-worker', ['ts', 'js'], function() {
   return browserify({
       debug: true,
@@ -92,4 +82,4 @@ gulp.task('watch', function() {
   gulp.watch(['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts'], ['standalone']);
 });
 
-gulp.task('default', ["browserify"]);
+gulp.task('default', ["standalone"]);
