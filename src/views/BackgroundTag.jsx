@@ -13,45 +13,36 @@ var BackgroundTag = React.createClass({
   },
 
   render: function() {
+    var bg1 = this.makeBg(this.state.bg1, 4);
+    var bg2 = this.makeBg(this.state.bg2, 3);
+    var bg3 = this.makeBg(this.state.bg3, 2);
+
+    return (
+      <g>
+        {bg1}
+        {bg2}
+        {bg3}
+      </g>
+    );
+  },
+
+  makeBg: function(trees, far) {
     var screenScale = this.props.screenScale;
     var center = this.props.center;
     var screenHeight = this.props.screenHeight;
     var screenLeft = this.props.screenLeft;
     var screenRight = this.props.screenRight;
 
-    var viewLeft1 = ((screenLeft - center) / (screenScale / 4) + center) / 4;
-    var viewRight1 = ((screenRight - center) / (screenScale / 4) + center) / 4;
-    var trees1 = this.state.bg1.map(function(b) {
-      if(viewLeft1 < b.x + b.size && b.x - b.size < viewRight1) {
+    var viewLeft = ((screenLeft - center) / (screenScale / far) + center) / far;
+    var viewRight = ((screenRight - center) / (screenScale / far) + center) / far;
+    var treeTags = trees.map(function(b) {
+      if(viewLeft < b.x + b.size && b.x - b.size < viewRight) {
         return <TreeTag key={b.id} model={b} />
       }
     });
-    var viewLeft2 = ((screenLeft - center) / (screenScale / 3) + center) / 3;
-    var viewRight2 = ((screenRight - center) / (screenScale / 3) + center) / 3;
-    var trees2 = this.state.bg2.map(function(b) {
-      if(viewLeft2 < b.x + b.size && b.x - b.size < viewRight2) {
-        return <TreeTag key={b.id} model={b} />
-      }
-    });
-    var viewLeft3 = ((screenLeft - center) / (screenScale / 2) + center) / 2;
-    var viewRight3 = ((screenRight - center) / (screenScale / 2) + center) / 2;
-    var trees3 = this.state.bg3.map(function(b) {
-      if(viewLeft3 < b.x + b.size && b.x - b.size < viewRight3) {
-        return <TreeTag key={b.id} model={b} />
-      }
-    });
-
     return (
-      <g>
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center / 4) + "," + (screenHeight - 24) / screenScale +") scale(1, -1)"}>
-          {trees1}
-        </g>
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center / 3) + "," + (screenHeight - 24) / screenScale +") scale(1, -1)"}>
-          {trees2}
-        </g>
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center / 2) + "," + (screenHeight - 24) / screenScale +") scale(1, -1)"}>
-          {trees3}
-        </g>
+      <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center / far) + "," + (screenHeight - 24) / screenScale +") scale(1, -1)"}>
+        {treeTags}
       </g>
     );
   },
