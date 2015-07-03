@@ -37,7 +37,7 @@ var BackgroundTag = React.createClass({
     var viewRight = ((screenRight - center) / (screenScale / far) + center) / far;
     var treeTags = trees.map(function(b) {
       if(viewLeft < b.x + b.size && b.x - b.size < viewRight) {
-        return <TreeTag key={b.id} model={b} />
+        return <TreeTag key={b.id} model={b} far={far} />
       }
     });
     return (
