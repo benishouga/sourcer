@@ -2,38 +2,38 @@
 var React = require('react');
 var FieldTag = require('./views/FieldTag');
 
-var worker = new Worker("dist/arena.js");
-var frames = [];
-var frame = 0;
-var endOfGame = false;
-
-var thinking = null;
-
-var timeout = function() {
-  console.log("timeout", thinking);
-  endOfGame = true;
-  worker.terminate();
+var Standalone = function() {
+  this.worker = new Worker("dist/arena.js");
+  this.frames = [];
+  this.frame = 0;
+  this.endOfGame = false;
+  this.thinking = null;
+  this.timeout = function() {
+    console.log("timeout", thinking);
+    this.endOfGame = true;
+    this.worker.terminate();
+  };
+  this.handler = null;
+  var that = this;
+  this.worker.addEventListener('message', function(e) {
+    if(e.data.command === "PreThink") {
+      that.thinking = e.data.index;
+      that.handler = setTimeout(function() { that.timeout(); }, 10); // 10 milliseconds think timeout
+    } else if(e.data.command === "PostThink") {
+      that.thinking = null;
+      clearTimeout(that.handler);
+    } else if(e.data.command === "EndOfGame") {
+      that.endOfGame = true;
+    } else {
+      that.frames.push(e.data.field);
+    }
+  });
+  this.worker.postMessage({
+    sources: [$("#player1").val(), $("#player2").val()]
+  });
 };
 
-var handler = null;
-
-worker.addEventListener('message', function(e) {
-  if(e.data.command === "PreThink") {
-    thinking = e.data.index;
-    handler = setTimeout(timeout, 10); // 10 milliseconds think timeout
-  } else if(e.data.command === "PostThink") {
-    thinking = null;
-    clearTimeout(handler);
-  } else if(e.data.command === "EndOfGame") {
-    endOfGame = true;
-  } else {
-    frames.push(e.data.field);
-  }
-});
-
-worker.postMessage({
-  sources: [$("#player1").val(), $("#player2").val()]
-});
+var standalone = new Standalone();
 
 var ScreenTag = React.createClass({
   getInitialState: function(){
@@ -42,26 +42,30 @@ var ScreenTag = React.createClass({
     };
   },
 
-  onPlay : function() {
+  onPlay: function() {
     this.setState({ playing: true });
   },
 
-  onPause : function() {
+  onPause: function() {
     this.setState({ playing: false });
+  },
+
+  onReload: function() {
+    standalone = new Standalone();
   },
 
   render: function() {
     var width = this.props.width;
     var height = this.props.height;
 
-    if(endOfGame) {
+    if(standalone.endOfGame) {
       var onFrameChanged = function(newFrame) {
-        frame = newFrame;
+        standalone.frame = newFrame;
       };
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-          <FieldTag field={this.state.field} width={width} height={height} frameLength={frames.length}
-            playing={this.state.playing} onFrameChanged={onFrameChanged} onPlay={this.onPlay} onPause={this.onPause} />
+          <FieldTag field={this.state.field} width={width} height={height} frameLength={standalone.frames.length}
+            playing={this.state.playing} onFrameChanged={onFrameChanged} onPlay={this.onPlay} onPause={this.onPause} onReload={this.onReload} />
         </svg>
       );
     } else {
@@ -72,13 +76,13 @@ var ScreenTag = React.createClass({
   tick : function(){
     requestAnimationFrame(this.tick);
 
-    if (endOfGame && frame < frames.length) {
+    if (standalone.endOfGame && standalone.frame < standalone.frames.length) {
       this.setState({
-        field: frames[frame]
+        field: standalone.frames[standalone.frame]
       });
 
       if (this.state.playing) {
-        frame++;
+        standalone.frame++;
       }
     }
   },

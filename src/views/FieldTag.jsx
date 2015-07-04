@@ -21,10 +21,11 @@ var FieldTag = React.createClass({
       top: 0,
       scale: 0,
       center: 0,
-      onFrameChanged: this.props.onFrameChanged,
       playing: this.props.playing,
+      onFrameChanged: this.props.onFrameChanged,
       onPlay: this.props.onPlay,
-      onPause: this.props.onPause
+      onPause: this.props.onPause,
+      onReload: this.props.onReload
     };
 
     var maxLeft = Number.MAX_VALUE;
@@ -76,6 +77,7 @@ var FieldTag = React.createClass({
     var fxs = field.fxs.map(function(b) {
       return <FxTag key={b.id} model={b} />
     });
+
     var filter = '<filter id="f1" x="-1" y="-1" width="300%" height="300%">' +
       '  <feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" />' +
       '  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" />' +
