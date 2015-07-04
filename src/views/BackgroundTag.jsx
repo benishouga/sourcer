@@ -27,21 +27,17 @@ var BackgroundTag = React.createClass({
   },
 
   makeBg: function(trees, far) {
-    var screenScale = this.props.screenScale;
-    var center = this.props.center;
-    var screenHeight = this.props.screenHeight;
-    var screenLeft = this.props.screenLeft;
-    var screenRight = this.props.screenRight;
+    var screen = this.props.screen;
 
-    var viewLeft = ((screenLeft - center) / (screenScale / far) + center) / far;
-    var viewRight = ((screenRight - center) / (screenScale / far) + center) / far;
+    var viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
+    var viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
     var treeTags = trees.map(function(b) {
       if(viewLeft < b.x + b.size && b.x - b.size < viewRight) {
         return <TreeTag key={b.id} model={b} far={far} />
       }
     });
     return (
-      <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center / far) + "," + (screenHeight - 24) / screenScale +") scale(1, -1)"}>
+      <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center / far) + "," + (screen.height - 24) / screen.scale +") scale(1, -1)"}>
         {treeTags}
       </g>
     );

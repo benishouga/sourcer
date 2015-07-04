@@ -11,16 +11,23 @@ var Utils = require('../core/Utils');
 var FieldTag = React.createClass({
   render: function() {
     var field = this.props.field;
-    var frameLength = this.props.frameLength;
-    var width = this.props.width;
-    var height = this.props.height;
-    var center = 0;
+
+    var screen = {
+      frameLength: this.props.frameLength,
+      height: this.props.height,
+      width: this.props.width,
+      left: 0,
+      right: 0,
+      top: 0,
+      scale: 0,
+      center: 0,
+      onValueChanged: this.props.onValueChanged
+    };
+
     var maxLeft = Number.MAX_VALUE;
     var maxRight = -Number.MAX_VALUE;
     var maxTop = -Number.MAX_VALUE;
     var sumX = 0;
-
-    var onValueChanged = this.props.onValueChanged;
 
     var sourcers = field.sourcers.map(function(b){
       sumX += b.position.x;
@@ -31,23 +38,23 @@ var FieldTag = React.createClass({
     });
 
     if (sourcers.length != 0) {
-      center = sumX / sourcers.length;
+      screen.center = sumX / sourcers.length;
     }
 
-    var screenLeft = maxLeft - 100;
-    var screenRight = maxRight + 100;
-    var screenTop = maxTop + 100;
+    screen.left = maxLeft - 100;
+    screen.right = maxRight + 100;
+    screen.top = maxTop + 100;
 
-    if(width > screenRight - screenLeft) {
-      screenRight = center + width / 2;
-      screenLeft = center - width / 2;
+    if(screen.width > screen.right - screen.left) {
+      screen.right = screen.center + screen.width / 2;
+      screen.left = screen.center - screen.width / 2;
     }
 
-    var screenScale = Math.min(1, Math.min(height / screenTop, width / (screenRight - screenLeft)));
+    screen.scale = Math.min(1, Math.min(screen.height / screen.top, screen.width / (screen.right - screen.left)));
 
-    var viewLeft = (screenLeft - center) / screenScale + center;
-    var viewRight = (screenRight - center) / screenScale + center;
-    var viewTop = (height - 24) / screenScale;
+    var viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
+    var viewRight = (screen.right - screen.center) / screen.scale + screen.center;
+    var viewTop = (screen.height - 24) / screen.scale;
 
     if (field.shots) {
       var shots = field.shots.map(function(b){
@@ -76,9 +83,9 @@ var FieldTag = React.createClass({
       <g>
         <defs dangerouslySetInnerHTML={{__html:filter}} />
 
-        <BackgroundTag screenScale={screenScale} center={center} screenHeight={height} screenLeft={screenLeft} screenRight={screenRight} />
+        <BackgroundTag screen={screen} />
 
-        <g transform={"scale(" + screenScale + ", " + screenScale + ") translate(" + (-center) + "," + (height - 24) / screenScale + ") scale(1, -1)"}>
+        <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center) + "," + (screen.height - 24) / screen.scale + ") scale(1, -1)"}>
           <g>
             {sourcers}
             {shots}
@@ -86,7 +93,7 @@ var FieldTag = React.createClass({
           {fxs}
         </g>
 
-        <HudTag screenHeight={height} screenWidth={width} field={field} frameLength={frameLength} onValueChanged={onValueChanged} />
+        <HudTag field={field} screen={screen} />
       </g>
     );
   }

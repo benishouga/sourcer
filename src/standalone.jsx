@@ -42,7 +42,7 @@ var ScreenTag = React.createClass({
 
     if(endOfGame) {
       var onValueChanged = function(newFrame) {
-        frame = Math.floor(newFrame);
+        frame = newFrame;
       };
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>

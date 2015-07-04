@@ -15,16 +15,16 @@ var ControllerHudTag = React.createClass({
 
   onMouseDown: function(e) {
     this.setState({ drag : true });
-    var screenWidth = this.props.screenWidth;
-    var length = screenWidth - PADDING * 2;
-    this.onValueChanged(this.convert(e) / length * this.props.frameLength);
+    var screen = this.props.screen;
+    var length = screen.width - PADDING * 2;
+    this.onValueChanged(Math.floor(this.convert(e) / length * this.props.screen.frameLength));
   },
 
   onMouseMove: function(e) {
     if (this.state.drag) {
-      var screenWidth = this.props.screenWidth;
-      var length = screenWidth - PADDING * 2;
-      this.onValueChanged(this.convert(e) / length * this.props.frameLength);
+      var screen = this.props.screen;
+      var length = screen.width - PADDING * 2;
+      this.onValueChanged(Math.floor(this.convert(e) / length * this.props.screen.frameLength));
     }
   },
 
@@ -34,16 +34,16 @@ var ControllerHudTag = React.createClass({
 
   render: function() {
     var frame = this.props.frame;
-    var frameLength = this.props.frameLength;
-    var screenWidth = this.props.screenWidth;
-    var screenHeight = this.props.screenHeight;
-
-    this.onValueChanged = this.props.onValueChanged;
+    var screen = this.props.screen;
+    var playing = this.props.playing;
+    this.onValueChanged = screen.onValueChanged;
 
     return (
-      <g onMouseDown={this.onMouseDown} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} transform={"translate(" + (-screenWidth / 2) + "," + (screenHeight - ControllerHudTag.height) + ")"}>
-        <rect className="b" fill="#fff" width={screenWidth - PADDING * 2} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
-        <rect className="m" fill="#000" width={(screenWidth - PADDING * 2 - 2) * frame / frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING+1} y={PADDING+1} ry="3" />
+      <g>
+        <g onMouseDown={this.onMouseDown} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} transform={"translate(" + (-screen.width / 2) + "," + (screen.height - ControllerHudTag.height) + ")"}>
+          <rect className="b" fill="#fff" width={screen.width - PADDING * 2} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
+          <rect className="m" fill="#000" width={(screen.width - PADDING * 2 - 2) * frame / screen.frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING+1} y={PADDING+1} ry="3" />
+        </g>
       </g>
     );
   }
