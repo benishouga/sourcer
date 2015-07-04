@@ -21,7 +21,10 @@ var FieldTag = React.createClass({
       top: 0,
       scale: 0,
       center: 0,
-      onValueChanged: this.props.onValueChanged
+      onFrameChanged: this.props.onFrameChanged,
+      playing: this.props.playing,
+      onPlay: this.props.onPlay,
+      onPause: this.props.onPause
     };
 
     var maxLeft = Number.MAX_VALUE;

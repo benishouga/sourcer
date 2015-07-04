@@ -36,17 +36,32 @@ worker.postMessage({
 });
 
 var ScreenTag = React.createClass({
+  getInitialState: function(){
+    return {
+      playing: true
+    };
+  },
+
+  onPlay : function() {
+    this.setState({ playing: true });
+  },
+
+  onPause : function() {
+    this.setState({ playing: false });
+  },
+
   render: function() {
     var width = this.props.width;
     var height = this.props.height;
 
     if(endOfGame) {
-      var onValueChanged = function(newFrame) {
+      var onFrameChanged = function(newFrame) {
         frame = newFrame;
       };
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-          <FieldTag field={this.state.field} width={width} height={height} frameLength={frames.length} onValueChanged={onValueChanged} />
+          <FieldTag field={this.state.field} width={width} height={height} frameLength={frames.length}
+            playing={this.state.playing} onFrameChanged={onFrameChanged} onPlay={this.onPlay} onPause={this.onPause} />
         </svg>
       );
     } else {
@@ -57,11 +72,12 @@ var ScreenTag = React.createClass({
   tick : function(){
     requestAnimationFrame(this.tick);
 
-    if(endOfGame) {
-      if(frame < frames.length) {
-        this.setState({
-          field: frames[frame]
-        });
+    if (endOfGame && frame < frames.length) {
+      this.setState({
+        field: frames[frame]
+      });
+
+      if (this.state.playing) {
         frame++;
       }
     }
