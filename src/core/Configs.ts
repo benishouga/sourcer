@@ -6,7 +6,7 @@ class Configs {
   public static COLLISION_SIZE = 4;
   public static SCAN_WAIT = 0.35;
   public static SPEED_RESISTANCE = 0.96;
-  public static GRAVITY = 0.08;
+  public static GRAVITY = 0.1;
   public static TOP_INVISIBLE_HAND = 480;
   public static DISTANCE_BORDAR = 400;
   public static DISTANCE_INVISIBLE_HAND = 0.008;
