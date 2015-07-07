@@ -64,8 +64,8 @@ var ControllerHudTag = React.createClass({
         {reload}
         {playOrStop}
         <g onMouseDown={this.onMouseDown} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} transform={"translate(" + (-screen.width / 2 + this.progressLeft) + "," + (screen.height - ControllerHudTag.height) + ")"}>
-          <rect className="b" fill="#fff" width={screen.width - PADDING * 2 - this.progressLeft} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
-          <rect className="m" fill="#000" width={(screen.width - PADDING * 2 - 2 - this.progressLeft) * frame / screen.frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING+1} y={PADDING+1} ry="3" />
+          <rect fill="#fff" width={screen.width - PADDING * 2 - this.progressLeft} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
+          <rect fill="#000" width={(screen.width - PADDING * 2 - 2 - this.progressLeft) * frame / screen.frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING+1} y={PADDING+1} ry="3" />
         </g>
       </g>
     );

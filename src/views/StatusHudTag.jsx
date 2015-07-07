@@ -11,19 +11,20 @@ var StatusHudTag = React.createClass({
 
     return (
       <g transform={"translate(" + position.x + "," + position.y + ")"}>
-        <rect className="b" fill="#ccc" width={StatusHudTag.width} height={PADDING * 2 + 19} x="0" y="0" ry="2" />
+        <rect fill="#ccc" width={StatusHudTag.width} height={PADDING * 2 + 19} x="0" y="0" ry="2" />
+        <rect fill={model.color} width="8" height={PADDING * 2 + 19} x="0" y="0" ry="1" />
 
-        <rect className="b" fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING} ry="2" />
-        <rect className="b" fill="#00c" width={(StatusHudTag.width - PADDING * 2 - 2) * model.shield / Configs.INITIAL_SHIELD} height="2" x={PADDING + 1} y={PADDING+1} ry="1" />
+        <rect fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING} ry="2" />
+        <rect fill="#00c" width={(StatusHudTag.width - PADDING * 2 - 2) * model.shield / Configs.INITIAL_SHIELD} height="2" x={PADDING + 1} y={PADDING+1} ry="1" />
 
-        <rect className="b" fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 5} ry="2" />
-        <rect className="b" fill="#f80" width={(StatusHudTag.width - PADDING * 2 - 2) * model.fuel / Configs.INITIAL_FUEL} height="2" x={PADDING + 1} y={PADDING+6} ry="1" />
+        <rect fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 5} ry="2" />
+        <rect fill="#f80" width={(StatusHudTag.width - PADDING * 2 - 2) * model.fuel / Configs.INITIAL_FUEL} height="2" x={PADDING + 1} y={PADDING+6} ry="1" />
 
-        <rect className="b" fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 10} ry="2" />
-        <rect className="b" fill="#f00" width={(StatusHudTag.width - PADDING * 2 - 2) * model.temperature / Configs.OVERHEAT_BORDER} height="2" x={PADDING + 1} y={PADDING+11} ry="1" />
+        <rect fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 10} ry="2" />
+        <rect fill="#f00" width={(StatusHudTag.width - PADDING * 2 - 2) * model.temperature / Configs.OVERHEAT_BORDER} height="2" x={PADDING + 1} y={PADDING+11} ry="1" />
 
-        <rect className="b" fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 15} ry="2" />
-        <rect className="b" fill="#080" width={(StatusHudTag.width - PADDING * 2 - 2) * model.missileAmmo / Configs.INITIAL_MISSILE_AMMO} height="2" x={PADDING + 1} y={PADDING+16} ry="1" />
+        <rect fill="#fff" width={StatusHudTag.width - PADDING * 2} height="4" x={PADDING} y={PADDING + 15} ry="2" />
+        <rect fill="#080" width={(StatusHudTag.width - PADDING * 2 - 2) * model.missileAmmo / Configs.INITIAL_MISSILE_AMMO} height="2" x={PADDING + 1} y={PADDING+16} ry="1" />
       </g>
     );
   }

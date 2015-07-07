@@ -29,7 +29,10 @@ var Standalone = function() {
     }
   });
   this.worker.postMessage({
-    sources: [$("#player1").val(), $("#player2").val()]
+    sources: [
+      { color: "#866", ai: $("#player1").val() },
+      { color: "#262", ai: $("#player2").val() }
+    ]
   });
 };
 

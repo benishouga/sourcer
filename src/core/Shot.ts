@@ -35,6 +35,7 @@ class Shot extends Actor {
   public dump(): any {
     var dump = super.dump();
     dump.type = this.type;
+    dump.color = this.owner.color;
     return dump;
   }
 }
