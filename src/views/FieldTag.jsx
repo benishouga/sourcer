@@ -78,16 +78,8 @@ var FieldTag = React.createClass({
       return <FxTag key={b.id} model={b} />
     });
 
-    var filter = '<filter id="f1" x="-1" y="-1" width="300%" height="300%">' +
-      '  <feOffset result="offOut" in="SourceAlpha" dx="0.5" dy="-0.5" />' +
-      '  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="1.5" />' +
-      '  <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />' +
-      '</filter>';
-
     return (
       <g>
-        <defs dangerouslySetInnerHTML={{__html:filter}} />
-
         <BackgroundTag screen={screen} />
 
         <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center) + "," + (screen.height - 24) / screen.scale + ") scale(1, -1)"}>
