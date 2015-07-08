@@ -30,8 +30,8 @@ var Standalone = function() {
   });
   this.worker.postMessage({
     sources: [
-      { color: "#866", ai: $("#player1").val() },
-      { color: "#262", ai: $("#player2").val() }
+      { name: "player1", color: "#866", ai: $("#player1").val() },
+      { name: "player2", color: "#262", ai: $("#player2").val() }
     ]
   });
 };

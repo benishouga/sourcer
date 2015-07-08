@@ -15,6 +15,7 @@ class Field {
   public frame: number;
   public finishedFrame: number;
   public center: number;
+  public result: GameResult;
 
   constructor() {
     this.frame = 0;
@@ -93,13 +94,28 @@ class Field {
       fx.move();
     });
 
-    this.sourcers.forEach((sourcer: Sourcer) => {
-      if (sourcer.shield <= 0) {
-        sourcer.alive = false;
-      }
-    });
+    this.checkResult();
 
     this.frame++;
+  }
+
+  public checkResult() {
+    if (this.result) {
+      return;
+    }
+
+    var survived: Sourcer = null;
+    for (var i = 0; i < this.sourcers.length; i++) {
+      var sourcer = this.sourcers[i];
+      if (sourcer.shield <= 0) {
+        sourcer.alive = false;
+      } else if (!survived) {
+        survived = sourcer;
+      } else {
+        return;
+      }
+    }
+    this.result = new GameResult(survived, this.frame);
   }
 
   public scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
@@ -196,6 +212,7 @@ class Field {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
     var fxDump: any[] = [];
+    var resultDump: any = null;
 
     this.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());
@@ -206,12 +223,35 @@ class Field {
     this.fxs.forEach((fx: Fx) => {
       fxDump.push(fx.dump());
     });
+    if (this.result) {
+      resultDump = this.result.dump();
+    }
 
     return {
       frame: this.frame,
       sourcers: sourcersDump,
       shots: shotsDump,
-      fxs: fxDump
+      fxs: fxDump,
+      result: resultDump
+    };
+  }
+}
+
+class GameResult {
+  constructor(public winner: Sourcer, public frame: number) {
+  }
+  public isDraw() {
+    return this.winner == null;
+  }
+  public dump() {
+    var dump: any = null;
+    if (this.winner) {
+      dump = this.winner.dump()
+    }
+    return {
+      winner: dump,
+      isDraw: this.isDraw(),
+      frame: this.frame
     };
   }
 }

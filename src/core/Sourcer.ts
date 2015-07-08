@@ -23,7 +23,7 @@ class Sourcer extends Actor {
   public controller: SourcerController;
   public ai: Function;
 
-  constructor(field: Field, x: number, y: number, ai: string, public color: string) {
+  constructor(field: Field, x: number, y: number, ai: string, public name: string, public color: string) {
     super(field, x, y);
     this.direction = Consts.DIRECTION_RIGHT;
     this.command = new SourcerCommand(this);
@@ -133,6 +133,7 @@ class Sourcer extends Actor {
     dump.temperature = this.temperature;
     dump.missileAmmo = this.missileAmmo;
     dump.fuel = this.fuel;
+    dump.name = this.name;
     dump.color = this.color;
     return dump;
   }
