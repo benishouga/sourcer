@@ -54,6 +54,9 @@ var ScreenTag = React.createClass({
   },
 
   onReload: function() {
+    if (standalone) {
+      standalone.worker.terminate();
+    }
     standalone = new Standalone();
   },
 
