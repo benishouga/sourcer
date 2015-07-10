@@ -190,7 +190,7 @@ describe('V', () => {
     });
   });
 
-  describe.only('direction', () => {
+  describe('direction', () => {
     it('zero', () => {
       var result = V.direction(0);
       assert.ok(Math.abs(result.x - 1) < EPSILON);
