@@ -7,10 +7,12 @@
         "noImplicitAny": true,
         "removeComments": true,
         "noLib": false,
-        "outDir": "../intermediate/"
+        "outDir": "../intermediate/",
+        "jsx": "react"
     },
     "filesGlob": [
         "./**/*.ts",
+        "./**/*.tsx",
         "../typings/**/*.ts",
         "!./node_modules/**/*.ts"
     ],
@@ -42,6 +44,7 @@
         "../typings/assert/assert.d.ts",
         "../typings/jquery/jquery.d.ts",
         "../typings/mocha/mocha.d.ts",
+        "../typings/react/react.d.ts",
         "../typings/tsd.d.ts"
     ],
     "formatCodeOptions": {

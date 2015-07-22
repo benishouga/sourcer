@@ -24,7 +24,7 @@ gulp.task('standalone-worker', ['ts', 'js'], function() {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('standalone', ['ts', 'js', 'standalone-worker', 'react'], function() {
+gulp.task('standalone', ['ts', 'js', 'standalone-worker'], function() {
   return browserify({
       debug: true,
     })
@@ -54,10 +54,9 @@ gulp.task('mocha', ['ts', 'js'], function() {
 });
 
 gulp.task('ts', function() {
-  var project = ts.createProject(
-    'src/tsconfig.json', {
-      typescript: require('typescript')
-    });
+  var project = ts.createProject('src/tsconfig.json', {
+    typescript: require('typescript')
+  });
 
   return project.src()
     .pipe(ts(project))
@@ -68,12 +67,6 @@ gulp.task('js', function() {
   return gulp.src(['src/**/*.js'], {
     base: 'src'
   }).pipe(gulp.dest('intermediate'));
-});
-
-gulp.task('react', function() {
-  return gulp.src('src/**/*.jsx')
-    .pipe(react())
-    .pipe(gulp.dest('intermediate'));
 });
 
 gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
