@@ -1,8 +1,12 @@
-/** @jsx React.DOM */
-var React = require('react');
+import * as React from 'react';
+import {FxDump} from '../core/Fx';
 
-var FxTag = React.createClass({
-  render: function() {
+interface FxTagProps extends React.Props<any> {
+  model: FxDump;
+}
+
+export default class FxTag extends React.Component<FxTagProps, {}> {
+  render() {
     var model = this.props.model;
     var frame = model.frame;
     return (
@@ -15,6 +19,4 @@ var FxTag = React.createClass({
       </g>
     );
   }
-});
-
-module.exports = FxTag;
+}

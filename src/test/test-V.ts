@@ -1,5 +1,5 @@
-import V = require('../core/V');
-import assert = require('power-assert');
+import V from '../core/V';
+import * as assert from 'power-assert';
 
 var EPSILON = 10e-12;
 

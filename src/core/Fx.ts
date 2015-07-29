@@ -1,33 +1,40 @@
-import Field = require('./Field');
-import V = require('./V');
+import Field from './Field';
+import V from './V';
 
-class Fx {
-  public frame: number;
-  public id: string;
+export default class Fx {
+  frame: number;
+  id: string;
 
   constructor(public field: Field, public position: V, public speed: V, public length: number) {
     this.frame = 0;
   }
 
-  public action() {
+  action() {
     this.frame++;
     if (this.length <= this.frame) {
       this.field.removeFx(this);
     }
   }
 
-  public move() {
+  move() {
     this.position = this.position.add(this.speed);
   }
 
-  public dump() {
-    return {
-      id: this.id,
-      position: this.position,
-      frame: this.frame,
-      length: this.length
-    };
+  dump() {
+    return new FxDump(this);
   }
 }
 
-export = Fx;
+export class FxDump {
+  id: string;
+  position: V;
+  frame: number;
+  length: number;
+
+  constructor(fx: Fx) {
+    this.id = fx.id;
+    this.position = fx.position;
+    this.frame = fx.frame;
+    this.length = fx.length;
+  }
+}

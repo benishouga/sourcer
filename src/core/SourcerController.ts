@@ -1,26 +1,26 @@
-import Controller = require('./Controller');
-import Sourcer = require('./Sourcer');
-import Field = require('./Field');
-import Configs = require('./Configs');
-import Utils = require('./Utils');
-import ShotParam = require('./ShotParam');
+import Controller from './Controller';
+import Sourcer from './Sourcer';
+import Field from './Field';
+import Configs from './Configs';
+import Utils from './Utils';
+import ShotParam from './ShotParam';
 
-class SourcerController extends Controller {
-  public shield: () => number;
-  public temperature: () => number;
-  public missileAmmo: () => number;
+export default class SourcerController extends Controller {
+  shield: () => number;
+  temperature: () => number;
+  missileAmmo: () => number;
 
-  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
-  public scanAttack: (direction: number, angle: number, renge?: number) => boolean;
+  scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
+  scanAttack: (direction: number, angle: number, renge?: number) => boolean;
 
-  public ahead: () => void;
-  public back: () => void;
-  public ascent: () => void;
-  public descent: () => void;
-  public turn: () => void;
+  ahead: () => void;
+  back: () => void;
+  ascent: () => void;
+  descent: () => void;
+  turn: () => void;
 
-  public fireLaser: (direction: number, power: number) => void;
-  public fireMissile: (ai: Function) => void;
+  fireLaser: (direction: number, power: number) => void;
+  fireMissile: (ai: Function) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);
@@ -87,4 +87,3 @@ class SourcerController extends Controller {
 
   }
 }
-export = SourcerController;

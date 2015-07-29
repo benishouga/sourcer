@@ -1,16 +1,16 @@
-import Consts = require('./Consts');
-import Field = require('./Field');
-import V = require('./V');
-import Configs = require('./Configs');
-import Shot = require('./Shot');
+import Consts from './Consts';
+import Field from './Field';
+import V from './V';
+import Configs from './Configs';
+import Shot from './Shot';
 
-class Actor {
-  public id: string;
-  public size = Configs.COLLISION_SIZE;
-  public position: V;
-  public speed: V;
-  public direction: number;
-  public wait = 0;
+export default class Actor {
+  id: string;
+  position: V;
+  speed: V;
+  direction: number;
+  size = Configs.COLLISION_SIZE;
+  wait = 0;
 
   constructor(public field: Field, x: number, y: number) {
     this.wait = 0;
@@ -18,7 +18,7 @@ class Actor {
     this.speed = new V(0, 0);
   }
 
-  public think() {
+  think() {
     if (this.wait <= 0) {
       this.wait = 0;
       this.onThink();
@@ -27,26 +27,34 @@ class Actor {
     }
   }
 
-  public onThink() {
+  onThink() {
   }
 
-  public action() {
+  action() {
   }
 
-  public move() {
+  move() {
     this.position = this.position.add(this.speed);
   }
 
-  public onHit(shot: Shot) {
+  onHit(shot: Shot) {
   }
 
-  public dump(): any {
-    return {
-      id: this.id,
-      position: this.position,
-      speed: this.speed,
-      direction: this.direction
-    };
+  dump() {
+    return new ActorDump(this);
   }
 }
-export = Actor;
+
+export class ActorDump {
+  id: string;
+  position: V;
+  speed: V;
+  direction: number;
+
+  constructor(actor: Actor) {
+    this.id = actor.id;
+    this.position = actor.position;
+    this.speed = actor.speed;
+    this.direction = actor.direction;
+  }
+}

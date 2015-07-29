@@ -1,21 +1,21 @@
-import V = require('./V');
-import Actor = require('./Actor');
-import Sourcer = require('./Sourcer');
-import Shot = require('./Shot');
-import Fx = require('./Fx');
-import Utils = require('./Utils');
-import TickEventListener = require('./TickEventListener');
+import V from './V';
+import Actor from './Actor';
+import Sourcer, {SourcerDump} from './Sourcer';
+import Shot, {ShotDump} from './Shot';
+import Fx, {FxDump} from './Fx';
+import Utils from './Utils';
+import TickEventListener from './TickEventListener';
 
-class Field {
-  private id = 0;
-  public sourcers: Sourcer[];
-  public shots: Shot[];
-  public fxs: Fx[];
-  public actorCounter: number;
-  public frame: number;
-  public finishedFrame: number;
-  public center: number;
-  public result: GameResult;
+export default class Field {
+  currentId = 0;
+  sourcers: Sourcer[];
+  shots: Shot[];
+  fxs: Fx[];
+  actorCounter: number;
+  frame: number;
+  finishedFrame: number;
+  center: number;
+  result: GameResult;
 
   constructor() {
     this.frame = 0;
@@ -24,17 +24,17 @@ class Field {
     this.fxs = [];
   }
 
-  public addSourcer(sourcer: Sourcer) {
-    sourcer.id = "sourcer" + (this.id++);
+  addSourcer(sourcer: Sourcer) {
+    sourcer.id = "sourcer" + (this.currentId++);
     this.sourcers.push(sourcer);
   }
 
-  public addShot(shot: Shot) {
-    shot.id = "shot" + (this.id++);
+  addShot(shot: Shot) {
+    shot.id = "shot" + (this.currentId++);
     this.shots.push(shot);
   }
 
-  public removeShot(target: Shot) {
+  removeShot(target: Shot) {
     for (var i = 0; i < this.shots.length; i++) {
       var actor = this.shots[i];
       if (actor === target) {
@@ -44,12 +44,12 @@ class Field {
     }
   }
 
-  public addFx(fx: Fx) {
-    fx.id = "fx" + (this.id++);
+  addFx(fx: Fx) {
+    fx.id = "fx" + (this.currentId++);
     this.fxs.push(fx);
   }
 
-  public removeFx(target: Fx) {
+  removeFx(target: Fx) {
     for (var i = 0; i < this.fxs.length; i++) {
       var fx = this.fxs[i];
       if (fx === target) {
@@ -59,7 +59,7 @@ class Field {
     }
   }
 
-  public tick(listener: TickEventListener) {
+  tick(listener: TickEventListener) {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
@@ -99,7 +99,7 @@ class Field {
     this.frame++;
   }
 
-  public checkResult() {
+  checkResult() {
     if (this.result) {
       return;
     }
@@ -115,10 +115,10 @@ class Field {
         return;
       }
     }
-    this.result = new GameResult(survived, this.frame);
+    this.result = new GameResult(survived.dump(), this.frame);
   }
 
-  public scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
+  scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
     for (var i = 0; i < this.sourcers.length; i++) {
       var sourcer = this.sourcers[i];
       if (sourcer.alive && sourcer !== owner && radar(sourcer.position)) {
@@ -128,7 +128,7 @@ class Field {
     return false;
   }
 
-  public scanAttack(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
+  scanAttack(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
     var ownerPosition = owner.position;
     for (var i = 0; i < this.shots.length; i++) {
       var shot = this.shots[i];
@@ -144,7 +144,7 @@ class Field {
     return false;
   }
 
-  public checkCollision(shot: Shot): Actor {
+  checkCollision(shot: Shot): Actor {
     var f = shot.position;
     var t = shot.position.add(shot.speed);
 
@@ -171,7 +171,7 @@ class Field {
     return null;
   }
 
-  public checkCollisionEnviroment(shot: Shot): boolean {
+  checkCollisionEnviroment(shot: Shot): boolean {
     return shot.position.y < 0;
   }
 
@@ -187,7 +187,7 @@ class Field {
     return sumX / count;
   }
 
-  public isFinish(): boolean {
+  isFinish(): boolean {
     var finished = false;
 
     if (!this.finishedFrame) {
@@ -208,52 +208,46 @@ class Field {
     return false;
   }
 
-  public dump(): any {
+  dump() {
+    return new FieldDump(this);
+  }
+}
+
+export class FieldDump {
+  frame: number;
+  sourcers: SourcerDump[];
+  shots: ShotDump[];
+  fxs: FxDump[];
+  result: GameResult;
+
+  constructor(field: Field) {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
     var fxDump: any[] = [];
     var resultDump: any = null;
 
-    this.sourcers.forEach((actor: Actor) => {
+    field.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());
     });
-    this.shots.forEach((actor: Actor) => {
+    field.shots.forEach((actor: Actor) => {
       shotsDump.push(actor.dump());
     });
-    this.fxs.forEach((fx: Fx) => {
+    field.fxs.forEach((fx: Fx) => {
       fxDump.push(fx.dump());
     });
-    if (this.result) {
-      resultDump = this.result.dump();
+    this.frame = field.frame;
+    this.sourcers = sourcersDump;
+    this.shots = shotsDump;
+    this.fxs = fxDump;
+    if (field.result) {
+      this.result = field.result;
     }
-
-    return {
-      frame: this.frame,
-      sourcers: sourcersDump,
-      shots: shotsDump,
-      fxs: fxDump,
-      result: resultDump
-    };
   }
 }
 
-class GameResult {
-  constructor(public winner: Sourcer, public frame: number) {
-  }
-  public isDraw() {
-    return this.winner == null;
-  }
-  public dump() {
-    var dump: any = null;
-    if (this.winner) {
-      dump = this.winner.dump()
-    }
-    return {
-      winner: dump,
-      isDraw: this.isDraw(),
-      frame: this.frame
-    };
+export class GameResult {
+  isDraw: boolean;
+  constructor(public winner: SourcerDump, public frame: number) {
+    this.isDraw = winner == null;
   }
 }
-
-export = Field;

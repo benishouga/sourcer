@@ -1,11 +1,19 @@
-/** @jsx React.DOM */
-var React = require('react');
-var Configs = require('../core/Configs');
+import * as React from 'react';
+import {SourcerDump} from '../core/Sourcer';
+import V from '../core/V';
+import Configs from '../core/Configs';
 
 var PADDING = 2;
 
-var StatusHudTag = React.createClass({
-  render: function() {
+interface StatusHudTagProps extends React.Props<any> {
+  model: SourcerDump;
+  position: V;
+}
+
+export default class StatusHudTag extends React.Component<StatusHudTagProps, {}> {
+  static width = 128;
+
+  render() {
     var model = this.props.model;
     var position = this.props.position;
 
@@ -28,8 +36,4 @@ var StatusHudTag = React.createClass({
       </g>
     );
   }
-});
-
-StatusHudTag.width = 128;
-
-module.exports = StatusHudTag;
+}

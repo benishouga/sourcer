@@ -1,18 +1,31 @@
-/** @jsx React.DOM */
-var React = require('react');
-var SourcerTag = require('./SourcerTag');
-var LaserTag = require('./LaserTag');
-var MissileTag = require('./MissileTag');
-var FxTag = require('./FxTag');
-var HudTag = require('./HudTag');
-var BackgroundTag = require('./BackgroundTag');
-var Utils = require('../core/Utils');
+import * as React from 'react';
+import {FieldDump} from '../core/Field';
+import V from '../core/V';
+import Screen from './Screen';
+import SourcerTag from './SourcerTag';
+import ShotTag from './ShotTag';
+import LaserTag from './LaserTag';
+import MissileTag from './MissileTag';
+import FxTag from './FxTag';
+import HudTag from './HudTag';
+import BackgroundTag from './BackgroundTag';
+import Utils from '../core/Utils';
 
-var FieldTag = React.createClass({
-  render: function() {
+export default class FieldTag extends React.Component<{
+  height: number;
+  width: number;
+  playing: boolean;
+  frameLength: number;
+  onFrameChanged: (frame: number) => void;
+  onPlay: () => void;
+  onPause: () => void;
+  onReload: () => void;
+  field: FieldDump;
+}, {}> {
+  render() {
     var field = this.props.field;
 
-    var screen = {
+    var screen: Screen = {
       frameLength: this.props.frameLength,
       height: this.props.height,
       width: this.props.width,
@@ -33,7 +46,7 @@ var FieldTag = React.createClass({
     var maxTop = -Number.MAX_VALUE;
     var sumX = 0;
 
-    var sourcers = field.sourcers.map(function(b){
+    var sourcers: JSX.Element[] = field.sourcers.map(function(b) {
       sumX += b.position.x;
       maxTop = Math.max(maxTop, b.position.y);
       maxRight = Math.max(maxRight, b.position.x);
@@ -49,7 +62,7 @@ var FieldTag = React.createClass({
     screen.right = maxRight + 100;
     screen.top = maxTop + 100;
 
-    if(screen.width > screen.right - screen.left) {
+    if (screen.width > screen.right - screen.left) {
       screen.right = screen.center + screen.width / 2;
       screen.left = screen.center - screen.width / 2;
     }
@@ -61,10 +74,10 @@ var FieldTag = React.createClass({
     var viewTop = (screen.height - 24) / screen.scale;
 
     if (field.shots) {
-      var shots = field.shots.map(function(b){
+      var shots: JSX.Element[] = field.shots.map(function(b) {
         var x = b.position.x;
         var y = b.position.y;
-        if(viewLeft < x && x < viewRight && y < viewTop) {
+        if (viewLeft < x && x < viewRight && y < viewTop) {
           if (b.type === "Missile") {
             return <MissileTag key={b.id} model={b} />
           } else {
@@ -74,7 +87,7 @@ var FieldTag = React.createClass({
       });
     }
 
-    var fxs = field.fxs.map(function(b) {
+    var fxs: JSX.Element[] = field.fxs.map(function(b) {
       return <FxTag key={b.id} model={b} />
     });
 
@@ -94,6 +107,4 @@ var FieldTag = React.createClass({
       </g>
     );
   }
-});
-
-module.exports = FieldTag;
+}

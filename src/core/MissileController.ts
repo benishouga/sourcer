@@ -1,15 +1,15 @@
-import Controller = require('./Controller');
-import Field = require('./Field');
-import Missile = require('./Missile');
-import Utils = require('./Utils');
+import Controller from './Controller';
+import Field from './Field';
+import Missile from './Missile';
+import Utils from './Utils';
 
-class MissileController extends Controller {
-  public direction: () => number;
-  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
-  public speedUp: () => void;
-  public speedDown: () => void;
-  public turnRight: () => void;
-  public turnLeft: () => void;
+export default class MissileController extends Controller {
+  direction: () => number;
+  scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
+  speedUp: () => void;
+  speedDown: () => void;
+  turnRight: () => void;
+  turnLeft: () => void;
 
   constructor(missile: Missile) {
     super(missile);
@@ -50,5 +50,3 @@ class MissileController extends Controller {
     }
   }
 }
-
-export = MissileController;

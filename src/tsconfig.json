@@ -1,13 +1,9 @@
 {
-    "version": "1.5.0-alpha",
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": false,
         "noImplicitAny": true,
-        "removeComments": true,
-        "noLib": false,
-        "outDir": "../intermediate/",
+        "outDir": "../intermediate",
         "jsx": "react"
     },
     "filesGlob": [
@@ -41,11 +37,26 @@
         "./test/test-Utils.ts",
         "./test/test-V.ts",
         "./test2d.ts",
+        "./views/Screen.ts",
+        "./standalone.tsx",
+        "./test.tsx",
+        "./views/BackgroundTag.tsx",
+        "./views/ControllerHudTag.tsx",
+        "./views/FieldTag.tsx",
+        "./views/FxTag.tsx",
+        "./views/HudTag.tsx",
+        "./views/LaserTag.tsx",
+        "./views/MissileTag.tsx",
+        "./views/ResultHudTag.tsx",
+        "./views/ShotTag.tsx",
+        "./views/SourcerTag.tsx",
+        "./views/StatusHudTag.tsx",
+        "./views/TreeTag.tsx",
         "../typings/assert/assert.d.ts",
+        "../typings/bundle.d.ts",
         "../typings/jquery/jquery.d.ts",
         "../typings/mocha/mocha.d.ts",
-        "../typings/react/react.d.ts",
-        "../typings/tsd.d.ts"
+        "../typings/react/react.d.ts"
     ],
     "formatCodeOptions": {
         "indentSize": 2,

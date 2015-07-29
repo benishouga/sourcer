@@ -1,27 +1,27 @@
-import Command = require('./Command');
-import Sourcer = require('./Sourcer');
-import Configs = require('./Configs');
-import ShotParam = require('./ShotParam');
+import Command from './Command';
+import Sourcer from './Sourcer';
+import Configs from './Configs';
+import ShotParam from './ShotParam';
 
-class SourcerCommand extends Command {
-  public ahead: number;
-  public ascent: number;
-  public turn: boolean;
-  public fire: ShotParam;
+export default class SourcerCommand extends Command {
+  ahead: number;
+  ascent: number;
+  turn: boolean;
+  fire: ShotParam;
 
   constructor(public sourcer: Sourcer) {
     super();
     this.reset();
   }
 
-  public reset() {
+  reset() {
     this.ahead = 0;
     this.ascent = 0;
     this.turn = false;
     this.fire = null;
   }
 
-  public execute() {
+  execute() {
     if (this.fire) {
       this.sourcer.fire(this.fire);
     }
@@ -37,5 +37,3 @@ class SourcerCommand extends Command {
     }
   }
 }
-
-export = SourcerCommand;

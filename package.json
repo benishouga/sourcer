@@ -2,19 +2,19 @@
   "name": "sourcer",
   "author": "moriki",
   "devDependencies": {
-    "gulp": "^3.8.11",
     "browserify": "^9.0.8",
-    "vinyl-source-stream": "^1.1.0",
-    "gulp-mocha": "^2.0.1",
+    "browserify-shim": "^3.8.7",
     "chai": "^2.3.0",
+    "del": "^1.2.0",
+    "espower-loader": "^0.11.0",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.1",
+    "gulp-react": "^3.0.1",
     "gulp-typescript": "^2.7.4",
     "mocha": "^2.2.5",
-    "typescript": "git@github.com:Microsoft/TypeScript.git#master",
-    "espower-loader": "^0.11.0",
     "power-assert": "^0.11.0",
-    "browserify-shim": "^3.8.7",
-    "del": "^1.2.0",
-    "gulp-react": "^3.0.1"
+    "typescript": "^1.6.0-dev.20150724",
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "react": "^0.13.3"

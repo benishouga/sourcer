@@ -1,8 +1,6 @@
-import Sourcer = require('./Sourcer');
+import Sourcer from './Sourcer';
 
-interface TickEventListener {
+export default class TickEventListener {
   onPreThink: (targetId: string) => void;
   onPostThink: (targetId: string) => void;
 }
-
-export = TickEventListener;

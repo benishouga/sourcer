@@ -1,10 +1,10 @@
-import V = require('./V');
-import Consts = require('./Consts');
+import V from './V';
+import Consts from './Consts';
 
 var EPSILON = 10e-12;
 
-class Utils {
-  public static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
+export default class Utils {
+  static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
     var checkDistance = (t: V) => c.distance(t) <= renge;
 
     if (360 <= angle) {
@@ -21,7 +21,7 @@ class Utils {
     }
   }
 
-  public static side(base: V, degree: number): (t: V) => boolean {
+  static side(base: V, degree: number): (t: V) => boolean {
     var radian = Utils.toRadian(degree);
     var direction = new V(Math.cos(radian), Math.sin(radian));
     var previously = base.x * direction.y - base.y * direction.x - EPSILON;
@@ -30,7 +30,7 @@ class Utils {
     };
   }
 
-  public static calcDistance(f: V, t: V, p: V): number {
+  static calcDistance(f: V, t: V, p: V): number {
     var toFrom = t.subtract(f);
     var pFrom = p.subtract(f);
     if (toFrom.dot(pFrom) < EPSILON) {
@@ -46,11 +46,11 @@ class Utils {
     return Math.abs(toFrom.cross(pFrom) / toFrom.length());
   }
 
-  public static toRadian(degree: number): number {
+  static toRadian(degree: number): number {
     return degree * (Math.PI / 180);
   }
 
-  public static toOpposite(degree: number): number {
+  static toOpposite(degree: number): number {
     degree = degree % 360;
     if (degree < 0) {
       degree = degree + 360;
@@ -62,9 +62,7 @@ class Utils {
     }
   }
 
-  public static rand(renge: number): number {
+  static rand(renge: number): number {
     return Math.random() * renge;
   }
 }
-
-export = Utils;

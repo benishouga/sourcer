@@ -1,8 +1,19 @@
-/** @jsx React.DOM */
-var React = require('react');
+import * as React from 'react';
 
-var TreeTag = React.createClass({
-  render: function() {
+export class Tree {
+  id: string;
+  x: number;
+  size: number;
+  height: number;
+}
+
+interface TreeTagProps extends React.Props<any> {
+  model: Tree;
+  far: number
+}
+
+export default class TreeTag extends React.Component<TreeTagProps, {}> {
+  render() {
     var model = this.props.model;
     var far = this.props.far;
     var alpha = 255 - Math.floor(255 / far);
@@ -17,6 +28,4 @@ var TreeTag = React.createClass({
       </g>
     );
   }
-});
-
-module.exports = TreeTag;
+}

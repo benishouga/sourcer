@@ -1,6 +1,6 @@
-import Utils = require('./core/Utils');
-import V = require('./core/V');
-import $ = require('jquery');
+import Utils from './core/Utils';
+import V from './core/V';
+import * as $ from 'jquery';
 
 class Test2d {
   public context: CanvasRenderingContext2D;

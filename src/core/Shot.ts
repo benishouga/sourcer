@@ -1,18 +1,18 @@
-import Field = require('./Field');
-import Sourcer = require('./Sourcer');
-import Actor = require('./Actor');
-import Fx = require('./Fx');
+import Field from './Field';
+import Sourcer from './Sourcer';
+import Actor, {ActorDump} from './Actor';
+import Fx from './Fx';
 
-class Shot extends Actor {
-  public temperature = 0;
-  public damage = () => 0;
-  public breakable = false;
+export default class Shot extends Actor {
+  temperature = 0;
+  damage = () => 0;
+  breakable = false;
 
-  public constructor(field: Field, public owner: Sourcer, public type: string) {
+  constructor(field: Field, public owner: Sourcer, public type: string) {
     super(field, owner.position.x, owner.position.y);
   }
 
-  public action() {
+  action() {
     this.onAction();
     var collided = this.field.checkCollision(this);
     if (collided) {
@@ -25,19 +25,25 @@ class Shot extends Actor {
       this.field.addFx(new Fx(this.field, this.position, this.speed.divide(2), 8));
     }
   }
-  public reaction(sourcer: Sourcer) {
+  reaction(sourcer: Sourcer) {
     sourcer.temperature += this.temperature;
   }
 
-  public onAction() {
+  onAction() {
   }
 
-  public dump(): any {
-    var dump = super.dump();
-    dump.type = this.type;
-    dump.color = this.owner.color;
-    return dump;
+  dump() {
+    return new ShotDump(this);
   }
 }
 
-export = Shot;
+export class ShotDump extends ActorDump {
+  type: string;
+  color: string;
+
+  constructor(shot: Shot) {
+    super(shot);
+    this.type = shot.type;
+    this.color = shot.owner.color;
+  }
+}

@@ -1,7 +1,7 @@
-import Field = require('./core/Field');
-import Sourcer = require('./core/Sourcer');
-import Utils = require('./core/Utils');
-import TickEventListener = require('./core/TickEventListener');
+import Field from './core/Field';
+import Sourcer from './core/Sourcer';
+import Utils from './core/Utils';
+import TickEventListener from './core/TickEventListener';
 
 declare function postMessage(message: any): void;
 

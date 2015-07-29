@@ -1,3 +1,3 @@
 declare var chainchomp : (source: string) => Function;
 
-export = chainchomp;
+export default chainchomp;

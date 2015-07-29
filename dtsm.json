@@ -19,11 +19,11 @@
     "assert/assert.d.ts": {
       "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
     },
-    "react/react.d.ts": {
-      "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
-    },
     "jquery/jquery.d.ts": {
       "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
+    },
+    "react/react.d.ts": {
+      "ref": "f6c8ca47193fb67947944a3170912672ac3e908e"
     }
   }
 }

@@ -1,13 +1,13 @@
-import Field = require('./Field');
-import Actor = require('./Actor');
+import Field from './Field';
+import Actor from './Actor';
 
-class Controller {
-  public field: Field;
-  public frame: () => number;
-  public altitude: () => number;
-  public wait: (frame: number) => void;
-  public fuel: () => number;
-  public log: (message?: any, ...optionalParams: any[]) => void;
+export default class Controller {
+  field: Field;
+  frame: () => number;
+  altitude: () => number;
+  wait: (frame: number) => void;
+  fuel: () => number;
+  log: (message?: any, ...optionalParams: any[]) => void;
 
   constructor(actor: Actor) {
     this.log = (message?: any, ...optionalParams: any[]) => {
@@ -23,5 +23,3 @@ class Controller {
     };
   }
 }
-
-export = Controller;

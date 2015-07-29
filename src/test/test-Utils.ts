@@ -1,6 +1,6 @@
-import Utils = require('../core/Utils');
-import V = require('../core/V');
-import assert = require('power-assert');
+import Utils from '../core/Utils';
+import V from '../core/V';
+import * as assert from 'power-assert';
 
 describe('Utils', () => {
 

@@ -1,8 +1,6 @@
-class ShotParam {
-  public ai: Function;
-  public direction: number;
-  public power: number;
-  public shotType: string;
+export default class ShotParam {
+  ai: Function;
+  direction: number;
+  power: number;
+  shotType: string;
 }
-
-export = ShotParam;

@@ -1,27 +1,27 @@
-import chainchomp = require('../libs/chainchomp');
-import Actor = require('./Actor');
-import Field = require('./Field');
-import SourcerCommand = require('./SourcerCommand');
-import SourcerController = require('./SourcerController');
-import ShotParam = require('./ShotParam');
-import Configs = require('./Configs');
-import Consts = require('./Consts');
-import Utils = require('./Utils');
-import V = require('./V');
-import Shot = require('./Shot');
-import Laser = require('./Laser');
-import Missile = require('./Missile');
+import chainchomp from '../libs/chainchomp';
+import Actor, {ActorDump} from './Actor';
+import Field from './Field';
+import SourcerCommand from './SourcerCommand';
+import SourcerController from './SourcerController';
+import ShotParam from './ShotParam';
+import Configs from './Configs';
+import Consts from './Consts';
+import Utils from './Utils';
+import V from './V';
+import Shot from './Shot';
+import Laser from './Laser';
+import Missile from './Missile';
 
-class Sourcer extends Actor {
-  public alive = true;
-  public temperature = 0;
-  public shield = Configs.INITIAL_SHIELD;
-  public missileAmmo = Configs.INITIAL_MISSILE_AMMO;
-  public fuel = Configs.INITIAL_FUEL;
+export default class Sourcer extends Actor {
+  alive = true;
+  temperature = 0;
+  shield = Configs.INITIAL_SHIELD;
+  missileAmmo = Configs.INITIAL_MISSILE_AMMO;
+  fuel = Configs.INITIAL_FUEL;
 
-  public command: SourcerCommand;
-  public controller: SourcerController;
-  public ai: Function;
+  command: SourcerCommand;
+  controller: SourcerController;
+  ai: Function;
 
   constructor(field: Field, x: number, y: number, ai: string, public name: string, public color: string) {
     super(field, x, y);
@@ -36,7 +36,7 @@ class Sourcer extends Actor {
     }
   }
 
-  public onThink() {
+  onThink() {
     if (this.ai === null || !this.alive) {
       return;
     }
@@ -51,7 +51,7 @@ class Sourcer extends Actor {
     }
   }
 
-  public action() {
+  action() {
     // air resistance
     this.speed = this.speed.multiply(Configs.SPEED_RESISTANCE);
 
@@ -94,7 +94,7 @@ class Sourcer extends Actor {
     this.command.reset()
   }
 
-  public fire(param: ShotParam) {
+  fire(param: ShotParam) {
     if (param.shotType === "Laser") {
       var direction = this.opposite(param.direction);
       var shot = new Laser(this.field, this, direction, param.power);
@@ -112,7 +112,7 @@ class Sourcer extends Actor {
     }
   }
 
-  public opposite(direction: number): number {
+  opposite(direction: number): number {
     if (this.direction === Consts.DIRECTION_LEFT) {
       return Utils.toOpposite(direction);
     } else {
@@ -120,23 +120,33 @@ class Sourcer extends Actor {
     }
   }
 
-  public onHit(shot: Shot) {
+  onHit(shot: Shot) {
     this.speed = this.speed.add(shot.speed.multiply(Configs.ON_HIT_SPEED_GIVEN_RATE));
     this.shield -= shot.damage();
     this.shield = Math.max(0, this.shield);
     this.field.removeShot(shot);
   }
 
-  public dump(): any {
-    var dump = super.dump();
-    dump.shield = this.shield;
-    dump.temperature = this.temperature;
-    dump.missileAmmo = this.missileAmmo;
-    dump.fuel = this.fuel;
-    dump.name = this.name;
-    dump.color = this.color;
-    return dump;
+  dump() {
+    return new SourcerDump(this);
   }
 }
 
-export = Sourcer;
+export class SourcerDump extends ActorDump {
+  shield: number;
+  temperature: number;
+  missileAmmo: number;
+  fuel: number;
+  name: string;
+  color: string;
+
+  constructor(sourcer: Sourcer) {
+    super(sourcer);
+    this.shield = sourcer.shield;
+    this.temperature = sourcer.temperature;
+    this.missileAmmo = sourcer.missileAmmo;
+    this.fuel = sourcer.fuel;
+    this.name = sourcer.name;
+    this.color = sourcer.color;
+  }
+}
