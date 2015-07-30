@@ -1,67 +1,9 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var Consts = (function () {
     function Consts() {
     }
     Consts.STIR = 3;
     Consts.MISSILE_AMMO = 20;
     return Consts;
-})();
-var ActionQueue = (function () {
-    function ActionQueue() {
-        this.queue = [];
-    }
-    ActionQueue.prototype.push = function (action) {
-        this.queue.push(action);
-    };
-    ActionQueue.prototype.next = function (ctrl) {
-        if (this.queue.length === 0) {
-            return false;
-        }
-        var action = this.queue.shift();
-        action(ctrl);
-        return true;
-    };
-    return ActionQueue;
-})();
-var Ai = (function () {
-    function Ai() {
-        this.frame = 0;
-        this.queue = new ActionQueue();
-    }
-    Ai.prototype.port = function () {
-        var _this = this;
-        return function (ctrl) {
-            _this.frame++;
-            if (_this.queue.next(ctrl)) {
-                return;
-            }
-            _this.think(ctrl);
-        };
-    };
-    Ai.prototype.think = function (ctrl) {
-    };
-    Ai.prototype.scanEnemyDirection = function (ctrl, precision) {
-        var currentAngle = 180;
-        var currentDirection = 0;
-        for (var i = 0; i < precision; i++) {
-            currentAngle /= 2;
-            var up = currentDirection + currentAngle / 2;
-            var down = currentDirection - currentAngle / 2;
-            if (ctrl.scanEnemy(up, currentAngle)) {
-                currentDirection = up;
-            }
-            else {
-                currentDirection = down;
-            }
-        }
-        return currentDirection;
-    };
-    return Ai;
 })();
 var MissilePod = (function () {
     function MissilePod() {
@@ -74,9 +16,13 @@ var MissilePod = (function () {
 })();
 var MissileAi = (function () {
     function MissileAi(index) {
-        this.index = index;
+        var _this = this;
         this.frame = 0;
-        this.odd = this.index % 2 ? 1 : -1;
+        this.port = function (ctrl) {
+            _this.frame++;
+            _this.think(ctrl);
+        };
+        this.odd = index % 2 ? 1 : -1;
         this.stir = (Consts.MISSILE_AMMO - index) * this.odd * Consts.STIR;
     }
     MissileAi.prototype.think = function (ctrl) {
@@ -97,20 +43,38 @@ var MissileAi = (function () {
             this.stir = 0;
         }
     };
-    MissileAi.prototype.port = function () {
-        var _this = this;
-        return function (ctrl) {
-            _this.frame++;
-            _this.think(ctrl);
-        };
-    };
     return MissileAi;
 })();
-var SourcerAi = (function (_super) {
-    __extends(SourcerAi, _super);
+var ActionQueue = (function () {
+    function ActionQueue() {
+        this.queue = [];
+    }
+    ActionQueue.prototype.push = function (action) {
+        this.queue.push(action);
+    };
+    ActionQueue.prototype.next = function (ctrl) {
+        if (this.queue.length === 0) {
+            return false;
+        }
+        var action = this.queue.shift();
+        action(ctrl);
+        return true;
+    };
+    return ActionQueue;
+})();
+var SourcerAi = (function () {
     function SourcerAi() {
-        _super.apply(this, arguments);
+        var _this = this;
+        this.frame = 0;
         this.pod = new MissilePod();
+        this.queue = new ActionQueue();
+        this.port = function (ctrl) {
+            _this.frame++;
+            if (_this.queue.next(ctrl)) {
+                return;
+            }
+            _this.think(ctrl);
+        };
     }
     SourcerAi.prototype.think = function (ctrl) {
         var _this = this;
@@ -121,7 +85,7 @@ var SourcerAi = (function (_super) {
         if (ctrl.temperature() < 60) {
             if (this.frame % 2 === 0 && ctrl.missileAmmo() !== 0) {
                 this.queue.push(function (ctrl) {
-                    ctrl.fireMissile(_this.pod.fire().port());
+                    ctrl.fireMissile(_this.pod.fire().port);
                 });
                 ctrl.turn();
                 return;
@@ -157,6 +121,22 @@ var SourcerAi = (function (_super) {
             }
         }
     };
+    SourcerAi.prototype.scanEnemyDirection = function (ctrl, precision) {
+        var currentAngle = 180;
+        var currentDirection = 0;
+        for (var i = 0; i < precision; i++) {
+            currentAngle /= 2;
+            var up = currentDirection + currentAngle / 2;
+            var down = currentDirection - currentAngle / 2;
+            if (ctrl.scanEnemy(up, currentAngle)) {
+                currentDirection = up;
+            }
+            else {
+                currentDirection = down;
+            }
+        }
+        return currentDirection;
+    };
     return SourcerAi;
-})(Ai);
-return new SourcerAi().port();
+})();
+module.exports = new SourcerAi().port;

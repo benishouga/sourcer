@@ -30,7 +30,18 @@ export default class Sourcer extends Actor {
     this.controller = new SourcerController(this);
 
     try {
-      this.ai = chainchomp(ai);
+      interface ExportScope {
+        module: {
+          exports: Function;
+        };
+      }
+
+      let scope: ExportScope = {
+        module: {
+          exports: null
+        }
+      };
+      this.ai = chainchomp(ai, scope) || scope.module && scope.module.exports;
     } catch (error) {
       this.ai = null;
     }

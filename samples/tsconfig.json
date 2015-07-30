@@ -13,7 +13,8 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
-        "./advance.ts"
+        "./advance.ts",
+        "./typescript.ts"
     ],
     "formatCodeOptions": {
         "indentSize": 2,
