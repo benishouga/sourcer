@@ -9,7 +9,6 @@
     "espower-loader": "^0.11.0",
     "gulp": "^3.8.11",
     "gulp-mocha": "^2.0.1",
-    "gulp-react": "^3.0.1",
     "gulp-typescript": "^2.7.4",
     "mocha": "^2.2.5",
     "power-assert": "^0.11.0",

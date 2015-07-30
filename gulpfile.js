@@ -5,7 +5,6 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var mocha = require('gulp-mocha');
 var ts = require('gulp-typescript');
-var react = require('gulp-react');
 var del = require('del');
 
 // for power-assert
