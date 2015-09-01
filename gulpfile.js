@@ -33,6 +33,16 @@ gulp.task('standalone', ['ts', 'js', 'standalone-worker'], function() {
     .pipe(gulp.dest('./'));
 });
 
+gulp.task('browser', ['ts', 'js', 'standalone-worker'], function() {
+  return browserify({
+      debug: true,
+    })
+    .add('./intermediate/browser.js')
+    .bundle()
+    .pipe(source('dist/browser.js'))
+    .pipe(gulp.dest('./'));
+});
+
 gulp.task('test2d', ['ts', 'js'], function() {
   return browserify({
       debug: true,
@@ -74,4 +84,5 @@ gulp.task('watch', function() {
   gulp.watch(['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts'], ['standalone']);
 });
 
-gulp.task('default', ["standalone"]);
+// gulp.task('default', ["standalone"]);
+gulp.task('default', ["browser"]);

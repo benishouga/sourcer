@@ -14,7 +14,7 @@ class Standalone {
     this.endOfGame = true;
     this.worker.terminate();
   };
-  handler: number = null;
+  handler: NodeJS.Timer = null;
 
   constructor() {
     this.worker.addEventListener('message', (e: MessageEvent) => {

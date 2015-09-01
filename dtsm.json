@@ -14,17 +14,28 @@
   },
   "dependencies": {
     "mocha/mocha.d.ts": {
-      "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
+      "ref": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
     },
     "assert/assert.d.ts": {
-      "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
+      "ref": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
     },
     "jquery/jquery.d.ts": {
-      "ref": "54f5b04fab7c173e6bf47a381214582c13f6adea"
+      "ref": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
     },
     "react/react.d.ts": {
-      "repo": "https://github.com/benishouga/DefinitelyTyped.git",
-      "ref": "8c18f7d318940a780470c703d2bd06efd3977839"
+      "ref": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "node/node.d.ts": {
+      "ref": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
+    },
+    "express/express.d.ts": {
+      "ref": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
+    },
+    "handlebars/handlebars.d.ts": {
+      "ref": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
+    },
+    "react-router/react-router.d.ts": {
+      "ref": "a213223e1bdf40b280ebf765b42e7ef3da9394dc"
     }
   }
 }
