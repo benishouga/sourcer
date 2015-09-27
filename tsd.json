@@ -1,0 +1,66 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "mocha/mocha.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "power-assert/power-assert.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "empower/empower.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "power-assert-formatter/power-assert-formatter.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "react/react.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "node/node.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "express/express.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "mime/mime.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "handlebars/handlebars.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "react-router/react-router.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "passport/passport.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "passport-google-oauth/passport-google-oauth.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "mongoose/mongoose.d.ts": {
+      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+    },
+    "express-session/express-session.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "cookie-parser/cookie-parser.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "body-parser/body-parser.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+    }
+  }
+}

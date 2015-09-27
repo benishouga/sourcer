@@ -1,4 +1,4 @@
-import V from '../core/V';
+import V from '../main/core/V';
 import * as assert from 'power-assert';
 
 var EPSILON = 10e-12;
@@ -116,10 +116,10 @@ describe('V', () => {
   describe('length', () => {
     it('length', () => {
       var point = new V(30, 40);
-      var result = point.length();
-      assert.ok(result === 50);
-      var result = point.length();
-      assert.ok(result === 50);
+      var result1 = point.length();
+      assert.ok(result1 === 50);
+      var result2 = point.length();
+      assert.ok(result2 === 50);
     });
   });
 

@@ -1,0 +1,1 @@
+require('./intermediate/main/server');

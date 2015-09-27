@@ -6,6 +6,8 @@ var source = require('vinyl-source-stream');
 var mocha = require('gulp-mocha');
 var ts = require('gulp-typescript');
 var del = require('del');
+var tslint = require('gulp-tslint');
+var stylus = require('gulp-stylus');
 
 // for power-assert
 require('espower-loader')({
@@ -17,7 +19,7 @@ gulp.task('standalone-worker', ['ts', 'js'], function() {
   return browserify({
       debug: true,
     })
-    .add('./intermediate/arena.js')
+    .add('./intermediate/main/arena.js')
     .bundle()
     .pipe(source('dist/arena.js'))
     .pipe(gulp.dest('./'));
@@ -27,7 +29,7 @@ gulp.task('standalone', ['ts', 'js', 'standalone-worker'], function() {
   return browserify({
       debug: true,
     })
-    .add('./intermediate/standalone.js')
+    .add('./intermediate/main/standalone.js')
     .bundle()
     .pipe(source('dist/standalone.js'))
     .pipe(gulp.dest('./'));
@@ -37,7 +39,7 @@ gulp.task('browser', ['ts', 'js', 'standalone-worker'], function() {
   return browserify({
       debug: true,
     })
-    .add('./intermediate/browser.js')
+    .add('./intermediate/main/browser.js')
     .bundle()
     .pipe(source('dist/browser.js'))
     .pipe(gulp.dest('./'));
@@ -47,7 +49,7 @@ gulp.task('test2d', ['ts', 'js'], function() {
   return browserify({
       debug: true,
     })
-    .add('./intermediate/test2d.js')
+    .add('./intermediate/main/test2d.js')
     .bundle()
     .pipe(source('dist/test2d.js'))
     .pipe(gulp.dest('./'));
@@ -62,7 +64,7 @@ gulp.task('mocha', ['ts', 'js'], function() {
     }));
 });
 
-gulp.task('ts', function() {
+gulp.task('ts', ['tslint'], function() {
   var project = ts.createProject('src/tsconfig.json', {
     typescript: require('typescript')
   });
@@ -72,17 +74,29 @@ gulp.task('ts', function() {
     .js.pipe(gulp.dest('intermediate'));
 });
 
+gulp.task('tslint', function(){
+    return gulp.src(['src/**/*.ts'])
+      .pipe(tslint())
+      .pipe(tslint.report('verbose'));
+});
+
 gulp.task('js', function() {
   return gulp.src(['src/**/*.js'], {
     base: 'src'
   }).pipe(gulp.dest('intermediate'));
 });
 
+gulp.task('stylus', function() {
+  return gulp.src(['src/css/**/*.stylus'])
+    .pipe(stylus())
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
 
 gulp.task('watch', function() {
-  gulp.watch(['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts'], ['standalone']);
+  gulp.watch(['./src/**/*.js', './src/**/*.ts'], ['default']);
 });
 
 // gulp.task('default', ["standalone"]);
-gulp.task('default', ["browser"]);
+gulp.task('default', ['browser', 'stylus']);

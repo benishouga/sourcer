@@ -1,5 +1,5 @@
-import Utils from '../core/Utils';
-import V from '../core/V';
+import Utils from '../main/core/Utils';
+import V from '../main/core/V';
 import * as assert from 'power-assert';
 
 describe('Utils', () => {

@@ -1,4 +1,4 @@
-import SourcerController from '../src/core/SourcerController';
+import SourcerController from '../src/main/core/SourcerController';
 
 class SourcerAi {
   port = (ctrl: SourcerController) => this.think(ctrl);

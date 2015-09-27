@@ -1,5 +1,5 @@
-import SourcerController from '../src/core/SourcerController';
-import MissileController from '../src/core/MissileController';
+import SourcerController from '../src/main/core/SourcerController';
+import MissileController from '../src/main/core/MissileController';
 
 class Consts {
   static STIR = 3;
