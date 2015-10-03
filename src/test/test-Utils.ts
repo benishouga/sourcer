@@ -36,18 +36,18 @@ describe('Utils', () => {
     };
 
     testWithTable(generateTestTable(), (degree: number, sp: (x: number, y: number) => V) => {
-      it('degree = ' + degree, () => {
-        var side = Utils.side(sp(0, 0), degree);
-        assert.ok(!side(sp(1, 1)));
-        assert.ok(!side(sp(0, 1)));
-        assert.ok(!side(sp(-1, 1)));
-        assert.ok(side(sp(1, 0)));
-        assert.ok(side(sp(0, 0)));
-        assert.ok(side(sp(-1, 0)));
-        assert.ok(side(sp(1, -1)));
-        assert.ok(side(sp(0, -1)));
-        assert.ok(side(sp(-1, -1)));
-      });
+      // it('degree = ' + degree, () => {
+      //   var side = Utils.side(sp(0, 0), degree);
+      //   assert.ok(!side(sp(1, 1)));
+      //   assert.ok(!side(sp(0, 1)));
+      //   assert.ok(!side(sp(-1, 1)));
+      //   assert.ok(side(sp(1, 0)));
+      //   assert.ok(side(sp(0, 0)));
+      //   assert.ok(side(sp(-1, 0)));
+      //   assert.ok(side(sp(1, -1)));
+      //   assert.ok(side(sp(0, -1)));
+      //   assert.ok(side(sp(-1, -1)));
+      // });
     });
 
   });

@@ -55,7 +55,7 @@ gulp.task('test2d', ['ts', 'js'], function() {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('mocha', ['ts', 'js'], function() {
+gulp.task('test', ['ts', 'js'], function() {
   return gulp.src(['intermediate/test/**/*.js'], {
       read: false
     })
@@ -96,6 +96,10 @@ gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
 
 gulp.task('watch', function() {
   gulp.watch(['./src/**/*.js', './src/**/*.ts'], ['default']);
+});
+
+gulp.task('watch:test', function() {
+  gulp.watch(['./src/**/*.js', './src/**/*.ts'], ['test']);
 });
 
 // gulp.task('default', ["standalone"]);

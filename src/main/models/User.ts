@@ -1,24 +1,25 @@
 import {Schema, Document, model, Types} from 'mongoose';
+import {AiDocument} from './Ai';
 import * as _ from 'lodash';
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
   _id: Types.ObjectId;
   account: string;
-  providers: [{ provider: string, id: string }];
-  ais: [Types.ObjectId];
+  providers: [{ provider: string, account: string }];
+  ais: AiDocument[];
   created: Date;
   updated: Date;
 }
 
 let schema = new Schema({
-  account: { type: String, required: true, index: { unique: true } },
+  account: { type: String, required: true },
   providers: [{
     provider: String,
-    id: String
+    account: String
   }],
   ais: [{ type: Schema.Types.ObjectId, ref: 'Ai' }],
-  created: { type: Date, default: Date.now },
-  updated: { type: Date, default: Date.now }
+  created: { type: Date, 'default': Date.now },
+  updated: { type: Date, 'default': Date.now }
 }).pre('save', (next: Function) => {
   this.updated = new Date();
   next();
@@ -30,21 +31,27 @@ module models {
   'use strict';
 
   export class User extends modelBase {
-    static load(id: string, next: (err: any, res: UserDocument) => void) {
-      this.findOne({ id: id }).populate('ais').exec(next);
+    static loadByAccount(account: string, next: (err: any, res: UserDocument) => void) {
+      this.findOne({ account: account }).populate('ais').exec(next);
     }
 
-    static findByAccount(account: { provider: string, id: string }, next?: (err: any, res: UserDocument) => void) {
-      let provider = account.provider;
-      let id = account.id;
-      return this.findOne({ providers: { provider: provider, id: id } }).populate('ais', '_id').exec(next);
+    static loadById(id: Types.ObjectId, next: (err: any, res: UserDocument) => void) {
+      this.findOne({ _id: id }).populate('ais').exec(next);
     }
 
-    static createFromAccount(provider: string, authorId: string, id: string, next: (err: any, res: UserDocument) => void) {
+    static findByOAuthAccount(oauth: { provider: string, account: string }, next?: (err: any, res: UserDocument) => void) {
+      let provider = oauth.provider;
+      let account = oauth.account;
+      return this.findOne({ providers: { provider: provider, account: account } }).populate('ais', '_id').exec(next);
+    }
+
+    static createFromAccount(account: string, oauthProvider: string, oauthAccount: string, next: (err: any, res: UserDocument) => void) {
       new User({
-        provider: provider,
-        authorId: authorId,
-        id: id
+        account: account,
+        providers: [{
+          provider: oauthProvider,
+          account: oauthAccount
+        }]
       }).save(next);
     }
   }
