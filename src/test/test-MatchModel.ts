@@ -30,8 +30,6 @@ describe('Match', () => {
       };
 
       new Match(match).save((err, res) => {
-        console.log(err);
-        console.log(res);
         if (!err) { return reject(); }
         assert.ok(!err, 'err');
         resolve();

@@ -41,29 +41,16 @@ module models {
       this.findOne({ owner: user._id, name: aiName })
         .populate('owner')
         .populate('matches')
-        .exec().then<AiDocument>((res) => {
-          return this.populate(res, {
-            path: 'matches.winner.owner',
-            model: User
-          });
+        .exec()
+        .then<AiDocument>((res) => {
+          return this.populate(res, { path: 'matches.winner.owner', model: User });
         }).then<AiDocument>((res) => {
-          return this.populate(res, {
-            path: 'matches.winner.ai',
-            model: this
-          });
+          return this.populate(res, { path: 'matches.winner.ai', model: this });
         }).then<AiDocument>((res) => {
-          return this.populate(res, {
-            path: 'matches.contestants.owner',
-            model: User
-          });
+          return this.populate(res, { path: 'matches.contestants.owner', model: User });
         }).then<AiDocument>((res) => {
-          return this.populate(res, {
-            path: 'matches.contestants.ai',
-            model: this
-          });
-        }).then<AiDocument>((res) => {
-          next(null, res);
-        });
+          return this.populate(res, { path: 'matches.contestants.ai', model: this });
+        }).then((res) => { next(null, res); }, (err) => { next(err, null); });
     }
 
     static updateOrCreate(newAi: AiDocument, next: (err: any, res: AiDocument) => void) {
@@ -73,6 +60,7 @@ module models {
         return this.createAndRegisterToOwner(newAi, next);
       });
     }
+
     static createAndRegisterToOwner(ai: AiDocument, next: (err: any, res: AiDocument) => void) {
       User.loadById(ai.owner._id, (err, user) => {
         if (err) { return next(err, null); }

@@ -25,9 +25,11 @@ describe('User', () => {
   it('findByOAuthAccount', done => {
     let ai = new Ai({ owner: user._id, name: 'hoge', source: 'huga' });
     Ai.updateOrCreate(ai, (err, res) => {
-      assert.ok(!err, 'err');
+      if (err) { done(err); }
+
       User.findByOAuthAccount({ provider: 'twitter', account: '1234' }, (err, user) => {
-        assert.ok(!err, 'err');
+        if (err) { done(err); }
+
         assert.ok(user.account === 'account', 'account');
         assert.ok(user.providers.length === 1, 'providers');
         assert.ok(user.providers[0].provider === 'twitter', 'oauthProvider');
@@ -41,9 +43,11 @@ describe('User', () => {
   it('loadByAccount', done => {
     let ai = new Ai({ owner: user._id, name: 'hoge', source: 'huga' });
     Ai.updateOrCreate(ai, (err, res) => {
-      assert.ok(!err, 'err');
+      if (err) { done(err); }
+
       User.loadByAccount('account', (err, user) => {
-        assert.ok(!err, 'err');
+        if (err) { done(err); }
+
         assert.ok(user.account === 'account', 'account');
         assert.ok(user.providers.length === 1, 'providers');
         assert.ok(user.providers[0].provider === 'twitter', 'oauthProvider');
