@@ -1,69 +1,69 @@
 {
   "version": "v4",
-  "repo": "borisyankov/DefinitelyTyped",
+  "repo": "benishouga/DefinitelyTyped",
   "ref": "master",
   "path": "typings",
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "mocha/mocha.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "power-assert/power-assert.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "empower/empower.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "power-assert-formatter/power-assert-formatter.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "jquery/jquery.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "react/react.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "node/node.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "express/express.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "mime/mime.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "handlebars/handlebars.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "react-router/react-router.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "passport/passport.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "passport-google-oauth/passport-google-oauth.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "mongoose/mongoose.d.ts": {
-      "commit": "eb6c8b5cb5e2d67128e188cc93d777e356a5109c"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "express-session/express-session.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "cookie-parser/cookie-parser.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "lodash/lodash.d.ts": {
-      "commit": "4551ee0a58024dec15df4929a4b19af2dc52a747"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "d0adccc436197cc7c3559322721e9df86b892bd6"
+      "commit": "669185e5235c890e0d892f30a9a364d7d6caf58a"
     }
   }
 }
