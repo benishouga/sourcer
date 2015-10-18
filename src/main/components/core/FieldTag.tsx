@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldDump} from '../../core/Field';
+import {FieldDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
@@ -74,7 +74,7 @@ export default class FieldTag extends React.Component<{
     var viewTop = (screen.height - 24) / screen.scale;
 
     if (field.shots) {
-      var shots: JSX.Element[] = field.shots.map(function(b) {
+      var shots: JSX.Element[] = field.shots.map((b) => {
         var x = b.position.x;
         var y = b.position.y;
         if (viewLeft < x && x < viewRight && y < viewTop) {
@@ -87,7 +87,7 @@ export default class FieldTag extends React.Component<{
       });
     }
 
-    var fxs: JSX.Element[] = field.fxs.map(function(b) {
+    var fxs: JSX.Element[] = field.fxs.map((b) => {
       return <FxTag key={b.id} model={b} />
     });
 
@@ -99,12 +99,12 @@ export default class FieldTag extends React.Component<{
           <g>
             {sourcers}
             {shots}
-          </g>
+            </g>
           {fxs}
-        </g>
+          </g>
 
         <HudTag field={field} screen={screen} />
-      </g>
+        </g>
     );
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {GameResult} from '../../core/Field';
+import {GameResult} from '../../core/Dump';
 import Screen from './Screen';
 
 var PADDING = 2;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ShotDump} from '../../core/Shot';
+import {ShotDump} from '../../core/Dump';
 
 interface ShotTagProps extends React.Props<any> {
   model: ShotDump;

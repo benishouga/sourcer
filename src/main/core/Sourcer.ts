@@ -1,5 +1,5 @@
 import chainchomp from '../../libs/chainchomp';
-import Actor, {ActorDump} from './Actor';
+import Actor from './Actor';
 import Field from './Field';
 import SourcerCommand from './SourcerCommand';
 import SourcerController from './SourcerController';
@@ -11,6 +11,7 @@ import V from './V';
 import Shot from './Shot';
 import Laser from './Laser';
 import Missile from './Missile';
+import {SourcerDump} from './Dump';
 
 interface ExportScope {
   module: {
@@ -138,26 +139,18 @@ export default class Sourcer extends Actor {
     this.field.removeShot(shot);
   }
 
-  dump() {
-    return new SourcerDump(this);
-  }
-}
-
-export class SourcerDump extends ActorDump {
-  shield: number;
-  temperature: number;
-  missileAmmo: number;
-  fuel: number;
-  name: string;
-  color: string;
-
-  constructor(sourcer: Sourcer) {
-    super(sourcer);
-    this.shield = sourcer.shield;
-    this.temperature = sourcer.temperature;
-    this.missileAmmo = sourcer.missileAmmo;
-    this.fuel = sourcer.fuel;
-    this.name = sourcer.name;
-    this.color = sourcer.color;
+  dump(): SourcerDump {
+    return {
+      id: this.id,
+      position: this.position,
+      speed: this.speed,
+      direction: this.direction,
+      shield: this.shield,
+      temperature: this.temperature,
+      missileAmmo: this.missileAmmo,
+      fuel: this.fuel,
+      name: this.name,
+      color: this.color
+    };
   }
 }

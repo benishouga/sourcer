@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SourcerDump} from '../../core/Sourcer';
+import {SourcerDump} from '../../core/Dump';
 
 interface SourcerTagProps extends React.Props<any> {
   model: SourcerDump;

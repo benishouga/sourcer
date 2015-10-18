@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 import * as React from 'react';
 import FieldTag from './components/core/FieldTag';
-import {FieldDump} from './core/Field';
+import {FieldDump} from './core/Dump';
 
 class Standalone {
   worker = new Worker("dist/arena.js");
@@ -99,5 +99,11 @@ class ScreenTag extends React.Component<{ width: number; height: number }, { fie
   }
 }
 
-var output = document.getElementById("screen");
-React.render(<ScreenTag width={512} height={384} />, output);
+let screens = document.getElementsByClassName("sourcer");
+for (let i = 0; i < screens.length; i++) {
+  let output = screens[i];
+  var width = parseInt(output.getAttribute('data-width')) || 512;
+  var height = parseInt(output.getAttribute('data-height')) || 384;
+  var scale = parseInt(output.getAttribute('data-scale')) || 1.0;
+  React.render(<ScreenTag width={width} height={height} />, output);
+}

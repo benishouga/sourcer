@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ShotDump} from '../../core/Shot';
+import {ShotDump} from '../../core/Dump';
 import ShotTag from './ShotTag';
 
 export default class MissileTag extends ShotTag {

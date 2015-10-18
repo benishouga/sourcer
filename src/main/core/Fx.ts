@@ -1,5 +1,6 @@
 import Field from './Field';
 import V from './V';
+import {FxDump} from './Dump';
 
 export default class Fx {
   frame: number;
@@ -20,21 +21,12 @@ export default class Fx {
     this.position = this.position.add(this.speed);
   }
 
-  dump() {
-    return new FxDump(this);
-  }
-}
-
-export class FxDump {
-  id: string;
-  position: V;
-  frame: number;
-  length: number;
-
-  constructor(fx: Fx) {
-    this.id = fx.id;
-    this.position = fx.position;
-    this.frame = fx.frame;
-    this.length = fx.length;
+  dump(): FxDump {
+    return {
+      id: this.id,
+      position: this.position,
+      frame: this.frame,
+      length: this.length
+    };
   }
 }

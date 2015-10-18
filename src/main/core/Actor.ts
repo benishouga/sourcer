@@ -44,20 +44,6 @@ export default class Actor {
   }
 
   dump() {
-    return new ActorDump(this);
-  }
-}
-
-export class ActorDump {
-  id: string;
-  position: V;
-  speed: V;
-  direction: number;
-
-  constructor(actor: Actor) {
-    this.id = actor.id;
-    this.position = actor.position;
-    this.speed = actor.speed;
-    this.direction = actor.direction;
+    throw new Error('not implimentation');
   }
 }

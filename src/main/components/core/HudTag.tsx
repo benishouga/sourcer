@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldDump} from '../../core/Field';
+import {FieldDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import StatusHudTag from './StatusHudTag';

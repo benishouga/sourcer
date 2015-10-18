@@ -1,7 +1,8 @@
 import Field from './Field';
 import Sourcer from './Sourcer';
-import Actor, {ActorDump} from './Actor';
+import Actor from './Actor';
 import Fx from './Fx';
+import {ShotDump} from './Dump';
 
 export default class Shot extends Actor {
   temperature = 0;
@@ -33,18 +34,14 @@ export default class Shot extends Actor {
     // do nothing
   }
 
-  dump() {
-    return new ShotDump(this);
-  }
-}
-
-export class ShotDump extends ActorDump {
-  type: string;
-  color: string;
-
-  constructor(shot: Shot) {
-    super(shot);
-    this.type = shot.type;
-    this.color = shot.owner.color;
+  dump(): ShotDump {
+    return {
+      id: this.id,
+      position: this.position,
+      speed: this.speed,
+      direction: this.direction,
+      type: this.type,
+      color: this.owner.color
+    };
   }
 }

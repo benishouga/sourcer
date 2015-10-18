@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SourcerDump} from '../../core/Sourcer';
+import {SourcerDump} from '../../core/Dump';
 import V from '../../core/V';
 import Configs from '../../core/Configs';
 

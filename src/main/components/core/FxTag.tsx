@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FxDump} from '../../core/Fx';
+import {FxDump} from '../../core/Dump';
 
 interface FxTagProps extends React.Props<any> {
   model: FxDump;

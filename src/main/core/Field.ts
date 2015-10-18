@@ -1,10 +1,11 @@
 import V from './V';
 import Actor from './Actor';
-import Sourcer, {SourcerDump} from './Sourcer';
-import Shot, {ShotDump} from './Shot';
-import Fx, {FxDump} from './Fx';
+import Sourcer from './Sourcer';
+import Shot from './Shot';
+import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
+import {FieldDump, GameResult, SourcerDump, ShotDump, FxDump} from './Dump';
 
 export default class Field {
   currentId = 0;
@@ -115,10 +116,15 @@ export default class Field {
         return;
       }
     }
-    this.result = new GameResult(survived.dump(), this.frame);
+
+    this.result = {
+      winner: survived.dump(),
+      frame: this.frame,
+      isDraw: !survived
+    };
   }
 
-  scanEnemy(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
+  scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
     for (var i = 0; i < this.sourcers.length; i++) {
       var sourcer = this.sourcers[i];
       if (sourcer.alive && sourcer !== owner && radar(sourcer.position)) {
@@ -128,7 +134,7 @@ export default class Field {
     return false;
   }
 
-  scanAttack(owner: Sourcer, radar: ((t: V) => boolean)): boolean {
+  scanAttack(owner: Sourcer, radar: (t: V) => boolean): boolean {
     var ownerPosition = owner.position;
     for (var i = 0; i < this.shots.length; i++) {
       var shot = this.shots[i];
@@ -208,46 +214,28 @@ export default class Field {
     return false;
   }
 
-  dump() {
-    return new FieldDump(this);
-  }
-}
-
-export class FieldDump {
-  frame: number;
-  sourcers: SourcerDump[];
-  shots: ShotDump[];
-  fxs: FxDump[];
-  result: GameResult;
-
-  constructor(field: Field) {
+  dump(): FieldDump {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
     var fxDump: any[] = [];
     var resultDump: any = null;
 
-    field.sourcers.forEach((actor: Actor) => {
+    this.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());
     });
-    field.shots.forEach((actor: Actor) => {
+    this.shots.forEach((actor: Actor) => {
       shotsDump.push(actor.dump());
     });
-    field.fxs.forEach((fx: Fx) => {
+    this.fxs.forEach((fx: Fx) => {
       fxDump.push(fx.dump());
     });
-    this.frame = field.frame;
-    this.sourcers = sourcersDump;
-    this.shots = shotsDump;
-    this.fxs = fxDump;
-    if (field.result) {
-      this.result = field.result;
-    }
-  }
-}
 
-export class GameResult {
-  isDraw: boolean;
-  constructor(public winner: SourcerDump, public frame: number) {
-    this.isDraw = winner == null;
+    return {
+      frame: this.frame,
+      sourcers: sourcersDump,
+      shots: shotsDump,
+      fxs: fxDump,
+      result: this.result
+    };
   }
 }

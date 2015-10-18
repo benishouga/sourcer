@@ -31,9 +31,9 @@ export default class BackgroundTag extends React.Component<{ screen: Screen; }, 
 
     var viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
     var viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
-    var treeTags = trees.map(function(b) {
-      if (viewLeft < b.x + b.size && b.x - b.size < viewRight) {
-        return <TreeTag key={b.id} model={b} far={far} />
+    var treeTags = trees.map((tree) => {
+      if (viewLeft < tree.x + tree.size && tree.x - tree.size < viewRight) {
+        return <TreeTag key={tree.id} model={tree} far={far} />
       }
     });
     return (
