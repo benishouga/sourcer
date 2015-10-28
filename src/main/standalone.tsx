@@ -6,7 +6,6 @@ import {FieldDump} from './core/Dump';
 class Standalone {
   worker = new Worker("dist/arena.js");
   frames: FieldDump[] = [];
-  frame = 0;
   endOfGame = false;
   thinking: number = null;
   timeout = () => {
@@ -43,12 +42,24 @@ class Standalone {
   }
 }
 
-var standalone = new Standalone();
+interface StandaloneScreenProps {
+  width: number;
+  height: number;
+  scale: number;
+}
 
-class ScreenTag extends React.Component<{ width: number; height: number; scale: number }, { field?: FieldDump; playing?: boolean }> {
+interface StandaloneScreenStats {
+  playing?: boolean;
+  frame?: number;
+  fieldHistory?: FieldDump[];
+  standalone?: Standalone;
+  loadedFrame?: number;
+}
+
+class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenStats> {
   constructor() {
     super();
-    this.state = { field: null, playing: true };
+    this.state = { playing: true };
   }
   onPlay() {
     this.setState({ playing: true });
@@ -59,10 +70,18 @@ class ScreenTag extends React.Component<{ width: number; height: number; scale: 
   }
 
   onReload() {
+    var standalone = this.state.standalone;
     if (standalone) {
       standalone.worker.terminate();
     }
-    standalone = new Standalone();
+    this.setState({
+      fieldHistory: null,
+      standalone: new Standalone()
+    });
+  }
+
+  onFrameChanged(newFrame: number) {
+    this.setState({ frame: newFrame });
   }
 
   render() {
@@ -72,39 +91,58 @@ class ScreenTag extends React.Component<{ width: number; height: number; scale: 
     var scaledWidth = this.props.width / scale;
     var scaledHeight = this.props.height / scale;
 
-    if (standalone.endOfGame) {
-      var onFrameChanged = (newFrame: number) => {
-        standalone.frame = newFrame;
-      };
+    var standalone = this.state.standalone;
+    var loadedFrame = this.state.loadedFrame || 0;
+
+    if (this.state.fieldHistory) {
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
           <g transform={"scale(" + scale + ", " + scale + ")"}>
-            <FieldTag field={this.state.field} width={scaledWidth} height={scaledHeight} frameLength={standalone.frames.length}
-              playing={this.state.playing} onFrameChanged={onFrameChanged} onPlay={() => this.onPlay() } onPause={() => this.onPause() } onReload={() => this.onReload() } />
+            <FieldTag field={this.state.fieldHistory[this.state.frame]} width={scaledWidth} height={scaledHeight} frameLength={this.state.fieldHistory.length}
+              playing={this.state.playing} onFrameChanged={(frame) => this.onFrameChanged(frame) } onPlay={() => this.onPlay() } onPause={() => this.onPause() } onReload={() => this.onReload() } />
             </g>
           </svg>
       );
     } else {
-      return (<p>Loading...</p>);
+
+      return (
+        <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
+          <g transform={"scale(" + scale + ", " + scale + ")"}>
+            <text x={0} y={scaledHeight / 2} textAnchor="middle">{"Loading ..." + loadedFrame}</text>
+            </g>
+          </svg>
+      );
     }
   }
 
   tick() {
     requestAnimationFrame(() => this.tick());
 
-    if (standalone.endOfGame && standalone.frame < standalone.frames.length) {
-      this.setState({
-        field: standalone.frames[standalone.frame]
-      });
+    var standalone = this.state.standalone;
 
-      if (this.state.playing) {
-        standalone.frame++;
+    var loadedFrame = standalone && standalone.frames.length;
+    if (this.state.loadedFrame !== loadedFrame) {
+      this.setState({ loadedFrame: loadedFrame });
+    }
+
+    if (standalone.endOfGame) {
+      if (!this.state.fieldHistory) {
+        this.setState({
+          fieldHistory: standalone.frames,
+          frame: 0
+        });
+      } else if (this.state.playing) {
+        var nextFrame = this.state.frame + 1;
+        if (nextFrame < this.state.fieldHistory.length) {
+          this.setState({ frame: nextFrame });
+        }
       }
     }
   }
 
   componentDidMount() {
     requestAnimationFrame(() => this.tick());
+    this.setState({ standalone: new Standalone() });
   }
 }
 
@@ -113,6 +151,6 @@ for (let i = 0; i < screens.length; i++) {
   let output = screens[i];
   var width = parseInt(output.getAttribute('data-width')) || 512;
   var height = parseInt(output.getAttribute('data-height')) || 384;
-  var scale = parseInt(output.getAttribute('data-scale')) || 1.0;
+  var scale = parseFloat(output.getAttribute('data-scale')) || 1.0;
   React.render(<ScreenTag width={width} height={height} scale={scale} />, output);
 }

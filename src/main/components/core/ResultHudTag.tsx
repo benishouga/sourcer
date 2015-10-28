@@ -5,6 +5,7 @@ import Screen from './Screen';
 export default class ResultHudTag extends React.Component<{ result: GameResult; screen: Screen; }, {}> {
   static width = 256;
   static height = 64;
+
   render() {
     var screen = this.props.screen;
     var result = this.props.result;
