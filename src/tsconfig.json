@@ -46,6 +46,7 @@
         "main/models/Match.ts",
         "main/models/User.ts",
         "main/server.ts",
+        "main/SourcerSource.ts",
         "main/test2d.ts",
         "test/test-AiModel.ts",
         "test/test-MatchModel.ts",

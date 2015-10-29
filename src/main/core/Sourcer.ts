@@ -12,6 +12,7 @@ import Shot from './Shot';
 import Laser from './Laser';
 import Missile from './Missile';
 import {SourcerDump} from './Dump';
+import Fx from './Fx';
 
 interface ExportScope {
   module: {
@@ -64,6 +65,13 @@ export default class Sourcer extends Actor {
   }
 
   action() {
+    if (!this.alive && Utils.rand(8) < 1) {
+      var position = this.position.add(Utils.rand(16) - 8, Utils.rand(16) - 8);
+      var speed = new V(Utils.rand(1) - 0.5, Utils.rand(1) + 0.5);
+      var length = Utils.rand(8) + 4;
+      this.field.addFx(new Fx(this.field, position, speed, length));
+    }
+
     // air resistance
     this.speed = this.speed.multiply(Configs.SPEED_RESISTANCE);
 
@@ -79,7 +87,8 @@ export default class Sourcer extends Actor {
     // control distance by the invisible hand
     var diff = this.field.center - this.position.x;
     if (Configs.DISTANCE_BORDAR < Math.abs(diff)) {
-      var invisibleHand = diff * Configs.DISTANCE_INVISIBLE_HAND;
+      var n = diff < 0 ? -1 : 1;
+      var invisibleHand = (Math.abs(diff) - Configs.DISTANCE_BORDAR) * Configs.DISTANCE_INVISIBLE_HAND * n;
       this.position = new V(this.position.x + invisibleHand, this.position.y);
     }
 

@@ -14,6 +14,7 @@ import Utils from '../../core/Utils';
 export default class FieldTag extends React.Component<{
   height: number;
   width: number;
+  scale: number;
   playing: boolean;
   frameLength: number;
   onFrameChanged: (frame: number) => void;
@@ -29,6 +30,7 @@ export default class FieldTag extends React.Component<{
       frameLength: this.props.frameLength,
       height: this.props.height,
       width: this.props.width,
+      viewScale: this.props.scale,
       left: 0,
       right: 0,
       top: 0,

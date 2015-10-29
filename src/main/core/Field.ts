@@ -17,6 +17,7 @@ export default class Field {
   finishedFrame: number;
   center: number;
   result: GameResult;
+  isFinished: boolean = false;
 
   constructor() {
     this.frame = 0;
@@ -36,12 +37,9 @@ export default class Field {
   }
 
   removeShot(target: Shot) {
-    for (var i = 0; i < this.shots.length; i++) {
-      var actor = this.shots[i];
-      if (actor === target) {
-        this.shots.splice(i, 1);
-        return;
-      }
+    var index = this.shots.indexOf(target);
+    if (0 <= index) {
+      this.shots.splice(index, 1);
     }
   }
 
@@ -51,12 +49,9 @@ export default class Field {
   }
 
   removeFx(target: Fx) {
-    for (var i = 0; i < this.fxs.length; i++) {
-      var fx = this.fxs[i];
-      if (fx === target) {
-        this.fxs.splice(i, 1);
-        return;
-      }
+    var index = this.fxs.indexOf(target);
+    if (0 <= index) {
+      this.fxs.splice(index, 1);
     }
   }
 
@@ -96,58 +91,80 @@ export default class Field {
     });
 
     this.checkResult();
+    this.checkFinish();
 
     this.frame++;
   }
 
   checkResult() {
+    // 決定済み
     if (this.result) {
       return;
     }
 
-    var survived: Sourcer = null;
-    for (var i = 0; i < this.sourcers.length; i++) {
-      var sourcer = this.sourcers[i];
-      if (sourcer.shield <= 0) {
-        sourcer.alive = false;
-      } else if (!survived) {
-        survived = sourcer;
-      } else {
-        return;
-      }
+    this.sourcers.forEach((sourcer) => { sourcer.alive = 0 < sourcer.shield; });
+    var survivers = this.sourcers.filter((sourcer) => { return sourcer.alive; });
+
+    if (1 < survivers.length) {
+      return;
     }
 
+    if (survivers.length === 1) {
+      var surviver = survivers[0];
+      this.result = {
+        winner: surviver.dump(),
+        frame: this.frame,
+        isDraw: false
+      };
+      return;
+    }
+
+    // no surviver draw...
     this.result = {
-      winner: survived.dump(),
+      winner: null,
       frame: this.frame,
-      isDraw: !survived
+      isDraw: true
     };
   }
 
-  scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
-    for (var i = 0; i < this.sourcers.length; i++) {
-      var sourcer = this.sourcers[i];
-      if (sourcer.alive && sourcer !== owner && radar(sourcer.position)) {
-        return true;
-      }
+  checkFinish() {
+    if (this.isFinished) {
+      return;
     }
-    return false;
+
+    var finished = false;
+
+    if (!this.finishedFrame) {
+      var survivers = this.sourcers.filter((sourcer) => { return sourcer.alive; });
+      if (survivers.length <= 1) {
+        this.finishedFrame = this.frame;
+      }
+      return;
+    }
+
+    if (this.finishedFrame < this.frame - 90) {
+      this.isFinished = true;
+    }
+  }
+
+  scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
+    return this.sourcers.some((sourcer) => {
+      return sourcer.alive && sourcer !== owner && radar(sourcer.position);
+    });
   }
 
   scanAttack(owner: Sourcer, radar: (t: V) => boolean): boolean {
+    return this.shots.some((shot) => {
+      return shot.owner !== owner && radar(shot.position) && this.isIncoming(owner, shot);
+    });
+  }
+
+  isIncoming(owner: Sourcer, shot: Shot) {
     var ownerPosition = owner.position;
-    for (var i = 0; i < this.shots.length; i++) {
-      var shot = this.shots[i];
-      var actorPosition = shot.position;
-      if (shot.owner !== owner && radar(actorPosition)) {
-        var currentDistance = ownerPosition.distance(actorPosition);
-        var nextDistance = ownerPosition.distance(actorPosition.add(shot.speed));
-        if (nextDistance < currentDistance) {
-          return true;
-        }
-      }
-    }
-    return false;
+    var actorPosition = shot.position;
+    var currentDistance = ownerPosition.distance(actorPosition);
+    var nextDistance = ownerPosition.distance(actorPosition.add(shot.speed));
+    return nextDistance < currentDistance;
   }
 
   checkCollision(shot: Shot): Actor {
@@ -168,7 +185,7 @@ export default class Field {
       var sourcer = this.sourcers[i];
       if (sourcer.alive && sourcer !== shot.owner) {
         var distance = Utils.calcDistance(f, t, sourcer.position);
-        if (distance < shot.size + actor.size) {
+        if (distance < shot.size + sourcer.size) {
           return sourcer;
         }
       }
@@ -191,27 +208,6 @@ export default class Field {
       }
     });
     return sumX / count;
-  }
-
-  isFinish(): boolean {
-    var finished = false;
-
-    if (!this.finishedFrame) {
-      for (var i = 0; i < this.sourcers.length; i++) {
-        var sourcer = this.sourcers[i];
-        if (!sourcer.alive) {
-          finished = true;
-          this.finishedFrame = this.frame;
-        }
-      }
-      return false;
-    }
-
-    if (this.finishedFrame < this.frame - 90) {
-      return true;
-    }
-
-    return false;
   }
 
   dump(): FieldDump {

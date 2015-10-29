@@ -19,7 +19,7 @@ export default class ControllerHudTag extends React.Component<ControllerHudTagPr
   }
   convert(e: React.MouseEvent) {
     var element = e.target as Element;
-    return e.clientX - element.getBoundingClientRect().left;
+    return (e.clientX - element.getBoundingClientRect().left) / this.props.screen.viewScale;
   }
 
   onMouseDown(e: React.MouseEvent) {
@@ -75,8 +75,8 @@ export default class ControllerHudTag extends React.Component<ControllerHudTagPr
         <g onMouseDown={(e) => this.onMouseDown(e) } onMouseMove={(e) => this.onMouseMove(e) } onMouseUp={(e) => this.onMouseUp(e) } transform={"translate(" + (-screen.width / 2 + this.progressLeft) + "," + (screen.height - ControllerHudTag.height) + ")"}>
           <rect fill="#fff" width={screen.width - PADDING * 2 - this.progressLeft} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
           <rect fill="#000" width={(screen.width - PADDING * 2 - 2 - this.progressLeft) * frame / screen.frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING + 1} y={PADDING + 1} ry="3" />
+          </g>
         </g>
-      </g>
     );
   }
 }

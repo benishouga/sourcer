@@ -5,7 +5,7 @@ import TickEventListener from './core/TickEventListener';
 
 declare function postMessage(message: any): void;
 
-function create(field: Field, source: any) {
+function create(field: Field, source: SourcerSource) {
   "use strict";
 
   return new Sourcer(
@@ -15,29 +15,30 @@ function create(field: Field, source: any) {
 
 onmessage = function(e) {
   var field = new Field();
-
-  var sourcer1 = create(field, e.data.sources[0]);
-  var sourcer2 = create(field, e.data.sources[1]);
-
-  field.addSourcer(sourcer1);
-  field.addSourcer(sourcer2);
+  var idToIndex: { [key: string]: number } = {};
+  var sources = e.data.sources as SourcerSource[];
+  sources.forEach((value, index) => {
+    var sourcer = create(field, value);
+    field.addSourcer(sourcer);
+    idToIndex[sourcer.id] = index;
+  });
 
   var listener: TickEventListener = {
     onPreThink: function(sourcerId: string) {
       postMessage({
         command: "PreThink",
-        index: sourcer1.id === sourcerId ? 0 : 1
+        index: idToIndex[sourcerId]
       });
     },
     onPostThink: function(sourcerId: string) {
       postMessage({
         command: "PostThink",
-        index: sourcer1.id === sourcerId ? 0 : 1
+        index: idToIndex[sourcerId]
       });
     }
   };
 
-  for (var i = 0; i < 2000 && !field.isFinish(); i++) {
+  for (var i = 0; i < 2000 && !field.isFinished; i++) {
     field.tick(listener);
     postMessage({
       command: "Frame",

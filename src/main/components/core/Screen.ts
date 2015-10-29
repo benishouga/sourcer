@@ -2,6 +2,7 @@ export default class Screen {
   frameLength: number;
   height: number;
   width: number;
+  viewScale: number;
   left: number;
   right: number;
   top: number;

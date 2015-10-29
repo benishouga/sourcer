@@ -3,6 +3,8 @@ import * as React from 'react';
 import FieldTag from './components/core/FieldTag';
 import {FieldDump} from './core/Dump';
 
+var colors = ['#866', '#262', '#c55', '#44b'];
+
 class Standalone {
   worker = new Worker("dist/arena.js");
   frames: FieldDump[] = [];
@@ -15,7 +17,7 @@ class Standalone {
   };
   handler: NodeJS.Timer = null;
 
-  constructor() {
+  constructor(playerIds: string[]) {
     this.worker.addEventListener('message', (e: MessageEvent) => {
       if (e.data.command === "PreThink") {
         this.thinking = e.data.index;
@@ -29,16 +31,11 @@ class Standalone {
         this.frames.push(e.data.field);
       }
     });
-
-    var player1 = document.getElementById("player1") as HTMLTextAreaElement;
-    var player2 = document.getElementById("player2") as HTMLTextAreaElement;
-
-    this.worker.postMessage({
-      sources: [
-        { name: "player1", color: "#866", ai: player1.value },
-        { name: "player2", color: "#262", ai: player2.value }
-      ]
+    var players = playerIds.map((value, index) => {
+      var player = document.getElementById(value) as HTMLTextAreaElement;
+      return { name: value, color: colors[index], ai: player.value }
     });
+    this.worker.postMessage({ sources: players });
   }
 }
 
@@ -46,6 +43,7 @@ interface StandaloneScreenProps {
   width: number;
   height: number;
   scale: number;
+  playerIds: string[];
 }
 
 interface StandaloneScreenStats {
@@ -76,7 +74,7 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
     }
     this.setState({
       fieldHistory: null,
-      standalone: new Standalone()
+      standalone: new Standalone(this.props.playerIds)
     });
   }
 
@@ -98,7 +96,7 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
           <g transform={"scale(" + scale + ", " + scale + ")"}>
-            <FieldTag field={this.state.fieldHistory[this.state.frame]} width={scaledWidth} height={scaledHeight} frameLength={this.state.fieldHistory.length}
+            <FieldTag field={this.state.fieldHistory[this.state.frame]} width={scaledWidth} height={scaledHeight} scale={scale} frameLength={this.state.fieldHistory.length}
               playing={this.state.playing} onFrameChanged={(frame) => this.onFrameChanged(frame) } onPlay={() => this.onPlay() } onPause={() => this.onPause() } onReload={() => this.onReload() } />
             </g>
           </svg>
@@ -142,7 +140,7 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
 
   componentDidMount() {
     requestAnimationFrame(() => this.tick());
-    this.setState({ standalone: new Standalone() });
+    this.setState({ standalone: new Standalone(this.props.playerIds) });
   }
 }
 
@@ -152,5 +150,8 @@ for (let i = 0; i < screens.length; i++) {
   var width = parseInt(output.getAttribute('data-width')) || 512;
   var height = parseInt(output.getAttribute('data-height')) || 384;
   var scale = parseFloat(output.getAttribute('data-scale')) || 1.0;
-  React.render(<ScreenTag width={width} height={height} scale={scale} />, output);
+  var playerIdsText = output.getAttribute('data-players');
+  if (playerIdsText) {
+    React.render(<ScreenTag width={width} height={height} scale={scale} playerIds={playerIdsText.split(',') } />, output);
+  }
 }

@@ -10,11 +10,15 @@ export default class HudTag extends React.Component<{ field: FieldDump; screen: 
   render() {
     var field = this.props.field;
     var screen = this.props.screen;
+    var length = field.sourcers.length;
+    var padding = 1;
 
-    var hudPosition = [new V(-screen.width / 2, 0), new V(screen.width / 2 - StatusHudTag.width, 0)];
-    var index = 0;
-    var statusHuds = field.sourcers.map(function(b) {
-      return <StatusHudTag key={b.id + "_hud"} model={b} position={hudPosition[index++]} />
+    var statusHuds = field.sourcers.map(function(b, index) {
+      var width = screen.width / length;
+
+      // space both side.
+      var position = new V(-screen.width / 2 + width * index + padding, 0)
+      return <StatusHudTag key={b.id + "_hud"} model={b} position={position} width={width - padding * 2} />
     });
 
     var resultHudTag: JSX.Element = null;
@@ -27,7 +31,7 @@ export default class HudTag extends React.Component<{ field: FieldDump; screen: 
         {statusHuds}
         {resultHudTag}
         <ControllerHudTag frame={field.frame} screen={screen} />
-      </g>
+        </g>
     );
   }
 }
