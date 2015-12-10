@@ -2,6 +2,7 @@
   "name": "sourcer",
   "author": "moriki",
   "devDependencies": {
+    "browser-sync": "^2.9.11",
     "browserify": "^9.0.8",
     "browserify-shim": "^3.8.7",
     "chai": "^2.3.0",
@@ -9,6 +10,7 @@
     "espower-loader": "^0.11.0",
     "gulp": "^3.8.11",
     "gulp-mocha": "^2.0.1",
+    "gulp-nodemon": "^2.0.4",
     "gulp-stylus": "^2.0.6",
     "gulp-tslint": "^3.2.0",
     "gulp-typescript": "^2.7.4",

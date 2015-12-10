@@ -44,6 +44,7 @@ interface StandaloneScreenProps {
   height: number;
   scale: number;
   playerIds: string[];
+  output: Element;
 }
 
 interface StandaloneScreenStats {
@@ -52,6 +53,7 @@ interface StandaloneScreenStats {
   fieldHistory?: FieldDump[];
   standalone?: Standalone;
   loadedFrame?: number;
+  dynamicWidth?: number;
 }
 
 class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenStats> {
@@ -84,10 +86,10 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
 
   render() {
     var scale = this.props.scale;
-    var width = this.props.width;
+    var width = (this.props.width !== -1 ? this.props.width : this.state.dynamicWidth) || 512;
     var height = this.props.height;
-    var scaledWidth = this.props.width / scale;
-    var scaledHeight = this.props.height / scale;
+    var scaledWidth = width / scale;
+    var scaledHeight = height / scale;
 
     var standalone = this.state.standalone;
     var loadedFrame = this.state.loadedFrame || 0;
@@ -115,6 +117,10 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
 
   tick() {
     requestAnimationFrame(() => this.tick());
+
+    if (this.props.width === -1) {
+      this.setState({ dynamicWidth: this.props.output.clientWidth })
+    }
 
     var standalone = this.state.standalone;
 
@@ -147,11 +153,11 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
 let screens = document.getElementsByClassName("sourcer-standalone");
 for (let i = 0; i < screens.length; i++) {
   let output = screens[i];
-  var width = parseInt(output.getAttribute('data-width')) || 512;
+  var width = parseInt(output.getAttribute('data-width')) || -1;
   var height = parseInt(output.getAttribute('data-height')) || 384;
   var scale = parseFloat(output.getAttribute('data-scale')) || 1.0;
   var playerIdsText = output.getAttribute('data-players');
   if (playerIdsText) {
-    React.render(<ScreenTag width={width} height={height} scale={scale} playerIds={playerIdsText.split(',') } />, output);
+    React.render(<ScreenTag width={width} height={height} scale={scale} playerIds={playerIdsText.split(',') } output={output} />, output);
   }
 }

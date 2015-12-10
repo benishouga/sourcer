@@ -8,6 +8,8 @@ var ts = require('gulp-typescript');
 var del = require('del');
 var tslint = require('gulp-tslint');
 var stylus = require('gulp-stylus');
+var browserSync = require('browser-sync').create();
+var nodemon = require('gulp-nodemon');
 
 // for power-assert
 require('espower-loader')({
@@ -94,13 +96,30 @@ gulp.task('stylus', function() {
 
 gulp.task('clean', del.bind(null, ['intermediate', 'dist']));
 
-gulp.task('watch', function() {
-  gulp.watch(['./src/**/*.js', './src/**/*.ts'], ['default']);
-});
-
 gulp.task('watch:test', function() {
   gulp.watch(['./src/**/*.js', './src/**/*.ts'], ['test']);
 });
 
-// gulp.task('default', ["standalone"]);
+gulp.task('watch:browser', ['nodemon'], function() {
+  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx'], ['reload']);
+  browserSync.init(null, {
+    proxy: 'http://localhost:5000',
+    port: 3000
+  });
+});
+
+gulp.task('nodemon', ['browser', 'stylus'], function() {
+  return nodemon({
+    script: './app.js'
+  });
+});
+
+gulp.task('reload', ['browser', 'stylus'], function() {
+  browserSync.reload();
+});
+
+// gulp.task('browser-sync', ['nodemon'], function() {
+// });
+// gulp.task('default', ['nodaemon']);
+
 gulp.task('default', ['browser', 'stylus']);

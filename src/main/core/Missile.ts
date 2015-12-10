@@ -11,7 +11,7 @@ import MissileController from './MissileController';
 import Consts from './Consts';
 
 export default class Missile extends Shot {
-  temperature = 5;
+  temperature = 10;
   damage = () => 10 + this.speed.length() * 2;
   fuel = 100;
   breakable = true;
