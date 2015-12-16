@@ -37,7 +37,10 @@ export function arena(players: SourcerSource[]): Promise<MatchResult> {
       resolve(match);
     };
 
+    let resolved: boolean = false;
     child.on('message', (message: ArenaMessage) => {
+      if (resolved) { return;}
+
       switch (message.command) {
         case Command.ENTER_FRAME:
           match.frames.push(message.data.field);
@@ -51,6 +54,7 @@ export function arena(players: SourcerSource[]): Promise<MatchResult> {
           clearTimeout(timer);
           break;
         case Command.END_OF_GAME:
+          resolved = true;
           resolve(match);
           break;
       }

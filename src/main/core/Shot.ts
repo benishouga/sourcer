@@ -15,6 +15,7 @@ export default class Shot extends Actor {
 
   action() {
     this.onAction();
+
     var collided = this.field.checkCollision(this);
     if (collided) {
       collided.onHit(this);
@@ -26,6 +27,7 @@ export default class Shot extends Actor {
       this.field.addFx(new Fx(this.field, this.position, this.speed.divide(2), 8));
     }
   }
+
   reaction(sourcer: Sourcer) {
     sourcer.temperature += this.temperature;
   }
