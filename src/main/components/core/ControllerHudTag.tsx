@@ -46,7 +46,7 @@ export default class ControllerHudTag extends React.Component<ControllerHudTagPr
     var screen = this.props.screen;
 
 
-    var reload = (<g onClick={screen.onReload} transform={"translate(" + (-screen.width / 2) + "," + (screen.height - ControllerHudTag.height) + ")"}>
+    var reload = (<g onClick={screen.onReload} transform={`translate(${-screen.width / 2},${screen.height - ControllerHudTag.height})`}>
       <circle r="8" cy="8" cx="8" fill="#fff" />
       <circle r="7" cy="8" cx="8" fill="#000" />
       <circle r="5" cx="8" cy="8" fill="#fff" />
@@ -54,13 +54,13 @@ export default class ControllerHudTag extends React.Component<ControllerHudTagPr
       </g>);
     this.progressLeft = 16;
 
-    var playOrStop = screen.playing ? (<g onClick={screen.onPause} transform={"translate(" + (-screen.width / 2 + this.progressLeft) + "," + (screen.height - ControllerHudTag.height) + ")"}>
+    var playOrStop = screen.playing ? (<g onClick={screen.onPause} transform={`translate(${-screen.width / 2 + this.progressLeft},${screen.height - ControllerHudTag.height})`}>
         <circle r="8" cy="8" cx="8" fill="#fff" />
         <circle r="7" cy="8" cx="8" fill="#000" />
         <circle r="5" cy="8" cx="8" fill="#fff" />
         <rect ry="0.5" y="5" x="5.5" height="6" width="2" fill="#000" />
         <rect ry="0.5" y="5" x="8.5" height="6" width="2" fill="#000" />
-      </g>) : (<g onClick={screen.onPlay} transform={"translate(" + (-screen.width / 2 + this.progressLeft) + "," + (screen.height - ControllerHudTag.height) + ")"}>
+      </g>) : (<g onClick={screen.onPlay} transform={`translate(${-screen.width / 2 + this.progressLeft},${screen.height - ControllerHudTag.height})`}>
           <circle fill="#fff" cx="8" cy="8" r="8" />
           <circle fill="#000" cx="8" cy="8" r="7" />
           <circle fill="#fff" cx="8" cy="8" r="5" />
@@ -72,7 +72,7 @@ export default class ControllerHudTag extends React.Component<ControllerHudTagPr
       <g>
         {reload}
         {playOrStop}
-        <g onMouseDown={(e) => this.onMouseDown(e) } onMouseMove={(e) => this.onMouseMove(e) } onMouseUp={(e) => this.onMouseUp(e) } transform={"translate(" + (-screen.width / 2 + this.progressLeft) + "," + (screen.height - ControllerHudTag.height) + ")"}>
+        <g onMouseDown={(e) => this.onMouseDown(e) } onMouseMove={(e) => this.onMouseMove(e) } onMouseUp={(e) => this.onMouseUp(e) } transform={`translate(${-screen.width / 2 + this.progressLeft},${screen.height - ControllerHudTag.height})`}>
           <rect fill="#fff" width={screen.width - PADDING * 2 - this.progressLeft} height={ControllerHudTag.height - PADDING * 2} x={PADDING} y={PADDING} ry="4" />
           <rect fill="#000" width={(screen.width - PADDING * 2 - 2 - this.progressLeft) * frame / screen.frameLength} height={ControllerHudTag.height - PADDING * 2 - 2} x={PADDING + 1} y={PADDING + 1} ry="3" />
           </g>

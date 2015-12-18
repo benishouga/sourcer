@@ -71,6 +71,7 @@
         "./test/test-V.ts",
         "./main/components/core/BackgroundTag.tsx",
         "./main/components/core/ControllerHudTag.tsx",
+        "./main/components/core/DomeTag.tsx",
         "./main/components/core/FieldTag.tsx",
         "./main/components/core/FxTag.tsx",
         "./main/components/core/HudTag.tsx",

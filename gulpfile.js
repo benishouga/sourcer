@@ -114,12 +114,20 @@ gulp.task('nodemon', ['browser', 'stylus'], function() {
   });
 });
 
-gulp.task('reload', ['browser', 'stylus'], function() {
+gulp.task('reload:browser', ['browser', 'stylus'], function() {
   browserSync.reload();
 });
 
-// gulp.task('browser-sync', ['nodemon'], function() {
-// });
-// gulp.task('default', ['nodaemon']);
+gulp.task('watch:standalone', ['standalone'], function() {
+  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx'], ['reload:standalone']);
+  browserSync.init(null, {
+    server: { baseDir: "." },
+    port: 3000
+  });
+});
+
+gulp.task('reload:standalone', ['standalone'], function() {
+  browserSync.reload();
+});
 
 gulp.task('default', ['browser', 'stylus']);
