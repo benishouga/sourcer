@@ -5,7 +5,7 @@ import Shot from './Shot';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import {FieldDump, GameResult, SourcerDump, ShotDump, FxDump} from './Dump';
+import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump} from './Dump';
 
 export default class Field {
   currentId = 0;
@@ -16,7 +16,7 @@ export default class Field {
   frame: number;
   finishedFrame: number;
   center: number;
-  result: GameResult;
+  result: ResultDump;
   isFinished: boolean = false;
 
   constructor() {
@@ -90,13 +90,15 @@ export default class Field {
       fx.move();
     });
 
-    this.checkResult();
-    this.checkFinish();
+    this.checkFinish(listener);
+    this.checkEndOfGame(listener);
 
     this.frame++;
+
+    listener.onFrame(this.dump());
   }
 
-  checkResult() {
+  checkFinish(listener: TickEventListener) {
     // 決定済み
     if (this.result) {
       return;
@@ -116,34 +118,31 @@ export default class Field {
         frame: this.frame,
         isDraw: false
       };
+      listener.onFinished(this.result);
       return;
     }
 
-    // no surviver draw...
+    // no surviver.. draw...
     this.result = {
       winner: null,
       frame: this.frame,
       isDraw: true
     };
+    listener.onFinished(this.result);
   }
 
-  checkFinish() {
+  checkEndOfGame(listener: TickEventListener) {
     if (this.isFinished) {
       return;
     }
 
-    var finished = false;
-
-    if (!this.finishedFrame) {
-      var survivers = this.sourcers.filter((sourcer) => { return sourcer.alive; });
-      if (survivers.length <= 1) {
-        this.finishedFrame = this.frame;
-      }
+    if (!this.result) {
       return;
     }
 
-    if (this.finishedFrame < this.frame - 90) {
+    if (this.result.frame < this.frame - 90) { // 勝敗が決したあとも若干フレームを記録する
       this.isFinished = true;
+      listener.onEndOfGame();
     }
   }
 
@@ -214,7 +213,6 @@ export default class Field {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
     var fxDump: any[] = [];
-    var resultDump: any = null;
 
     this.sourcers.forEach((actor: Actor) => {
       sourcersDump.push(actor.dump());
@@ -230,8 +228,7 @@ export default class Field {
       frame: this.frame,
       sourcers: sourcersDump,
       shots: shotsDump,
-      fxs: fxDump,
-      result: this.result
+      fxs: fxDump
     };
   }
 }

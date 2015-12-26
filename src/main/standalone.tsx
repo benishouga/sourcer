@@ -1,13 +1,16 @@
 /** @jsx React.DOM */
 import * as React from 'react';
 import FieldTag from './components/core/FieldTag';
-import {FieldDump} from './core/Dump';
+import {GameDump, FieldDump, ResultDump} from './core/Dump';
 
 var colors = ['#866', '#262', '#c55', '#44b'];
 
 class Standalone {
   worker = new Worker("dist/arena.js");
-  frames: FieldDump[] = [];
+  game: GameDump = {
+    result: null,
+    frames: []
+  };
   endOfGame = false;
   thinking: number = null;
   timeout = () => {
@@ -19,16 +22,24 @@ class Standalone {
 
   constructor(playerIds: string[]) {
     this.worker.addEventListener('message', (e: MessageEvent) => {
-      if (e.data.command === "PreThink") {
-        this.thinking = e.data.index;
-        this.handler = setTimeout(() => { this.timeout(); }, 10); // 10 milliseconds think timeout
-      } else if (e.data.command === "PostThink") {
-        this.thinking = null;
-        clearTimeout(this.handler);
-      } else if (e.data.command === "EndOfGame") {
-        this.endOfGame = true;
-      } else {
-        this.frames.push(e.data.field);
+      switch (e.data.command) {
+        case "PreThink":
+          this.thinking = e.data.index;
+          this.handler = setTimeout(() => { this.timeout(); }, 10); // 10 milliseconds think timeout
+          break;
+        case "PostThink":
+          this.thinking = null;
+          clearTimeout(this.handler);
+          break;
+        case "Frame":
+          this.game.frames.push(e.data.field);
+          break;
+        case "Finished":
+          this.game.result = e.data.result;
+          break;
+        case "EndOfGame":
+          this.endOfGame = true;
+          break;
       }
     });
     var players = playerIds.map((value, index) => {
@@ -50,6 +61,7 @@ interface StandaloneScreenProps {
 interface StandaloneScreenStats {
   playing?: boolean;
   frame?: number;
+  result?: ResultDump;
   fieldHistory?: FieldDump[];
   standalone?: Standalone;
   loadedFrame?: number;
@@ -81,7 +93,12 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
   }
 
   onFrameChanged(newFrame: number) {
-    this.setState({ frame: newFrame });
+    var standalone = this.state.standalone;
+
+    this.setState({
+      frame: newFrame,
+      result: standalone.game.result && standalone.game.result.frame <= newFrame && standalone.game.result
+    });
   }
 
   render() {
@@ -98,7 +115,7 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
           <g transform={"scale(" + scale + ", " + scale + ")"}>
-            <FieldTag field={this.state.fieldHistory[this.state.frame]} width={scaledWidth} height={scaledHeight} scale={scale} frameLength={this.state.fieldHistory.length}
+            <FieldTag field={this.state.fieldHistory[this.state.frame]} result={this.state.result} width={scaledWidth} height={scaledHeight} scale={scale} frameLength={this.state.fieldHistory.length}
               playing={this.state.playing} onFrameChanged={(frame) => this.onFrameChanged(frame) } onPlay={() => this.onPlay() } onPause={() => this.onPause() } onReload={() => this.onReload() } />
             </g>
           </svg>
@@ -124,7 +141,7 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
 
     var standalone = this.state.standalone;
 
-    var loadedFrame = standalone && standalone.frames.length;
+    var loadedFrame = standalone && standalone.game.frames.length;
     if (this.state.loadedFrame !== loadedFrame) {
       this.setState({ loadedFrame: loadedFrame });
     }
@@ -132,13 +149,17 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
     if (standalone.endOfGame) {
       if (!this.state.fieldHistory) {
         this.setState({
-          fieldHistory: standalone.frames,
+          fieldHistory: standalone.game.frames,
           frame: 0
         });
       } else if (this.state.playing) {
         var nextFrame = this.state.frame + 1;
         if (nextFrame < this.state.fieldHistory.length) {
-          this.setState({ frame: nextFrame });
+
+          this.setState({
+            frame: nextFrame,
+            result: standalone.game.result && standalone.game.result.frame <= nextFrame && standalone.game.result
+          });
         }
       }
     }

@@ -1,14 +1,15 @@
 import * as React from 'react';
-import {FieldDump} from '../../core/Dump';
+import {FieldDump, ResultDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import StatusHudTag from './StatusHudTag';
 import ControllerHudTag from './ControllerHudTag';
 import ResultHudTag from './ResultHudTag';
 
-export default class HudTag extends React.Component<{ field: FieldDump; screen: Screen; }, {}> {
+export default class HudTag extends React.Component<{ field: FieldDump; result: ResultDump; screen: Screen; }, {}> {
   render() {
     var field = this.props.field;
+    var result = this.props.result;
     var screen = this.props.screen;
     var length = field.sourcers.length;
     var padding = 1;
@@ -22,8 +23,8 @@ export default class HudTag extends React.Component<{ field: FieldDump; screen: 
     });
 
     var resultHudTag: JSX.Element = null;
-    if (field.result) {
-      resultHudTag = <ResultHudTag result={field.result} screen={screen} />
+    if (result) {
+      resultHudTag = <ResultHudTag result={result} screen={screen} />
     }
 
     return (

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {GameResult} from '../../core/Dump';
+import {ResultDump} from '../../core/Dump';
 import Screen from './Screen';
 
-export default class ResultHudTag extends React.Component<{ result: GameResult; screen: Screen; }, {}> {
+export default class ResultHudTag extends React.Component<{ result: ResultDump; screen: Screen; }, {}> {
   static width = 256;
   static height = 64;
 

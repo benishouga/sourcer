@@ -33,10 +33,14 @@ export interface FieldDump {
   sourcers: SourcerDump[];
   shots: ShotDump[];
   fxs: FxDump[];
-  result: GameResult;
 }
 
-export interface GameResult {
+export interface GameDump {
+  result: ResultDump;
+  frames: FieldDump[];
+}
+
+export interface ResultDump {
   isDraw: boolean;
   winner: SourcerDump;
   frame: number;

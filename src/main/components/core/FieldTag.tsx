@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldDump} from '../../core/Dump';
+import {FieldDump, ResultDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
@@ -22,9 +22,11 @@ export default class FieldTag extends React.Component<{
   onPause: () => void;
   onReload: () => void;
   field: FieldDump;
+  result: ResultDump;
 }, {}> {
   render() {
     var field = this.props.field;
+    var result = this.props.result;
 
     var screen: Screen = {
       frameLength: this.props.frameLength,
@@ -105,7 +107,7 @@ export default class FieldTag extends React.Component<{
           {fxs}
           </g>
 
-        <HudTag field={field} screen={screen} />
+        <HudTag field={field} result={result} screen={screen} />
         </g>
     );
   }

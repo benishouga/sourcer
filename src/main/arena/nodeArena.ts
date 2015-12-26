@@ -1,14 +1,10 @@
 import * as cluster from 'cluster';
-import {FieldDump, SourcerDump} from '../core/Dump';
+import {FieldDump, SourcerDump, GameDump, ResultDump} from '../core/Dump';
 
 import Field from '../core/Field';
 import Sourcer from '../core/Sourcer';
 import Utils from '../core/Utils';
 import TickEventListener from '../core/TickEventListener';
-
-interface MatchResult {
-  frames: FieldDump[];
-}
 
 interface ArenaMessage {
   command: Command;
@@ -16,46 +12,57 @@ interface ArenaMessage {
 }
 
 enum Command {
-  ENTER_FRAME, PRE_THINK, POST_THINK, END_OF_GAME
+  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME
 }
 
-export function arena(players: SourcerSource[]): Promise<MatchResult> {
+export function arena(players: SourcerSource[]): Promise<GameDump> {
   'use strict';
 
   cluster.setupMaster({ exec: __dirname + '/nodeArena.js' });
   let child = cluster.fork();
 
-  return new Promise<MatchResult>((resolve, reject) => {
+  return new Promise<GameDump>((resolve, reject) => {
 
-    let match: MatchResult = {
+    let game: GameDump = {
+      result: null,
       frames: []
     };
-    let currentThink: number = null;
-    let timer: NodeJS.Timer = null;
-    let timeout = () => {
-      child.kill('SIGTERM');
-      resolve(match);
+    let currentThink: SourcerSource = null;
+    let thinkTimer: NodeJS.Timer = null;
+    let thinkTimeout = () => {
+      child.kill();
+      resolve(game);
     };
+    let gameTimer = setTimeout(() => {
+      child.kill();
+      resolve(game);
+    }, 20000); // 20 seconds
 
     let resolved: boolean = false;
     child.on('message', (message: ArenaMessage) => {
-      if (resolved) { return;}
+      if (resolved) { return; }
 
       switch (message.command) {
-        case Command.ENTER_FRAME:
-          match.frames.push(message.data.field);
-          break;
         case Command.PRE_THINK:
-          currentThink = message.data.index;
-          timer = setTimeout(timeout, 10); // 10 milliseconds think timeout
+          currentThink = players[message.data.index];
+          thinkTimer = setTimeout(thinkTimeout, 10); // 10 milliseconds think timeout
           break;
         case Command.POST_THINK:
           currentThink = null;
-          clearTimeout(timer);
+          clearTimeout(thinkTimer);
+          break;
+        case Command.FRAME:
+          game.frames.push(message.data.field);
+          break;
+        case Command.FINISHED:
+          game.result = message.data.result;
           break;
         case Command.END_OF_GAME:
           resolved = true;
-          resolve(match);
+          resolve(game);
+          setTimeout(() => {
+            child.kill();
+          });
           break;
       }
     });
@@ -66,15 +73,15 @@ export function arena(players: SourcerSource[]): Promise<MatchResult> {
   });
 }
 
+function create(field: Field, source: SourcerSource) {
+  'use strict';
+  return new Sourcer(
+    field, Utils.rand(320) - 160, Utils.rand(160) + 80,
+    source.ai, source.name, source.color);
+}
+
 if (cluster.isWorker) {
   process.on('message', (message: { sourcers: SourcerSource[] }) => {
-    function create(field: Field, source: SourcerSource) {
-      'use strict';
-      return new Sourcer(
-        field, Utils.rand(320) - 160, Utils.rand(320) - 160,
-        source.ai, source.name, source.color);
-    }
-
     let field = new Field();
     let idToIndex: { [key: string]: number } = {};
     message.sourcers.forEach((value, index) => {
@@ -95,18 +102,29 @@ if (cluster.isWorker) {
           command: Command.POST_THINK,
           data: { index: idToIndex[sourcerId] }
         });
+      },
+      onFrame: (field: FieldDump) => {
+        process.send({
+          command: Command.FRAME,
+          data: { field: field }
+        });
+      },
+      onFinished: (result: ResultDump) => {
+        process.send({
+          command: Command.FINISHED,
+          data: { result: result }
+        });
+      },
+      onEndOfGame: () => {
+        process.send({
+          command: Command.END_OF_GAME
+        });
       }
     };
-    for (let i = 0; i < 2000 && !field.isFinished; i++) {
+
+    while (!field.isFinished) {
       field.tick(listener);
-      process.send({
-        command: Command.ENTER_FRAME,
-        data: { field: field.dump() }
-      });
     }
-    process.send({
-      command: Command.END_OF_GAME
-    });
   });
 
 }

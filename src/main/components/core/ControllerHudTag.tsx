@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {GameResult} from '../../core/Dump';
 import Screen from './Screen';
 
 var PADDING = 2;
 
 class ControllerHudTagProps {
-  frame: number; screen: Screen;
+  frame: number;
+  screen: Screen;
 }
 
 export default class ControllerHudTag extends React.Component<ControllerHudTagProps, { drag: boolean }> {
