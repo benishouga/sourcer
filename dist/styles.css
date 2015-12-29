@@ -1,21 +1,19 @@
 .scr-header .mdl-layout__header-row {
   padding-left: 40px;
 }
-
-.method p, .method code, .method h6 {
+.method p,
+.method code,
+.method h6 {
   margin-left: 8px;
 }
-
 .method h6 {
   margin-bottom: 4px;
 }
-
 pre.code {
   border: 1px solid #888;
   border-radius: 3px;
 }
-
-@media (min-width: 840px)
+@media (min-width: 840px) {
   dt {
     padding-top: 8px;
     float: left;
@@ -26,16 +24,13 @@ pre.code {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
   dd {
     padding-top: 8px;
     margin-left: 180px;
   }
-
-@media (max-width: 839px)
+}
+@media (max-width: 839px) {
   dt {
     padding-top: 8px;
   }
-
-  dd {
-  }
+}

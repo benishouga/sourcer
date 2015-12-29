@@ -118,15 +118,15 @@ gulp.task('reload:browser', ['browser', 'stylus'], function() {
   browserSync.reload();
 });
 
-gulp.task('watch:standalone', ['standalone'], function() {
-  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx'], ['reload:standalone']);
+gulp.task('watch:standalone', ['standalone', 'stylus'], function() {
+  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx', './src/**/*.stylus'], ['reload:standalone']);
   browserSync.init(null, {
     server: { baseDir: "." },
     port: 3000
   });
 });
 
-gulp.task('reload:standalone', ['standalone'], function() {
+gulp.task('reload:standalone', ['standalone', 'stylus'], function() {
   browserSync.reload();
 });
 
