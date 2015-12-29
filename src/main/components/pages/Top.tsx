@@ -28,13 +28,13 @@ export default class Top extends React.Component<TopProps, TopStats> {
       <div>
         <h1>Top</h1>
         <ul>
-          <li><Link to="aiNew">WRITE CODE</Link></li>
-          <li><Link to="userEdit">Edit Profile</Link></li>
+          <li><Link to="edit">Edit</Link></li>
           <li><Link to="userShow" params={{ userId: "userId123" }}>Choose User</Link></li>
-          <li><Link to="aiShow" params={{ userId: "userId123", aiId: "aiId123" }}>Choose Ai</Link></li>
           <li><Link to="matchShow" params={{ matchId: "matchId123" }}>Choose Match</Link></li>
-          </ul>
-        </div>
+          <li><Link to="matchNew">Choose Match New</Link></li>
+          <li><Link to="matchAgainst" params={{ userId: "userId123" }}>Choose Match Against</Link></li>
+        </ul>
+      </div>
     );
   }
 }

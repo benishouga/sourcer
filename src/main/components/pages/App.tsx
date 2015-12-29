@@ -10,7 +10,7 @@ export default class App extends React.Component<{}, {}> {
             <span className="mdl-layout-title">Sourcer</span>
             <nav className="mdl-navigation">
               <Link className="mdl-navigation__link mdl-color-text--grey-800" to="app">HOME</Link>
-              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="aiNew">WRITE CODE</Link>
+              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="edit">WRITE CODE</Link>
             </nav>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
