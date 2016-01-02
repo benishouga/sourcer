@@ -7,4 +7,5 @@ export default class TickEventListener {
   onFrame: (field: FieldDump) => void;
   onFinished: (result: ResultDump) => void;
   onEndOfGame: () => void;
+  onLog: (targetId: string, ...message: any[]) => void;
 }

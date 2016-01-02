@@ -132,24 +132,27 @@ var ai = function(controller) {
 return ai;</textarea>
             </div>
             <div class="mdl-cell mdl-cell--6-col">
-              <div class="sourcer-standalone" style="width: 100%; margin-bottom: 20px;" data-height="384" data-players="player1,player2"></div>
+              <div class="sourcer-standalone"　data-height="384" data-players="player1,player2"></div>
             </div>
           </div>
           <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--6-col">
               <h2>概要</h2>
-              <p>Sourcer は javascript プログラムで操作できます。</p>
+              <p>Sourcer というプログラムで動かす機体を使い対戦をするゲームです。</p>
+              <p>Sourcer のプログラムは JavaScript というプログラミング言語を使い記述できます。</p>
               <h4>ステータス</h4>
-              <dl class="dl-horizontal">
-                <dt>耐久力(health)</dt>
-                <dd>初期値 100 でダメージをうけると減ります。0 になると戦闘不能となり消滅します。</dd>
+              <dl>
+                <dt>シールド(Shield)</dt>
+                <dd>初期値 100 でダメージをうけると減ります。0 になると戦闘不能となり、相手より先に戦闘不能になると負けとなってしまいます。</dd>
                 <dt>熱量(temperature)</dt>
                 <dd>初期値 0 で攻撃を行ったり、ダメージをうけると上昇します。温度が 100 を超えると、徐々に耐久力が減っていきます。温度は時間経過で徐々に減っていきます。</dd>
                 <dt>燃料(fuel)</dt>
                 <dd>Sourcer が移動を行うと徐々に減っていきます。0 になると移動が行えなくなります。</dd>
+                <dt>AIミサイル残弾(missileAmmo)</dt>
+                <dd>初期値 20 でミサイルを使うごとに減少します。0 になるとミサイルが発射できなくなります。</dd>
               </dl>
               <h4>攻撃手段</h4>
-              <dl class="dl-horizontal">
+              <dl>
                 <dt>レーザー</dt>
                 <dd>発射すると真っ直ぐに飛んでいく攻撃手段です。残弾数は無制限です。</dd>
                 <dt>AIミサイル</dt>
@@ -173,7 +176,7 @@ return ai;</textarea>
 return ai;</pre>
                 <p>コントローラによる命令⇒命令の実施⇒命令⇒実施⇒...と繰り返し動作します。</p>
                 <h4>コントローラで行える操作</h4>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>移動</dt><dd>前進、後退、上昇、下降など</dd>
                   <dt>レーダー</dt><dd>敵機の探知と、自機に飛来してくる攻撃の探知など</dd>
                   <dt>攻撃</dt><dd>レーザーの発射、AIミサイルの発射</dd>
@@ -212,15 +215,15 @@ return ai;</pre>
               <div class="method">
                 <h5>wait(frame)</h5>
                 <p>指定したフレーム数、行動をしない命令を出します。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} frame</dt>
                   <dd>行動をしないフレーム数</dd>
                 </dl>
               </div>
               <div class="method">
-                <h5>health()</h5>
-                <p>自機の耐久力を取得します。</p>
-                <dl><dt>returns {number}</dt><dd>自機の耐久力</dd>
+                <h5>shield()</h5>
+                <p>自機のシールドの耐久力を取得します。</p>
+                <dl><dt>returns {number}</dt><dd>自機のシールドの耐久力</dd>
               </div>
               <div class="method">
                 <h5>fuel()</h5>
@@ -240,7 +243,7 @@ return ai;</pre>
               <div class="method">
                 <h5>scanEnemy(direction, angle, renge)</h5>
                 <p>指定した方向、範囲、距離に敵が入っているか否かを判定します。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} direction</dt>
                   <dd>レーダーの方向を度数で指定。向いている方向を0とし、上方向がプラス＋、下方向がマイナス−。</dd>
                   <dt>{number} angle</dt>
@@ -284,7 +287,7 @@ return ai;</pre>
               <div class="method">
                 <h5>scanAttack(direction, angle, renge)</h5>
                 <p>指定した方向、範囲、距離に敵の攻撃が居るか否かを判定します。<br />なお敵の攻撃は、自分に近づいてくるもののみを対象とする。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} direction</dt>
                   <dd>レーダーの方向を度数で指定。向いている方向を0とし、上方向がプラス＋、下方向がマイナス−。</dd>
                   <dt>{number} angle</dt>
@@ -315,9 +318,9 @@ return ai;</pre>
                 <p>現在向いている方向と逆方向を向きます。</p>
               </div>
               <div class="method">
-                <h5>fireAssault(direction, power)</h5>
+                <h5>fireLaser(direction, power)</h5>
                 <p>レーザーを発射します。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} direction</dt>
                   <dd>打ち出す方向を度数で指定。向いている方向を0とし、上方向がプラス＋、下方向がマイナス−。</dd>
                   <dt>{number} power</dt>
@@ -327,7 +330,7 @@ return ai;</pre>
               <div class="method">
                 <h5>fireMissile(ai)</h5>
                 <p>AIミサイルを発射します。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{function} ai</dt>
                   <dd>ミサイルの動きを制御するための function</dd>
                 </dl>
@@ -350,7 +353,7 @@ return ai;</pre>
               <div class="method">
                 <h5>wait(frame)</h5>
                 <p>指定したフレーム数、行動をしない命令を出します。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} frame</dt>
                   <dd>行動をしないフレーム数</dd>
                 </dl>
@@ -370,7 +373,7 @@ return ai;</pre>
                 <h5>scanEnemy(direction, angle, renge)</h5>
                 <p>指定した方向、範囲、距離に敵が入っているか否かを判定します。<br />
                   範囲の指定方法について、 Sourcer と相違がある点に注意してください。</p>
-                <dl class="dl-horizontal">
+                <dl>
                   <dt>{number} direction</dt>
                   <dd>レーダーの方向を度数で指定。向いている方向を0とし、逆時計周り方向をプラス＋、時計回り方向をマイナス−。</dd>
                   <dt>{number} angle</dt>

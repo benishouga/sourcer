@@ -21,6 +21,10 @@ class Standalone {
   handler: NodeJS.Timer = null;
 
   constructor(playerIds: string[]) {
+    var players = playerIds.map((value, index) => {
+      var player = document.getElementById(value) as HTMLTextAreaElement;
+      return { name: value, color: colors[index], ai: player.value }
+    });
     this.worker.addEventListener('message', (e: MessageEvent) => {
       switch (e.data.command) {
         case "PreThink":
@@ -40,11 +44,11 @@ class Standalone {
         case "EndOfGame":
           this.endOfGame = true;
           break;
+        case "Log":
+          var player = players[e.data.index];
+          console.log.apply(console, e.data.messages.unshift(player.name));
+          break;
       }
-    });
-    var players = playerIds.map((value, index) => {
-      var player = document.getElementById(value) as HTMLTextAreaElement;
-      return { name: value, color: colors[index], ai: player.value }
     });
     this.worker.postMessage({ sources: players });
   }

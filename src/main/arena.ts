@@ -46,6 +46,14 @@ onmessage = function(e) {
       postMessage({
         command: "EndOfGame"
       });
+    },
+    onLog: (sourcerId: string, ...messages: any[]) => {
+      console.log("onLog");
+      postMessage({
+        command: "Log",
+        index: idToIndex[sourcerId],
+        messages: messages
+      });
     }
   };
 

@@ -7,11 +7,11 @@ export default class Controller {
   altitude: () => number;
   wait: (frame: number) => void;
   fuel: () => number;
-  log: (message?: any, ...optionalParams: any[]) => void;
+  log: (...messages: any[]) => void;
 
   constructor(actor: Actor) {
-    this.log = (message?: any, ...optionalParams: any[]) => {
-      console.log(message, optionalParams);
+    this.log = (...messages: any[]) => {
+      console.log.apply(console, messages);
     };
     this.field = actor.field;
     this.frame = () => this.field.frame;

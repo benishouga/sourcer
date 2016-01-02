@@ -12,7 +12,7 @@ interface ArenaMessage {
 }
 
 enum Command {
-  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME
+  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG
 }
 
 export function arena(players: SourcerSource[]): Promise<GameDump> {
@@ -63,6 +63,10 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           setTimeout(() => {
             child.kill();
           });
+          break;
+        case Command.LOG:
+          let player = players[message.data.index];
+          console.log.apply(console, message.data.messages.unshift(player.name));
           break;
       }
     });
@@ -118,6 +122,15 @@ if (cluster.isWorker) {
       onEndOfGame: () => {
         process.send({
           command: Command.END_OF_GAME
+        });
+      },
+      onLog: (sourcerId: string, ...messages: any[]) => {
+        process.send({
+          command: Command.LOG,
+          data: {
+            index: idToIndex[sourcerId],
+            messages: messages
+          }
         });
       }
     };
