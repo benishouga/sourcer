@@ -62,6 +62,7 @@ gulp.task('test', ['ts', 'js'], function() {
       read: false
     })
     .pipe(mocha({
+      'debug': true,
       reporter: 'tap'
     }));
 });

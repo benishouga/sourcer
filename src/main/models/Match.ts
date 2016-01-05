@@ -1,35 +1,18 @@
 import {Schema, Document, model, Types} from 'mongoose';
 import {UserDocument} from './User';
-import Ai, {AiDocument} from './Ai';
 import * as _ from 'lodash';
 
 export interface MatchDocument extends Document {
   _id: Types.ObjectId;
-  winner: {
-    owner: UserDocument;
-    ai: AiDocument;
-  };
-  timeout: boolean;
-  contestants: [{
-    owner: UserDocument;
-    ai: AiDocument;
-  }];
-  path: string;
+  winner: UserDocument;
+  contestants: UserDocument[];
   created: Date;
   updated: Date;
 }
 
 let schema = new Schema({
-  winner: {
-    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    ai: { type: Schema.Types.ObjectId, ref: 'Ai', required: true }
-  },
-  timeout: { type: Boolean, 'default': false },
-  contestants: [{
-    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    ai: { type: Schema.Types.ObjectId, ref: 'Ai', required: true }
-  }],
-  path: { type: String, required: true },
+  winner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  contestants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
 }).pre('save', (next: Function) => {
@@ -46,22 +29,19 @@ module models {
 
     static load(id: Types.ObjectId, next: (err: any, res: MatchDocument) => void) {
       this.findOne({ _id: id })
-        .populate('winner.owner')
-        .populate('winner.ai')
-        .populate('contestants.owner')
-        .populate('contestants.ai')
+        .populate('winner')
+        .populate('contestants')
         .exec(next);
     }
 
-    static createAndRegisterToAi(match: MatchDocument, next: (err: any, res: MatchDocument) => void) {
+    static createAndRegisterToUser(match: MatchDocument, next: (err: any, res: MatchDocument) => void) {
       match.save((err) => {
         this.load(match._id, (err, match) => {
           let promises = match.contestants.map((contestant) => {
             return new Promise<{}>((resolve, reject) => {
-              let ai = contestant.ai;
-              ai.matches = ai.matches || [];
-              ai.matches.push(match);
-              ai.save((err) => {
+              contestant.matches = contestant.matches || [];
+              contestant.matches.push(match);
+              contestant.save((err) => {
                 if (err) { reject(err); }
                 resolve();
               });

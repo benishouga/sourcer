@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-let dbURI = 'mongodb://localhost/todo';
+let dbURI = 'mongodb://localhost/sourcer';
 mongoose.disconnect();
 mongoose.connect(dbURI);
 mongoose.connection.on('connected', () => console.log('Mongoose> connected: ' + dbURI));

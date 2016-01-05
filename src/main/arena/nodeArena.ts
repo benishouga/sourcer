@@ -30,13 +30,15 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
     let currentThink: SourcerSource = null;
     let thinkTimer: NodeJS.Timer = null;
     let thinkTimeout = () => {
-      child.kill();
+      console.log('kill by thinkTimeout');
+      child.kill('SIGKILL');
       resolve(game);
     };
     let gameTimer = setTimeout(() => {
-      child.kill();
+      console.log('kill by gameTimer');
+      child.kill('SIGKILL');
       resolve(game);
-    }, 20000); // 20 seconds
+    }, 5000); // 20 seconds
 
     let resolved: boolean = false;
     child.on('message', (message: ArenaMessage) => {
@@ -61,7 +63,8 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           resolved = true;
           resolve(game);
           setTimeout(() => {
-            child.kill();
+            console.log('kill by END_OF_GAME');
+            // child.kill('SIGKILL');
           });
           break;
         case Command.LOG:
