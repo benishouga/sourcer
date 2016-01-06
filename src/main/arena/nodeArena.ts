@@ -29,16 +29,17 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
     };
     let currentThink: SourcerSource = null;
     let thinkTimer: NodeJS.Timer = null;
+    let gameTimer: NodeJS.Timer = null;
     let thinkTimeout = () => {
-      console.log('kill by thinkTimeout');
-      child.kill('SIGKILL');
+      child.kill();
+      clearTimeout(gameTimer);
       resolve(game);
     };
-    let gameTimer = setTimeout(() => {
-      console.log('kill by gameTimer');
-      child.kill('SIGKILL');
+    gameTimer = setTimeout(() => {
+      child.kill();
+      clearTimeout(thinkTimer);
       resolve(game);
-    }, 5000); // 20 seconds
+    }, 20000); // 20 seconds
 
     let resolved: boolean = false;
     child.on('message', (message: ArenaMessage) => {
@@ -63,8 +64,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           resolved = true;
           resolve(game);
           setTimeout(() => {
-            console.log('kill by END_OF_GAME');
-            // child.kill('SIGKILL');
+            child.kill();
+            clearTimeout(gameTimer);
+            clearTimeout(thinkTimer);
           });
           break;
         case Command.LOG:
@@ -141,6 +143,7 @@ if (cluster.isWorker) {
     while (!field.isFinished) {
       field.tick(listener);
     }
+    process.exit(0);
   });
 
 }
