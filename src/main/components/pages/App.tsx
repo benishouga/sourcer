@@ -7,14 +7,13 @@ export default class App extends React.Component<{}, {}> {
       <div className="scr-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--white-100 is-upgraded">
         <header className="scr-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
           <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title">Sourcer</span>
+            <span className="mdl-layout-title"><Link to="app">Sourcer</Link></span>
             <nav className="mdl-navigation">
-              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="app">HOME</Link>
               <Link className="mdl-navigation__link mdl-color-text--grey-800" to="edit">WRITE CODE</Link>
             </nav>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <a className="mdl-navigation__link mdl-color-text--grey-800" href="#">Sign in</a>
+              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="signin">Sign in</Link>
             </nav>
           </div>
         </header>

@@ -84,6 +84,7 @@
         "./main/components/pages/Edit.tsx",
         "./main/components/pages/MatchNew.tsx",
         "./main/components/pages/MatchShow.tsx",
+        "./main/components/pages/SignIn.tsx",
         "./main/components/pages/Top.tsx",
         "./main/components/pages/UserShow.tsx",
         "./main/routes.tsx",

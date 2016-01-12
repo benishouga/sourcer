@@ -102,7 +102,7 @@ gulp.task('watch:test', function() {
 });
 
 gulp.task('watch:browser', ['nodemon'], function() {
-  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx'], ['reload']);
+  gulp.watch(['./src/**/*.js', './src/**/*.ts', './src/**/*.tsx', './src/**/*.stylus'], ['reload:browser']);
   browserSync.init(null, {
     proxy: 'http://localhost:5000',
     port: 3000

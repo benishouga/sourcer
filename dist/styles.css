@@ -13,6 +13,11 @@ pre.code {
   border: 1px solid #888;
   border-radius: 3px;
 }
+.mdl-layout-title a {
+  text-decoration: none;
+  color: #424242;
+  font-weight: 400;
+}
 @media (min-width: 840px) {
   dt {
     padding-top: 8px;
