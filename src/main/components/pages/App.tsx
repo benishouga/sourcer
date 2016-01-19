@@ -1,7 +1,13 @@
 import * as React from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 
-export default class App extends React.Component<{}, {}> {
+interface AppProps extends React.Props<App> {
+}
+
+interface AppState {
+}
+
+export default class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <div className="scr-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--white-100 is-upgraded">
@@ -21,7 +27,7 @@ export default class App extends React.Component<{}, {}> {
           <div className="scr-container mdl-grid">
             <div className="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
             <div className="scr-content content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
-              <RouteHandler {...this.props} />
+              {this.props.children}
             </div>
           </div>
         </main>

@@ -2,7 +2,8 @@ import * as express from 'express';
 import * as fs from 'fs';
 import * as Handlebars  from  'handlebars';
 import * as React from 'react';
-import * as Router from 'react-router';
+import { renderToString } from 'react-dom/server';
+import { match, RoutingContext } from 'react-router';
 
 import Routes from './routes';
 import apis from './api/apis';
@@ -29,16 +30,25 @@ app.use(express.static('dist'));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(session({secret: 'seecreeeeet'}));
+app.use(session({ secret: 'seecreeeeet' }));
 
 apis(app);
 
 app.use(function(req, res) {
-  Router.run(routes, req.path, function(handler) {
-    res.send(template({
-      initialData: JSON.stringify(data),
-      markup: React.renderToString(React.createElement(handler, { datas: data }))
-    }));
+  // TODO: まだ
+  // { routes: routes, location: req.path }
+  match({}, function(error, redirectLocation, renderProps) {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (renderProps) {
+      res.status(200).send(template({
+        initialData: JSON.stringify(data),
+        markup: renderToString(routes)
+      }));
+    } else {
+      res.status(404).send('Not found');
+    }
+
   });
 });
 

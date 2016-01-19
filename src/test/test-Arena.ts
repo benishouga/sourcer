@@ -1,6 +1,6 @@
 import Utils from '../main/core/Utils';
 import V from '../main/core/V';
-import * as assert from 'power-assert';
+import assert from 'power-assert';
 import {arena} from '../main/arena/nodeArena';
 import * as fs from 'fs';
 

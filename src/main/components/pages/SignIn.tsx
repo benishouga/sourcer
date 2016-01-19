@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 
-interface SignInProps {
+interface SignInProps extends React.Props<SignIn> {
 }
 
 interface SignInStats {

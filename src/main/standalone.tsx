@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 import * as React from 'react';
+import { render } from 'react-dom'
 import FieldTag from './components/core/FieldTag';
 import {GameDump, FieldDump, ResultDump} from './core/Dump';
 
@@ -183,6 +184,6 @@ for (let i = 0; i < screens.length; i++) {
   var scale = parseFloat(output.getAttribute('data-scale')) || 1.0;
   var playerIdsText = output.getAttribute('data-players');
   if (playerIdsText) {
-    React.render(<ScreenTag width={width} height={height} scale={scale} playerIds={playerIdsText.split(',') } output={output} />, output);
+    render(<ScreenTag width={width} height={height} scale={scale} playerIds={playerIdsText.split(',') } output={output} />, output);
   }
 }

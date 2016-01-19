@@ -6,8 +6,10 @@ export default class MatchNew extends React.Component<{}, {}> {
     return (
       <div>
         <h1>MatchNew</h1>
-        <li><Link to="matchShow" params={{ matchId: "matchId123" }}>Start Match</Link></li>
-        <li><Link to="matchAgainst" params={{ userId: "userId123" }}>Choose Match Against</Link></li>
+        <ul>
+          <li><Link to={`match/${'matchId123'}`}>Start Match</Link></li>
+          <li><Link to={`match/new/${'userId123'}`}>Choose Match Against</Link></li>
+        </ul>
       </div>
     );
   }

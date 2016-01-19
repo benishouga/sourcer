@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { render } from 'react-dom'
 
-React.render(
+render(
   <p>test</p>,
   document.getElementById('todoapp')
-  );
+);

@@ -1,4 +1,4 @@
-import * as assert from 'power-assert';
+import assert from 'power-assert';
 import * as mongoose from 'mongoose';
 let mockgoose = require('mockgoose');
 mockgoose(mongoose);

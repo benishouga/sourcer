@@ -1,5 +1,5 @@
 import V from '../main/core/V';
-import * as assert from 'power-assert';
+import assert  from 'power-assert';
 
 var EPSILON = 10e-12;
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 
 interface TopProps {
   isSignIn?: boolean;
@@ -29,10 +29,10 @@ export default class Top extends React.Component<TopProps, TopStats> {
         <h1>Top</h1>
         <ul>
           <li><Link to="edit">Edit</Link></li>
-          <li><Link to="userShow" params={{ userId: "userId123" }}>Choose User</Link></li>
-          <li><Link to="matchShow" params={{ matchId: "matchId123" }}>Choose Match</Link></li>
-          <li><Link to="matchNew">Choose Match New</Link></li>
-          <li><Link to="matchAgainst" params={{ userId: "userId123" }}>Choose Match Against</Link></li>
+          <li><Link to={`user/${'userId123'}`}>Choose User</Link></li>
+          <li><Link to={`match/${'matchId123'}`}>Choose Match</Link></li>
+          <li><Link to="match/new">Choose Match New</Link></li>
+          <li><Link to={`match/new/${'userId123'}`}>Choose Match Against</Link></li>
         </ul>
       </div>
     );
