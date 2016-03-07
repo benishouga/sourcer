@@ -26,13 +26,14 @@
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "handlebars": "^4.0.5",
+    "history": "^1.13.1",
     "lodash": "^3.10.1",
     "mongoose": "^4.1.4",
     "passport": "^0.3.0",
     "passport-google-oauth": "^0.2.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
-    "react-router": "^1.0.3"
+    "react-router": "^2.0.0"
   },
   "browser": {
     "jquery": "./libs/jquery.js"

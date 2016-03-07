@@ -9,16 +9,16 @@
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
     },
     "node/node.d.ts": {
-      "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     },
     "react-router/history.d.ts": {
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
     },
     "express/express.d.ts": {
-      "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     },
     "es6-promise/es6-promise.d.ts": {
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
@@ -33,7 +33,7 @@
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
     },
     "mime/mime.d.ts": {
-      "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     },
     "jquery/jquery.d.ts": {
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
@@ -48,7 +48,7 @@
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
     },
     "react-router/react-router.d.ts": {
-      "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     },
     "mocha/mocha.d.ts": {
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
@@ -67,6 +67,9 @@
     },
     "passport-google-oauth/passport-google-oauth.d.ts": {
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
+    },
+    "body-parser/body-parser.d.ts": {
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
     }
   }
 }

@@ -3,7 +3,8 @@ import * as fs from 'fs';
 import * as Handlebars  from  'handlebars';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
-import { match, RoutingContext } from 'react-router';
+import { match, RouterContext } from 'react-router';
+import * as history from 'history';
 
 import Routes from './routes';
 import apis from './api/apis';
@@ -14,16 +15,6 @@ import * as cookieParser from 'cookie-parser';
 
 var routes = Routes();
 var app = express();
-
-var data = {
-  aaa: [
-    { id: 'XxVg_s8xAms', title: 'Introduction to React.js' },
-    { id: '-DX3vJiqxm4', title: 'Pete Hunt - The Secrets of React\'s Virtual DOM (FutureJS 2014)' },
-    { id: 'lAn7GVoGlKU', title: 'Building UIs with ReactJS' },
-    { id: 'i__969noyAM', title: 'React and Flux: Building Applications with a Unidirectional Data Flow' }
-  ]
-};
-
 var template = Handlebars.compile(fs.readFileSync('./index.hbs').toString());
 
 app.use(express.static('dist'));
@@ -34,21 +25,12 @@ app.use(session({ secret: 'seecreeeeet' }));
 
 apis(app);
 
-app.use(function(req, res) {
-  // TODO: まだ
-  // { routes: routes, location: req.path }
-  match({}, function(error, redirectLocation, renderProps) {
-    if (error) {
-      res.status(500).send(error.message);
-    } else if (renderProps) {
-      res.status(200).send(template({
-        initialData: JSON.stringify(data),
-        markup: renderToString(routes)
-      }));
-    } else {
-      res.status(404).send('Not found');
-    }
+app.use(function(req, res, next) {
+  const location = history.createLocation(req.url);
 
+  match({ routes, location }, (error: any, redirectLocation: any, renderProps: any) => {
+    var html = renderToString(<RouterContext {...renderProps} />);
+    return res.send(template({ markup: html }));
   });
 });
 

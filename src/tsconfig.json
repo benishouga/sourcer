@@ -4,6 +4,7 @@
         "module": "commonjs",
         "noImplicitAny": true,
         "outDir": "../intermediate",
+        "rootDir": ".",
         "jsx": "react"
     },
     "formatCodeOptions": {
@@ -34,7 +35,6 @@
         "./main/api/UserApi.ts",
         "./main/arena.ts",
         "./main/arena/nodeArena.ts",
-        "./main/browser.ts",
         "./main/components/core/Screen.ts",
         "./main/core/Actor.ts",
         "./main/core/Command.ts",
@@ -66,6 +66,7 @@
         "./test/test-UserModel.ts",
         "./test/test-Utils.ts",
         "./test/test-V.ts",
+        "./main/browser.tsx",
         "./main/components/core/BackgroundTag.tsx",
         "./main/components/core/ControllerHudTag.tsx",
         "./main/components/core/DomeTag.tsx",
