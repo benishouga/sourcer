@@ -1,25 +1,59 @@
 import * as React from 'react';
 import {Link} from 'react-router';
+import Auth from '../../service/Auth';
+
+interface AppContext {
+  router: ReactRouter.RouterOnContext;
+}
 
 interface AppProps extends React.Props<App> {
+  context: AppContext;
 }
 
 interface AppState {
+  loggedIn: boolean
 }
 
 export default class App extends React.Component<AppProps, AppState> {
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: Auth.authenticated
+    };
+  }
+
+  updateAuth(loggedIn: boolean) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  }
+
+  componentWillMount() {
+    Auth.addOnChangeListener((loggedIn: boolean) => {
+      this.updateAuth(loggedIn);
+    })
+    Auth.login().then((loggedIn: boolean) => {
+      this.updateAuth(loggedIn);
+    });
+  }
+
   render() {
     return (
-      <div className="scr-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--white-100 is-upgraded">
+      <div className="scr-layout mdl-layout mdl-layout--fixed-header mdl-color--white-100 is-upgraded">
         <header className="scr-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
           <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title"><Link to="app">Sourcer</Link></span>
+            <span className="mdl-layout-title"><Link to="/">Sourcer</Link></span>
             <nav className="mdl-navigation">
-              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="edit">WRITE CODE</Link>
+              {
+                this.state.loggedIn ? <Link className="mdl-navigation__link mdl-color-text--grey-800" to="edit">WRITE CODE</Link> : null
+              }
             </nav>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <Link className="mdl-navigation__link mdl-color-text--grey-800" to="signin">Sign in</Link>
+              {
+                this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="logout">Logout</Link>) :
+                  (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="login">Login</Link>)
+              }
             </nav>
           </div>
         </header>

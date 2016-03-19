@@ -15,32 +15,26 @@ describe('User', () => {
     mockgoose.reset();
     user = new User();
     user.account = 'account';
-    user.providers = [{ provider: 'twitter', account: '1234' }];
+    user.provider = { service: 'twitter', account: '1234' };
     user.save(done);
   });
 
   it('findByOAuthAccount', done => {
-    User.findByOAuthAccount({ provider: 'twitter', account: '1234' }, (err, user) => {
-      if (err) { done(err); }
-
+    User.findByOAuthAccount({ service: 'twitter', account: '1234' }).then((user1) => {
       assert.ok(user.account === 'account', 'account');
-      assert.ok(user.providers.length === 1, 'providers');
-      assert.ok(user.providers[0].provider === 'twitter', 'oauthProvider');
-      assert.ok(user.providers[0].account === '1234', 'oauthAccount');
+      assert.ok(user.provider.service === 'twitter', 'oauthProvider');
+      assert.ok(user.provider.account === '1234', 'oauthAccount');
       done();
-    });
+    }, done);
   });
 
   it('loadByAccount', done => {
-    User.loadByAccount('account', (err, user) => {
-      if (err) { done(err); }
-
+    User.loadByAccount('account').then((user) => {
       assert.ok(user.account === 'account', 'account');
-      assert.ok(user.providers.length === 1, 'providers');
-      assert.ok(user.providers[0].provider === 'twitter', 'oauthProvider');
-      assert.ok(user.providers[0].account === '1234', 'oauthAccount');
+      assert.ok(user.provider.service === 'twitter', 'oauthProvider');
+      assert.ok(user.provider.account === '1234', 'oauthAccount');
       done();
-    });
+    }, done);
   });
 
   it('loadWithMatchees', done => {
@@ -50,15 +44,13 @@ describe('User', () => {
     Match.createAndRegisterToUser(match, (err, result) => {
       if (err) { done(err); }
 
-      User.loadWithMatchees('account', (err, user) => {
-        if (err) { done(err); }
-
+      User.loadWithMatchees('account').then((user) => {
         assert.ok(user.matches.length === 1, 'matches');
         assert.ok(user.matches[0].winner.account === 'account', 'winner account');
         assert.ok(user.matches[0].contestants.length === 1, 'contestants');
         assert.ok(user.matches[0].contestants[0].account === 'account', 'contestants');
         done();
-      });
+      }, done);
     });
   });
 });

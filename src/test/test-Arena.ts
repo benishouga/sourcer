@@ -4,7 +4,7 @@ import assert from 'power-assert';
 import {arena} from '../main/arena/nodeArena';
 import * as fs from 'fs';
 
-describe.only('NodeArena', function() {
+describe('NodeArena', function() {
 
   it('arena', function(done) {
     this.timeout(15000);

@@ -65,11 +65,11 @@
       ["catchClause", "noSpace"],
       ["indexSignature", "space"]
     ],
-    "use-strict": [true,
+    "use-strict": [false,
       "check-module",
       "check-function"
     ],
-    "variable-name": true,
+    "variable-name": false,
     "whitespace": [false,
       "check-branch",
       "check-decl",

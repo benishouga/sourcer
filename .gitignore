@@ -6,3 +6,5 @@ typings
 
 intermediate/*
 dist/*
+
+src/main/config.ts

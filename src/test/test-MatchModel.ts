@@ -14,7 +14,7 @@ describe('Match', () => {
     mockgoose.reset();
     user = new User();
     user.account = 'account';
-    user.providers = [{ provider: 'twitter', account: '1234' }];
+    user.provider = { service: 'twitter', account: '1234' };
     user.save(done);
   });
 
@@ -29,11 +29,7 @@ describe('Match', () => {
         resolve();
       });
     }).then(() => {
-      return new Promise<{}>((resolve, reject) => {
-        User.loadWithMatchees('account', (err: any, res: UserDocument) => {
-          resolve();
-        });
-      });
-    }).then(done).catch(done);
+      User.loadWithMatchees('account').then(() => { done(); });
+    }, done);
   });
 });

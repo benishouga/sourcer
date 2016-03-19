@@ -32,10 +32,12 @@
         "./main/api/AiApi.ts",
         "./main/api/apis.ts",
         "./main/api/MatchApi.ts",
+        "./main/api/SessionApi.ts",
         "./main/api/UserApi.ts",
         "./main/arena.ts",
         "./main/arena/nodeArena.ts",
         "./main/components/core/Screen.ts",
+        "./main/config.ts",
         "./main/core/Actor.ts",
         "./main/core/Command.ts",
         "./main/core/Configs.ts",
@@ -59,6 +61,7 @@
         "./main/db.ts",
         "./main/models/Match.ts",
         "./main/models/User.ts",
+        "./main/service/Auth.ts",
         "./main/SourcerSource.ts",
         "./main/test2d.ts",
         "./test/test-Arena.ts",
@@ -82,9 +85,10 @@
         "./main/components/core/TreeTag.tsx",
         "./main/components/pages/App.tsx",
         "./main/components/pages/Edit.tsx",
+        "./main/components/pages/Login.tsx",
+        "./main/components/pages/Logout.tsx",
         "./main/components/pages/MatchNew.tsx",
         "./main/components/pages/MatchShow.tsx",
-        "./main/components/pages/SignIn.tsx",
         "./main/components/pages/Top.tsx",
         "./main/components/pages/UserShow.tsx",
         "./main/routes.tsx",
@@ -113,7 +117,8 @@
         "../typings/react/react-dom.d.ts",
         "../typings/react/react.d.ts",
         "../typings/serve-static/serve-static.d.ts",
-        "../typings/tsd.d.ts"
+        "../typings/tsd.d.ts",
+        "../typings/whatwg-fetch/whatwg-fetch.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

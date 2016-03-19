@@ -1,20 +1,25 @@
 import * as React from 'react';
 import {Link} from 'react-router';
+import Auth from '../../service/Auth';
 
 interface TopProps {
-  isSignIn?: boolean;
 }
 
 interface TopStats {
+  loggedIn: boolean;
 }
 
 
 export default class Top extends React.Component<TopProps, TopStats> {
-  render() {
-    var isSignIn = this.props.isSignIn || false;
-    isSignIn = true;
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: Auth.authenticated
+    };
+  }
 
-    if (!isSignIn) {
+  render() {
+    if (!this.state.loggedIn) {
       return (
         <div className="scr-jumbotron">
           <h2>Sourcer</h2>

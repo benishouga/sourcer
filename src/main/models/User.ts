@@ -2,10 +2,12 @@ import {Schema, Document, model, Types} from 'mongoose';
 import {MatchDocument} from './Match';
 import * as _ from 'lodash';
 
+import * as crypto from 'crypto';
+
 export interface UserDocument extends Document {
   _id: Types.ObjectId;
   account: string;
-  providers: [{ provider: string, account: string }];
+  provider: { service: string, account: string };
   source: string;
   isClosedSource: boolean;
   matches: MatchDocument[];
@@ -15,10 +17,10 @@ export interface UserDocument extends Document {
 
 let schema = new Schema({
   account: { type: String, required: true },
-  providers: [{
-    provider: String,
-    account: String
-  }],
+  provider: {
+    service: { type: String, required: true },
+    account: { type: String, required: true }
+  },
   source: { type: String, 'default': '' },
   isClosedSource: { type: Boolean, 'default': false },
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],
@@ -35,43 +37,50 @@ module models {
   'use strict';
 
   export class User extends modelBase {
-    static loadByAccount(account: string, next: (err: any, res: UserDocument) => void) {
-      this.findOne({ account: account }).exec(next);
+    static loadByAccount(account: string) {
+      return this.findOne({ account: account }).exec();
     }
 
-    static loadWithMatchees(account: string, next: (err: any, res: UserDocument) => void) {
-      this.findOne({ account: account })
+    static loadWithMatchees(account: string) {
+      return this.findOne({ account: account })
         .populate('matches')
         .exec()
         .then<UserDocument>((res) => {
-           // model は this で参照する必要がある。
+          // model は this で参照する必要があるっぽい
           return this.populate(res, { path: 'matches.winner', model: this });
         })
         .then<UserDocument>((res) => {
-          // model は this で参照する必要がある。
+          // model は this で参照する必要があるっぽい
           return this.populate(res, { path: 'matches.contestants', model: this });
-        })
-        .then((res) => { next(null, res); }, (err) => { next(err, null); });
+        });
     }
 
-    static loadById(id: Types.ObjectId, next: (err: any, res: UserDocument) => void) {
-      this.findOne({ _id: id }).exec(next);
+    static loadById(id: Types.ObjectId) {
+      return this.findOne({ _id: id }).exec();
     }
 
-    static findByOAuthAccount(oauth: { provider: string, account: string }, next?: (err: any, res: UserDocument) => void) {
-      let provider = oauth.provider;
+    static findByOAuthAccount(oauth: { service: string, account: string }) {
+      let service = oauth.service;
       let account = oauth.account;
-      return this.findOne({ providers: { provider: provider, account: account } }).exec(next);
+      return this.findOne({ provider: { service: service, account: account } }).exec();
     }
 
-    static createFromAccount(account: string, oauthProvider: string, oauthAccount: string, next: (err: any, res: UserDocument) => void) {
+    static createFromAccount(account: string, oauthService: string, oauthAccount: string) {
       let user = new User();
       user.account = account;
-      user.providers = [{
-        provider: oauthProvider,
+      user.provider = {
+        service: oauthService,
         account: oauthAccount
-      }];
-      user.save(next);
+      };
+      return new Promise<UserDocument>((resolve, reject) => {
+        user.save((err: any, res: UserDocument) => {
+          return err ? reject(err) : resolve(res);
+        });
+      });
+    }
+
+    static hash(account: string, password: string) {
+      return crypto.createHash('sha256').update(account + password, 'utf8').digest('hex');
     }
   }
 
