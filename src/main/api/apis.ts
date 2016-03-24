@@ -6,6 +6,7 @@ import * as SessionApi from './SessionApi';
 
 export default (app: Express) => {
   app.get('/api/user', UserApi.show);
+  app.post('/api/user', UserApi.create);
   app.get('/api/user/:id', UserApi.show);
   app.post('/api/user/:id', UserApi.update);
 

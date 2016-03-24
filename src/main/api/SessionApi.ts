@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import Auth from '../service/Auth';
 
 import User, {UserDocument} from '../models/User';
 
@@ -29,17 +28,17 @@ export function create(req: Request, res: Response, next: Function) {
   }).then((user) => {
     req.session['authenticated'] = true;
     req.session['account'] = user;
-    res.send({ authenticated: true });
+    res.status(200).send({ authenticated: true });
   }, (err: any) => {
     req.session['authenticated'] = false;
     req.session['account'] = null;
-    res.send({ authenticated: false });
+    res.status(403).send({ authenticated: false });
   });
 }
 
 export function destroy(req: Request, res: Response, next: Function) {
   "use strict";
-  req.session['authenticated'] = false;
-  req.session['account'] = null;
-  res.send({ authenticated: req.session['authenticated'] });
+  req.session.destroy(() => {
+    res.send({ authenticated: false });
+  });
 }

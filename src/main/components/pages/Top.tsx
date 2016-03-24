@@ -18,6 +18,18 @@ export default class Top extends React.Component<TopProps, TopStats> {
     };
   }
 
+  updateAuth(loggedIn: boolean) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  }
+
+  componentWillMount() {
+    Auth.addOnChangeListener((loggedIn: boolean) => {
+      this.updateAuth(loggedIn);
+    })
+  }
+
   render() {
     if (!this.state.loggedIn) {
       return (

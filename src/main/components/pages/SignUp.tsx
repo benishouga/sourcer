@@ -31,7 +31,7 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
     const userId = userIdElement.value;
     const password = passwordElement.value;
 
-    Auth.login(userId, password).then((loggedIn) => {
+    Auth.create(userId, password).then((loggedIn) => {
       if (!loggedIn) {
         return this.setState({ error: true });
       }
@@ -54,8 +54,7 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
         <form onSubmit={this.handleSubmit.bind(this) }>
           <label><input ref="userId" placeholder="userId" /></label>
           <label><input ref="password" placeholder="password" /></label>
-          <label><input type="hidden" ref="mode" value="login" /></label>
-          <button type="submit">login</button>
+          <button type="submit">signup</button>
           {this.state.error && (
             <p>Bad login information</p>
           ) }

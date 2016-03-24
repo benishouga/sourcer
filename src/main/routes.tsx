@@ -8,6 +8,7 @@ import Edit from './components/pages/Edit';
 import Top from './components/pages/Top';
 import Login from './components/pages/Login';
 import Logout from './components/pages/Logout';
+import SignUp from './components/pages/SignUp';
 import Auth from './service/Auth';
 
 // function requireAuth(nextState: RouterState, replaceState: RedirectFunction, callback?: Function): any {
@@ -27,6 +28,7 @@ export default function() {
     <Route path="/" component={App}>
       <IndexRoute component={Top} />
       <Route path='login' component={Login} />
+      <Route path='signup' component={SignUp} />
       <Route path='logout' component={Logout} />
       <Route path='match/new' component={MatchNew} />
       <Route path='match/new/:userId' component={MatchNew} />

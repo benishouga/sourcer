@@ -26,7 +26,12 @@ app.use(express.static('dist'));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(session({ secret: 'seecreeeeet' }));
+
+app.use(session({
+  secret: 'seecreeeeet',
+  resave: false,
+  saveUninitialized: true
+}));
 
 apis(app);
 
