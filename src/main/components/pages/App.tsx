@@ -22,19 +22,22 @@ export default class App extends React.Component<AppProps, AppState> {
     };
   }
 
-  updateAuth(loggedIn: boolean) {
+  updateAuth = (loggedIn: boolean) => {
     this.setState({
       loggedIn: loggedIn
     })
-  }
+  };
 
   componentWillMount() {
-    Auth.addOnChangeListener((loggedIn: boolean) => {
-      this.updateAuth(loggedIn);
-    })
+    Auth.addOnChangeListener(this.updateAuth);
+
     Auth.login().then((loggedIn: boolean) => {
       this.updateAuth(loggedIn);
     });
+  }
+
+  componentWillUnmount() {
+    Auth.removeOnChangeListener(this.updateAuth);
   }
 
   render() {
@@ -45,17 +48,17 @@ export default class App extends React.Component<AppProps, AppState> {
             <span className="mdl-layout-title"><Link to="/">Sourcer</Link></span>
             <nav className="mdl-navigation">
               {
-                this.state.loggedIn ? <Link className="mdl-navigation__link mdl-color-text--grey-800" to="edit">WRITE CODE</Link> : null
+                this.state.loggedIn ? <Link className="mdl-navigation__link mdl-color-text--grey-800" to="/edit">WRITE CODE</Link> : null
               }
             </nav>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
               {
-                this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="logout">Logout</Link>) :
+                this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/logout">Logout</Link>) :
                   (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="login">Login</Link>)
               }
               {
-                !this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="signup">SignUp</Link>) : null
+                !this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/signup">SignUp</Link>) : null
               }
 
             </nav>
@@ -63,8 +66,8 @@ export default class App extends React.Component<AppProps, AppState> {
         </header>
         <main className="scr-main mdl-layout__content">
           <div className="scr-container mdl-grid">
-            <div className="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
-            <div className="scr-content content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div className="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+            <div className="scr-content content mdl-color-text--grey-800 mdl-cell mdl-cell--10-col">
               {this.props.children}
             </div>
           </div>

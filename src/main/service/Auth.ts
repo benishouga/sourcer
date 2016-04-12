@@ -1,9 +1,5 @@
 import {EventEmitter} from 'events';
 
-let win = (typeof self === 'object' && self.self === self && self) ||
-  (typeof global === 'object' && global.global === global && global) ||
-  this;
-
 interface AuthResponse {
   authenticated: boolean;
 }
@@ -101,5 +97,9 @@ export default class Auth {
 
   static addOnChangeListener(cb: (loggedIn: boolean) => void) {
     this.emitter.on('onchange', cb);
+  }
+
+  static removeOnChangeListener(cb: (loggedIn: boolean) => void) {
+    this.emitter.removeListener('onchange', cb);
   }
 }

@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose';
 
+import User from './models/User';
+import Match from './models/Match';
+console.log(typeof User, typeof Match);
+
 export default function(dbURI: string) {
   mongoose.disconnect();
   mongoose.connect(dbURI);

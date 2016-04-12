@@ -28,6 +28,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./libs/ace.d.ts",
         "./libs/chainchomp.d.ts",
         "./main/api/AiApi.ts",
         "./main/api/apis.ts",
@@ -62,6 +63,7 @@
         "./main/models/Match.ts",
         "./main/models/User.ts",
         "./main/service/Auth.ts",
+        "./main/service/User.ts",
         "./main/SourcerSource.ts",
         "./main/test2d.ts",
         "./main/utils/Validator.ts",
@@ -94,7 +96,9 @@
         "./main/components/pages/SignUp.tsx",
         "./main/components/pages/Top.tsx",
         "./main/components/pages/UserShow.tsx",
-        "./main/routes.tsx",
+        "./main/components/parts/AceEditor.tsx",
+        "./main/components/parts/Arena.tsx",
+        "./main/components/routes.tsx",
         "./main/server.tsx",
         "./main/standalone.tsx",
         "./main/test.tsx",

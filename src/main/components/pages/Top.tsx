@@ -18,16 +18,18 @@ export default class Top extends React.Component<TopProps, TopStats> {
     };
   }
 
-  updateAuth(loggedIn: boolean) {
+  updateAuth = (loggedIn: boolean) => {
     this.setState({
       loggedIn: loggedIn
     })
-  }
+  };
 
   componentWillMount() {
-    Auth.addOnChangeListener((loggedIn: boolean) => {
-      this.updateAuth(loggedIn);
-    })
+    Auth.addOnChangeListener(this.updateAuth);
+  }
+
+  componentWillUnmount() {
+    Auth.removeOnChangeListener(this.updateAuth);
   }
 
   render() {
@@ -45,11 +47,11 @@ export default class Top extends React.Component<TopProps, TopStats> {
       <div>
         <h1>Top</h1>
         <ul>
-          <li><Link to="edit">Edit</Link></li>
-          <li><Link to={`user/${'userId123'}`}>Choose User</Link></li>
-          <li><Link to={`match/${'matchId123'}`}>Choose Match</Link></li>
-          <li><Link to="match/new">Choose Match New</Link></li>
-          <li><Link to={`match/new/${'userId123'}`}>Choose Match Against</Link></li>
+          <li><Link to="/edit">Edit</Link></li>
+          <li><Link to={`/user/${'userId123'}`}>Choose User</Link></li>
+          <li><Link to={`/match/${'matchId123'}`}>Choose Match</Link></li>
+          <li><Link to="/match/new">Choose Match New</Link></li>
+          <li><Link to={`/match/new/${'userId123'}`}>Choose Match Against</Link></li>
         </ul>
       </div>
     );

@@ -6,7 +6,7 @@ import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import * as history from 'history';
 
-import Routes from './routes';
+// import Routes from './components/routes';
 import apis from './api/apis';
 
 import * as bodyParser from 'body-parser';
@@ -18,11 +18,12 @@ import config from './config';
 
 db(config.mongodb.url);
 
-var routes = Routes();
+// var routes = Routes();
 var app = express();
 var template = Handlebars.compile(fs.readFileSync('./index.hbs').toString());
 
 app.use(express.static('dist'));
+app.use(express.static('libs'));
 
 app.use(cookieParser());
 app.use(bodyParser.json());

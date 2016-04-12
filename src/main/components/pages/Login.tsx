@@ -54,7 +54,6 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
         <form onSubmit={this.handleSubmit.bind(this) }>
           <label><input ref="userId" placeholder="userId" /></label>
           <label><input ref="password" placeholder="password" /></label>
-          <label><input type="hidden" ref="mode" value="login" /></label>
           <button type="submit">login</button>
           {this.state.error && (
             <p>Bad login information</p>

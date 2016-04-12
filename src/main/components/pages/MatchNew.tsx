@@ -7,8 +7,8 @@ export default class MatchNew extends React.Component<{}, {}> {
       <div>
         <h1>MatchNew</h1>
         <ul>
-          <li><Link to={`match/${'matchId123'}`}>Start Match</Link></li>
-          <li><Link to={`match/new/${'userId123'}`}>Choose Match Against</Link></li>
+          <li><Link to={`/match/${'matchId123'}`}>Start Match</Link></li>
+          <li><Link to={`/match/new/${'userId123'}`}>Choose Match Against</Link></li>
         </ul>
       </div>
     );

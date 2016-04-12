@@ -12,7 +12,7 @@ export default class BackgroundTag extends React.Component<{ screen: Screen; }, 
       trees2: this.makeTrees(),
       trees3: this.makeTrees(),
       domes1: this.makeDomes()
-    }
+    };
   }
   render() {
     var screen = this.props.screen;
