@@ -1,6 +1,6 @@
 export default class Validator {
   static validateUserId(userId: string): string {
-    if (userId.length < 4 && /[^a-zA-Z0-9_]/.test(userId)) {
+    if (userId.length < 4 || /[^a-zA-Z0-9_]/.test(userId)) {
       throw 'Validation error : userId';
     }
     return userId;
