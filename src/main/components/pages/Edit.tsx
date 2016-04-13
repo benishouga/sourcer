@@ -8,32 +8,28 @@ interface AiEditProps extends React.Props<AiEdit> {
 
 interface AiEditState {
   source?: string;
-  editingSource?: string;
 }
 
 export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
   constructor() {
     super();
     this.state = {
-      source: null,
-      editingSource: null
+      source: null
     };
   }
 
   sourceOfResponse: string;
+  editingSource: string;
 
   onTextChange = (value: string) => {
-    // this.setState({
-    //   editingSource: value
-    // });
+    this.editingSource = value;
   };
 
   componentDidMount() {
     User.select().then((user) => {
       this.sourceOfResponse = user.source;
       this.setState({
-        source: user.source,
-        editingSource: user.source
+        source: user.source
       });
     });
   }

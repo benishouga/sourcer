@@ -29,10 +29,12 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     this.editor = Ace.edit(node);
     this.editor.$blockScrolling = Infinity;
     this.editor.setTheme("ace/theme/chrome");
-    this.editor.getSession().setMode("ace/mode/javascript");
+    let session = this.editor.getSession();
+    session.setMode("ace/mode/javascript");
+    session.setTabSize(2);
     this.editor.setShowPrintMargin(false);
-    this.editor.setOptions({ minLines: 25 });
-    this.editor.setOptions({ maxLines: 50 });
+    this.editor.setFontSize(11);
+    this.editor.setOptions({ minLines: 10, maxLines: 32 });
     this.editor.setValue(this.props.code, this.props.cursorStart);
     this.editor.on('change', this.onChange.bind(this));
   }

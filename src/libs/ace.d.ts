@@ -8,6 +8,7 @@ declare module Ace {
     getSession(): Session;
     setShowPrintMargin(showPrintMargin: boolean): void;
     setOptions(options: any): void;
+    setFontSize(size: number): void;
     destroy(): void;
     on(type: string, listener: Function): void;
     setValue(value: string, cursorStart?: number): void;
@@ -16,6 +17,7 @@ declare module Ace {
   }
   interface Session {
     setMode(mode: string): void;
+    setTabSize(size: number): void;
   }
 }
 
