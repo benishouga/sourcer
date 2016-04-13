@@ -44,6 +44,28 @@ export function create(req: Request, res: Response, next: Function) {
 }
 
 export function update(req: Request, res: Response, next: Function) {
-  var userId: string = req.param('userId');
-  console.log('userId', userId);
+  let user = req.session['account'] as UserDocument;
+  if (!user) {
+    return res.status(403).send('');
+  }
+  let userId = user.account;
+  User.loadWithMatchees(userId).then((user) => {
+    if (!user) {
+      return res.status(404).send('');
+    } else {
+      user.source = req.body.source;
+      user.save((err) => {
+        if (err) {
+          return res.status(503).send('User update failed...');
+        }
+        return res.status(200).send({
+          account: user.account,
+          source: user.source,
+          matches: user.matches
+        });
+      });
+    }
+  }, () => {
+    return res.status(404).send('');
+  });
 }

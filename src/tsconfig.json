@@ -30,7 +30,6 @@
     "files": [
         "./libs/ace.d.ts",
         "./libs/chainchomp.d.ts",
-        "./main/api/AiApi.ts",
         "./main/api/apis.ts",
         "./main/api/MatchApi.ts",
         "./main/api/SessionApi.ts",

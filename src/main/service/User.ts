@@ -1,15 +1,15 @@
 import {EventEmitter} from 'events';
 
-interface UserModel {
-  account: string;
-  source: string;
-  matches: MatchModel[];
+export interface UserModel {
+  account?: string;
+  source?: string;
+  matches?: MatchModel[];
 }
 
 interface MatchModel {
-  _id: string;
-  winner: UserModel;
-  contestants: UserModel[];
+  _id?: string;
+  winner?: UserModel;
+  contestants?: UserModel[];
 }
 
 export default class User {
@@ -41,14 +41,29 @@ export default class User {
     });
   }
 
-  static update(user: UserModel): Promise<{}> {
+  static update(user: UserModel): Promise<UserModel> {
+    console.log(user);
     return fetch('/api/user', {
-      method: 'post',
-      credentials: 'same-origin'
+      method: 'put',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ source: user.source })
+    }).then((res) => {
+      return res.ok ? res.json() : Promise.reject('User update failed.');
+    }).then((res: UserModel) => {
+      this.user = res;
+      return this.user;
     });
   }
 
   static addOnChangeListener(cb: (user: UserModel) => void) {
     this.emitter.on('onchange', cb);
+  }
+
+  static removeOnChangeListener(cb: (user: UserModel) => void) {
+    this.emitter.removeListener('onchange', cb);
   }
 }

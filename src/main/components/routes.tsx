@@ -11,15 +11,6 @@ import Logout from './pages/Logout';
 import SignUp from './pages/SignUp';
 import Auth from '../service/Auth';
 
-// function requireAuth(nextState: RouterState, replaceState: RedirectFunction, callback?: Function): any {
-//   if (!Auth.loggedIn()) {
-//     replace({
-//       pathname: '/login',
-//       state: { nextPathname: nextState.location.pathname }
-//     })
-//   }
-// }
-
 function requireAuth(nextState: RouterState, replaceState: any) {
   if (!Auth.authenticated) {
     replaceState({

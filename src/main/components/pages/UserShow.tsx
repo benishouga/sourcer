@@ -10,7 +10,7 @@ export default class UserShow extends React.Component<UserShowProps, {}> {
     let userId = this.props.params.userId;
     return (
       <div>
-        <h1>UserShow ${userId}</h1>
+        <h1>UserShow {userId}</h1>
         <ul>
           <li><Link to={`/user/${'userId123'}`}>Choose Other User</Link></li>
           <li><Link to={`/match/${'matchId123'}`}>Choose Match</Link></li>

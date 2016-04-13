@@ -2,19 +2,20 @@ import * as React from 'react';
 import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
 import User from '../../service/User';
+import Auth from '../../service/Auth';
 
 interface AiEditProps extends React.Props<AiEdit> {
 }
 
 interface AiEditState {
-  source?: string;
+  playerInfo?: PlayerInfo;
 }
 
 export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
   constructor() {
     super();
     this.state = {
-      source: null
+      playerInfo: null
     };
   }
 
@@ -23,31 +24,42 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
 
   onTextChange = (value: string) => {
     this.editingSource = value;
+    this.state.playerInfo.ai = value;
   };
 
   componentDidMount() {
     User.select().then((user) => {
       this.sourceOfResponse = user.source;
+      this.editingSource = user.source;
       this.setState({
-        source: user.source
+        playerInfo: {
+          name: "You",
+          ai: user.source,
+          color: '#866'
+        }
       });
     });
   }
 
-  render() {
-    console.log('Edit page render');
-    let players: PlayerInfo[] = [
-      { name: "You", ai: this.state.source, color: '#866', },
-      { name: "Enemy", ai: code, color: '#262' }
-    ];
+  handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    User.update({ source: this.editingSource });
+  }
 
-    if (this.state.source !== null) {
+
+  render() {
+    if (this.state.playerInfo !== null) {
+
+      let players: PlayerInfo[] = [
+        this.state.playerInfo,
+        { name: "Enemy", ai: code, color: '#262' }
+      ];
+
       return (
         <div className="scr-container mdl-grid">
           <div className="mdl-cell mdl-cell--6-col">
             <div>
-              <button>Try</button>
-              <button>Save</button>
+              <button onClick={this.handleSubmit.bind(this) }>Save</button>
             </div>
             <div>
               <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
