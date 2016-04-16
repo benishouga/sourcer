@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import User, {UserDocument} from '../models/User';
 import Validator from '../utils/Validator';
 
-export function show(req: Request, res: Response, next: Function) {
+export function show(req: Request, res: Response) {
   let userId: string = null;
   if (!req.body.userId) {
     let user = req.session['account'] as UserDocument;
@@ -18,7 +18,8 @@ export function show(req: Request, res: Response, next: Function) {
       return res.status(200).send({
         account: user.account,
         source: user.source,
-        matches: user.matches
+        matches: user.matches,
+        updated: user.updated
       });
     }
   }, () => {
@@ -26,7 +27,7 @@ export function show(req: Request, res: Response, next: Function) {
   });
 }
 
-export function create(req: Request, res: Response, next: Function) {
+export function create(req: Request, res: Response) {
   let userId: string = Validator.validateUserId(req.body.userId);
   let password: string = Validator.validatePassword(req.body.password);
 
@@ -43,7 +44,7 @@ export function create(req: Request, res: Response, next: Function) {
   });
 }
 
-export function update(req: Request, res: Response, next: Function) {
+export function update(req: Request, res: Response) {
   let user = req.session['account'] as UserDocument;
   if (!user) {
     return res.status(403).send('');
@@ -61,11 +62,28 @@ export function update(req: Request, res: Response, next: Function) {
         return res.status(200).send({
           account: user.account,
           source: user.source,
-          matches: user.matches
+          matches: user.matches,
+          updated: user.updated
         });
       });
     }
   }, () => {
     return res.status(404).send('');
+  });
+}
+
+export function recent(req: Request, res: Response) {
+  let user = req.session['account'] as UserDocument;
+  if (!user) {
+    return res.status(403).send('');
+  }
+
+  User.recent(user.account).then((users) => {
+    return res.status(200).send(users.map((user) => {
+      return {
+        account: user.account,
+        updated: user.updated
+      };
+    }));
   });
 }

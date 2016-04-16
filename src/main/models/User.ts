@@ -26,7 +26,7 @@ let schema = new Schema({
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
-}).pre('save', (next: Function) => {
+}).pre('save', function(next: Function) {
   this.updated = new Date();
   next();
 });
@@ -77,6 +77,11 @@ module models {
           return err ? reject(err) : resolve(res);
         });
       });
+    }
+
+    static recent(excludeUser: string) {
+      let query = { account: { $ne: excludeUser } };
+      return this.find(query).sort({ "updated": -1 }).limit(10).exec();
     }
 
     static hash(account: string, password: string) {

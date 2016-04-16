@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 import Auth from '../../service/Auth';
+import Matches from '../parts/Matches';
+import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 
 interface TopProps {
 }
@@ -53,6 +55,8 @@ export default class Top extends React.Component<TopProps, TopStats> {
           <li><Link to="/match/new">Choose Match New</Link></li>
           <li><Link to={`/match/new/${'userId123'}`}>Choose Match Against</Link></li>
         </ul>
+        <Matches />
+        <RecentUpdatedUsers />
       </div>
     );
   }

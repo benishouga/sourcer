@@ -4,6 +4,7 @@ import * as MatchApi from './MatchApi';
 import * as SessionApi from './SessionApi';
 
 export default (app: Express) => {
+  app.get('/api/user/recent', UserApi.recent);
   app.get('/api/user', UserApi.show);
   app.post('/api/user', UserApi.create);
   app.get('/api/user/:id', UserApi.show);

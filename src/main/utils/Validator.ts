@@ -3,6 +3,11 @@ export default class Validator {
     if (userId.length < 4 || /[^a-zA-Z0-9_]/.test(userId)) {
       throw 'Validation error : userId';
     }
+
+    if ('recent' === userId) {
+      throw 'Validation error : userId reserved';
+    }
+
     return userId;
   }
   static validatePassword(password: string): string {

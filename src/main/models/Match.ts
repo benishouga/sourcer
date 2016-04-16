@@ -15,7 +15,7 @@ let schema = new Schema({
   contestants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
-}).pre('save', (next: Function) => {
+}).pre('save', function(next: Function) {
   this.updated = new Date();
   next();
 });

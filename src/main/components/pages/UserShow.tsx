@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import {RouteParams} from '../routes';
+import Matches from '../parts/Matches';
 
 interface UserShowProps extends RouteComponentProps<RouteParams, {}> {
 }
@@ -16,6 +17,7 @@ export default class UserShow extends React.Component<UserShowProps, {}> {
           <li><Link to={`/match/${'matchId123'}`}>Choose Match</Link></li>
           <li><Link to={`/match/new/${'userId123'}`}>Choose Match Against</Link></li>
         </ul>
+        <Matches userId={userId} />
       </div>
     );
   }
