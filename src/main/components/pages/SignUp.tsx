@@ -2,13 +2,12 @@ import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import RouterContext from 'react-router/lib/RouterContext';
 import Auth from '../../service/Auth';
+import {Card, CardTitle, CardText, CardActions, Button, Textfield, Icon} from 'react-mdl';
 
 interface LoginProps extends RouteComponentProps<{}, {}> {
 }
 
 interface LoginStats {
-  userId?: string;
-  password?: string;
   error?: boolean;
 }
 
@@ -17,21 +16,31 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
     router: React.PropTypes.object
   };
 
+  userId: string;
+  password: string;
+  appKey: string;
+
   constructor() {
     super();
     this.state = { error: false };
   }
 
+  onChangeUserId(userId: any) {
+    this.userId = userId.target.value;
+  }
+
+  onChangePassword(password: any) {
+    this.password = password.target.value;
+  }
+
+  onChangeAppKey(appKey: any) {
+    this.appKey = appKey.target.value;
+  }
+
   handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    let refs = this.refs as any;
-    let userIdElement = refs.userId as HTMLInputElement;
-    let passwordElement = refs.password as HTMLInputElement;
 
-    const userId = userIdElement.value;
-    const password = passwordElement.value;
-
-    Auth.create(userId, password).then((loggedIn) => {
+    Auth.create(this.userId, this.password, this.appKey).then((loggedIn) => {
       if (!loggedIn) {
         return this.setState({ error: true });
       }
@@ -50,16 +59,24 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit.bind(this) }>
-          <label><input ref="userId" placeholder="userId" /></label>
-          <label><input ref="password" placeholder="password" /></label>
-          <button type="submit">signup</button>
+      <Card shadow={0} style={{ margin: 'auto' }}>
+        <CardTitle expand style={{ alignItems: 'flex-start' }}>
+          Sign Up
+        </CardTitle>
+        <CardText>
+          <Textfield label="User Id..." floatingLabel onChange={this.onChangeUserId.bind(this) } />
+          <Textfield label="Password..." floatingLabel onChange={this.onChangePassword.bind(this) } />
+          <Textfield label="App Key..." floatingLabel onChange={this.onChangeAppKey.bind(this) } />
           {this.state.error && (
             <p>Bad login information</p>
           ) }
-        </form>
-      </div>
+        </CardText>
+        <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
+          <Button colored onClick={this.handleSubmit.bind(this) }>Sign Up</Button>
+          <div className="mdl-layout-spacer"></div>
+          <Icon name="account_box" />
+        </CardActions>
+      </Card>
     );
   }
 }

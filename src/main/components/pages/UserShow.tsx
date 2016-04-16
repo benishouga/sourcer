@@ -7,11 +7,17 @@ interface UserShowProps extends RouteComponentProps<RouteParams, {}> {
 }
 
 export default class UserShow extends React.Component<UserShowProps, {}> {
+
+  fight() {
+
+  }
+
   render() {
     let userId = this.props.params.userId;
     return (
       <div>
-        <h1>UserShow {userId}</h1>
+        <h1>{userId}</h1>
+        <button onClick={this.fight.bind(this) }>fight</button>
         <ul>
           <li><Link to={`/user/${'userId123'}`}>Choose Other User</Link></li>
           <li><Link to={`/match/${'matchId123'}`}>Choose Match</Link></li>

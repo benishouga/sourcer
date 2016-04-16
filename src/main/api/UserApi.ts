@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import User, {UserDocument} from '../models/User';
 import Validator from '../utils/Validator';
+import config from '../config';
 
 export function show(req: Request, res: Response) {
   let userId: string = null;
@@ -28,6 +29,10 @@ export function show(req: Request, res: Response) {
 }
 
 export function create(req: Request, res: Response) {
+  if (req.body.appKey !== config.app.key) {
+    return res.status(403).send('');
+  }
+
   let userId: string = Validator.validateUserId(req.body.userId);
   let password: string = Validator.validatePassword(req.body.password);
 

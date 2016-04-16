@@ -18,7 +18,7 @@ export default class Auth {
     this._authenticated = authenticated;
   }
 
-  static create(userId: string, pass: string): Promise<boolean> {
+  static create(userId: string, pass: string, appKey: string): Promise<boolean> {
     return fetch('/api/user', {
       method: 'post',
       credentials: 'same-origin',
@@ -28,7 +28,8 @@ export default class Auth {
       },
       body: JSON.stringify({
         userId: userId,
-        password: pass
+        password: pass,
+        appKey: appKey
       })
     }).then((res) => {
       return res.ok ? res.json() : Promise.reject('Api connection failed.');

@@ -58,7 +58,7 @@ export default class App extends React.Component<AppProps, AppState> {
                   (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="login">Login</Link>)
               }
               {
-                !this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/signup">SignUp</Link>) : null
+                !this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/signup">Sign Up</Link>) : null
               }
 
             </nav>
