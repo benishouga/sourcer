@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 import Auth from '../../service/Auth';
+import {Header, HeaderRow, Navigation, Spacer, Content, Grid, Cell, Footer, FooterSection, FooterLinkList} from 'react-mdl';
 
 interface AppContext {
   router: ReactRouter.RouterOnContext;
@@ -42,45 +43,40 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render() {
     return (
-      <div className="scr-layout mdl-layout mdl-layout--fixed-header mdl-color--white-100 is-upgraded">
-        <header className="scr-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
-          <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title"><Link to="/">Sourcer</Link></span>
-            <nav className="mdl-navigation">
+      <div className="mdl-layout mdl-layout--fixed-header mdl-color--white-100 is-upgraded">
+        <Header className="scr-header mdl-color--grey-100 mdl-color-text--grey-800" scroll>
+          <HeaderRow title={<Link to="/">Sourcer</Link>}>
+            <Navigation>
               {
-                this.state.loggedIn ? <Link className="mdl-navigation__link mdl-color-text--grey-800" to="/edit">WRITE CODE</Link> : null
-              }
-            </nav>
-            <div className="mdl-layout-spacer"></div>
-            <nav className="mdl-navigation">
-              {
-                this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/logout">Logout</Link>) :
-                  (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="login">Login</Link>)
+                this.state.loggedIn ? <Link className="mdl-color-text--grey-800" to="/edit">Write Code</Link> : null
               }
               {
-                !this.state.loggedIn ? (<Link className="mdl-navigation__link mdl-color-text--grey-800" to="/signup">Sign Up</Link>) : null
+                this.state.loggedIn ? (<Link className="mdl-color-text--grey-800" to="/logout">Logout</Link>) :
+                  (<Link className="mdl-color-text--grey-800" to="login">Login</Link>)
               }
-
-            </nav>
-          </div>
-        </header>
-        <main className="scr-main mdl-layout__content">
-          <div className="scr-container mdl-grid">
-            <div className="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
-            <div className="scr-content content mdl-color-text--grey-800 mdl-cell mdl-cell--10-col">
+              {
+                !this.state.loggedIn ? (<Link className="mdl-color-text--grey-800" to="/signup">Sign Up</Link>) : null
+              }
+            </Navigation>
+          </HeaderRow>
+        </Header>
+        <Content>
+          <Grid>
+            <Cell col={1} className="mdl-cell--hide-tablet mdl-cell--hide-phone" />
+            <Cell col={10}>
               {this.props.children}
-            </div>
-          </div>
-        </main>
-        <footer className="scr-footer mdl-mini-footer">
-          <div className="mdl-mini-footer--left-section">
-            <ul className="mdl-mini-footer--link-list">
-              <li><a href="#">HOGEEEEEEE</a></li>
-              <li><a href="#">HOGEEEEEEE</a></li>
-              <li><a href="#">HOGEEEEEEE</a></li>
-            </ul>
-          </div>
-        </footer>
+            </Cell>
+          </Grid>
+        </Content>
+        <Footer size="mini">
+          <FooterSection type="left">
+            <FooterLinkList>
+              <a href="#">HOGEEEEEEE</a>
+              <a href="#">HOGEEEEEEE</a>
+              <a href="#">HOGEEEEEEE</a>
+            </FooterLinkList>
+          </FooterSection>
+        </Footer>
       </div>
     );
   }

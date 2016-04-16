@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 import User, {UserModel} from '../../service/User';
 import {MatchModel} from '../../service/Match';
+import {List, ListItem, ListItemContent, ListItemAction} from 'react-mdl';
+
 
 interface MatchesProps extends React.Props<Matches> {
   userId?: string;
@@ -31,9 +33,9 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     return (
       <div>
         <p>Matches {this.props.userId}</p>
-        <ul>
+        <List>
           {elements}
-        </ul>
+        </List>
       </div>
     );
   }
@@ -59,10 +61,11 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         let contestant = this.contestants(match);
 
         return (
-          <li key={match._id}>
-            <Link to={`/match/${match._id}`}>Choose Match</Link>
-            {contestant}
-          </li>
+          <ListItem key={match._id}>
+            <Link to={`/match/${match._id}`}>
+              {contestant}
+            </Link>
+          </ListItem>
         );
       });
     }

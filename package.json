@@ -1,6 +1,9 @@
 {
   "name": "sourcer",
   "author": "moriki",
+  "scripts": {
+    "start": "gulp browser && node app.js"
+  },
   "devDependencies": {
     "browser-sync": "^2.9.11",
     "browserify": "^13.0.0",

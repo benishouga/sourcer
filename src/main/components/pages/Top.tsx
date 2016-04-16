@@ -1,14 +1,17 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 import Auth from '../../service/Auth';
+import User from '../../service/User';
 import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
+import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
 
 interface TopProps {
 }
 
 interface TopStats {
-  loggedIn: boolean;
+  loggedIn?: boolean;
+  userId?: string;
 }
 
 
@@ -30,6 +33,14 @@ export default class Top extends React.Component<TopProps, TopStats> {
     Auth.addOnChangeListener(this.updateAuth);
   }
 
+  componentDidMount() {
+    User.select().then((user) => {
+      this.setState({
+        userId: user.account
+      });
+    });
+  }
+
   componentWillUnmount() {
     Auth.removeOnChangeListener(this.updateAuth);
   }
@@ -46,18 +57,25 @@ export default class Top extends React.Component<TopProps, TopStats> {
     }
 
     return (
-      <div>
-        <h1>Top</h1>
-        <ul>
-          <li><Link to="/edit">Edit</Link></li>
-          <li><Link to={`/user/${'userId123'}`}>Choose User</Link></li>
-          <li><Link to={`/match/${'matchId123'}`}>Choose Match</Link></li>
-          <li><Link to="/match/new">Choose Match New</Link></li>
-          <li><Link to={`/match/new/${'userId123'}`}>Choose Match Against</Link></li>
-        </ul>
-        <Matches />
-        <RecentUpdatedUsers />
-      </div>
+      <Grid>
+        <Cell col={4}>
+          <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
+            <CardTitle expand style={{ alignItems: 'flex-start' }}>
+              {this.state.userId}
+            </CardTitle>
+            <CardText>
+              card text...
+            </CardText>
+            <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
+              <Link to="/edit"><Button ripple>Write Code</Button></Link>
+            </CardActions>
+          </Card>
+        </Cell>
+        <Cell col={8}>
+          <Matches />
+          <RecentUpdatedUsers />
+        </Cell>
+      </Grid>
     );
   }
 }

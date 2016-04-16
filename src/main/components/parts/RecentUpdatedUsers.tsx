@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 import User, {UserModel} from '../../service/User';
+import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton} from 'react-mdl';
 
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
   userId?: string;
@@ -30,9 +31,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     return (
       <div>
         <p>Recent Updated Users</p>
-        <ul>
+        <List>
           {elements}
-        </ul>
+        </List>
       </div>
     );
   }
@@ -40,7 +41,16 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
   elements() {
     if (this.state.users && this.state.users.length !== 0) {
       return this.state.users.map((user) => {
-        return <li key={user.account} ><Link to={`/user/${user.account}`}>{user.account}</Link></li>;
+        return (
+          <ListItem key={user.account} >
+            <ListItemContent avatar="person">
+              <Link to={`/user/${user.account}`}>{user.account}</Link>
+            </ListItemContent>
+            <ListItemAction>
+              <Link to={`/match/new/${user.account}`}><FABButton mini ripple colored ><Icon name="whatshot" /></FABButton></Link>
+            </ListItemAction>
+          </ListItem>
+        );
       });
     }
     return [];

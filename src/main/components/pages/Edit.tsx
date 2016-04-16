@@ -3,6 +3,7 @@ import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
 import User from '../../service/User';
 import Auth from '../../service/Auth';
+import {Grid, Cell} from 'react-mdl';
 
 interface AiEditProps extends React.Props<AiEdit> {
 }
@@ -56,19 +57,15 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
       ];
 
       return (
-        <div className="scr-container mdl-grid">
-          <div className="mdl-cell mdl-cell--6-col">
-            <div>
-              <button onClick={this.handleSubmit.bind(this) }>Save</button>
-            </div>
-            <div>
-              <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
-            </div>
-          </div>
-          <div className="mdl-cell mdl-cell--6-col">
+        <Grid>
+          <Cell col={6}>
+            <p><button onClick={this.handleSubmit.bind(this) }>Save</button></p>
+            <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
+          </Cell>
+          <Cell col={6}>
             <Arena players={players}  />
-          </div>
-        </div>
+          </Cell>
+        </Grid>
       );
     }
 
