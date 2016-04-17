@@ -4,8 +4,8 @@ import Validator from '../utils/Validator';
 import config from '../config';
 
 export function show(req: Request, res: Response) {
-  let userId: string = null;
-  if (!req.body.userId) {
+  let userId: string = req.params['id'];
+  if (!userId) {
     let user = req.session['account'] as UserDocument;
     if (!user) {
       return res.status(403).send('');

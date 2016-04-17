@@ -29,7 +29,6 @@ export default class User {
   }
 
   static update(user: UserModel): Promise<UserModel> {
-    console.log(user);
     return fetch('/api/user', {
       method: 'put',
       credentials: 'same-origin',

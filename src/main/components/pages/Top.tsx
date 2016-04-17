@@ -6,47 +6,31 @@ import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
 
-interface TopProps {
+interface TopProps extends React.Props<Top> {
 }
 
 interface TopStats {
-  loggedIn?: boolean;
   userId?: string;
 }
-
 
 export default class Top extends React.Component<TopProps, TopStats> {
   constructor() {
     super();
-    this.state = {
-      loggedIn: Auth.authenticated
-    };
-  }
-
-  updateAuth = (loggedIn: boolean) => {
-    this.setState({
-      loggedIn: loggedIn
-    })
-  };
-
-  componentWillMount() {
-    Auth.addOnChangeListener(this.updateAuth);
+    this.state = {};
   }
 
   componentDidMount() {
-    User.select().then((user) => {
-      this.setState({
-        userId: user.account
+    if (Auth.authenticated) {
+      User.select().then((user) => {
+        this.setState({
+          userId: user.account
+        });
       });
-    });
-  }
-
-  componentWillUnmount() {
-    Auth.removeOnChangeListener(this.updateAuth);
+    }
   }
 
   render() {
-    if (!this.state.loggedIn) {
+    if (!Auth.authenticated) {
       return (
         <div className="scr-jumbotron">
           <h2>Sourcer</h2>

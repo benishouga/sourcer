@@ -3,7 +3,7 @@ import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
 import User from '../../service/User';
 import Auth from '../../service/Auth';
-import {Grid, Cell} from 'react-mdl';
+import {Grid, Cell, Button} from 'react-mdl';
 
 interface AiEditProps extends React.Props<AiEdit> {
 }
@@ -59,7 +59,7 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
       return (
         <Grid>
           <Cell col={6}>
-            <p><button onClick={this.handleSubmit.bind(this) }>Save</button></p>
+            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }>Save</Button></p>
             <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
           </Cell>
           <Cell col={6}>

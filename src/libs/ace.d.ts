@@ -9,6 +9,7 @@ declare module Ace {
     setShowPrintMargin(showPrintMargin: boolean): void;
     setOptions(options: any): void;
     setFontSize(size: number): void;
+    setReadOnly(readOnly: boolean): void;
     destroy(): void;
     on(type: string, listener: Function): void;
     setValue(value: string, cursorStart?: number): void;

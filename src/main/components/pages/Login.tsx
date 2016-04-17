@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import RouterContext from 'react-router/lib/RouterContext';
 import Auth from '../../service/Auth';
 import {List, ListItem, ListItemContent, Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer} from 'react-mdl';
 

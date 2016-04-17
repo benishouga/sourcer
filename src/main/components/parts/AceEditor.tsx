@@ -6,6 +6,7 @@ interface AceEditorProps extends React.Props<AceEditor> {
   code?: string;
   onChange?: Function;
   cursorStart?: number;
+  readOnly?: boolean;
 }
 
 export default class AceEditor extends React.Component<AceEditorProps, {}> {
@@ -36,6 +37,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     this.editor.setFontSize(11);
     this.editor.setOptions({ minLines: 10, maxLines: 32 });
     this.editor.setValue(this.props.code, this.props.cursorStart);
+    this.editor.setReadOnly(this.props.readOnly);
     this.editor.on('change', this.onChange.bind(this));
   }
 

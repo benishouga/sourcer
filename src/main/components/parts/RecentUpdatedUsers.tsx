@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 import User, {UserModel} from '../../service/User';
-import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton} from 'react-mdl';
+import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip} from 'react-mdl';
 
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
   userId?: string;
@@ -47,7 +47,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
               <Link to={`/user/${user.account}`}>{user.account}</Link>
             </ListItemContent>
             <ListItemAction>
-              <Link to={`/match/new/${user.account}`}><FABButton mini ripple colored ><Icon name="whatshot" /></FABButton></Link>
+              <Tooltip label="Fight" position="right">
+                <Link to={`/match/new/${user.account}`}><FABButton mini ripple colored ><Icon name="whatshot" /></FABButton></Link>
+              </Tooltip>
             </ListItemAction>
           </ListItem>
         );
