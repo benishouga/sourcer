@@ -10,11 +10,20 @@ export interface MatchModel {
 export default class Match {
   static emitter = new EventEmitter();
 
-  static create(userId: string) {
-    if (userId) {
-      return fetch(`/api/match/against/${userId}`, { method: 'post', credentials: 'same-origin' }).then((res) => {
+  static create(against: string) {
+    if (against) {
+      return fetch(`/api/match/against/${against}`, { method: 'post', credentials: 'same-origin' }).then((res) => {
         return res.ok ? res.json() : Promise.reject('Api connection failed.');
       });
     }
+    return Promise.reject('bad parameter userId: ' + against);
+  }
+  static select(matchId: string) {
+    if (matchId) {
+      return fetch(`/api/match/${matchId}`, { method: 'get', credentials: 'same-origin' }).then((res) => {
+        return res.ok ? res.json() : Promise.reject('Api connection failed.');
+      });
+    }
+    return Promise.reject('bad parameter userId: ' + matchId);
   }
 }
