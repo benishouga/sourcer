@@ -43,26 +43,25 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render() {
     return (
-      <div className="mdl-layout mdl-layout--fixed-header mdl-color--white-100 is-upgraded">
-        <Header className="scr-header mdl-color--grey-100 mdl-color-text--grey-800" scroll>
+      <div className="mdl-layout mdl-layout--fixed-header is-upgraded">
+        <Header scroll>
           <HeaderRow title={<Link to="/">Sourcer</Link>}>
             <Navigation>
               {
-                this.state.loggedIn ? <Link className="mdl-color-text--grey-800" to="/edit">Write Code</Link> : null
+                this.state.loggedIn ? <Link to="/edit">Write Code</Link> : null
               }
               {
-                this.state.loggedIn ? (<Link className="mdl-color-text--grey-800" to="/logout">Logout</Link>) :
-                  (<Link className="mdl-color-text--grey-800" to="login">Login</Link>)
+                this.state.loggedIn ? (<Link to="/logout">Logout</Link>) : (<Link to="login">Login</Link>)
               }
               {
-                !this.state.loggedIn ? (<Link className="mdl-color-text--grey-800" to="/signup">Sign Up</Link>) : null
+                !this.state.loggedIn ? (<Link to="/signup">Sign Up</Link>) : null
               }
             </Navigation>
           </HeaderRow>
         </Header>
         <Content>
           <Grid>
-            <Cell col={1} className="mdl-cell--hide-tablet mdl-cell--hide-phone" />
+            <Cell col={1} hideTablet hidePhone />
             <Cell col={10}>
               {this.props.children}
             </Cell>
