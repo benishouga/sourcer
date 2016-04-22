@@ -16,6 +16,8 @@ import * as cookieParser from 'cookie-parser';
 import db from './db';
 import config from './config';
 
+var MemcachedStore = require('connect-memcached')(session);
+
 db(config.mongodb.url);
 
 // var routes = Routes();
@@ -28,10 +30,13 @@ app.use(express.static('libs'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+let store = process.env.MEMCACHE_URL ? new MemcachedStore({ hosts: [process.env.MEMCACHE_URL] }) : undefined;
+
 app.use(session({
   secret: 'seecreeeeet',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: store
 }));
 
 apis(app);

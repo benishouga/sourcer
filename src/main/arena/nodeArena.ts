@@ -15,8 +15,14 @@ enum Command {
   PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG
 }
 
+const GAME_TIMEOUT = 200000; // 120 sec
+const THINK_TIMEOUT = 100; // 120 sec
+
 export function arena(players: SourcerSource[]): Promise<GameDump> {
   'use strict';
+  let id = players.map(p => p.name).join(',');
+  let start = new Date().getTime();
+  console.log('arena', id);
 
   cluster.setupMaster({ exec: __dirname + '/nodeArena.js' });
   let child = cluster.fork();
@@ -31,39 +37,45 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
     let thinkTimer: NodeJS.Timer = null;
     let gameTimer: NodeJS.Timer = null;
     let thinkTimeout = () => {
+      console.log('arena', id, 'thinkTimer', new Date().getTime() - start);
       child.kill();
       clearTimeout(gameTimer);
       resolve(game);
     };
     gameTimer = setTimeout(() => {
+      console.log('arena', id, 'gameTimer', new Date().getTime() - start);
       child.kill();
       clearTimeout(thinkTimer);
       resolve(game);
-    }, 20000); // 20 seconds
+    }, GAME_TIMEOUT);
 
     let resolved: boolean = false;
     child.on('message', (message: ArenaMessage) => {
       if (resolved) { return; }
 
       switch (message.command) {
-        case Command.PRE_THINK:
-          currentThink = players[message.data.index];
-          thinkTimer = setTimeout(thinkTimeout, 10); // 10 milliseconds think timeout
-          break;
-        case Command.POST_THINK:
-          currentThink = null;
-          clearTimeout(thinkTimer);
-          break;
-        case Command.FRAME:
-          game.frames.push(message.data.field);
-          break;
+        // case Command.PRE_THINK:
+        //   currentThink = players[message.data.index];
+        //   thinkTimer = setTimeout(thinkTimeout, THINK_TIMEOUT);
+        //   break;
+        // case Command.POST_THINK:
+        //   currentThink = null;
+        //   clearTimeout(thinkTimer);
+        //   break;
+        // case Command.FRAME:
+        //   game.frames.push(message.data.field);
+        //   break;
         case Command.FINISHED:
+          console.log('arena', id, 'Command.FINISHED', new Date().getTime() - start);
           game.result = message.data.result;
           break;
         case Command.END_OF_GAME:
+          console.log('arena', id, 'Command.END_OF_GAME', new Date().getTime() - start);
           resolved = true;
+          game.frames = message.data.frames;
           resolve(game);
           setTimeout(() => {
+            console.log('arena', id, 'finish', new Date().getTime() - start);
             child.kill();
             clearTimeout(gameTimer);
             clearTimeout(thinkTimer);
@@ -99,34 +111,43 @@ if (cluster.isWorker) {
       idToIndex[sourcer.id] = index;
     });
 
+    let id = message.sourcers.map(p => p.name).join(',');
+    let start = new Date().getTime();
+    console.log('arena', id, 'forked');
+
+    let frames: FieldDump[] = [];
     let listener: TickEventListener = {
       onPreThink: function(sourcerId: string) {
-        process.send({
-          command: Command.PRE_THINK,
-          data: { index: idToIndex[sourcerId] }
-        });
+        // process.send({
+        //   command: Command.PRE_THINK,
+        //   data: { index: idToIndex[sourcerId] }
+        // });
       },
       onPostThink: function(sourcerId: string) {
-        process.send({
-          command: Command.POST_THINK,
-          data: { index: idToIndex[sourcerId] }
-        });
+        // process.send({
+        //   command: Command.POST_THINK,
+        //   data: { index: idToIndex[sourcerId] }
+        // });
       },
       onFrame: (field: FieldDump) => {
-        process.send({
-          command: Command.FRAME,
-          data: { field: field }
-        });
+        frames.push(field);
+        // process.send({
+        //   command: Command.FRAME,
+        //   data: { field: field }
+        // });
       },
       onFinished: (result: ResultDump) => {
+        console.log('arena', id, 'onFinished', new Date().getTime() - start);
         process.send({
           command: Command.FINISHED,
           data: { result: result }
         });
       },
       onEndOfGame: () => {
+        console.log('arena', id, 'onEndOfGame', new Date().getTime() - start);
         process.send({
-          command: Command.END_OF_GAME
+          command: Command.END_OF_GAME,
+          data: { frames: frames }
         });
       },
       onLog: (sourcerId: string, ...messages: any[]) => {
@@ -143,6 +164,7 @@ if (cluster.isWorker) {
     while (!field.isFinished) {
       field.tick(listener);
     }
+    console.log('arena', id, 'process.exit');
     process.exit(0);
   });
 

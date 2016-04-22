@@ -59,6 +59,7 @@ export default class Field {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
+    // Think phase
     this.sourcers.forEach((sourcer: Sourcer) => {
       listener.onPreThink(sourcer.id);
       sourcer.think();
@@ -70,6 +71,7 @@ export default class Field {
       listener.onPostThink(shot.owner.id);
     });
 
+    // Action phase
     this.sourcers.forEach((actor: Actor) => {
       actor.action();
     });
@@ -80,6 +82,7 @@ export default class Field {
       fx.action();
     });
 
+    // Move phase
     this.sourcers.forEach((actor: Actor) => {
       actor.move();
     });
@@ -90,11 +93,13 @@ export default class Field {
       fx.move();
     });
 
+    // Check phase
     this.checkFinish(listener);
     this.checkEndOfGame(listener);
 
     this.frame++;
 
+    // onFrame
     listener.onFrame(this.dump());
   }
 

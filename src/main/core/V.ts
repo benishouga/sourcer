@@ -1,6 +1,6 @@
 export default class V {
-  calculatedLength: number = null;
-  calculatedAngle: number = null;
+  calculatedLength: number;
+  calculatedAngle: number;
 
   constructor(public x: number, public y: number) {
   }
@@ -97,5 +97,8 @@ export default class V {
   }
   static direction(degree: number) {
     return new V(1, 0).rotate(degree);
+  }
+  minimize() {
+    return { x: Math.round(this.x), y: Math.round(this.y) } as V;
   }
 }

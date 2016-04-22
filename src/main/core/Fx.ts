@@ -24,7 +24,7 @@ export default class Fx {
   dump(): FxDump {
     return {
       id: this.id,
-      position: this.position,
+      position: this.position.minimize(),
       frame: this.frame,
       length: this.length
     };
