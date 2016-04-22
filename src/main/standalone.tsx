@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { render } from 'react-dom'
 import FieldTag from './components/core/FieldTag';
-import {GameDump, FieldDump, ResultDump} from './core/Dump';
+import {GameDump, FieldDump, ResultDump, MembersDump} from './core/Dump';
 
 var colors = ['#866', '#262', '#c55', '#44b'];
 
@@ -10,6 +10,7 @@ class Standalone {
   worker = new Worker("dist/arena.js");
   game: GameDump = {
     result: null,
+    members: null,
     frames: []
   };
   endOfGame = false;
@@ -28,6 +29,9 @@ class Standalone {
     });
     this.worker.addEventListener('message', (e: MessageEvent) => {
       switch (e.data.command) {
+        case "Members":
+          this.game.members = e.data.members;
+          break;
         case "PreThink":
           this.thinking = e.data.index;
           this.handler = setTimeout(() => { this.timeout(); }, 10); // 10 milliseconds think timeout
@@ -67,6 +71,7 @@ interface StandaloneScreenStats {
   playing?: boolean;
   frame?: number;
   result?: ResultDump;
+  members?: MembersDump;
   fieldHistory?: FieldDump[];
   standalone?: Standalone;
   loadedFrame?: number;
@@ -120,10 +125,22 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
       return (
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
           <g transform={"scale(" + scale + ", " + scale + ")"}>
-            <FieldTag field={this.state.fieldHistory[this.state.frame]} result={this.state.result} width={scaledWidth} height={scaledHeight} scale={scale} frameLength={this.state.fieldHistory.length}
-              playing={this.state.playing} onFrameChanged={(frame) => this.onFrameChanged(frame) } onPlay={() => this.onPlay() } onPause={() => this.onPause() } onReload={() => this.onReload() } />
-            </g>
-          </svg>
+            <FieldTag
+              field={this.state.fieldHistory[this.state.frame]}
+              members={this.state.members}
+              result={this.state.result}
+              width={scaledWidth}
+              height={scaledHeight}
+              scale={scale}
+              frameLength={this.state.fieldHistory.length}
+              playing={this.state.playing}
+              onFrameChanged={this.onFrameChanged.bind(this) }
+              onPlay={this.onPlay.bind(this) }
+              onPause={this.onPause.bind(this) }
+              onReload={this.onReload.bind(this) }
+              />
+          </g>
+        </svg>
       );
     } else {
 
@@ -131,8 +148,8 @@ class ScreenTag extends React.Component<StandaloneScreenProps, StandaloneScreenS
         <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
           <g transform={"scale(" + scale + ", " + scale + ")"}>
             <text x={0} y={scaledHeight / 2} textAnchor="middle">{"Loading ..." + loadedFrame}</text>
-            </g>
-          </svg>
+          </g>
+        </svg>
       );
     }
   }

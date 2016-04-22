@@ -5,7 +5,7 @@ import Shot from './Shot';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump} from './Dump';
+import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, MembersDump} from './Dump';
 
 export default class Field {
   currentId = 0;
@@ -27,12 +27,12 @@ export default class Field {
   }
 
   addSourcer(sourcer: Sourcer) {
-    sourcer.id = "sourcer" + (this.currentId++);
+    sourcer.id = this.currentId++;
     this.sourcers.push(sourcer);
   }
 
   addShot(shot: Shot) {
-    shot.id = "shot" + (this.currentId++);
+    shot.id = this.currentId++;
     this.shots.push(shot);
   }
 
@@ -44,7 +44,7 @@ export default class Field {
   }
 
   addFx(fx: Fx) {
-    fx.id = "fx" + (this.currentId++);
+    fx.id = this.currentId++;
     this.fxs.push(fx);
   }
 
@@ -119,7 +119,7 @@ export default class Field {
     if (survivers.length === 1) {
       var surviver = survivers[0];
       this.result = {
-        winner: surviver.dump(),
+        winnerId: surviver.id,
         frame: this.frame,
         isDraw: false
       };
@@ -129,7 +129,7 @@ export default class Field {
 
     // no surviver.. draw...
     this.result = {
-      winner: null,
+      winnerId: null,
       frame: this.frame,
       isDraw: true
     };
@@ -214,6 +214,14 @@ export default class Field {
     return sumX / count;
   }
 
+  members() {
+    let members: MembersDump = {};
+    this.sourcers.forEach((sourcer) => {
+      members[sourcer.id] = { name: sourcer.name, color: sourcer.color };
+    });
+    return members;
+  }
+
   dump(): FieldDump {
     var sourcersDump: any[] = [];
     var shotsDump: any[] = [];
@@ -230,10 +238,10 @@ export default class Field {
     });
 
     return {
-      frame: this.frame,
-      sourcers: sourcersDump,
-      shots: shotsDump,
-      fxs: fxDump
+      f: this.frame,
+      s: sourcersDump,
+      b: shotsDump,
+      x: fxDump
     };
   }
 }

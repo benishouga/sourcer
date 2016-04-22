@@ -1,47 +1,74 @@
 import V from './V';
 
 interface ActorDump {
-  id: string;
-  position: V;
-  speed: V;
-  direction: number;
+  /** Id */
+  i: number;
+  /** Position */
+  p: V;
+  /** Direction */
+  d: number;
 }
 
 export interface SourcerDump extends ActorDump {
-  shield: number;
-  temperature: number;
-  missileAmmo: number;
-  fuel: number;
+  /** sHield */
+  h: number;
+  /** Temperature */
+  t: number;
+  /** MissileAmmo */
+  a: number;
+  /** Fuel */
+  f: number;
+}
+
+export interface ShotDump extends ActorDump {
+  /** Owner id */
+  o: number;
+  /** Shot type */
+  s: string;
+}
+
+export interface FxDump {
+  /** Id */
+  i: number;
+  /** Position */
+  p: V;
+  /** Frame */
+  f: number;
+  /** Length */
+  l: number;
+}
+
+export interface FieldDump {
+  /** Frame */
+  f: number;
+  /** Sourcers */
+  s: SourcerDump[];
+  /** shots (Bullets) */
+  b: ShotDump[];
+  /** fXs */
+  x: FxDump[];
+}
+
+export interface GameDump {
+  /** Result */
+  result: ResultDump;
+  /** Frames */
+  members: MembersDump;
+  /** Frames */
+  frames: FieldDump[];
+}
+
+export interface MembersDump {
+  [id: number]: ProfileDump;
+}
+
+export interface ProfileDump {
   name: string;
   color: string;
 }
 
-export interface ShotDump extends ActorDump {
-  type: string;
-  color: string;
-}
-
-export interface FxDump {
-  id: string;
-  position: V;
-  frame: number;
-  length: number;
-}
-
-export interface FieldDump {
-  frame: number;
-  sourcers: SourcerDump[];
-  shots: ShotDump[];
-  fxs: FxDump[];
-}
-
-export interface GameDump {
-  result: ResultDump;
-  frames: FieldDump[];
-}
-
 export interface ResultDump {
   isDraw: boolean;
-  winner: SourcerDump;
+  winnerId: number;
   frame: number;
 }

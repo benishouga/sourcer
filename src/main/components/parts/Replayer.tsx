@@ -64,6 +64,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     if (this.props.gameDump.frames) {
       let result = this.props.gameDump.result && this.props.gameDump.result.frame <= this.state.frame && this.props.gameDump.result;
+      let members = this.props.gameDump.members;
 
       return (
         <div ref="root">
@@ -72,6 +73,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
               <FieldTag
                 field={this.props.gameDump.frames[this.state.frame]}
                 result={result}
+                members={members}
                 width={scaledWidth}
                 height={scaledHeight}
                 scale={scale}

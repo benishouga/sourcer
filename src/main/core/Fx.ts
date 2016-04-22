@@ -4,7 +4,7 @@ import {FxDump} from './Dump';
 
 export default class Fx {
   frame: number;
-  id: string;
+  id: number;
 
   constructor(public field: Field, public position: V, public speed: V, public length: number) {
     this.frame = 0;
@@ -23,10 +23,10 @@ export default class Fx {
 
   dump(): FxDump {
     return {
-      id: this.id,
-      position: this.position.minimize(),
-      frame: this.frame,
-      length: this.length
+      i: this.id,
+      p: this.position.minimize(),
+      f: this.frame,
+      l: Math.round(this.length)
     };
   }
 }

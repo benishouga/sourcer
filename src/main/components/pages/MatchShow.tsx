@@ -11,7 +11,6 @@ interface MatchShowProps extends RouteComponentProps<RouteParams, {}> {
 
 interface MatchShowState {
   gameDump?: GameDump;
-  contestants?: { name: string }[];
 }
 
 export default class MatchShow extends React.Component<MatchShowProps, MatchShowState> {
@@ -23,10 +22,7 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
   componentDidMount() {
     Match.select(this.props.params.matchId).then((gameDump: GameDump) => {
       this.setState({
-        gameDump: gameDump,
-        contestants: gameDump.frames[0].sourcers.map((sourcer) => {
-          return { name: sourcer.name };
-        })
+        gameDump: gameDump
       });
     });
   }
@@ -47,14 +43,14 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
             <Cell col={6} table={8}>
               <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
                 <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.contestants[0].name}`}>{this.state.contestants[0].name}</Link>
+                  <Link to={`/match/new/${this.state.gameDump.members[0].name}`}>{this.state.gameDump.members[0].name}</Link>
                 </CardTitle>
               </Card>
             </Cell>
             <Cell col={6} table={8}>
               <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
                 <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.contestants[1].name}`}>{this.state.contestants[1].name}</Link>
+                  <Link to={`/match/new/${this.state.gameDump.members[1].name}`}>{this.state.gameDump.members[1].name}</Link>
                 </CardTitle>
               </Card>
             </Cell>

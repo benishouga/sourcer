@@ -16,15 +16,15 @@ function create(field: Field, source: SourcerSource) {
 
 onmessage = function(e) {
   var sources = e.data.sources as SourcerSource[];
-  var idToIndex: { [key: string]: number } = {};
+  var idToIndex: { [key: number]: number } = {};
   var listener: TickEventListener = {
-    onPreThink: function(sourcerId: string) {
+    onPreThink: function(sourcerId: number) {
       postMessage({
         command: "PreThink",
         index: idToIndex[sourcerId]
       });
     },
-    onPostThink: function(sourcerId: string) {
+    onPostThink: function(sourcerId: number) {
       postMessage({
         command: "PostThink",
         index: idToIndex[sourcerId]
@@ -47,7 +47,7 @@ onmessage = function(e) {
         command: "EndOfGame"
       });
     },
-    onLog: (sourcerId: string, ...messages: any[]) => {
+    onLog: (sourcerId: number, ...messages: any[]) => {
       console.log("onLog");
       postMessage({
         command: "Log",
@@ -62,6 +62,11 @@ onmessage = function(e) {
     var sourcer = create(field, value);
     field.addSourcer(sourcer);
     idToIndex[sourcer.id] = index;
+  });
+
+  postMessage({
+    command: "Members",
+    members: field.members()
   });
 
   for (var i = 0; i < 2000 && !field.isFinished; i++) {

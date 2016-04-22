@@ -38,12 +38,11 @@ export default class Shot extends Actor {
 
   dump(): ShotDump {
     return {
-      id: this.id,
-      position: this.position.minimize(),
-      speed: this.speed.minimize(),
-      direction: this.direction,
-      type: this.type,
-      color: this.owner.color
+      o: this.owner.id,
+      i: this.id,
+      p: this.position.minimize(),
+      d: this.direction,
+      s: this.type
     };
   }
 }

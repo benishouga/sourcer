@@ -5,7 +5,7 @@ import Configs from './Configs';
 import Shot from './Shot';
 
 export default class Actor {
-  id: string;
+  id: number;
   position: V;
   speed: V;
   direction: number;

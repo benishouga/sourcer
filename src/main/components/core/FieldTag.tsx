@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldDump, ResultDump} from '../../core/Dump';
+import {FieldDump, ResultDump, MembersDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
@@ -23,12 +23,14 @@ export default class FieldTag extends React.Component<{
   onReload: () => void;
   field: FieldDump;
   result: ResultDump;
+  members: MembersDump;
 }, {}> {
   render() {
-    var field = this.props.field;
-    var result = this.props.result;
+    const field = this.props.field;
+    const result = this.props.result;
+    const members = this.props.members;
 
-    var screen: Screen = {
+    const screen: Screen = {
       frameLength: this.props.frameLength,
       height: this.props.height,
       width: this.props.width,
@@ -50,12 +52,12 @@ export default class FieldTag extends React.Component<{
     var maxTop = -Number.MAX_VALUE;
     var sumX = 0;
 
-    var sourcers: JSX.Element[] = field.sourcers.map(function(b) {
-      sumX += b.position.x;
-      maxTop = Math.max(maxTop, b.position.y);
-      maxRight = Math.max(maxRight, b.position.x);
-      maxLeft = Math.min(maxLeft, b.position.x);
-      return <SourcerTag key={b.id} model={b} />
+    const sourcers: JSX.Element[] = field.s.map(function(b) {
+      sumX += b.p.x;
+      maxTop = Math.max(maxTop, b.p.y);
+      maxRight = Math.max(maxRight, b.p.x);
+      maxLeft = Math.min(maxLeft, b.p.x);
+      return <SourcerTag key={b.i} model={b} profile={members[b.i]} />
     });
 
     if (sourcers.length != 0) {
@@ -73,26 +75,27 @@ export default class FieldTag extends React.Component<{
 
     screen.scale = Math.min(1, Math.min(screen.height / screen.top, screen.width / (screen.right - screen.left)));
 
-    var viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
-    var viewRight = (screen.right - screen.center) / screen.scale + screen.center;
-    var viewTop = (screen.height - 24) / screen.scale;
+    const viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
+    const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
+    const viewTop = (screen.height - 24) / screen.scale;
 
-    if (field.shots) {
-      var shots: JSX.Element[] = field.shots.map((b) => {
-        var x = b.position.x;
-        var y = b.position.y;
+    var shots: JSX.Element[];
+    if (field.b) {
+      shots = field.b.map((b) => {
+        const x = b.p.x;
+        const y = b.p.y;
         if (viewLeft < x && x < viewRight && y < viewTop) {
-          if (b.type === "Missile") {
-            return <MissileTag key={b.id} model={b} />
+          if (b.s === "Missile") {
+            return <MissileTag key={b.i} model={b} profile={members[b.o]} />
           } else {
-            return <LaserTag key={b.id} model={b} />
+            return <LaserTag key={b.i} model={b} profile={members[b.o]} />
           }
         }
       });
     }
 
-    var fxs: JSX.Element[] = field.fxs.map((b) => {
-      return <FxTag key={b.id} model={b} />
+    var fxs: JSX.Element[] = field.x.map((b) => {
+      return <FxTag key={b.i} model={b} />
     });
 
     return (
@@ -103,12 +106,12 @@ export default class FieldTag extends React.Component<{
           <g>
             {sourcers}
             {shots}
-            </g>
-          {fxs}
           </g>
-
-        <HudTag field={field} result={result} screen={screen} />
+          {fxs}
         </g>
+
+        <HudTag field={field} result={result} members={members} screen={screen} />
+      </g>
     );
   }
 }

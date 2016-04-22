@@ -150,16 +150,13 @@ export default class Sourcer extends Actor {
 
   dump(): SourcerDump {
     return {
-      id: this.id,
-      position: this.position.minimize(),
-      speed: this.speed.minimize(),
-      direction: this.direction,
-      shield: Math.round(this.shield),
-      temperature: Math.round(this.temperature),
-      missileAmmo: this.missileAmmo,
-      fuel: Math.round(this.fuel),
-      name: this.name,
-      color: this.color
+      i: this.id,
+      p: this.position.minimize(),
+      d: this.direction,
+      h: Math.round(this.shield),
+      t: Math.round(this.temperature),
+      a: this.missileAmmo,
+      f: Math.round(this.fuel)
     };
   }
 }

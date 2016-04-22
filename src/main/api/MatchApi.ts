@@ -46,6 +46,9 @@ export function create(req: Request, res: Response) {
     ]).then((matchResult) => {
       let id = register(matchResult);
       res.status(201).send({ _id: id });
+      // fs.writeFile('./temp/' + id, JSON.stringify(matchResult), () => {
+      //   res.status(201).send({ _id: id });
+      // });
     });
   }).catch((error) => {
     console.log(error);

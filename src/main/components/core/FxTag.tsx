@@ -8,13 +8,13 @@ interface FxTagProps extends React.Props<any> {
 export default class FxTag extends React.Component<FxTagProps, {}> {
   render() {
     var model = this.props.model;
-    var frame = model.frame;
+    var frame = model.f;
     return (
       <g>
-        <g transform={"translate(" + model.position.x + "," + model.position.y + ")"}>
-          <circle r={frame / 2 + 6} cy="0" cx="0" fill={"rgba(255,255,255," + (255 * frame / model.length) + ")"} />
-          <circle r={frame / 2 + 5} cy="0" cx="0" fill={"rgba(0,0,0," + (255 * frame / model.length) + ")"} />
-          <circle r={frame / 2 + 3} cy="0" cx="0" fill={"rgba(255,255,255," + (255 * frame / model.length) + ")"} />
+        <g transform={"translate(" + model.p.x + "," + model.p.y + ")"}>
+          <circle r={frame / 2 + 6} cy="0" cx="0" fill={"rgba(255,255,255," + (255 * frame / model.l) + ")"} />
+          <circle r={frame / 2 + 5} cy="0" cx="0" fill={"rgba(0,0,0," + (255 * frame / model.l) + ")"} />
+          <circle r={frame / 2 + 3} cy="0" cx="0" fill={"rgba(255,255,255," + (255 * frame / model.l) + ")"} />
         </g>
       </g>
     );

@@ -12,11 +12,12 @@ interface ArenaMessage {
 }
 
 enum Command {
-  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG
+  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG, MEMBERS
 }
 
-const GAME_TIMEOUT = 200000; // 120 sec
-const THINK_TIMEOUT = 100; // 120 sec
+const GAME_TIMEOUT = 10000; // 10 sec
+const THINK_TIMEOUT = 10; // 100 msec
+const DELAY_FOR_POSTMESSAGE = 1000; // 1 sec
 
 export function arena(players: SourcerSource[]): Promise<GameDump> {
   'use strict';
@@ -28,9 +29,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
   let child = cluster.fork();
 
   return new Promise<GameDump>((resolve, reject) => {
-
     let game: GameDump = {
       result: null,
+      members: {},
       frames: []
     };
     let currentThink: SourcerSource = null;
@@ -54,6 +55,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
       if (resolved) { return; }
 
       switch (message.command) {
+        case Command.MEMBERS:
+          game.members = message.data.members;
+          break;
         // case Command.PRE_THINK:
         //   currentThink = players[message.data.index];
         //   thinkTimer = setTimeout(thinkTimeout, THINK_TIMEOUT);
@@ -104,11 +108,17 @@ function create(field: Field, source: SourcerSource) {
 if (cluster.isWorker) {
   process.on('message', (message: { sourcers: SourcerSource[] }) => {
     let field = new Field();
-    let idToIndex: { [key: string]: number } = {};
+    let idToIndex: { [key: number]: number } = {};
     message.sourcers.forEach((value, index) => {
       let sourcer = create(field, value);
       field.addSourcer(sourcer);
       idToIndex[sourcer.id] = index;
+    });
+
+    let members = field.members();
+    process.send({
+      command: Command.MEMBERS,
+      data: { members: members }
     });
 
     let id = message.sourcers.map(p => p.name).join(',');
@@ -117,13 +127,13 @@ if (cluster.isWorker) {
 
     let frames: FieldDump[] = [];
     let listener: TickEventListener = {
-      onPreThink: function(sourcerId: string) {
+      onPreThink: function(sourcerId: number) {
         // process.send({
         //   command: Command.PRE_THINK,
         //   data: { index: idToIndex[sourcerId] }
         // });
       },
-      onPostThink: function(sourcerId: string) {
+      onPostThink: function(sourcerId: number) {
         // process.send({
         //   command: Command.POST_THINK,
         //   data: { index: idToIndex[sourcerId] }
@@ -150,7 +160,7 @@ if (cluster.isWorker) {
           data: { frames: frames }
         });
       },
-      onLog: (sourcerId: string, ...messages: any[]) => {
+      onLog: (sourcerId: number, ...messages: any[]) => {
         process.send({
           command: Command.LOG,
           data: {
@@ -164,8 +174,11 @@ if (cluster.isWorker) {
     while (!field.isFinished) {
       field.tick(listener);
     }
-    console.log('arena', id, 'process.exit');
-    process.exit(0);
+
+    setTimeout(() => {
+      console.log('arena', id, 'process.exit');
+      process.exit(0);
+    }, DELAY_FOR_POSTMESSAGE);
   });
 
 }
