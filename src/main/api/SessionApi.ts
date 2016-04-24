@@ -13,7 +13,7 @@ export function create(req: Request, res: Response, next: Function) {
   let password = req.body.password;
   if (!userId || !password) {
     req.session['authenticated'] = false;
-    res.send({ authenticated: false });
+    res.status(400).type('json').send({ authenticated: false });
     return;
   }
   let hash = User.hash(userId, password);
@@ -28,7 +28,7 @@ export function create(req: Request, res: Response, next: Function) {
   }).then((user) => {
     req.session['authenticated'] = true;
     req.session['account'] = user;
-    res.status(200).send({ authenticated: true });
+    return res.status(200).type('json').send({ authenticated: true });
   }, (err: any) => {
     req.session['authenticated'] = false;
     req.session['account'] = null;

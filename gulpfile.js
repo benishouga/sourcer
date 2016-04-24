@@ -37,7 +37,7 @@ gulp.task('standalone', ['ts', 'js', 'standalone-worker'], function() {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('browser', ['ts', 'js', 'standalone-worker'], function() {
+gulp.task('browser', ['stylus', 'ts', 'js', 'standalone-worker'], function() {
   return browserify({
       debug: true,
     })

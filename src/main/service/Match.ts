@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events';
 import {UserModel} from './User';
+import PublicConfig from '../PublicConfig';
 
 export interface MatchModel {
   _id?: string;

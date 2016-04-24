@@ -16,7 +16,7 @@ export function show(req: Request, res: Response) {
     if (!user) {
       return res.status(404).send('');
     } else {
-      return res.status(200).send({
+      return res.status(200).type('json').send({
         account: user.account,
         source: user.source,
         matches: user.matches,
@@ -43,7 +43,7 @@ export function create(req: Request, res: Response) {
       User.createFromAccount(userId, 'own', User.hash(userId, password)).then((user) => {
         req.session['authenticated'] = true;
         req.session['account'] = user;
-        res.status(200).send({ authenticated: true });
+        return res.status(201).type('json').send({ authenticated: true });
       });
     }
   });
@@ -64,7 +64,7 @@ export function update(req: Request, res: Response) {
         if (err) {
           return res.status(503).send('User update failed...');
         }
-        return res.status(200).send({
+        return res.status(200).type('json').send({
           account: user.account,
           source: user.source,
           matches: user.matches,
@@ -84,7 +84,7 @@ export function recent(req: Request, res: Response) {
   }
 
   User.recent(user.account).then((users) => {
-    return res.status(200).send(users.map((user) => {
+    return res.status(200).type('json').send(users.map((user) => {
       return {
         account: user.account,
         updated: user.updated
