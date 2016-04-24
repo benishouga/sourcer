@@ -3,7 +3,7 @@
   "author": "moriki",
   "scripts": {
     "start": "node app.js",
-    "deploy": "gcloud preview app deploy",
+    "deploy": "gulp browser && gcloud preview app deploy",
     "local": "gulp browser && node app.js"
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "cookie-parser": "^1.3.5",
     "express": "^4.13.3",
     "express-session": "^1.11.3",
+    "gcloud": "^0.31.0",
     "handlebars": "^4.0.5",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
