@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { arena } from '../arena/nodeArena';
 import { GameDump } from '../core/Dump';
 import User, {UserDocument} from '../models/User';
+import Match, {MatchDocument} from '../models/Match';
 import Storage from '../utils/Storage';
 
 const colors = ['#866', '#262', '#c55', '#44b'];
@@ -44,11 +45,19 @@ export function create(req: Request, res: Response) {
       { name: contestants[0].account, color: colors[0], ai: contestants[0].source },
       { name: contestants[1].account, color: colors[1], ai: contestants[1].source }
     ]).then((matchResult) => {
-      let id = register(matchResult);
-      Storage.put(id, matchResult).then(() => {
-        return res.status(200).type('json').send({ _id: id });
+      let match = new Match();
+      match.winner = contestants[matchResult.result.winnerId];
+      match.contestants = contestants;
+      return Match.createAndRegisterToUser(match).then(() => {
+        let id = match._id.toHexString();
+        return Storage.put(id, matchResult).then(() => id);
+      }).then((id) => {
+        res.status(200).type('json').send({ _id: id });
+      }).catch((error) => {
+        res.status(500).send('');
       });
     });
+    return Promise.resolve();
   }).catch((error) => {
     console.log(error);
     return res.status(400).send('');

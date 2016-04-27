@@ -27,28 +27,39 @@ module models {
 
   export class Match extends modelBase {
 
-    static load(id: Types.ObjectId, next: (err: any, res: MatchDocument) => void) {
-      this.findOne({ _id: id })
-        .populate('winner')
-        .populate('contestants')
-        .exec(next);
+    static load(id: Types.ObjectId): Promise<MatchDocument> {
+      return new Promise<MatchDocument>((resolve, reject) => {
+        this.findOne({ _id: id })
+          .populate('winner')
+          .populate('contestants')
+          .exec((err, res) => {
+            if (err) { return reject(err); }
+            resolve(res);
+          });
+      });
     }
 
-    static createAndRegisterToUser(match: MatchDocument, next: (err: any, res: MatchDocument) => void) {
-      match.save((err) => {
-        this.load(match._id, (err, match) => {
-          let promises = match.contestants.map((contestant) => {
-            return new Promise<{}>((resolve, reject) => {
-              contestant.matches = contestant.matches || [];
-              contestant.matches.push(match);
-              contestant.save((err) => {
-                if (err) { reject(err); }
-                resolve();
+    static createAndRegisterToUser(match: MatchDocument): Promise<MatchDocument> {
+      return new Promise<MatchDocument>((resolve, reject) => {
+        match.save((err) => {
+          if (err) { return reject(err); }
+
+          this.load(match._id).then((match) => {
+
+            let promises = match.contestants.map((contestant) => {
+              return new Promise<{}>((resolve, reject) => {
+                contestant.matches = contestant.matches || [];
+                contestant.matches.push(match);
+                contestant.save((err) => {
+                  if (err) { reject(err); }
+                  resolve();
+                });
               });
             });
-          });
-          Promise.all(promises).then(() => {
-            next(null, match);
+
+            Promise.all(promises).then(() => {
+              resolve(match);
+            }).then(reject);
           });
         });
       });

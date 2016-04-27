@@ -76,6 +76,7 @@
         "./test/test-Utils.ts",
         "./test/test-V.ts",
         "./test/test-Validator.ts",
+        "./test/TestUtils.ts",
         "./main/browser.tsx",
         "./main/components/core/BackgroundTag.tsx",
         "./main/components/core/ControllerHudTag.tsx",

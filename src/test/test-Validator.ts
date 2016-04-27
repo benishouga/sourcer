@@ -1,6 +1,7 @@
 import Validator from '../main/utils/Validator';
 import assert  from 'power-assert';
-describe.only('Validator', () => {
+describe('Validator', () => {
+
   it('validateUserId', () => {
     let valids = ['abcd', '0189abcxyzABCXYZ_'];
     let invalids = ['', 'aaa', '!aaa', 'a aa', 'aa"a', 'aaa#'];
@@ -18,6 +19,7 @@ describe.only('Validator', () => {
       assert.fail('Its expected invalid: ' + invalid);
     });
   });
+
   it('validatePassword', () => {
     let valids = ['abcd', '0189abcxyzABCXYZ_'];
     let invalids = ['', 'aaa'];
