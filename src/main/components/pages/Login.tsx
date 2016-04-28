@@ -1,7 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import Auth from '../../service/Auth';
 import {List, ListItem, ListItemContent, Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer} from 'react-mdl';
+
+import Auth from '../../service/Auth';
+import ComponentExplorer from '../../utils/ComponentExplorer';
 
 interface LoginProps extends RouteComponentProps<{}, {}> {
 }
@@ -15,26 +17,18 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
     router: React.PropTypes.object
   };
 
-  userId: string;
-  password: string;
-
   constructor() {
     super();
     this.state = { error: false };
   }
 
-  onChangeUserId(userId: any) {
-    this.userId = userId.target.value;
-  }
-
-  onChangePassword(password: any) {
-    this.password = password.target.value;
-  }
-
   handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    Auth.login(this.userId, this.password).then((loggedIn) => {
+    let account = ComponentExplorer.extractInputValue(this.refs['account']);
+    let password = ComponentExplorer.extractInputValue(this.refs['password']);
+
+    Auth.login(account, password).then((loggedIn) => {
       if (!loggedIn) {
         return this.setState({ error: true });
       }
@@ -59,8 +53,8 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
             Login
           </CardTitle>
           <CardText>
-            <Textfield label="User Id..." floatingLabel onChange={this.onChangeUserId.bind(this) } />
-            <Textfield label="Password..." floatingLabel onChange={this.onChangePassword.bind(this) } />
+            <Textfield label="Account..." floatingLabel ref="account" />
+            <Textfield label="Password..." floatingLabel ref="password" />
             {this.state.error && (
               <p>Bad login information</p>
             ) }

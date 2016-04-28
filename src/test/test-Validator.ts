@@ -2,16 +2,16 @@ import Validator from '../main/utils/Validator';
 import assert  from 'power-assert';
 describe('Validator', () => {
 
-  it('validateUserId', () => {
+  it('validateAccount', () => {
     let valids = ['abcd', '0189abcxyzABCXYZ_'];
     let invalids = ['', 'aaa', '!aaa', 'a aa', 'aa"a', 'aaa#'];
 
     valids.forEach((valid) => {
-      assert.ok(Validator.validateUserId(valid), 'Its valid: ' + valid);
+      assert.ok(Validator.validateAccount(valid), 'Its valid: ' + valid);
     });
     invalids.forEach((invalid) => {
       try {
-        Validator.validateUserId(invalid);
+        Validator.validateAccount(invalid);
       } catch (error) {
         assert.ok(error);
         return;

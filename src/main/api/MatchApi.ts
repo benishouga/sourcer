@@ -8,11 +8,6 @@ import Storage from '../utils/Storage';
 const colors = ['#866', '#262', '#c55', '#44b'];
 let used = 0;
 
-function register(result: GameDump): string {
-  const id = 'match' + (++used);
-  return id;
-}
-
 export function list(req: Request, res: Response) {
   "use strict";
 }
@@ -27,18 +22,18 @@ export function show(req: Request, res: Response) {
 
 export function create(req: Request, res: Response) {
   "use strict";
-  const user = req.session['account'] as UserDocument;
+  const user = req.session['user'] as UserDocument;
   if (!user) {
     return res.status(403).send('');
   }
-  const userId = user.account;
+  const account = user.account;
   const againstId: string = req.params['id'];
   if (!againstId) {
     return res.status(400).send('');
   }
 
   Promise.all([
-    User.loadByAccount(userId),
+    User.loadByAccount(account),
     User.loadByAccount(againstId)
   ]).then((contestants: UserDocument[]) => {
     arena([

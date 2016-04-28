@@ -1,15 +1,19 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
-import User, {UserModel} from '../../service/User';
+import User from '../../service/User';
 import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip} from 'react-mdl';
+import * as moment from 'moment';
+
+require('moment/locale/ja');
+moment.locale('ja');
 
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
-  userId?: string;
+  account?: string;
 }
 
 interface RecentUpdatedUsersState {
-  users?: UserModel[];
+  users?: UserResponse[];
 }
 
 export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUsersProps, RecentUpdatedUsersState>{
@@ -42,9 +46,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     if (this.state.users && this.state.users.length !== 0) {
       return this.state.users.map((user) => {
         return (
-          <ListItem key={user.account} >
-            <ListItemContent avatar="person">
-              <Link to={`/user/${user.account}`}>{user.account}</Link>
+          <ListItem key={user.account} twoLine >
+            <ListItemContent avatar="person" subtitle="Xx戦 Xx勝 メンバー：Aaa, Bbb, Ccc, Ddd, Eee">
+              <Link to={`/user/${user.account}`}>{user.account}</Link> <span className="updated">{moment(user.updated).fromNow() }</span>
             </ListItemContent>
             <ListItemAction>
               <Tooltip label="Fight" position="right">

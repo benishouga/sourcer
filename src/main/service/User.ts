@@ -1,19 +1,20 @@
 import {EventEmitter} from 'events';
-import {MatchModel} from './Match';
+import Auth from './Auth';
 
-export interface UserModel {
-  account?: string;
-  source?: string;
-  matches?: MatchModel[];
-  update?: Date;
+interface SignUpParameter {
+  account: string;
+  password: string;
+  name: string;
+  appKey: string;
+  members: string[];
 }
 
 export default class User {
   static emitter = new EventEmitter();
 
-  static select(userId?: string): Promise<UserModel> {
-    if (userId) {
-      return fetch(`/api/user/${userId}`, { method: 'get', credentials: 'same-origin' }).then((res) => {
+  static select(account?: string): Promise<UserResponse> {
+    if (account) {
+      return fetch(`/api/user/${account}`, { method: 'get', credentials: 'same-origin' }).then((res) => {
         return res.ok ? res.json() : Promise.reject('Api connection failed.');
       });
     }
@@ -22,13 +23,29 @@ export default class User {
     });
   }
 
-  static recent(): Promise<UserModel[]> {
+  static recent(): Promise<UserResponse[]> {
     return fetch(`/api/user/recent`, { method: 'get', credentials: 'same-origin' }).then((res) => {
       return res.ok ? res.json() : Promise.reject('Api connection failed.');
     });
   }
 
-  static update(user: UserModel): Promise<UserModel> {
+  static create(parameter: SignUpParameter): Promise<boolean> {
+    return fetch('/api/user', {
+      method: 'post',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(parameter)
+    }).then((res) => {
+      return res.ok ? Auth.login() : Promise.reject(res.status);
+    }).catch(() => {
+      return false;
+    });
+  }
+
+  static update(user: UserResponse): Promise<UserResponse> {
     return fetch('/api/user', {
       method: 'put',
       credentials: 'same-origin',

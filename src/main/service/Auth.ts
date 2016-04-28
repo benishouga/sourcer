@@ -2,6 +2,7 @@ import {EventEmitter} from 'events';
 
 interface AuthResponse {
   authenticated: boolean;
+  initialized: boolean;
 }
 
 export default class Auth {
@@ -18,43 +19,12 @@ export default class Auth {
     this._authenticated = authenticated;
   }
 
-  static create(userId: string, pass: string, appKey: string): Promise<boolean> {
-    return fetch('/api/user', {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId: userId,
-        password: pass,
-        appKey: appKey
-      })
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject('Api connection failed.');
-    }).then((res: AuthResponse) => {
-      if (!res.authenticated) {
-        return Promise.reject('Authentication failed.');
-      }
-
-      this.authenticated = true;
-    }).catch(() => {
-      this.authenticated = false;
-    }).then(() => {
-      return this.authenticated;
-    });
-  }
-
-  static login(userId?: string, pass?: string): Promise<boolean> {
-    if (!userId && !pass) {
+  static login(account?: string, pass?: string): Promise<boolean> {
+    if (!account && !pass) {
       return fetch('/api/session', { credentials: 'same-origin' }).then((res) => {
-        return res.ok ? res.json() : Promise.reject('Api connection failed.');
+        return res.ok ? res.json() : Promise.reject(res.status);
       }).then((res: AuthResponse) => {
-        if (!res.authenticated) {
-          return Promise.reject('Authentication failed.');
-        }
-        this.authenticated = true;
+        this.authenticated = res.authenticated;
       }).catch(() => {
         this.authenticated = false;
       }).then(() => {
@@ -70,17 +40,13 @@ export default class Auth {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userId: userId,
+        account: account,
         password: pass
       })
     }).then((res) => {
-      return res.ok ? res.json() : Promise.reject('Api connection failed.');
+      return res.ok ? res.json() : Promise.reject(res.status);
     }).then((res: AuthResponse) => {
-      if (!res.authenticated) {
-        return Promise.reject('Authentication failed.');
-      }
-
-      this.authenticated = true;
+      this.authenticated = res.authenticated;
     }).catch(() => {
       this.authenticated = false;
     }).then(() => {

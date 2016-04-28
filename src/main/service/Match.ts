@@ -1,12 +1,5 @@
 import {EventEmitter} from 'events';
-import {UserModel} from './User';
 import PublicConfig from '../PublicConfig';
-
-export interface MatchModel {
-  _id?: string;
-  winner?: UserModel;
-  contestants?: UserModel[];
-}
 
 export default class Match {
   static emitter = new EventEmitter();
@@ -17,7 +10,7 @@ export default class Match {
         return res.ok ? res.json() : Promise.reject('Api connection failed.');
       });
     }
-    return Promise.reject('bad parameter userId: ' + against);
+    return Promise.reject('bad parameter account: ' + against);
   }
   static select(matchId: string) {
     if (matchId) {
@@ -25,6 +18,6 @@ export default class Match {
         return res.ok ? res.json() : Promise.reject('Api connection failed.');
       });
     }
-    return Promise.reject('bad parameter userId: ' + matchId);
+    return Promise.reject('bad parameter account: ' + matchId);
   }
 }

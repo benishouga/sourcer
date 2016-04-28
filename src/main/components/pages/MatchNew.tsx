@@ -2,16 +2,16 @@ import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import AceEditor from '../parts/AceEditor';
 import {Grid, Cell, Button, Card, CardTitle, CardText, Dialog, DialogTitle, DialogContent, ProgressBar} from 'react-mdl';
-import User, {UserModel} from '../../service/User';
-import Match, {MatchModel} from '../../service/Match';
+import User from '../../service/User';
+import Match from '../../service/Match';
 import {RouteParams} from '../routes';
 
 interface MatchNewProps extends RouteComponentProps<RouteParams, {}> {
 }
 
 interface MatchNewStats {
-  user?: UserModel;
-  against?: UserModel;
+  user?: UserResponse;
+  against?: UserResponse;
   openDialog?: boolean;
 }
 
@@ -30,7 +30,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
     this.setState({
       openDialog: true
     });
-    Match.create(this.props.params.userId).then((match: MatchModel) => {
+    Match.create(this.props.params.account).then((match: MatchResponse) => {
       let context = this.context as any;
       context.router.replace(`/match/${match._id}`);
     });
@@ -42,7 +42,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
         user: user
       });
     });
-    User.select(this.props.params.userId).then((user) => {
+    User.select(this.props.params.account).then((user) => {
       this.setState({
         against: user
       });
@@ -72,7 +72,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
       againstCard = (
         <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
           <CardTitle expand style={{ alignItems: 'flex-start' }}>
-            {this.state.against.account}
+            {this.state.against.name}
           </CardTitle>
           <CardText>
             <AceEditor code={this.state.against.source} readOnly={true} />

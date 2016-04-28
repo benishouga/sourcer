@@ -1,17 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
-import User, {UserModel} from '../../service/User';
-import {MatchModel} from '../../service/Match';
-import {List, ListItem, ListItemContent, ListItemAction} from 'react-mdl';
+import User from '../../service/User';
+import {List, ListItem, ListItemContent, ListItemAction, Button} from 'react-mdl';
 
 
 interface MatchesProps extends React.Props<Matches> {
-  userId?: string;
+  account?: string;
 }
 
 interface MatchesState {
-  matches?: MatchModel[];
+  matches?: MatchResponse[];
 }
 
 export default class Matches extends React.Component<MatchesProps, MatchesState>{
@@ -21,7 +20,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
   }
 
   componentDidMount() {
-    User.select(this.props.userId).then((user) => {
+    User.select(this.props.account).then((user) => {
       this.setState({
         matches: user.matches
       })
@@ -32,15 +31,13 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     let elements = this.elements();
     return (
       <div>
-        <p>Matches {this.props.userId}</p>
-        <List>
-          {elements}
-        </List>
+        <p>Matches {this.props.account}</p>
+        {elements}
       </div>
     );
   }
 
-  contestants(match: MatchModel) {
+  contestants(match: MatchResponse) {
     let contestants: React.ReactElement<any>[] = [];
     match.contestants.map((contestant) => {
       let isWin = match.winner.account === contestant.account;
@@ -63,7 +60,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         return (
           <ListItem key={match._id}>
             <Link to={`/match/${match._id}`}>
-              {contestant}
+              <Button ripple>{contestant}</Button>
             </Link>
           </ListItem>
         );

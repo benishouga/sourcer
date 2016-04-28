@@ -21,7 +21,7 @@ function requireAuth(nextState: RouterState, replaceState: any) {
 }
 
 export interface RouteParams {
-  userId?: string;
+  account?: string;
   matchId?: string;
 }
 
@@ -34,10 +34,10 @@ export default function() {
       <Route path='signup' component={SignUp} />
       <Route path='logout' component={Logout} />
       <Route path='match/new' component={MatchNew} onEnter={requireAuth} />
-      <Route path='match/new/:userId' component={MatchNew} onEnter={requireAuth} />
+      <Route path='match/new/:account' component={MatchNew} onEnter={requireAuth} />
       <Route path='match/:matchId' component={MatchShow} onEnter={requireAuth} />
       <Route path='edit' component={Edit} onEnter={requireAuth} />
-      <Route path='user/:userId' component={UserShow} onEnter={requireAuth} />
+      <Route path='user/:account' component={UserShow} onEnter={requireAuth} />
     </Route>
   );
 };

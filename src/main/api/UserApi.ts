@@ -2,26 +2,22 @@ import { Request, Response } from 'express';
 import User, {UserDocument} from '../models/User';
 import Validator from '../utils/Validator';
 import config from '../config';
+import ResponseCreator from './ResponseCreator';
 
 export function show(req: Request, res: Response) {
-  let userId: string = req.params['id'];
-  if (!userId) {
-    let user = req.session['account'] as UserDocument;
+  let account: string = req.params['id'];
+  if (!account) {
+    let user = req.session['user'] as UserDocument;
     if (!user) {
       return res.status(403).send('');
     }
-    userId = user.account;
+    account = user.account;
   }
-  User.loadWithMatchees(userId).then((user) => {
+  User.loadWithMatchees(account).then((user) => {
     if (!user) {
       return res.status(404).send('');
     } else {
-      return res.status(200).type('json').send({
-        account: user.account,
-        source: user.source,
-        matches: user.matches,
-        updated: user.updated
-      });
+      return res.status(200).type('json').send(ResponseCreator.user(user));
     }
   }, () => {
     return res.status(404).send('');
@@ -32,30 +28,39 @@ export function create(req: Request, res: Response) {
   if (req.body.appKey !== config.app.key) {
     return res.status(403).send('');
   }
+  try {
+    let account = Validator.validateAccount(req.body.account);
+    let name = Validator.validateName(req.body.name);
+    let password = Validator.validatePassword(req.body.password);
+    let members = Validator.validateMembers(req.body.members);
 
-  let userId: string = Validator.validateUserId(req.body.userId);
-  let password: string = Validator.validatePassword(req.body.password);
+    User.loadByAccount(account).then((user) => {
+      if (user) {
+        return res.status(409).send('');
+      } else {
+        User.createFromAccount(account, name, members, 'own', User.hash(account, password)).then((user) => {
+          req.session['authenticated'] = true;
+          req.session['user'] = user;
+          return res.status(201).type('json').send({});
+        }).catch((error) => {
+          console.log('create account failed', error);
+          return res.status(503).type('json').send({});
+        });
+      }
+    });
 
-  User.loadByAccount(userId).then((user) => {
-    if (user) {
-      return res.status(409).send('');
-    } else {
-      User.createFromAccount(userId, 'own', User.hash(userId, password)).then((user) => {
-        req.session['authenticated'] = true;
-        req.session['account'] = user;
-        return res.status(201).type('json').send({ authenticated: true });
-      });
-    }
-  });
+  } catch (error) {
+    return res.status(400).send('');
+  }
 }
 
 export function update(req: Request, res: Response) {
-  let user = req.session['account'] as UserDocument;
+  let user = req.session['user'] as UserDocument;
   if (!user) {
     return res.status(403).send('');
   }
-  let userId = user.account;
-  User.loadWithMatchees(userId).then((user) => {
+  let account = user.account;
+  User.loadWithMatchees(account).then((user) => {
     if (!user) {
       return res.status(404).send('');
     } else {
@@ -64,12 +69,7 @@ export function update(req: Request, res: Response) {
         if (err) {
           return res.status(503).send('User update failed...');
         }
-        return res.status(200).type('json').send({
-          account: user.account,
-          source: user.source,
-          matches: user.matches,
-          updated: user.updated
-        });
+        return res.status(200).type('json').send(ResponseCreator.user(user));
       });
     }
   }, () => {
@@ -78,17 +78,12 @@ export function update(req: Request, res: Response) {
 }
 
 export function recent(req: Request, res: Response) {
-  let user = req.session['account'] as UserDocument;
+  let user = req.session['user'] as UserDocument;
   if (!user) {
     return res.status(403).send('');
   }
 
   User.recent(user.account).then((users) => {
-    return res.status(200).type('json').send(users.map((user) => {
-      return {
-        account: user.account,
-        updated: user.updated
-      };
-    }));
+    return res.status(200).type('json').send(users.map(user => ResponseCreator.user(user)));
   });
 }

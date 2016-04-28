@@ -19,10 +19,30 @@ pre.code {
   border-radius: 3px;
 }
 
+.list-text-fields > .mdl-list__item {
+  padding: 0;
+}
+
 .mdl-layout-title a {
   text-decoration: none;
   color: #fff;
-  font-weight: 400;
+  font-weight: 200;
+}
+
+.headered-list > p {
+  margin: 16px 0 0;
+}
+
+.headered-list > ul {
+  margin: 0;
+}
+
+.mdl-textfield {
+  padding-bottom: 16px;
+}
+
+.updated {
+  font-size: 70%;
 }
 
 @media (min-width: 840px)

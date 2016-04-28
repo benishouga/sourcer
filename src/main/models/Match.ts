@@ -59,7 +59,7 @@ module models {
 
             Promise.all(promises).then(() => {
               resolve(match);
-            }).then(reject);
+            }).catch(reject);
           });
         });
       });

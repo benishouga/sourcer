@@ -36,6 +36,7 @@
     "handlebars": "^4.0.5",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
+    "moment": "^2.13.0",
     "mongoose": "^4.1.4",
     "passport": "^0.3.0",
     "passport-google-oauth": "^0.2.0",

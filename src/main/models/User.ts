@@ -7,9 +7,11 @@ import * as crypto from 'crypto';
 export interface UserDocument extends Document {
   _id: Types.ObjectId;
   account: string;
+  name: string;
   provider: { service: string, account: string };
   source: string;
   isClosedSource: boolean;
+  members: string[];
   matches: MatchDocument[];
   created: Date;
   updated: Date;
@@ -17,12 +19,14 @@ export interface UserDocument extends Document {
 
 let schema = new Schema({
   account: { type: String, required: true },
+  name: { type: String },
   provider: {
     service: { type: String, required: true },
     account: { type: String, required: true }
   },
   source: { type: String, 'default': '' },
   isClosedSource: { type: Boolean, 'default': false },
+  members: [{ type: String }],
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
@@ -65,9 +69,11 @@ module models {
       return this.findOne({ provider: { service: service, account: account } }).exec();
     }
 
-    static createFromAccount(account: string, oauthService: string, oauthAccount: string) {
+    static createFromAccount(account: string, name: string, members: string[], oauthService: string, oauthAccount: string) {
       let user = new User();
       user.account = account;
+      user.name = name;
+      user.members = members;
       user.provider = {
         service: oauthService,
         account: oauthAccount
