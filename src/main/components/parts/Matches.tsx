@@ -8,6 +8,7 @@ import User from '../../service/User';
 
 interface MatchesProps extends React.Props<Matches> {
   account?: string;
+  matches?: MatchResponse[];
 }
 
 interface MatchesState {
@@ -15,20 +16,22 @@ interface MatchesState {
 }
 
 export default class Matches extends React.Component<MatchesProps, MatchesState>{
-  constructor() {
+  constructor(props: MatchesProps) {
     super();
-    this.state = { matches: null };
+    this.state = { matches: props.matches };
   }
 
   request: RequestPromise<UserResponse>;
 
   componentDidMount() {
-    this.request = User.select(this.props.account);
-    this.request.then((user) => {
-      this.setState({
-        matches: user.matches
+    if (!this.props.matches) {
+      this.request = User.select(this.props.account);
+      this.request.then((user) => {
+        this.setState({
+          matches: user.matches
+        });
       });
-    });
+    }
   }
 
   componentWillUnmount() {

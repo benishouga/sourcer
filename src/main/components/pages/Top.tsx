@@ -78,7 +78,7 @@ export default class Top extends React.Component<TopProps, TopStats> {
           </Card>
         </Cell>
         <Cell col={8}>
-          <Matches />
+          <Matches matches={user.matches} />
           <RecentUpdatedUsers />
         </Cell>
       </Grid>

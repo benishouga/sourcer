@@ -73,7 +73,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
           </Card>
         </Cell>
         <Cell col={8}>
-          <Matches account={account} />
+          <Matches matches={user.matches} />
         </Cell>
       </Grid>
     );

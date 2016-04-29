@@ -31,7 +31,6 @@ let schema = new Schema({
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
 }).pre('save', function(next: Function) {
-  this.updated = new Date();
   next();
 });
 
