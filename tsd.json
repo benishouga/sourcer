@@ -9,7 +9,7 @@
       "commit": "984a41af67d76b5134e0d4991a30f813dfb8561f"
     },
     "node/node.d.ts": {
-      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     },
     "express/express.d.ts": {
       "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
@@ -71,13 +71,13 @@
     "react-router/history.d.ts": {
       "commit": "86f8d539cb17f13d0a3abebdcc8f359cf6a310b4"
     },
-    "whatwg-fetch/whatwg-fetch.d.ts": {
-      "commit": "ca92a5b250433c38230b5f4138b36453862342bf"
-    },
     "moment/moment.d.ts": {
       "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     },
     "moment/moment-node.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "superagent/superagent.d.ts": {
       "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     }
   }

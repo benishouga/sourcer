@@ -1,9 +1,10 @@
 import * as React from 'react';
+import {Grid, Cell, Button} from 'react-mdl';
+import {RequestPromise} from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
 import User from '../../service/User';
 import Auth from '../../service/Auth';
-import {Grid, Cell, Button} from 'react-mdl';
 
 interface AiEditProps extends React.Props<AiEdit> {
 }
@@ -28,8 +29,11 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
     this.state.playerInfo.ai = value;
   };
 
+  request: RequestPromise<UserResponse>;
+
   componentDidMount() {
-    User.select().then((user) => {
+    this.request = User.select();
+    this.request.then((user) => {
       this.sourceOfResponse = user.source;
       this.editingSource = user.source;
       this.setState({
@@ -40,6 +44,10 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
         }
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
   }
 
   handleSubmit(event: React.FormEvent) {

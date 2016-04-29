@@ -1,10 +1,12 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import {RouteParams} from '../routes';
+import {List, ListItem, ListItemContent, Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
+
+import {RequestPromise} from '../../utils/fetch';
 import Matches from '../parts/Matches';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
-import {List, ListItem, ListItemContent, Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
+import {RouteParams} from '../routes';
 
 interface UserShowProps extends RouteComponentProps<RouteParams, {}> {
   user?: UserResponse;
@@ -21,14 +23,21 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     this.state = {};
   }
 
+  request: RequestPromise<UserResponse>;
+
   componentDidMount() {
     if (Auth.authenticated) {
-      User.select(this.props.params.account).then((user) => {
+      this.request = User.select(this.props.params.account);
+      this.request.then((user) => {
         this.setState({
           user: user
         });
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
   }
 
   render() {

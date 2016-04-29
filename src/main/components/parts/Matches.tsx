@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
-import User from '../../service/User';
 import {List, ListItem, ListItemContent, ListItemAction, Button} from 'react-mdl';
 
+import {RequestPromise} from '../../utils/fetch';
+import User from '../../service/User';
 
 interface MatchesProps extends React.Props<Matches> {
   account?: string;
@@ -19,12 +20,19 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     this.state = { matches: null };
   }
 
+  request: RequestPromise<UserResponse>;
+
   componentDidMount() {
-    User.select(this.props.account).then((user) => {
+    this.request = User.select(this.props.account);
+    this.request.then((user) => {
       this.setState({
         matches: user.matches
-      })
+      });
     });
+  }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
   }
 
   render() {

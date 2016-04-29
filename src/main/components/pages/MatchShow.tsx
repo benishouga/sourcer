@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
+import {Grid, Cell, Card, CardTitle} from 'react-mdl';
+import {RequestPromise} from '../../utils/fetch';
+import {GameDump} from '../../core/Dump';
 import {RouteParams} from '../routes';
 import Replayer from '../parts/Replayer';
 import Match from '../../service/Match';
-import {GameDump} from '../../core/Dump';
-import {Grid, Cell, Card, CardTitle} from 'react-mdl';
 
 interface MatchShowProps extends RouteComponentProps<RouteParams, {}> {
 }
@@ -19,12 +20,19 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
     this.state = {};
   }
 
+  request: RequestPromise<GameDump>;
+
   componentDidMount() {
-    Match.select(this.props.params.matchId).then((gameDump: GameDump) => {
+    this.request = Match.select(this.props.params.matchId);
+    this.request.then((gameDump: GameDump) => {
       this.setState({
         gameDump: gameDump
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
   }
 
   render() {

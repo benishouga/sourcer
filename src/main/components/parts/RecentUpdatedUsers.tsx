@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import User from '../../service/User';
 import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip} from 'react-mdl';
 import * as moment from 'moment';
+import {RequestPromise} from '../../utils/fetch';
 
 require('moment/locale/ja');
 moment.locale('ja');
@@ -22,13 +23,21 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     this.state = { users: null };
   }
 
+  request: RequestPromise<UserResponse[]>;
+
   componentDidMount() {
-    User.recent().then((users) => {
+    this.request = User.recent();
+    this.request.then((users) => {
       this.setState({
         users: users
-      })
+      });
     });
   }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
+  }
+
 
   render() {
     let elements = this.elements();

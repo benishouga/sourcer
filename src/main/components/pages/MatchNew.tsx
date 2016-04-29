@@ -1,7 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import AceEditor from '../parts/AceEditor';
 import {Grid, Cell, Button, Card, CardTitle, CardText, Dialog, DialogTitle, DialogContent, ProgressBar} from 'react-mdl';
+
+import {RequestPromise} from '../../utils/fetch';
+import AceEditor from '../parts/AceEditor';
 import User from '../../service/User';
 import Match from '../../service/Match';
 import {RouteParams} from '../routes';
@@ -36,17 +38,30 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
     });
   }
 
+  requests: RequestPromise<UserResponse>[] = [];
   componentDidMount() {
-    User.select().then((user) => {
-      this.setState({
-        user: user
+    {
+      let request = User.select();
+      request.then((user) => {
+        this.setState({
+          user: user
+        });
       });
-    });
-    User.select(this.props.params.account).then((user) => {
-      this.setState({
-        against: user
+      this.requests.push(request);
+    }
+    {
+      let request = User.select(this.props.params.account);
+      request.then((user) => {
+        this.setState({
+          against: user
+        });
       });
-    });
+      this.requests.push(request);
+    }
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(request => request.abort());
   }
 
   render() {

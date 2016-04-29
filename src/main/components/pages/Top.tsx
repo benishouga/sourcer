@@ -1,10 +1,12 @@
 import * as React from 'react';
 import {Link} from 'react-router';
+import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent} from 'react-mdl';
+
+import {RequestPromise} from '../../utils/fetch';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
 import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
-import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent} from 'react-mdl';
 
 interface TopProps extends React.Props<Top> {
 }
@@ -18,15 +20,21 @@ export default class Top extends React.Component<TopProps, TopStats> {
     super();
     this.state = {};
   }
+  request: RequestPromise<UserResponse>;
 
   componentDidMount() {
     if (Auth.authenticated) {
-      User.select().then((user) => {
+      this.request = User.select();
+      this.request.then((user) => {
         this.setState({
           user: user
         });
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.request && this.request.abort();
   }
 
   render() {

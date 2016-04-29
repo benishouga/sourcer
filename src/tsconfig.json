@@ -72,6 +72,7 @@
         "./main/SourcerSource.ts",
         "./main/test2d.ts",
         "./main/utils/ComponentExplorer.ts",
+        "./main/utils/fetch.ts",
         "./main/utils/Storage.ts",
         "./main/utils/Validator.ts",
         "./test/test-Arena.ts",
@@ -137,8 +138,8 @@
         "../typings/react/react-dom.d.ts",
         "../typings/react/react.d.ts",
         "../typings/serve-static/serve-static.d.ts",
-        "../typings/tsd.d.ts",
-        "../typings/whatwg-fetch/whatwg-fetch.d.ts"
+        "../typings/superagent/superagent.d.ts",
+        "../typings/tsd.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
