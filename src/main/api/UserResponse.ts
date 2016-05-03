@@ -4,5 +4,7 @@ interface UserResponse {
   source?: string;
   members?: string[];
   matches?: MatchResponse[];
+  wins?: number;
+  losses?: number;
   updated?: Date | string;
 }

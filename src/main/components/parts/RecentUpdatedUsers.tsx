@@ -6,9 +6,6 @@ import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Toolti
 import * as moment from 'moment';
 import {RequestPromise} from '../../utils/fetch';
 
-require('moment/locale/ja');
-moment.locale('ja');
-
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
   account?: string;
 }
@@ -55,9 +52,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     if (this.state.users && this.state.users.length !== 0) {
       return this.state.users.map((user) => {
         return (
-          <ListItem key={user.account} twoLine >
-            <ListItemContent avatar="person" subtitle="Xx戦 Xx勝 メンバー：Aaa, Bbb, Ccc, Ddd, Eee">
-              <Link to={`/user/${user.account}`}>{user.account}</Link> <span className="updated">{moment(user.updated).fromNow() }</span>
+          <ListItem key={user.account} threeLine >
+            <ListItemContent avatar="person" subtitle={this.subtitle(user) }>
+              <Link to={`/user/${user.account}`}>{user.name}</Link>
             </ListItemContent>
             <ListItemAction>
               <Tooltip label="Fight" position="right">
@@ -69,5 +66,15 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
       });
     }
     return [];
+  }
+
+  subtitle(user: UserResponse) {
+    let members = user.members.join(', ');
+    return (
+      <div>
+        {`${members}`}<br />
+        <Icon name="mood" className="inline" /> {user.wins} wins <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} losses <span className="updated">更新 {moment(user.updated).fromNow() }</span>
+      </div>
+    );
   }
 }

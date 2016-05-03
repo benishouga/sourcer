@@ -36,6 +36,16 @@ pre.code {
 .updated {
   font-size: 70%;
 }
+.inline {
+  font-size: 16px;
+}
+.mdl-card__supporting-text .mdl-list {
+  padding: 0;
+  margin: 0;
+}
+.mdl-card__supporting-text .mdl-list__item {
+  padding: 4px;
+}
 @media (min-width: 840px) {
   dt {
     padding-top: 8px;

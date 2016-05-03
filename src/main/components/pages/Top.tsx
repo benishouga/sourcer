@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link} from 'react-router';
-import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent} from 'react-mdl';
+import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon} from 'react-mdl';
 
 import {RequestPromise} from '../../utils/fetch';
 import Auth from '../../service/Auth';
@@ -68,6 +68,7 @@ export default class Top extends React.Component<TopProps, TopStats> {
               {user.name}
             </CardTitle>
             <CardText>
+              <Icon name="mood" className="inline" /> {user.wins} wins <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} losses
               <List>
                 {members}
               </List>

@@ -40,6 +40,19 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     this.request && this.request.abort();
   }
 
+  componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
+    if (Auth.authenticated && nextProps.params.account !== this.props.params.account) {
+      this.request && this.request.abort();
+      this.request = User.select(nextProps.params.account);
+      this.setState({ user: null });
+      this.request.then((user) => {
+        this.setState({
+          user: user
+        });
+      });
+    }
+  }
+
   render() {
     let account = this.props.params.account;
     let user = this.state.user;

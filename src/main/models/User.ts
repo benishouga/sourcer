@@ -46,7 +46,7 @@ module models {
 
     static loadWithMatchees(account: string) {
       return this.findOne({ account: account })
-        .populate('matches')
+        .populate({ path: 'matches', options: { sort: { 'created': -1 } } })
         .exec()
         .then<UserDocument>((res) => {
           // model は this で参照する必要があるっぽい
@@ -86,7 +86,15 @@ module models {
 
     static recent(excludeUser: string) {
       let query = { account: { $ne: excludeUser } };
-      return this.find(query).sort({ "updated": -1 }).limit(10).exec();
+      return this.find(query)
+        .populate({ path: 'matches' })
+        .sort({ "updated": -1 })
+        .limit(10)
+        .exec()
+        .then<UserDocument[]>((res) => {
+          // model は this で参照する必要があるっぽい
+          return this.populate(res, { path: 'matches.winner', model: this });
+        });
     }
 
     static hash(account: string, password: string) {

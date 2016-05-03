@@ -1,7 +1,12 @@
 import * as React from 'react';
 import {Link} from 'react-router';
-import Auth from '../../service/Auth';
 import {Header, HeaderRow, Navigation, Spacer, Content, Grid, Cell, Footer, FooterSection, FooterLinkList} from 'react-mdl';
+import * as moment from 'moment';
+
+import Auth from '../../service/Auth';
+
+require('moment/locale/ja');
+moment.locale('ja');
 
 interface AppContext {
   router: ReactRouter.RouterOnContext;
