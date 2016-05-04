@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import {Grid, Cell, Card, CardTitle} from 'react-mdl';
+
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import {GameDump} from '../../core/Dump';
 import {RouteParams} from '../routes';
@@ -36,10 +39,11 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
   }
 
   render() {
+    let resources = strings();
     let matchId = this.props.params.matchId;
 
     if (!this.state.gameDump) {
-      return (<p>Loading...</p>);
+      return (<p>{resources.loading}</p>);
     }
 
     return (

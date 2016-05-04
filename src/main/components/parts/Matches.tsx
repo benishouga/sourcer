@@ -4,6 +4,8 @@ import {Link} from 'react-router';
 import {List, ListItem, ListItemContent, ListItemAction, Button, Tooltip, FABButton, Icon} from 'react-mdl';
 import * as moment from 'moment';
 
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import User from '../../service/User';
 
@@ -55,26 +57,28 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
   }
 
   render() {
+    let resource = strings();
     let elements = this.elements();
     return (
       <div>
-        <p>Matches {this.props.account}</p>
+        <p>{resource.matches_title} {this.props.account}</p>
         {elements}
       </div>
     );
   }
 
   elements() {
+    let resource = strings();
     if (this.state.matches && this.state.matches.length !== 0) {
       return this.state.matches.map((match, index) => {
-        let subtitle = (<span className="updated">更新 {moment(match.created).fromNow() }</span>);
+        let subtitle = (<span className="updated">{resource.updated_at} {moment(match.created).fromNow() }</span>);
         return (
           <ListItem key={index} twoLine >
             <ListItemContent avatar="whatshot" subtitle={subtitle}>
               {this.contestants(match) }
             </ListItemContent>
             <ListItemAction>
-              <Tooltip label="対戦を見る" position="right">
+              <Tooltip label={resource.view_match} position="right">
                 <Link to={`/match/${match._id}`}><FABButton mini ripple colored ><Icon name="play_arrow" /></FABButton></Link>
               </Tooltip>
             </ListItemAction>
@@ -89,7 +93,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     let contestants: React.ReactElement<any>[] = [];
     match.contestants.map((contestant) => {
       let isWin = match.winner.account === contestant.account;
-      let winOrLoseIcon = isWin ? <Icon name="mood" className="inline" /> : <Icon name="sentiment_very_dissatisfied" className="inline" />;
+      let winOrLoseIcon = isWin ? (<span><Icon name="mood" className="inline" /> Win</span>) : (<span><Icon name="sentiment_very_dissatisfied" className="inline" /> Lose</span>);
 
       return (<span><span className={isWin ? 'win' : 'lose'}><Link to={`/user/${contestant.account}`}>{contestant.name}</Link></span> {winOrLoseIcon}</span>);
     }).forEach((element) => {

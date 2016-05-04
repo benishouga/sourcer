@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import RouterContext from 'react-router/lib/RouterContext';
+
+import {strings} from '../resources/Strings';
+
 import User from '../../service/User';
 import {Card, CardTitle, CardText, CardActions, Button, Textfield, TextfieldProps, Icon, List, ListItem, ListItemContent} from 'react-mdl';
 import ComponentExplorer from '../../utils/ComponentExplorer';
@@ -57,43 +60,45 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
   }
 
   render() {
+    let resource = strings();
+
     return (
       <form onSubmit={this.handleSubmit.bind(this) }>
         <Card shadow={0} style={{ width: '400px', margin: 'auto' }}>
           <CardTitle expand style={{ alignItems: 'flex-start' }}>
-            Sign Up
+            {resource.sign_up_title}
           </CardTitle>
           <CardText>
-            <Textfield label="Account Id..." floatingLabel ref="account" />
-            <Textfield label="Password..." floatingLabel ref="password" />
-            <Textfield label="Team Name..." floatingLabel ref="name" />
+            <Textfield label={resource.field_label_account} floatingLabel ref="account" />
+            <Textfield label={resource.field_label_password} floatingLabel ref="password" />
+            <Textfield label={resource.field_label_name} floatingLabel ref="name" />
             <div className="headered-list">
-              <p>Members</p>
+              <p>{resource.members}</p>
               <List className="list-text-fields">
                 <ListItem>
-                  <ListItemContent icon="person"><Textfield label="Member 1..." floatingLabel ref="member1" /></ListItemContent>
+                  <ListItemContent icon="person"><Textfield label={resource.field_label_member1} floatingLabel ref="member1" /></ListItemContent>
                 </ListItem>
                 <ListItem>
-                  <ListItemContent icon="person"><Textfield label="Member 2..." floatingLabel ref="member2" /></ListItemContent>
+                  <ListItemContent icon="person"><Textfield label={resource.field_label_member2} floatingLabel ref="member2" /></ListItemContent>
                 </ListItem>
                 <ListItem>
-                  <ListItemContent icon="person"><Textfield label="Member 3..." floatingLabel ref="member3" /></ListItemContent>
+                  <ListItemContent icon="person"><Textfield label={resource.field_label_member3} floatingLabel ref="member3" /></ListItemContent>
                 </ListItem>
                 <ListItem>
-                  <ListItemContent icon="person"><Textfield label="Member 4..." floatingLabel ref="member4" /></ListItemContent>
+                  <ListItemContent icon="person"><Textfield label={resource.field_label_member4} floatingLabel ref="member4" /></ListItemContent>
                 </ListItem>
                 <ListItem>
-                  <ListItemContent icon="person"><Textfield label="Member 5..." floatingLabel ref="member5" /></ListItemContent>
+                  <ListItemContent icon="person"><Textfield label={resource.field_label_member5} floatingLabel ref="member5" /></ListItemContent>
                 </ListItem>
               </List>
             </div>
-            <Textfield label="App Key..." floatingLabel ref="appKey" />
+            <Textfield label={resource.field_label_app_key} floatingLabel ref="appKey" />
             {this.state.error && (
-              <p>Bad login information</p>
+              <p>{resource.bad_request}</p>
             ) }
           </CardText>
           <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-            <Button raised colored ripple onClick={this.handleSubmit.bind(this) }>SIGN UP</Button>
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this) }>{resource.sign_up}</Button>
             <div className="mdl-layout-spacer"></div>
             <Icon name="account_box" />
           </CardActions>

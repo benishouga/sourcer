@@ -2,6 +2,8 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon} from 'react-mdl';
 
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
@@ -38,12 +40,13 @@ export default class Top extends React.Component<TopProps, TopStats> {
   }
 
   render() {
+    let resource = strings();
     if (!Auth.authenticated) {
       return (
-        <div className="scr-jumbotron">
+        <div>
           <h2>Sourcer</h2>
-          <p>JavaScript で AI をコーディングして対戦させよう！<br />
-            ライバルと競い合うことで、あなたの JavaScript コーディングスキルも上達するかも！</p>
+          <p>{resource.service_description}<br />
+            {resource.service_benefit}</p>
         </div>
       );
     }
@@ -51,7 +54,7 @@ export default class Top extends React.Component<TopProps, TopStats> {
     let user = this.state.user;
 
     if (!user) {
-      return (<p>Loading...</p>);
+      return (<p>{resource.loading}</p>);
     }
 
     let members = user.members.map((m, index) => {
@@ -68,13 +71,13 @@ export default class Top extends React.Component<TopProps, TopStats> {
               {user.name}
             </CardTitle>
             <CardText>
-              <Icon name="mood" className="inline" /> {user.wins} wins <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} losses
+              <Icon name="mood" className="inline" /> {user.wins} {resource.wins} <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
               <List>
                 {members}
               </List>
             </CardText>
             <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-              <Link to="/edit"><Button ripple>Write Code</Button></Link>
+              <Link to="/edit"><Button ripple>{resource.write_code}</Button></Link>
             </CardActions>
           </Card>
         </Cell>

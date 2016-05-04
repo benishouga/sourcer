@@ -2,6 +2,8 @@ import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import {List, ListItem, ListItemContent, Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
 
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import Matches from '../parts/Matches';
 import Auth from '../../service/Auth';
@@ -54,6 +56,8 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
   }
 
   render() {
+    let resource = strings();
+
     let account = this.props.params.account;
     let user = this.state.user;
 
@@ -61,12 +65,11 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
       return (<p>Loading...</p>);
     }
 
-    let members = user.members.map((m, index) => {
+    let members = user.members.map((member, index) => {
       return (<ListItem key={index}>
-        <ListItemContent icon="person">{m}</ListItemContent>
+        <ListItemContent icon="person">{member}</ListItemContent>
       </ListItem>)
     });
-
 
     return (
       <Grid>
@@ -81,7 +84,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
               </List>
             </CardText>
             <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-              <Link to={`/match/new/${user.account}`}><Button ripple>Fight</Button></Link>
+              <Link to={`/match/new/${user.account}`}><Button ripple>{resource.fight}</Button></Link>
             </CardActions>
           </Card>
         </Cell>

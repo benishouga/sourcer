@@ -2,6 +2,8 @@ import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import {List, ListItem, ListItemContent, Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer} from 'react-mdl';
 
+import {strings} from '../resources/Strings';
+
 import Auth from '../../service/Auth';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 
@@ -46,21 +48,22 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
   }
 
   render() {
+    let resource = strings();
     return (
       <form onSubmit={this.handleSubmit.bind(this) }>
         <Card shadow={0} style={{ margin: 'auto' }}>
           <CardTitle expand style={{ alignItems: 'flex-start' }}>
-            Login
+            {resource.login_title}
           </CardTitle>
           <CardText>
-            <Textfield label="Account..." floatingLabel ref="account" />
-            <Textfield label="Password..." floatingLabel ref="password" />
+            <Textfield label={resource.field_label_account} floatingLabel ref="account" />
+            <Textfield label={resource.field_label_password} floatingLabel ref="password" />
             {this.state.error && (
-              <p>Bad login information</p>
+              <p>{resource.bad_request}</p>
             ) }
           </CardText>
           <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-            <Button raised colored ripple onClick={this.handleSubmit.bind(this) }>Login</Button>
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this) }>{resource.login}</Button>
             <Spacer />
             <Icon name="account_box" />
           </CardActions>

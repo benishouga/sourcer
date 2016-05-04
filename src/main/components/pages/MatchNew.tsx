@@ -2,6 +2,8 @@ import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
 import {Grid, Cell, Button, Card, CardTitle, CardText, Dialog, DialogTitle, DialogContent, ProgressBar} from 'react-mdl';
 
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import User from '../../service/User';
@@ -65,6 +67,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
   }
 
   render() {
+    let resources = strings();
 
     let userCard: React.ReactElement<any>;
     if (this.state.user) {
@@ -79,7 +82,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
         </Card>
       );
     } else {
-      userCard = (<span>Loading...</span>);
+      userCard = (<span>{resources.loading}</span>);
     }
 
     let againstCard: React.ReactElement<any>;
@@ -95,7 +98,7 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
         </Card>
       );
     } else {
-      againstCard = (<span>Loading...</span>);
+      againstCard = (<span>{resources.loading}</span>);
     }
 
     return (
@@ -105,9 +108,9 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
         </Cell>
         <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
           <div style={{ height: '120px' }}></div>
-          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple>FIGHT</Button>
+          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple>{resources.fight}</Button>
           <Dialog open={this.state.openDialog}>
-            <DialogTitle>Fighting...</DialogTitle>
+            <DialogTitle>{resources.fighting}</DialogTitle>
             <DialogContent>
               <ProgressBar indeterminate />
             </DialogContent>

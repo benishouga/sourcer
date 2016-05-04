@@ -3,6 +3,8 @@ import {Link} from 'react-router';
 import {Header, HeaderRow, Navigation, Spacer, Content, Grid, Cell, Footer, FooterSection, FooterLinkList} from 'react-mdl';
 import * as moment from 'moment';
 
+import {strings} from '../resources/Strings';
+
 import Auth from '../../service/Auth';
 
 require('moment/locale/ja');
@@ -47,19 +49,20 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
+    let resource = strings();
     return (
       <div className="mdl-layout mdl-layout--fixed-header is-upgraded">
         <Header scroll>
           <HeaderRow title={<Link to="/">Sourcer</Link>}>
             <Navigation>
               {
-                this.state.loggedIn ? <Link to="/edit">Write Code</Link> : null
+                this.state.loggedIn ? <Link to="/edit">{resource.write_code}</Link> : null
               }
               {
-                this.state.loggedIn ? (<Link to="/logout">Logout</Link>) : (<Link to="login">Login</Link>)
+                this.state.loggedIn ? (<Link to="/logout">{resource.logout}</Link>) : (<Link to="login">{resource.login}</Link>)
               }
               {
-                !this.state.loggedIn ? (<Link to="/signup">Sign Up</Link>) : null
+                !this.state.loggedIn ? (<Link to="/signup">{resource.sign_up}</Link>) : null
               }
             </Navigation>
           </HeaderRow>

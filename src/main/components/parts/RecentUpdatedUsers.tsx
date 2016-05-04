@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Link} from 'react-router';
-import User from '../../service/User';
 import {List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip} from 'react-mdl';
 import * as moment from 'moment';
+
+import {strings} from '../resources/Strings';
+
+import User from '../../service/User';
 import {RequestPromise} from '../../utils/fetch';
 
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
@@ -37,10 +40,11 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
 
 
   render() {
+    let resource = strings();
     let elements = this.elements();
     return (
       <div>
-        <p>Recent Updated Users</p>
+        <p>{resource.recent_updated_users_title}</p>
         <List>
           {elements}
         </List>
@@ -69,11 +73,12 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
   }
 
   subtitle(user: UserResponse) {
+    let resource = strings();
     let members = user.members.join(', ');
     return (
       <div>
         {`${members}`}<br />
-        <Icon name="mood" className="inline" /> {user.wins} wins <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} losses <span className="updated">更新 {moment(user.updated).fromNow() }</span>
+        <Icon name="mood" className="inline" />{user.wins} {resource.wins} <Icon name="sentiment_very_dissatisfied" className="inline" />{user.losses} {resource.losses} <span className="updated">{resource.updated_at} {moment(user.updated).fromNow() }</span>
       </div>
     );
   }

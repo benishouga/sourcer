@@ -1,5 +1,8 @@
 import * as React from 'react';
 import {Grid, Cell, Button} from 'react-mdl';
+
+import {strings} from '../resources/Strings';
+
 import {RequestPromise} from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
@@ -57,6 +60,8 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
 
 
   render() {
+    let resource = strings();
+
     if (this.state.playerInfo !== null) {
 
       let players: PlayerInfo[] = [
@@ -67,17 +72,17 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
       return (
         <Grid>
           <Cell col={6}>
-            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }>Save</Button></p>
+            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }>{resource.save}</Button></p>
             <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
           </Cell>
           <Cell col={6}>
-            <Arena players={players}  />
+            <Arena players={players} />
           </Cell>
         </Grid>
       );
     }
 
-    return (<div>loading...</div>);
+    return (<div>{resource.loading}</div>);
   }
 }
 
