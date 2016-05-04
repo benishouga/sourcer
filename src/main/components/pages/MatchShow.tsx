@@ -26,7 +26,7 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
   requests: RequestPromise<any>[] = [];
   componentDidMount() {
     {
-      let request = Match.getDump(this.props.params.matchId);;
+      let request = Match.replay(this.props.params.matchId);;
       request.then((gameDump) => {
         this.setState({
           gameDump: gameDump
@@ -57,14 +57,14 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
             <Cell col={6} table={8}>
               <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
                 <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.gameDump.members[0].name}`}>{this.state.gameDump.members[0].name}</Link>
+                  <Link to={`/match/new/${this.state.gameDump.players[0].account}`}>{this.state.gameDump.players[0].name}</Link>
                 </CardTitle>
               </Card>
             </Cell>
             <Cell col={6} table={8}>
               <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
                 <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.gameDump.members[1].name}`}>{this.state.gameDump.members[1].name}</Link>
+                  <Link to={`/match/new/${this.state.gameDump.players[1].account}`}>{this.state.gameDump.players[1].name}</Link>
                 </CardTitle>
               </Card>
             </Cell>

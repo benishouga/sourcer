@@ -5,7 +5,7 @@ import Shot from './Shot';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, MembersDump} from './Dump';
+import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump} from './Dump';
 
 export default class Field {
   currentId = 0;
@@ -214,12 +214,12 @@ export default class Field {
     return sumX / count;
   }
 
-  members() {
-    let members: MembersDump = {};
+  players() {
+    let players: PlayersDump = {};
     this.sourcers.forEach((sourcer) => {
-      members[sourcer.id] = { name: sourcer.name, color: sourcer.color };
+      players[sourcer.id] = { name: sourcer.name || sourcer.account, account: sourcer.account, color: sourcer.color };
     });
-    return members;
+    return players;
   }
 
   dump(): FieldDump {

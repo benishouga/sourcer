@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import FieldTag from '../core/FieldTag';
-import {GameDump, FieldDump, ResultDump, MembersDump} from '../../core/Dump';
+import {GameDump, FieldDump, ResultDump, PlayersDump} from '../../core/Dump';
 
 var colors = ['#866', '#262', '#c55', '#44b'];
 
@@ -15,7 +15,7 @@ class Standalone {
   worker = new Worker("arena.js");
   game: GameDump = {
     result: null,
-    members: null,
+    players: null,
     frames: []
   };
   endOfGame = false;
@@ -35,8 +35,8 @@ class Standalone {
   constructor(players: PlayerInfo[]) {
     this.worker.addEventListener('message', (e: MessageEvent) => {
       switch (e.data.command) {
-        case "Members":
-          this.game.members = e.data.members;
+        case "Players":
+          this.game.players = e.data.players;
           break;
         case "PreThink":
           this.thinking = e.data.index;
@@ -76,7 +76,7 @@ interface ArenaStats {
   playing?: boolean;
   frame?: number;
   result?: ResultDump;
-  members?: MembersDump;
+  players?: PlayersDump;
   fieldHistory?: FieldDump[];
   standalone?: Standalone;
   loadedFrame?: number;
@@ -144,7 +144,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
             <g transform={"scale(" + scale + ", " + scale + ")"}>
               <FieldTag
                 field={this.state.fieldHistory[this.state.frame]}
-                members={this.state.members}
+                players={this.state.players}
                 result={this.state.result}
                 width={scaledWidth}
                 height={scaledHeight}
@@ -195,7 +195,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
       if (!this.state.fieldHistory) {
         this.setState({
           fieldHistory: standalone.game.frames,
-          members: standalone.game.members,
+          players: standalone.game.players,
           frame: 0
         });
       } else if (this.state.playing) {

@@ -1,6 +1,6 @@
 interface MatchResponse {
   _id?: string;
   winner?: UserResponse;
-  contestants?: UserResponse[];
+  players?: UserResponse[];
   created?: Date | string;
 }

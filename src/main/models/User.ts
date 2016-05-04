@@ -54,7 +54,7 @@ module models {
         })
         .then<UserDocument>((res) => {
           // model は this で参照する必要があるっぽい
-          return this.populate(res, { path: 'matches.contestants', model: this });
+          return this.populate(res, { path: 'matches.players', model: this });
         });
     }
 

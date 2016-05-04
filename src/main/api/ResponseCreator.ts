@@ -42,7 +42,7 @@ export default class ResponseCreator {
     return this.inflated(match) ? {
       _id: match._id.toHexString(),
       winner: this.user(match.winner),
-      contestants: match.contestants ? match.contestants.map(v => this.user(v)) : [],
+      players: match.players ? match.players.map(v => this.user(v)) : [],
       created: match.created
     } : match as any;
   }

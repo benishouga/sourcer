@@ -50,13 +50,13 @@ describe('User', () => {
     this.timeout(10000);
     let match = new Match();
     match.winner = user;
-    match.contestants = [user];
+    match.players = [user];
     Match.createAndRegisterToUser(match).then((match) => {
       return User.loadWithMatchees('account').then((user) => {
         assert.ok(user.matches.length === 1, 'matches');
         assert.ok(user.matches[0].winner.account === 'account', 'winner account');
-        assert.ok(user.matches[0].contestants.length === 1, 'contestants');
-        assert.ok(user.matches[0].contestants[0].account === 'account', 'contestants');
+        assert.ok(user.matches[0].players.length === 1, 'players');
+        assert.ok(user.matches[0].players[0].account === 'account', 'players');
       });
     }).then(done).catch(done);
   });

@@ -5,14 +5,14 @@ import * as _ from 'lodash';
 export interface MatchDocument extends Document {
   _id: Types.ObjectId;
   winner: UserDocument;
-  contestants: UserDocument[];
+  players: UserDocument[];
   created: Date;
   updated: Date;
 }
 
 let schema = new Schema({
   winner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  contestants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+  players: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   created: { type: Date, 'default': Date.now },
   updated: { type: Date, 'default': Date.now }
 }).pre('save', function(next: Function) {
@@ -27,11 +27,14 @@ module models {
 
   export class Match extends modelBase {
 
-    static load(id: Types.ObjectId): Promise<MatchDocument> {
+    static load(id: Types.ObjectId | string): Promise<MatchDocument> {
+      if (typeof id === 'string') {
+        id = Types.ObjectId.createFromHexString(id as string);
+      }
       return new Promise<MatchDocument>((resolve, reject) => {
         this.findOne({ _id: id })
           .populate('winner')
-          .populate('contestants')
+          .populate('players')
           .exec((err, res) => {
             if (err) { return reject(err); }
             resolve(res);
@@ -46,7 +49,7 @@ module models {
 
           this.load(match._id).then((match) => {
 
-            let promises = match.contestants.map((contestant) => {
+            let promises = match.players.map((contestant) => {
               return new Promise<{}>((resolve, reject) => {
                 contestant.matches = contestant.matches || [];
                 contestant.matches.push(match);

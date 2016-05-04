@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldDump, ResultDump, MembersDump} from '../../core/Dump';
+import {FieldDump, ResultDump, PlayersDump} from '../../core/Dump';
 import V from '../../core/V';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
@@ -23,12 +23,12 @@ export default class FieldTag extends React.Component<{
   onReload: () => void;
   field: FieldDump;
   result: ResultDump;
-  members: MembersDump;
+  players: PlayersDump;
 }, {}> {
   render() {
     const field = this.props.field;
     const result = this.props.result;
-    const members = this.props.members;
+    const players = this.props.players;
 
     const screen: Screen = {
       frameLength: this.props.frameLength,
@@ -57,7 +57,7 @@ export default class FieldTag extends React.Component<{
       maxTop = Math.max(maxTop, b.p.y);
       maxRight = Math.max(maxRight, b.p.x);
       maxLeft = Math.min(maxLeft, b.p.x);
-      return <SourcerTag key={b.i} model={b} profile={members[b.i]} />
+      return <SourcerTag key={b.i} model={b} profile={players[b.i]} />
     });
 
     if (sourcers.length != 0) {
@@ -86,9 +86,9 @@ export default class FieldTag extends React.Component<{
         const y = b.p.y;
         if (viewLeft < x && x < viewRight && y < viewTop) {
           if (b.s === "Missile") {
-            return <MissileTag key={b.i} model={b} profile={members[b.o]} />
+            return <MissileTag key={b.i} model={b} profile={players[b.o]} />
           } else {
-            return <LaserTag key={b.i} model={b} profile={members[b.o]} />
+            return <LaserTag key={b.i} model={b} profile={players[b.o]} />
           }
         }
       });
@@ -110,7 +110,7 @@ export default class FieldTag extends React.Component<{
           {fxs}
         </g>
 
-        <HudTag field={field} result={result} members={members} screen={screen} />
+        <HudTag field={field} result={result} players={players} screen={screen} />
       </g>
     );
   }

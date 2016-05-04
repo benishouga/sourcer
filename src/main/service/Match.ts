@@ -12,10 +12,16 @@ export default class Match {
     }
     return post(`/api/match/against/${against}`, {});
   }
-  static getDump(matchId: string) {
+  static replay(matchId: string) {
     if (!matchId) {
       throw 'bad parameter matchId: ' + matchId;
     }
-    return get<GameDump>(`/api/match/${matchId}`);
+    return get<GameDump>(`/api/replay/${matchId}`);
+  }
+  static select(matchId: string) {
+    if (!matchId) {
+      throw 'bad parameter matchId: ' + matchId;
+    }
+    return get<MatchResponse>(`/api/match/${matchId}`);
   }
 }

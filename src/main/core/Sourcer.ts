@@ -31,7 +31,7 @@ export default class Sourcer extends Actor {
   controller: SourcerController;
   ai: Function;
 
-  constructor(field: Field, x: number, y: number, ai: string, public name: string, public color: string) {
+  constructor(field: Field, x: number, y: number, ai: string, public account: string, public name: string, public color: string) {
     super(field, x, y);
     this.direction = Consts.DIRECTION_RIGHT;
     this.command = new SourcerCommand(this);

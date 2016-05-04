@@ -12,6 +12,7 @@ export default (app: Express) => {
 
   app.get('/api/match', MatchApi.list);
   app.get('/api/match/:id', MatchApi.show);
+  app.get('/api/replay/:id', MatchApi.replay);
   app.post('/api/match/against/:id', MatchApi.create);
 
   app.post('/api/session', SessionApi.create);

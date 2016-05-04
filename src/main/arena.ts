@@ -11,7 +11,7 @@ function create(field: Field, source: SourcerSource) {
 
   return new Sourcer(
     field, Utils.rand(320) - 160, Utils.rand(160) + 80,
-    source.ai, source.name, source.color);
+    source.ai, source.account, source.name, source.color);
 }
 
 onmessage = function(e) {
@@ -65,8 +65,8 @@ onmessage = function(e) {
   });
 
   postMessage({
-    command: "Members",
-    members: field.members()
+    command: "Players",
+    players: field.players()
   });
 
   for (var i = 0; i < 2000 && !field.isFinished; i++) {

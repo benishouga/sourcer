@@ -75,7 +75,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         return (
           <ListItem key={index} twoLine >
             <ListItemContent avatar="whatshot" subtitle={subtitle}>
-              {this.contestants(match) }
+              {this.players(match) }
             </ListItemContent>
             <ListItemAction>
               <Tooltip label={resource.view_match} position="right">
@@ -89,19 +89,19 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     return [];
   }
 
-  contestants(match: MatchResponse) {
-    let contestants: React.ReactElement<any>[] = [];
-    match.contestants.map((contestant) => {
+  players(match: MatchResponse) {
+    let players: React.ReactElement<any>[] = [];
+    match.players.map((contestant) => {
       let isWin = match.winner.account === contestant.account;
       let winOrLoseIcon = isWin ? (<span><Icon name="mood" className="inline" /> Win</span>) : (<span><Icon name="sentiment_very_dissatisfied" className="inline" /> Lose</span>);
 
       return (<span><span className={isWin ? 'win' : 'lose'}><Link to={`/user/${contestant.account}`}>{contestant.name}</Link></span> {winOrLoseIcon}</span>);
     }).forEach((element) => {
-      if (contestants.length !== 0) {
-        contestants.push(<span> vs </span>);
+      if (players.length !== 0) {
+        players.push(<span> vs </span>);
       }
-      contestants.push(element);
+      players.push(element);
     });
-    return contestants;
+    return players;
   }
 }

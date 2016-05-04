@@ -53,17 +53,18 @@ export interface GameDump {
   /** Result */
   result: ResultDump;
   /** Frames */
-  members: MembersDump;
+  players: PlayersDump;
   /** Frames */
   frames: FieldDump[];
 }
 
-export interface MembersDump {
+export interface PlayersDump {
   [id: number]: ProfileDump;
 }
 
 export interface ProfileDump {
   name: string;
+  account: string;
   color: string;
 }
 

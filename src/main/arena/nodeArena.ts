@@ -12,7 +12,7 @@ interface ArenaMessage {
 }
 
 enum Command {
-  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG, MEMBERS
+  PRE_THINK, POST_THINK, FRAME, FINISHED, END_OF_GAME, LOG, CONTESTANTS
 }
 
 const GAME_TIMEOUT = 15000; // 10 sec
@@ -22,7 +22,7 @@ const DELAY_FOR_END_OF_GAME = 10000; // 10 sec
 
 export function arena(players: SourcerSource[]): Promise<GameDump> {
   'use strict';
-  let id = players.map(p => p.name).join(',');
+  let id = players.map(p => p.account).join(',');
   let start = new Date().getTime();
   console.log('arena', id);
 
@@ -32,7 +32,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
   return new Promise<GameDump>((resolve, reject) => {
     let game: GameDump = {
       result: null,
-      members: {},
+      players: {},
       frames: []
     };
     // let currentThink: SourcerSource = null;
@@ -56,8 +56,8 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
       if (resolved) { return; }
 
       switch (message.command) {
-        case Command.MEMBERS:
-          game.members = message.data.members;
+        case Command.CONTESTANTS:
+          game.players = message.data.players;
           break;
         // case Command.PRE_THINK:
         //   currentThink = players[message.data.index];
@@ -87,7 +87,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           break;
         case Command.LOG:
           let player = players[message.data.index];
-          console.log.apply(console, message.data.messages.unshift(player.name));
+          console.log.apply(console, message.data.messages.unshift(player.account));
           break;
       }
     });
@@ -102,7 +102,7 @@ function create(field: Field, source: SourcerSource) {
   'use strict';
   return new Sourcer(
     field, Utils.rand(320) - 160, Utils.rand(160) + 80,
-    source.ai, source.name, source.color);
+    source.ai, source.account, source.name, source.color);
 }
 
 if (cluster.isWorker) {
@@ -115,13 +115,13 @@ if (cluster.isWorker) {
       idToIndex[sourcer.id] = index;
     });
 
-    let members = field.members();
+    let players = field.players();
     process.send({
-      command: Command.MEMBERS,
-      data: { members: members }
+      command: Command.CONTESTANTS,
+      data: { players: players }
     });
 
-    let id = message.sourcers.map(p => p.name).join(',');
+    let id = message.sourcers.map(p => p.account).join(',');
     let start = new Date().getTime();
     console.log('arena', id, 'forked');
 

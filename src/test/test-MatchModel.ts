@@ -31,7 +31,7 @@ describe('Match', () => {
     new Promise<{}>((resolve, reject) => {
       let match = new Match();
       match.winner = user;
-      match.contestants = [user];
+      match.players = [user];
       match.save((err, res) => {
         if (err) { return reject(err); }
         assert.ok(!err, 'err');
