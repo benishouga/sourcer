@@ -111,6 +111,7 @@
         "./main/components/parts/AceEditor.tsx",
         "./main/components/parts/Arena.tsx",
         "./main/components/parts/Matches.tsx",
+        "./main/components/parts/ProfileCard.tsx",
         "./main/components/parts/RecentUpdatedUsers.tsx",
         "./main/components/parts/Replayer.tsx",
         "./main/components/routes.tsx",

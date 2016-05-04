@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import {List, ListItem, ListItemContent, Grid, Cell, Card, CardTitle, CardText, CardActions, Button} from 'react-mdl';
+import {Grid, Cell} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
@@ -9,6 +9,7 @@ import Matches from '../parts/Matches';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
 import {RouteParams} from '../routes';
+import ProfileCard from '../parts/ProfileCard';
 
 interface UserShowProps extends RouteComponentProps<RouteParams, {}> {
   user?: UserResponse;
@@ -65,28 +66,10 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
       return (<p>Loading...</p>);
     }
 
-    let members = user.members.map((member, index) => {
-      return (<ListItem key={index}>
-        <ListItemContent icon="person">{member}</ListItemContent>
-      </ListItem>)
-    });
-
     return (
       <Grid>
         <Cell col={4}>
-          <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-            <CardTitle expand style={{ alignItems: 'flex-start' }}>
-              {user.name}
-            </CardTitle>
-            <CardText>
-              <List>
-                {members}
-              </List>
-            </CardText>
-            <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-              <Link to={`/match/new/${user.account}`}><Button ripple>{resource.fight}</Button></Link>
-            </CardActions>
-          </Card>
+          <ProfileCard user={user} showFight />
         </Cell>
         <Cell col={8}>
           <Matches matches={user.matches} />

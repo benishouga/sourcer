@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link} from 'react-router';
-import {Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon} from 'react-mdl';
+import {Grid, Cell} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
@@ -9,6 +9,7 @@ import Auth from '../../service/Auth';
 import User from '../../service/User';
 import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
+import ProfileCard from '../parts/ProfileCard';
 
 interface TopProps extends React.Props<Top> {
 }
@@ -57,29 +58,10 @@ export default class Top extends React.Component<TopProps, TopStats> {
       return (<p>{resource.loading}</p>);
     }
 
-    let members = user.members.map((m, index) => {
-      return (<ListItem key={index}>
-        <ListItemContent icon="person">{m}</ListItemContent>
-      </ListItem>)
-    })
-
     return (
       <Grid>
         <Cell col={4}>
-          <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-            <CardTitle expand style={{ alignItems: 'flex-start' }}>
-              {user.name}
-            </CardTitle>
-            <CardText>
-              <Icon name="mood" className="inline" /> {user.wins} {resource.wins} <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
-              <List>
-                {members}
-              </List>
-            </CardText>
-            <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-              <Link to="/edit"><Button ripple>{resource.write_code}</Button></Link>
-            </CardActions>
-          </Card>
+          <ProfileCard user={user} showWriteCode={true} />
         </Cell>
         <Cell col={8}>
           <Matches matches={user.matches} />

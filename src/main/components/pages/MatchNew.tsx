@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import {Grid, Cell, Button, Card, CardTitle, CardText, Dialog, DialogTitle, DialogContent, ProgressBar} from 'react-mdl';
+import {Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
 import {RequestPromise} from '../../utils/fetch';
-import AceEditor from '../parts/AceEditor';
 import User from '../../service/User';
 import Match from '../../service/Match';
 import {RouteParams} from '../routes';
+import ProfileCard from '../parts/ProfileCard';
 
 interface MatchNewProps extends RouteComponentProps<RouteParams, {}> {
 }
@@ -67,38 +67,20 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
   }
 
   render() {
-    let resources = strings();
+    let resource = strings();
 
     let userCard: React.ReactElement<any>;
     if (this.state.user) {
-      userCard = (
-        <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-          <CardTitle expand style={{ alignItems: 'flex-start' }}>
-            You
-          </CardTitle>
-          <CardText>
-            <AceEditor code={this.state.user.source} readOnly={true} />
-          </CardText>
-        </Card>
-      );
+      userCard = (<ProfileCard user={this.state.user} />);
     } else {
-      userCard = (<span>{resources.loading}</span>);
+      userCard = (<span>{resource.loading}</span>);
     }
 
     let againstCard: React.ReactElement<any>;
     if (this.state.against) {
-      againstCard = (
-        <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-          <CardTitle expand style={{ alignItems: 'flex-start' }}>
-            {this.state.against.name}
-          </CardTitle>
-          <CardText>
-            <AceEditor code={this.state.against.source} readOnly={true} />
-          </CardText>
-        </Card>
-      );
+      againstCard = (<ProfileCard user={this.state.against} />);
     } else {
-      againstCard = (<span>{resources.loading}</span>);
+      againstCard = (<span>{resource.loading}</span>);
     }
 
     return (
@@ -108,9 +90,9 @@ export default class MatchNew extends React.Component<MatchNewProps, MatchNewSta
         </Cell>
         <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
           <div style={{ height: '120px' }}></div>
-          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple>{resources.fight}</Button>
+          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple>{resource.fight}</Button>
           <Dialog open={this.state.openDialog}>
-            <DialogTitle>{resources.fighting}</DialogTitle>
+            <DialogTitle>{resource.fighting}</DialogTitle>
             <DialogContent>
               <ProgressBar indeterminate />
             </DialogContent>

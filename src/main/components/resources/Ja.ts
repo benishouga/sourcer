@@ -20,8 +20,8 @@ export class Ja implements StringResource {
   field_label_member5 = 'メンバー５...';
   field_label_app_key = 'アプリキー';
   logout_message = 'ログアウトしました。';
-  fight = 'ファイト';
-  fighting = 'ファイト中...';
+  fight = '対戦する';
+  fighting = '対戦中...';
   members = 'メンバー';
   service_description = 'JavaScript で AI をコーディングして対戦させよう！';
   service_benefit = 'ライバルと競い合うことで、あなたの JavaScript コーディングスキルも上達するかも！';
