@@ -91,7 +91,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
           <div className="replay-controller">
             <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this) }><Icon name="replay" /></FABButton></div>
             <div className="replay-controller-button">{playOrPause}</div>
-            <div className="replay-slider"><Slider max={this.props.gameDump.frames.length} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
+            <div className="replay-slider"><Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
           </div>
         </div>
       );
