@@ -15,15 +15,17 @@ export default class FieldTag extends React.Component<{
   height: number;
   width: number;
   scale: number;
-  playing: boolean;
-  frameLength: number;
-  onFrameChanged: (frame: number) => void;
-  onPlay: () => void;
-  onPause: () => void;
-  onReload: () => void;
+  playing?: boolean;
+  frameLength?: number;
+  onFrameChanged?: (frame: number) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onReload?: () => void;
   field: FieldDump;
   result: ResultDump;
   players: PlayersDump;
+  hideStatus?: boolean;
+  hideController?: boolean;
 }, {}> {
   render() {
     const field = this.props.field;
@@ -44,7 +46,8 @@ export default class FieldTag extends React.Component<{
       onFrameChanged: this.props.onFrameChanged,
       onPlay: this.props.onPlay,
       onPause: this.props.onPause,
-      onReload: this.props.onReload
+      onReload: this.props.onReload,
+      hideController: this.props.hideController
     };
 
     var maxLeft = Number.MAX_VALUE;
@@ -77,7 +80,7 @@ export default class FieldTag extends React.Component<{
 
     const viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
     const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
-    const viewTop = (screen.height - 24) / screen.scale;
+    const viewTop = (screen.height - (this.props.hideController ? 8 : 24)) / screen.scale;
 
     var shots: JSX.Element[];
     if (field.b) {
@@ -102,7 +105,7 @@ export default class FieldTag extends React.Component<{
       <g>
         <BackgroundTag screen={screen} />
 
-        <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center) + "," + (screen.height - 24) / screen.scale + ") scale(1, -1)"}>
+        <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center) + "," + viewTop + ") scale(1, -1)"}>
           <g>
             {sourcers}
             {shots}
@@ -110,7 +113,7 @@ export default class FieldTag extends React.Component<{
           {fxs}
         </g>
 
-        <HudTag field={field} result={result} players={players} screen={screen} />
+        <HudTag field={field} result={result} players={players} screen={screen} hideStatus={this.props.hideStatus} hideController={this.props.hideController} />
       </g>
     );
   }

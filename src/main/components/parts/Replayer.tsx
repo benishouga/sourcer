@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import {FABButton, Icon, Slider} from 'react-mdl';
+
 import FieldTag from '../core/FieldTag';
 import {GameDump, FieldDump, ResultDump} from '../../core/Dump';
+import ComponentExplorer from '../../utils/ComponentExplorer';
 
 interface ReplayerProps {
   gameDump?: GameDump;
@@ -49,9 +52,9 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     this.setState({ frame: 0 });
   }
 
-  onFrameChanged(newFrame: number) {
+  onFrameChanged(frameEvent: any) {
     this.setState({
-      frame: newFrame,
+      frame: ComponentExplorer.extractSliderOnChange(frameEvent)
     });
   }
 
@@ -66,6 +69,10 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       let result = this.props.gameDump.result && this.props.gameDump.result.frame <= this.state.frame && this.props.gameDump.result;
       let players = this.props.gameDump.players;
 
+      let playOrPause = this.state.playing ?
+        (<FABButton mini colored ripple onClick={this.onPause.bind(this) }><Icon name="pause" /></FABButton>) :
+        (<FABButton mini colored ripple onClick={this.onPlay.bind(this) }><Icon name="play_arrow"  /></FABButton>);
+
       return (
         <div ref="root">
           <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
@@ -77,24 +84,15 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
                 width={scaledWidth}
                 height={scaledHeight}
                 scale={scale}
-                frameLength={this.props.gameDump.frames.length}
-                playing={this.state.playing}
-                onFrameChanged={this.onFrameChanged.bind(this) }
-                onPlay={this.onPlay.bind(this) }
-                onPause={this.onPause.bind(this) }
-                onReload={this.onReload.bind(this) } />
+                hideStatus={true}
+                hideController={true} />
             </g>
           </svg>
-        </div>
-      );
-    } else {
-      return (
-        <div ref="root">
-          <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-            <g transform={"scale(" + scale + ", " + scale + ")"}>
-              <text x={0} y={scaledHeight / 2} textAnchor="middle">{"Loading ..."}</text>
-            </g>
-          </svg>
+          <div className="replay-controller">
+            <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this) }><Icon name="replay" /></FABButton></div>
+            <div className="replay-controller-button">{playOrPause}</div>
+            <div className="replay-slider"><Slider max={this.props.gameDump.frames.length} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
+          </div>
         </div>
       );
     }

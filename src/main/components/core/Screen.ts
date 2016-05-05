@@ -11,6 +11,7 @@ export default class Screen {
   playing: boolean;
   onFrameChanged: (frame: number) => void;
   onPlay: () => void;
-  onPause:  () => void;
-  onReload:  () => void;
+  onPause: () => void;
+  onReload: () => void;
+  hideController: boolean;
 }

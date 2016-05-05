@@ -17,7 +17,7 @@ export default class BackgroundTag extends React.Component<{ screen: Screen; }, 
   render() {
     var screen = this.props.screen;
 
-    var ground = (<rect fill="#888" width={screen.width} height={1} x={-screen.width / 2} y={screen.height - 20} />);
+    var ground = (<rect fill="#888" width={screen.width} height={1} x={-screen.width / 2} y={screen.height - (screen.hideController ? 6 : 22)} />);
     var bg1 = this.makeBg(this.state.trees1, 2);
     var bg2 = this.makeBg(this.state.trees2, 3);
     var bg3 = this.makeBg(this.state.trees3, 4);
@@ -39,13 +39,14 @@ export default class BackgroundTag extends React.Component<{ screen: Screen; }, 
 
     var viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
     var viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
+    var viewTop = (screen.height - (screen.hideController ? 8 : 24)) / screen.scale;
     var treeTags = trees.map((tree) => {
       if (viewLeft < tree.x + tree.size && tree.x - tree.size < viewRight) {
         return <TreeTag key={tree.id} model={tree} far={far} />
       }
     });
     return (
-      <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center / far) + "," + (screen.height - 24) / screen.scale + ") scale(1, -1)"}>
+      <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center / far) + "," + viewTop + ") scale(1, -1)"}>
         {treeTags}
       </g>
     );
@@ -56,13 +57,14 @@ export default class BackgroundTag extends React.Component<{ screen: Screen; }, 
 
     var viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
     var viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
+    var viewTop = (screen.height - (screen.hideController ? 8 : 24)) / screen.scale;
     var domeTags = domes.map((dome) => {
       if (viewLeft < dome.x + dome.size && dome.x - dome.size < viewRight) {
         return <DomeTag key={dome.id} model={dome} far={far} />
       }
     });
     return (
-      <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center / far) + "," + (screen.height - 24) / screen.scale + ") scale(1, -1)"}>
+      <g transform={"scale(" + screen.scale + ", " + screen.scale + ") translate(" + (-screen.center / far) + "," + viewTop + ") scale(1, -1)"}>
         {domeTags}
       </g>
     );

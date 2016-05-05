@@ -58,6 +58,22 @@ pre.code {
   padding: 4px;
 }
 
+.replay-controller {
+  display: flex;
+}
+
+.replay-controller .replay-controller-button {
+  padding: 4px;
+}
+
+.replay-slider {
+  flex-grow: 1;
+}
+
+.replay-slider .mdl-slider__container {
+  height: 48px;
+}
+
 @media (min-width: 840px)
   dt {
     padding-top: 8px;

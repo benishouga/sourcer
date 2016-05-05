@@ -6,7 +6,16 @@ import StatusHudTag from './StatusHudTag';
 import ControllerHudTag from './ControllerHudTag';
 import ResultHudTag from './ResultHudTag';
 
-export default class HudTag extends React.Component<{ field: FieldDump; players: PlayersDump; result: ResultDump; screen: Screen; }, {}> {
+interface HudTagProps extends React.Props<HudTag> {
+  field: FieldDump;
+  players: PlayersDump;
+  result: ResultDump;
+  screen: Screen;
+  hideStatus?: boolean;
+  hideController?: boolean;
+}
+
+export default class HudTag extends React.Component<HudTagProps, {}> {
   render() {
     const field = this.props.field;
     const players = this.props.players;
@@ -15,13 +24,16 @@ export default class HudTag extends React.Component<{ field: FieldDump; players:
     const length = field.s.length;
     const padding = 1;
 
-    const statusHuds = field.s.map(function(b, index) {
-      var width = screen.width / length;
+    let statusHuds: any;
+    if (!this.props.hideStatus) {
+      statusHuds = field.s.map(function(b, index) {
+        var width = screen.width / length;
 
-      // space both side.
-      var position = new V(-screen.width / 2 + width * index + padding, 0)
-      return <StatusHudTag key={b.i + "_hud"} model={b} profile={players[b.i]} position={position} width={width - padding * 2} />
-    });
+        // space both side.
+        var position = new V(-screen.width / 2 + width * index + padding, 0)
+        return <StatusHudTag key={b.i + "_hud"} model={b} profile={players[b.i]} position={position} width={width - padding * 2} />
+      });
+    }
 
     var resultHudTag: JSX.Element = null;
     if (result) {
@@ -32,7 +44,7 @@ export default class HudTag extends React.Component<{ field: FieldDump; players:
       <g>
         {statusHuds}
         {resultHudTag}
-        <ControllerHudTag frame={field.f} screen={screen} />
+        {this.props.hideController ? null : <ControllerHudTag frame={field.f} screen={screen} />}
       </g>
     );
   }
