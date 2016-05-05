@@ -14,6 +14,7 @@ interface ReplayerProps {
   width?: number;
   height?: number;
   scale?: number;
+  onReload?: () => void;
 }
 
 interface ReplayerStats {
@@ -52,7 +53,11 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   }
 
   onReload() {
-    this.setState({ frame: 0 });
+    if (this.props.onReload) {
+      this.props.onReload();
+    } else {
+      this.setState({ frame: 0 });
+    }
   }
 
   onFrameChanged(frameEvent: any) {

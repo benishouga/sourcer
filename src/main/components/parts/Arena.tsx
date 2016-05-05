@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import FieldTag from '../core/FieldTag';
 import {GameDump, FieldDump, ResultDump, PlayersDump} from '../../core/Dump';
+import Replayer from './Replayer';
 
 var colors = ['#866', '#262', '#c55', '#44b'];
 
@@ -73,14 +74,10 @@ interface ArenaProps {
 }
 
 interface ArenaStats {
-  playing?: boolean;
-  frame?: number;
-  result?: ResultDump;
-  players?: PlayersDump;
-  fieldHistory?: FieldDump[];
   standalone?: Standalone;
   loadedFrame?: number;
   dynamicWidth?: number;
+  gameDump?: GameDump;
 }
 
 export default class Arena extends React.Component<ArenaProps, ArenaStats> {
@@ -97,14 +94,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
 
   constructor() {
     super();
-    this.state = { playing: true };
-  }
-  onPlay() {
-    this.setState({ playing: true });
-  }
-
-  onPause() {
-    this.setState({ playing: false });
+    this.state = {};
   }
 
   onReload() {
@@ -113,18 +103,12 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
       standalone.worker.terminate();
     }
     this.setState({
-      fieldHistory: null,
+      gameDump: null,
       standalone: new Standalone(this.props.players)
     });
-  }
-
-  onFrameChanged(newFrame: number) {
-    var standalone = this.state.standalone;
-
-    this.setState({
-      frame: newFrame,
-      result: standalone.game.result && standalone.game.result.frame <= newFrame && standalone.game.result
-    });
+    if (!this.animationFrameHandler) {
+      this.animationFrameHandler = requestAnimationFrame(() => this.tick());
+    }
   }
 
   render() {
@@ -137,31 +121,11 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
     var standalone = this.state.standalone;
     var loadedFrame = this.state.loadedFrame || 0;
 
-    if (this.state.fieldHistory) {
+    if (this.state.gameDump) {
       return (
-        <div ref="root">
-          <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-            <g transform={"scale(" + scale + ", " + scale + ")"}>
-              <FieldTag
-                field={this.state.fieldHistory[this.state.frame]}
-                players={this.state.players}
-                result={this.state.result}
-                width={scaledWidth}
-                height={scaledHeight}
-                scale={scale}
-                frameLength={this.state.fieldHistory.length}
-                playing={this.state.playing}
-                onFrameChanged={this.onFrameChanged.bind(this) }
-                onPlay={this.onPlay.bind(this) }
-                onPause={this.onPause.bind(this) }
-                onReload={this.onReload.bind(this) }
-                />
-            </g>
-          </svg>
-        </div>
+        <Replayer width={this.props.width} height={this.props.height} scale={this.props.scale} gameDump={this.state.gameDump} onReload={this.onReload.bind(this) } />
       );
     } else {
-
       return (
         <div ref="root">
           <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
@@ -192,21 +156,12 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
     }
 
     if (standalone.endOfGame) {
-      if (!this.state.fieldHistory) {
+      if (!this.state.gameDump) {
+        cancelAnimationFrame(this.animationFrameHandler)
+        this.animationFrameHandler = null;
         this.setState({
-          fieldHistory: standalone.game.frames,
-          players: standalone.game.players,
-          frame: 0
+          gameDump: standalone.game
         });
-      } else if (this.state.playing) {
-        var nextFrame = this.state.frame + 1;
-        if (nextFrame < this.state.fieldHistory.length) {
-
-          this.setState({
-            frame: nextFrame,
-            result: standalone.game.result && standalone.game.result.frame <= nextFrame && standalone.game.result
-          });
-        }
       }
     }
   }
@@ -217,6 +172,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
   }
   componentWillUnmount() {
     cancelAnimationFrame(this.animationFrameHandler)
+    this.animationFrameHandler = null;
     this.state.standalone.cancel();
   }
 }
