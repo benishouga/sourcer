@@ -2,6 +2,7 @@ import {En} from './En';
 import {Ja} from './Ja';
 
 export interface StringResource {
+  api_document: string;
   write_code: string;
   login: string;
   logout: string;

@@ -7,7 +7,7 @@ export default class ReadyHudTag extends React.Component<{
   player2: ProfileDump;
   screenHeight: number;
 }, {}> {
-  static width = 256;
+  static width = 384;
   static height = 64;
 
   render() {
@@ -19,8 +19,8 @@ export default class ReadyHudTag extends React.Component<{
         <text x={ReadyHudTag.width / 2} y={ReadyHudTag.height / 2} textAnchor="middle">vs</text>
         <text x={ReadyHudTag.width / 4} y={ReadyHudTag.height / 2} textAnchor="middle">{this.props.player1.name}</text>
         <text x={ReadyHudTag.width / 4 + ReadyHudTag.width / 2} y={ReadyHudTag.height / 2} textAnchor="middle">{this.props.player2.name}</text>
-        <rect y={ReadyHudTag.height / 2 - 18} x={12} height={32} width={8} fill={this.props.player1.color} />
-        <rect y={ReadyHudTag.height / 2 - 18} x={ReadyHudTag.width / 2 + 20} height={32} width={8} fill={this.props.player2.color} />
+        <rect y={ReadyHudTag.height / 2 - 18} x={16} height={32} width={8} fill={this.props.player1.color} />
+        <rect y={ReadyHudTag.height / 2 - 18} x={ReadyHudTag.width / 2 + 24} height={32} width={8} fill={this.props.player2.color} />
       </g>
     );
   }

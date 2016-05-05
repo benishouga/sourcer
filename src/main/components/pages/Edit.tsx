@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Grid, Cell, Button} from 'react-mdl';
+import {Grid, Cell, Button, Icon} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
@@ -72,7 +72,7 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
       return (
         <Grid>
           <Cell col={6}>
-            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }>{resource.save}</Button></p>
+            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }><Icon name="save" /> {resource.save}</Button></p>
             <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
           </Cell>
           <Cell col={6}>

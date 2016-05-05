@@ -1,6 +1,7 @@
 import {StringResource} from './Strings';
 
 export class Ja implements StringResource {
+  api_document = 'API ドキュメント';
   write_code = 'AIを書く';
   login = 'ログイン';
   logout = 'ログアウト';
@@ -30,5 +31,5 @@ export class Ja implements StringResource {
   matches_title = '対戦履歴';
   updated_at = '更新';
   view_match = '観戦する';
-  recent_updated_users_title = '最新更新';
+  recent_updated_users_title = '最新の更新';
 }

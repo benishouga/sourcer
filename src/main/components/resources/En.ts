@@ -1,6 +1,7 @@
 import {StringResource} from './Strings';
 
 export class En implements StringResource {
+  api_document = 'API documents';
   write_code = 'Write code';
   login = 'Login';
   logout = 'Logout';
