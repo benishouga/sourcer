@@ -100,6 +100,7 @@
         "./main/components/core/SourcerTag.tsx",
         "./main/components/core/StatusHudTag.tsx",
         "./main/components/core/TreeTag.tsx",
+        "./main/components/pages/Admin.tsx",
         "./main/components/pages/App.tsx",
         "./main/components/pages/Edit.tsx",
         "./main/components/pages/Login.tsx",

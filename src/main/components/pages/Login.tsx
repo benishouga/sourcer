@@ -31,7 +31,7 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
     let password = ComponentExplorer.extractInputValue(this.refs['password']);
 
     Auth.login(account, password).then((loggedIn) => {
-      if (!loggedIn) {
+      if (!loggedIn.authenticated) {
         return this.setState({ error: true });
       }
 
@@ -39,7 +39,9 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
       let state = location.state as any;
       let context = this.context as any;
 
-      if (state && state.nextPathname) {
+      if (loggedIn.admin) {
+        context.router.replace('/official');
+      } else if (state && state.nextPathname) {
         context.router.replace(state.nextPathname);
       } else {
         context.router.replace('/');

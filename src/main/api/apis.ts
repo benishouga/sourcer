@@ -5,6 +5,7 @@ import * as SessionApi from './SessionApi';
 
 export default (app: Express) => {
   app.get('/api/user/recent', UserApi.recent);
+  app.get('/api/user/all', UserApi.all);
   app.get('/api/user', UserApi.show);
   app.post('/api/user', UserApi.create);
   app.get('/api/user/:id', UserApi.show);
@@ -13,6 +14,7 @@ export default (app: Express) => {
   app.get('/api/match', MatchApi.list);
   app.get('/api/match/:id', MatchApi.show);
   app.get('/api/replay/:id', MatchApi.replay);
+  app.post('/api/match/official/:player1/:player2', MatchApi.create);
   app.post('/api/match/against/:id', MatchApi.create);
 
   app.post('/api/session', SessionApi.create);

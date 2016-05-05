@@ -29,7 +29,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
   request: RequestPromise<UserResponse>;
 
   componentDidMount() {
-    if (Auth.authenticated) {
+    if (Auth.info.authenticated) {
       this.request = User.select(this.props.params.account);
       this.request.then((user) => {
         this.setState({
@@ -44,7 +44,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
   }
 
   componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
-    if (Auth.authenticated && nextProps.params.account !== this.props.params.account) {
+    if (Auth.info.authenticated && nextProps.params.account !== this.props.params.account) {
       this.request && this.request.abort();
       this.request = User.select(nextProps.params.account);
       this.setState({ user: null });

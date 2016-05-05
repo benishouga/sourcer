@@ -10,11 +10,21 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import SignUp from './pages/SignUp';
 import Auth from '../service/Auth';
+import Admin from './pages/Admin';
 
 function requireAuth(nextState: RouterState, replaceState: any) {
-  if (!Auth.authenticated) {
+  if (!Auth.info.authenticated) {
     replaceState({
       pathname: '/login',
+      state: { nextPathname: nextState.location.pathname }
+    })
+  }
+}
+
+function requireAdmin(nextState: RouterState, replaceState: any) {
+  if (!Auth.info.admin) {
+    replaceState({
+      pathname: '/logout',
       state: { nextPathname: nextState.location.pathname }
     })
   }
@@ -38,6 +48,7 @@ export default function() {
       <Route path='match/:matchId' component={MatchShow} onEnter={requireAuth} />
       <Route path='edit' component={Edit} onEnter={requireAuth} />
       <Route path='user/:account' component={UserShow} onEnter={requireAuth} />
+      <Route path='official' component={Admin} onEnter={requireAdmin} />
     </Route>
   );
 };

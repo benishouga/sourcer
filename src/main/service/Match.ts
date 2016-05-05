@@ -12,6 +12,12 @@ export default class Match {
     }
     return post(`/api/match/against/${against}`, {});
   }
+  static official(player1: string, player2: string) {
+    if (!player1 || !player2) {
+      throw 'bad parameter player: ' + player1 + ', ' + player2;
+    }
+    return post(`/api/match/official/${player1}/${player2}`, {});
+  }
   static replay(matchId: string) {
     if (!matchId) {
       throw 'bad parameter matchId: ' + matchId;

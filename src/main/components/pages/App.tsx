@@ -26,7 +26,7 @@ export default class App extends React.Component<AppProps, AppState> {
   constructor() {
     super();
     this.state = {
-      loggedIn: Auth.authenticated
+      loggedIn: Auth.info.authenticated
     };
   }
 
@@ -39,8 +39,8 @@ export default class App extends React.Component<AppProps, AppState> {
   componentWillMount() {
     Auth.addOnChangeListener(this.updateAuth);
 
-    Auth.login().then((loggedIn: boolean) => {
-      this.updateAuth(loggedIn);
+    Auth.login().then((loggedIn) => {
+      this.updateAuth(loggedIn.authenticated);
     });
   }
 
@@ -50,7 +50,6 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render() {
     let resource = strings();
-    console.log('aa', resource);
     return (
       <div className="mdl-layout mdl-layout--fixed-header is-upgraded">
         <Header scroll>

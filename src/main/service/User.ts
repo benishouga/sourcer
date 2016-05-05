@@ -17,6 +17,10 @@ export default class User {
     return get<UserResponse>(account ? `/api/user/${account}` : '/api/user');
   }
 
+  static all() {
+    return get<UserResponse[]>('/api/user/all');
+  }
+
   static recent() {
     return get<UserResponse[]>('/api/user/recent');
   }

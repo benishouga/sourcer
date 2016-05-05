@@ -31,19 +31,28 @@ export function replay(req: Request, res: Response) {
 
 export function create(req: Request, res: Response) {
   "use strict";
-  const user = req.session['user'] as UserDocument;
-  if (!user) {
-    return res.status(403).send('');
-  }
-  const account = user.account;
-  const againstId: string = req.params['id'];
-  if (!againstId) {
-    return res.status(400).send('');
+  let player1: string;
+  let player2: string;
+  console.log('aa', req.params['player1'], req.params['player2']);
+  if (req.params['player1'] && req.params['player2'] && req.session['admin']) {
+    player1 = req.params['player1'];
+    player2 = req.params['player2'];
+  } else {
+    const user = req.session['user'] as UserDocument;
+    if (!user) {
+      return res.status(403).send('');
+    }
+    player1 = user.account;
+    player2 = req.params['id'];
+    if (!player2) {
+      return res.status(400).send('');
+    }
   }
 
+  console.log('bb', player1, player2);
   Promise.all([
-    User.loadByAccount(account),
-    User.loadByAccount(againstId)
+    User.loadByAccount(player1),
+    User.loadByAccount(player2)
   ]).then((players: UserDocument[]) => {
     arena([
       { account: players[0].account, name: players[0].name, color: colors[0], ai: players[0].source },

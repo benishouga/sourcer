@@ -17,7 +17,7 @@ export default class Validator {
       throw 'Validation error : account';
     }
 
-    if ('recent' === account) {
+    if ('recent' === account || 'admin' === account || 'all' === account) {
       throw 'Validation error : account reserved';
     }
 

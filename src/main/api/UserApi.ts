@@ -78,6 +78,17 @@ export function update(req: Request, res: Response) {
   });
 }
 
+export function all(req: Request, res: Response) {
+  let user = req.session['admin'] as boolean;
+  if (!user) {
+    return res.status(403).send('');
+  }
+
+  User.find({}).exec().then((users) => {
+    return res.status(200).type('json').send(users.map(user => ResponseCreator.user(user)));
+  });
+}
+
 export function recent(req: Request, res: Response) {
   let user = req.session['user'] as UserDocument;
   if (!user) {
