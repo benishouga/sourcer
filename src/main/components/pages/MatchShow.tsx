@@ -52,7 +52,7 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
       <Grid>
         <Cell col={2} hidePhone hideTablet />
         <Cell col={8} phone={12} tablet={12}>
-          <Replayer gameDump={this.state.gameDump} scale={1.5} />
+          <Replayer gameDump={this.state.gameDump} scale={1.2} />
         </Cell>
       </Grid>
     );

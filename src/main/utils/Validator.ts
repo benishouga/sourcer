@@ -34,8 +34,8 @@ export default class Validator {
 
   static validateName(name: string): string {
     name = normalize(name);
-    if (!name) {
-      throw 'Validation error : password';
+    if (!name || 11 < name.length) {
+      throw 'Validation error : name';
     }
     return name;
   }

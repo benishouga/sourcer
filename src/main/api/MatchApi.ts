@@ -33,7 +33,6 @@ export function create(req: Request, res: Response) {
   "use strict";
   let player1: string;
   let player2: string;
-  console.log('aa', req.params['player1'], req.params['player2']);
   if (req.params['player1'] && req.params['player2'] && req.session['admin']) {
     player1 = req.params['player1'];
     player2 = req.params['player2'];
@@ -49,7 +48,6 @@ export function create(req: Request, res: Response) {
     }
   }
 
-  console.log('bb', player1, player2);
   Promise.all([
     User.loadByAccount(player1),
     User.loadByAccount(player2)

@@ -56,6 +56,8 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
       } else {
         context.router.replace('/');
       }
+    }).catch(() => {
+      return this.setState({ error: true });
     });
   }
 
