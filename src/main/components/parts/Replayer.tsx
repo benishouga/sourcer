@@ -1,10 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {FABButton, Icon, Slider} from 'react-mdl';
+import {FABButton, Icon, Slider, Grid, Cell, Card, CardTitle, CardText, ProgressBar} from 'react-mdl';
+
+import Configs from '../../core/Configs';
 
 import FieldTag from '../core/FieldTag';
-import {GameDump, FieldDump, ResultDump} from '../../core/Dump';
+import {GameDump, FieldDump, ResultDump, ProfileDump, SourcerDump} from '../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
+import ReadyHudTag from '../core/ReadyHudTag';
 
 interface ReplayerProps {
   gameDump?: GameDump;
@@ -35,7 +38,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   constructor(props: ReplayerProps) {
     super();
     this.state = {
-      playing: true,
+      playing: false,
       frame: 0
     };
   }
@@ -68,17 +71,21 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (this.props.gameDump.frames) {
       let result = this.props.gameDump.result && this.props.gameDump.result.frame <= this.state.frame && this.props.gameDump.result;
       let players = this.props.gameDump.players;
+      let frame = this.props.gameDump.frames[this.state.frame];
 
       let playOrPause = this.state.playing ?
         (<FABButton mini colored ripple onClick={this.onPause.bind(this) }><Icon name="pause" /></FABButton>) :
         (<FABButton mini colored ripple onClick={this.onPlay.bind(this) }><Icon name="play_arrow"  /></FABButton>);
+
+      let player1Status = this.status(frame.s[0], players[frame.s[0].i]);
+      let player2Status = this.status(frame.s[1], players[frame.s[1].i]);
 
       return (
         <div ref="root">
           <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
             <g transform={"scale(" + scale + ", " + scale + ")"}>
               <FieldTag
-                field={this.props.gameDump.frames[this.state.frame]}
+                field={frame}
                 result={result}
                 players={players}
                 width={scaledWidth}
@@ -86,6 +93,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
                 scale={scale}
                 hideStatus={true}
                 hideController={true} />
+              {this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null}
             </g>
           </svg>
           <div className="replay-controller">
@@ -93,6 +101,10 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <div className="replay-controller-button">{playOrPause}</div>
             <div className="replay-slider"><Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
           </div>
+          <Grid>
+            <Cell col={6} tablet={6}>{player1Status}</Cell>
+            <Cell col={6} tablet={6}>{player2Status}</Cell>
+          </Grid>
         </div>
       );
     }
@@ -115,6 +127,43 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         this.setState({ frame: nextFrame });
       }
     }
+  }
+
+  status(model: SourcerDump, profile: ProfileDump) {
+    let shield = (model.h / Configs.INITIAL_SHIELD) * 100;
+
+    let backgroundColor: string
+    if (50 < shield) {
+      backgroundColor = '#fff';
+    } else if (25 < shield) {
+      backgroundColor = '#ff8';
+    } else {
+      backgroundColor = '#f44';
+    }
+
+    return (
+      <Card shadow={0} style={{ width: '100%', margin: 'auto', backgroundColor: backgroundColor }}>
+        <CardTitle><div style={{ height: '32px', width: '16px', marginRight: '8px', backgroundColor: profile.color }} /> {profile.name}</CardTitle>
+        <CardText style={{ paddingTop: '0px' }}>
+          <div>
+            <div className="status"><span className="title">シールド</span><span className="main">{model.h}</span> / {Configs.INITIAL_SHIELD}</div>
+            <div><ProgressBar className="progress-status progress-shield" progress={(model.h / Configs.INITIAL_SHIELD) * 100} /></div>
+          </div>
+          <div>
+            <div className="status"><span className="title">燃料</span><span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}</div>
+            <div><ProgressBar className="progress-status progress-fuel" progress={(model.f / Configs.INITIAL_FUEL) * 100} /></div>
+          </div>
+          <div>
+            <div className="status"><span className="title">熱</span><span className="main">{model.t}</span> / {Configs.OVERHEAT_BORDER}</div>
+            <div><ProgressBar className="progress-status progress-temperature" progress={(model.t / Configs.OVERHEAT_BORDER) * 100} /></div>
+          </div>
+          <div>
+            <div className="status"><span className="title">ミサイル</span><span className="main">{model.a}</span> / {Configs.INITIAL_MISSILE_AMMO}</div>
+            <div><ProgressBar className="progress-status progress-ammo" progress={(model.a / Configs.INITIAL_MISSILE_AMMO) * 100} /></div>
+          </div>
+        </CardText>
+      </Card>
+    );
   }
 
   componentDidMount() {

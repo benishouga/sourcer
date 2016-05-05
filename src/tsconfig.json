@@ -94,6 +94,7 @@
         "./main/components/core/HudTag.tsx",
         "./main/components/core/LaserTag.tsx",
         "./main/components/core/MissileTag.tsx",
+        "./main/components/core/ReadyHudTag.tsx",
         "./main/components/core/ResultHudTag.tsx",
         "./main/components/core/ShotTag.tsx",
         "./main/components/core/SourcerTag.tsx",

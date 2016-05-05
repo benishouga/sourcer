@@ -30,9 +30,7 @@ export default class ProfileCard extends React.Component<ProfileCardProps, Profi
 
     return (
       <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-        <CardTitle expand style={{ alignItems: 'flex-start' }}>
-          {user.name}
-        </CardTitle>
+        <CardTitle>{user.name}</CardTitle>
         <CardText>
           <p><Icon name="mood" className="inline" /> {user.wins} {resource.wins} <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}</p>
           <List>

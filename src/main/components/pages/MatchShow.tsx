@@ -51,24 +51,8 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
     return (
       <Grid>
         <Cell col={2} hidePhone hideTablet />
-        <Cell col={8}>
+        <Cell col={8} phone={12} tablet={12}>
           <Replayer gameDump={this.state.gameDump} scale={1.5} />
-          <Grid>
-            <Cell col={6} table={8}>
-              <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-                <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.gameDump.players[0].account}`}>{this.state.gameDump.players[0].name}</Link>
-                </CardTitle>
-              </Card>
-            </Cell>
-            <Cell col={6} table={8}>
-              <Card shadow={0} style={{ width: '100%', margin: 'auto' }}>
-                <CardTitle expand style={{ alignItems: 'flex-start' }}>
-                  <Link to={`/match/new/${this.state.gameDump.players[1].account}`}>{this.state.gameDump.players[1].name}</Link>
-                </CardTitle>
-              </Card>
-            </Cell>
-          </Grid>
         </Cell>
       </Grid>
     );
