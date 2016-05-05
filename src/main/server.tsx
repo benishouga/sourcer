@@ -25,7 +25,7 @@ var app = express();
 var template = Handlebars.compile(fs.readFileSync('./index.hbs').toString());
 
 app.use(express.static('dist'));
-app.use(express.static('libs'));
+app.use(express.static('statics'));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
