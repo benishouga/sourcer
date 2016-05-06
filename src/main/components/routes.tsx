@@ -10,7 +10,7 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import SignUp from './pages/SignUp';
 import Auth from '../service/Auth';
-import Admin from './pages/Admin';
+import Official from './pages/Official';
 
 function requireAuth(nextState: RouterState, replaceState: any) {
   if (!Auth.authResponse.authenticated) {
@@ -48,7 +48,7 @@ export default function() {
       <Route path='match/:matchId' component={MatchShow} onEnter={requireAuth} />
       <Route path='edit' component={Edit} onEnter={requireAuth} />
       <Route path='user/:account' component={UserShow} onEnter={requireAuth} />
-      <Route path='official' component={Admin} onEnter={requireAdmin} />
+      <Route path='official' component={Official} onEnter={requireAdmin} />
     </Route>
   );
 };

@@ -33,6 +33,7 @@ export interface StringResource {
   updated_at: string;
   view_match: string;
   recent_updated_users_title: string;
+  official_match: string;
 }
 
 let stringsMap: { [key: string]: StringResource } = {

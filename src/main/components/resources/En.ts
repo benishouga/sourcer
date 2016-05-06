@@ -32,4 +32,5 @@ export class En implements StringResource {
   updated_at = 'Updated at';
   view_match = 'View match';
   recent_updated_users_title = 'Recent Updated Users';
+  official_match = 'Official match';
 }

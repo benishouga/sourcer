@@ -32,4 +32,5 @@ export class Ja implements StringResource {
   updated_at = '更新';
   view_match = '観戦する';
   recent_updated_users_title = '最新の更新';
+  official_match = '公式戦を行う';
 }

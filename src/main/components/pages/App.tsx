@@ -19,21 +19,21 @@ interface AppProps extends React.Props<App> {
 }
 
 interface AppState {
-  loggedIn: boolean
+  authResponse: AuthResponse
 }
 
 export default class App extends React.Component<AppProps, AppState> {
   constructor() {
     super();
     this.state = {
-      loggedIn: Auth.authResponse.authenticated
+      authResponse: Auth.authResponse
     };
   }
 
   updateAuth = (authResponse: AuthResponse) => {
     this.setState({
-      loggedIn: authResponse.authenticated
-    })
+      authResponse: authResponse
+    });
   };
 
   componentWillMount() {
@@ -53,16 +53,24 @@ export default class App extends React.Component<AppProps, AppState> {
     return (
       <div className="mdl-layout mdl-layout--fixed-header is-upgraded">
         <Header scroll>
-          <HeaderRow title={<Link to="/">Sourcer</Link>}>
+          <HeaderRow title={<Link to={this.state.authResponse.admin ? '/official' : '/'}>Sourcer</Link>}>
             <Navigation>
               {
-                this.state.loggedIn ? <Link to="/edit"><Icon name="edit" /> {resource.write_code}</Link> : null
+                this.state.authResponse.admin ?
+                  <Link to="/official"><Icon name="whatshot" /> {resource.official_match}</Link> : null
               }
               {
-                this.state.loggedIn ? (<Link to="/logout"><Icon name="open_in_new" /> {resource.logout}</Link>) : (<Link to="login"><Icon name="input" /> {resource.login}</Link>)
+                this.state.authResponse.authenticated && !this.state.authResponse.admin ?
+                  <Link to="/edit"><Icon name="edit" /> {resource.write_code}</Link> : null
               }
               {
-                !this.state.loggedIn ? (<Link to="/signup"><Icon name="create" /> {resource.sign_up}</Link>) : null
+                this.state.authResponse.authenticated ?
+                  (<Link to="/logout"><Icon name="open_in_new" /> {resource.logout}</Link>) :
+                  (<Link to="login"><Icon name="input" /> {resource.login}</Link>)
+              }
+              {
+                !this.state.authResponse.authenticated ?
+                  (<Link to="/signup"><Icon name="create" /> {resource.sign_up}</Link>) : null
               }
               <a target="_new" href="/docs.html"><Icon name="help" /> {resource.api_document}</a>
             </Navigation>
