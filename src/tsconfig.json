@@ -32,6 +32,7 @@
         "./libs/chainchomp.d.ts",
         "./libs/react-mdl.d.ts",
         "./main/api/apis.ts",
+        "./main/api/AuthResponse.ts",
         "./main/api/MatchApi.ts",
         "./main/api/MatchResponse.ts",
         "./main/api/ResponseCreator.ts",

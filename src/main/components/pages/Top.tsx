@@ -26,7 +26,7 @@ export default class Top extends React.Component<TopProps, TopStats> {
   request: RequestPromise<UserResponse>;
 
   componentDidMount() {
-    if (Auth.info.authenticated) {
+    if (Auth.authResponse.authenticated) {
       this.request = User.select();
       this.request.then((user) => {
         this.setState({
@@ -42,7 +42,7 @@ export default class Top extends React.Component<TopProps, TopStats> {
 
   render() {
     let resource = strings();
-    if (!Auth.info.authenticated) {
+    if (!Auth.authResponse.authenticated) {
       return (
         <div>
           <h2>Sourcer</h2>

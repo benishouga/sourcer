@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import ResponseCreator from './ResponseCreator';
+
 import User, {UserDocument} from '../models/User';
 
 import config from '../config';
@@ -17,7 +19,7 @@ export function create(req: Request, res: Response, next: Function) {
     req.session['authenticated'] = false;
     req.session['admin'] = false;
     req.session['user'] = null;
-    res.status(400).type('json').send({ authenticated: false, admin: false });
+    res.status(400).type('json').send(ResponseCreator.auth(req.session));
     return;
   }
 
@@ -26,12 +28,12 @@ export function create(req: Request, res: Response, next: Function) {
       req.session['authenticated'] = true;
       req.session['admin'] = true;
       req.session['user'] = null;
-      res.status(200).type('json').send({ authenticated: true, admin: true });
+      res.status(200).type('json').send(ResponseCreator.auth(req.session));
     } else {
       req.session['authenticated'] = false;
       req.session['admin'] = false;
       req.session['user'] = null;
-      res.status(200).type('json').send({ authenticated: false, admin: false });
+      res.status(200).type('json').send(ResponseCreator.auth(req.session));
     }
     return;
   }
@@ -49,18 +51,18 @@ export function create(req: Request, res: Response, next: Function) {
     req.session['authenticated'] = true;
     req.session['admin'] = false;
     req.session['user'] = user;
-    return res.status(200).type('json').send({ authenticated: true, admin: false });
+    return res.status(200).type('json').send(ResponseCreator.auth(req.session));
   }, (err: any) => {
     req.session['authenticated'] = false;
     req.session['admin'] = false;
     req.session['user'] = null;
-    res.status(403).send({ authenticated: false, admin: false });
+    res.status(403).send(ResponseCreator.auth(req.session));
   });
 }
 
 export function destroy(req: Request, res: Response, next: Function) {
   "use strict";
   req.session.destroy(() => {
-    res.send({ authenticated: false, admin: false });
+    res.send(ResponseCreator.auth(req.session));
   });
 }

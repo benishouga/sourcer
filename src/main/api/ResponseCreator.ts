@@ -46,4 +46,11 @@ export default class ResponseCreator {
       created: match.created
     } : match as any;
   }
+
+  static auth(session: Express.Session): AuthResponse {
+    return {
+      authenticated: session['authenticated'],
+      admin: session['admin']
+    };
+  }
 }

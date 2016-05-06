@@ -1,34 +1,29 @@
 import {EventEmitter} from 'events';
 import {get, post, chain} from '../utils/fetch';
 
-interface AuthResponse {
-  authenticated: boolean;
-  admin: boolean;
-}
-
 export default class Auth {
   static emitter = new EventEmitter();
-  static _authenticated: AuthResponse = { admin: false, authenticated: false };
-  static get info() {
-    return this._authenticated;
+  static _authResponse: AuthResponse = { admin: false, authenticated: false };
+  static get authResponse() {
+    return this._authResponse;
   }
 
-  static set info(authenticated: AuthResponse) {
-    if (this._authenticated !== authenticated) {
-      this.emitter.emit('onchange', authenticated);
+  static set authResponse(authResponse: AuthResponse) {
+    if (this._authResponse !== authResponse) {
+      this.emitter.emit('onchange', authResponse);
     }
-    this._authenticated = authenticated;
+    this._authResponse = authResponse;
   }
 
   static login(account?: string, pass?: string) {
     if (!account && !pass) {
       return chain(get<AuthResponse>('/api/session'), (abortable) => {
         return abortable.then((res) => {
-          this.info = res;
+          this.authResponse = res;
         }).catch(() => {
-          this.info = { admin: false, authenticated: false };
+          this.authResponse = { admin: false, authenticated: false };
         }).then(() => {
-          return this.info;
+          return this.authResponse;
         });
       });
     }
@@ -38,28 +33,28 @@ export default class Auth {
       password: pass
     }), (abortable) => {
       return abortable.then((res: AuthResponse) => {
-        this.info = res;
+        this.authResponse = res;
       }).catch(() => {
-        this.info = { admin: false, authenticated: false };
+        this.authResponse = { admin: false, authenticated: false };
       }).then(() => {
-        return this.info;
+        return this.authResponse;
       });
     });
   }
 
   static logout(): Promise<{}> {
-    this.info = { admin: false, authenticated: false };
+    this.authResponse = { admin: false, authenticated: false };
     return post('/api/session', {
       method: 'delete',
       credentials: 'same-origin'
     });
   }
 
-  static addOnChangeListener(cb: (loggedIn: boolean) => void) {
+  static addOnChangeListener(cb: (authResponse: AuthResponse) => void) {
     this.emitter.on('onchange', cb);
   }
 
-  static removeOnChangeListener(cb: (loggedIn: boolean) => void) {
+  static removeOnChangeListener(cb: (authResponse: AuthResponse) => void) {
     this.emitter.removeListener('onchange', cb);
   }
 }

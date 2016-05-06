@@ -26,21 +26,21 @@ export default class App extends React.Component<AppProps, AppState> {
   constructor() {
     super();
     this.state = {
-      loggedIn: Auth.info.authenticated
+      loggedIn: Auth.authResponse.authenticated
     };
   }
 
-  updateAuth = (loggedIn: boolean) => {
+  updateAuth = (authResponse: AuthResponse) => {
     this.setState({
-      loggedIn: loggedIn
+      loggedIn: authResponse.authenticated
     })
   };
 
   componentWillMount() {
     Auth.addOnChangeListener(this.updateAuth);
 
-    Auth.login().then((loggedIn) => {
-      this.updateAuth(loggedIn.authenticated);
+    Auth.login().then((authInfo) => {
+      this.updateAuth(authInfo);
     });
   }
 

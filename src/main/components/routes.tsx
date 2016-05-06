@@ -13,7 +13,7 @@ import Auth from '../service/Auth';
 import Admin from './pages/Admin';
 
 function requireAuth(nextState: RouterState, replaceState: any) {
-  if (!Auth.info.authenticated) {
+  if (!Auth.authResponse.authenticated) {
     replaceState({
       pathname: '/login',
       state: { nextPathname: nextState.location.pathname }
@@ -22,7 +22,7 @@ function requireAuth(nextState: RouterState, replaceState: any) {
 }
 
 function requireAdmin(nextState: RouterState, replaceState: any) {
-  if (!Auth.info.admin) {
+  if (!Auth.authResponse.admin) {
     replaceState({
       pathname: '/logout',
       state: { nextPathname: nextState.location.pathname }
