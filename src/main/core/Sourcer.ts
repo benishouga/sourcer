@@ -33,7 +33,7 @@ export default class Sourcer extends Actor {
 
   constructor(field: Field, x: number, y: number, ai: string, public account: string, public name: string, public color: string) {
     super(field, x, y);
-    this.direction = Consts.DIRECTION_RIGHT;
+    this.direction = Math.random() < 0.5 ? Consts.DIRECTION_RIGHT : Consts.DIRECTION_LEFT;
     this.command = new SourcerCommand(this);
     this.controller = new SourcerController(this);
 

@@ -6,11 +6,11 @@ import {FieldDump, ResultDump} from './core/Dump';
 
 declare function postMessage(message: any): void;
 
-function create(field: Field, source: SourcerSource) {
+function create(field: Field, source: SourcerSource, index: number) {
   "use strict";
-
+  let side = (index % 2 === 0) ? -1 : 1;
   return new Sourcer(
-    field, Utils.rand(320) - 160, Utils.rand(160) + 80,
+    field, Utils.rand(80) + 160 * side, Utils.rand(160) + 80,
     source.ai, source.account, source.name, source.color);
 }
 
@@ -59,7 +59,7 @@ onmessage = function(e) {
 
   var field = new Field();
   sources.forEach((value, index) => {
-    var sourcer = create(field, value);
+    var sourcer = create(field, value, index);
     field.addSourcer(sourcer);
     idToIndex[sourcer.id] = index;
   });

@@ -98,10 +98,11 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
   });
 }
 
-function create(field: Field, source: SourcerSource) {
+function create(field: Field, source: SourcerSource, index: number) {
   'use strict';
+  let side = (index % 2 === 0) ? -1 : 1;
   return new Sourcer(
-    field, Utils.rand(320) - 160, Utils.rand(160) + 80,
+    field, Utils.rand(80) + 160 * side, Utils.rand(160) + 80,
     source.ai, source.account, source.name, source.color);
 }
 
@@ -110,7 +111,7 @@ if (cluster.isWorker) {
     let field = new Field();
     let idToIndex: { [key: number]: number } = {};
     message.sourcers.forEach((value, index) => {
-      let sourcer = create(field, value);
+      let sourcer = create(field, value, index);
       field.addSourcer(sourcer);
       idToIndex[sourcer.id] = index;
     });
