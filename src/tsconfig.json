@@ -67,6 +67,7 @@
         "./main/core/Utils.ts",
         "./main/core/V.ts",
         "./main/db.ts",
+        "./main/models/defaultAi.ts",
         "./main/models/Match.ts",
         "./main/models/User.ts",
         "./main/PublicConfig.ts",

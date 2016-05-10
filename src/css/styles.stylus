@@ -117,7 +117,7 @@ pre.code {
 
 .status .title {
   display: inline-block;
-  width: 64px;
+  width: 72px;
 }
 
 @media (min-width: 840px)

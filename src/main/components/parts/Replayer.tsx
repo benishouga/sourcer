@@ -4,6 +4,8 @@ import {FABButton, Icon, Slider, Grid, Cell, Card, CardTitle, CardText, Progress
 
 import Configs from '../../core/Configs';
 
+import {strings} from '../resources/Strings';
+
 import FieldTag from '../core/FieldTag';
 import {GameDump, FieldDump, ResultDump, ProfileDump, SourcerDump} from '../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
@@ -135,6 +137,8 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   }
 
   status(model: SourcerDump, profile: ProfileDump) {
+    let resource = strings();
+
     let shield = (model.h / Configs.INITIAL_SHIELD) * 100;
 
     let backgroundColor: string
@@ -151,19 +155,19 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         <CardTitle><div style={{ height: '32px', width: '16px', marginRight: '8px', backgroundColor: profile.color }} /> {profile.name}</CardTitle>
         <CardText style={{ paddingTop: '0px' }}>
           <div>
-            <div className="status"><span className="title">シールド</span><span className="main">{model.h}</span> / {Configs.INITIAL_SHIELD}</div>
+            <div className="status"><span className="title">{resource.shield}</span><span className="main">{model.h}</span> / {Configs.INITIAL_SHIELD}</div>
             <div><ProgressBar className="progress-status progress-shield" progress={(model.h / Configs.INITIAL_SHIELD) * 100} /></div>
           </div>
           <div>
-            <div className="status"><span className="title">燃料</span><span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}</div>
+            <div className="status"><span className="title">{resource.fuel}</span><span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}</div>
             <div><ProgressBar className="progress-status progress-fuel" progress={(model.f / Configs.INITIAL_FUEL) * 100} /></div>
           </div>
           <div>
-            <div className="status"><span className="title">熱</span><span className="main">{model.t}</span> / {Configs.OVERHEAT_BORDER}</div>
+            <div className="status"><span className="title">{resource.temperature}</span><span className="main">{model.t}</span> / {Configs.OVERHEAT_BORDER}</div>
             <div><ProgressBar className="progress-status progress-temperature" progress={(model.t / Configs.OVERHEAT_BORDER) * 100} /></div>
           </div>
           <div>
-            <div className="status"><span className="title">ミサイル</span><span className="main">{model.a}</span> / {Configs.INITIAL_MISSILE_AMMO}</div>
+            <div className="status"><span className="title">{resource.ammo}</span><span className="main">{model.a}</span> / {Configs.INITIAL_MISSILE_AMMO}</div>
             <div><ProgressBar className="progress-status progress-ammo" progress={(model.a / Configs.INITIAL_MISSILE_AMMO) * 100} /></div>
           </div>
         </CardText>

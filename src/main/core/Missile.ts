@@ -33,6 +33,7 @@ export default class Missile extends Shot {
     this.command.reset();
     try {
       this.command.accept();
+      this.controller.preThink();
       this.ai(this.controller);
       this.command.unaccept();
     } catch (error) {

@@ -56,6 +56,7 @@ export default class Sourcer extends Actor {
 
     try {
       this.command.accept();
+      this.controller.preThink();
       this.ai(this.controller);
     } catch (error) {
       this.command.reset();

@@ -38,8 +38,8 @@ export default class ProfileCard extends React.Component<ProfileCardProps, Profi
           </List>
         </CardText>
         <CardActions border>
-          {this.props.showWriteCode ? <Link to="/edit"><Button ripple>{resource.write_code}</Button></Link> : null}
-          {this.props.showFight ? <Link to={`/match/new/${user.account}`}><Button ripple>{resource.fight}</Button></Link> : null}
+          {this.props.showWriteCode ? <Link to="/edit"><Button ripple colored raised><Icon name="edit" /> {resource.write_code}</Button></Link> : null}
+          {this.props.showFight ? <Link to={`/match/new/${user.account}`}><Button ripple colored raised><Icon name="whatshot" /> {resource.fight}</Button></Link> : null}
         </CardActions>
       </Card>
     );

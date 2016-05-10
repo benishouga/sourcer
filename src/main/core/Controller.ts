@@ -9,12 +9,17 @@ export default class Controller {
   fuel: () => number;
   log: (...messages: any[]) => void;
 
+  countOfThinks: number = 0;
+  preThink = () => {
+    this.countOfThinks++;
+  };
+
   constructor(actor: Actor) {
     this.log = (...messages: any[]) => {
       console.log.apply(console, messages);
     };
     this.field = actor.field;
-    this.frame = () => this.field.frame;
+    this.frame = () => this.countOfThinks;
     this.altitude = () => actor.position.y;
     this.wait = (frame: number) => {
       if (0 < frame) {

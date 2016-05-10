@@ -1,8 +1,10 @@
 import {Schema, Document, model, Types} from 'mongoose';
-import {MatchDocument} from './Match';
 import * as _ from 'lodash';
 
 import * as crypto from 'crypto';
+
+import {defaultAi} from './defaultAi';
+import {MatchDocument} from './Match';
 
 export interface UserDocument extends Document {
   _id: Types.ObjectId;
@@ -24,7 +26,7 @@ let schema = new Schema({
     service: { type: String, required: true },
     account: { type: String, required: true }
   },
-  source: { type: String, 'default': '' },
+  source: { type: String, 'default': defaultAi },
   isClosedSource: { type: Boolean, 'default': false },
   members: [{ type: String }],
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],

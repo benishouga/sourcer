@@ -34,6 +34,10 @@ export interface StringResource {
   view_match: string;
   recent_updated_users_title: string;
   official_match: string;
+  shield: string;
+  fuel: string;
+  temperature: string;
+  ammo: string;
 }
 
 let stringsMap: { [key: string]: StringResource } = {

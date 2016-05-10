@@ -33,4 +33,8 @@ export class Ja implements StringResource {
   view_match = '観戦する';
   recent_updated_users_title = '最新の更新';
   official_match = '公式戦を行う';
+  shield = 'シールド';
+  fuel = '燃料';
+  temperature = '温度';
+  ammo = 'ミサイル';
 }
