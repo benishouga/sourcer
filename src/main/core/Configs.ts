@@ -3,7 +3,7 @@ export default class Configs {
   static INITIAL_FUEL = 100;
   static INITIAL_MISSILE_AMMO = 20;
   static LASER_ATTENUATION = 1;
-  static LASER_MOMENTUM = 100;
+  static LASER_MOMENTUM = 128;
   static FUEL_COST = 0.24;
   static COLLISION_SIZE = 4;
   static SCAN_WAIT = 0.35;

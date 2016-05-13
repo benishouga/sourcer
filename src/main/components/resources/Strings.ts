@@ -38,6 +38,17 @@ export interface StringResource {
   fuel: string;
   temperature: string;
   ammo: string;
+  test: string;
+  saved: string;
+  save_and_find_against: string;
+  select_enemy: string;
+  fiddle: string;
+  few_attack: string;
+  few_missile: string;
+  escape: string;
+  fixed_battery: string;
+  standard: string;
+  view_code: string;
 }
 
 let stringsMap: { [key: string]: StringResource } = {

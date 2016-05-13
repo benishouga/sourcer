@@ -71,9 +71,8 @@ export default class SourcerController extends Controller {
 
     this.fireLaser = (direction, power) => {
       command.validate();
-      power = Math.min(Math.max(power || 8, 3), 8);
       command.fire = new ShotParam();
-      command.fire.power = power;
+      command.fire.power = Math.min(Math.max(power || 8, 3), 8);
       command.fire.direction = direction;
       command.fire.shotType = 'Laser';
     };

@@ -69,7 +69,7 @@ onmessage = function(e) {
     players: field.players()
   });
 
-  for (var i = 0; i < 2000 && !field.isFinished; i++) {
+  for (var i = 0; i < 10000 && !field.isFinished; i++) {
     field.tick(listener);
   }
 };

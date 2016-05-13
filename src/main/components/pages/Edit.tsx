@@ -1,26 +1,38 @@
 import * as React from 'react';
-import {Grid, Cell, Button, Icon} from 'react-mdl';
+import {Link} from 'react-router';
+import {Grid, Cell, Button, Icon, Card, CardTitle, CardMenu, Snackbar, Spacer, Menu, MenuItem} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
 import {RequestPromise} from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import Arena, {PlayerInfo} from '../parts/Arena';
+import BotSelector from '../parts/BotSelector';
 import User from '../../service/User';
 import Auth from '../../service/Auth';
+
+import {fiddle} from './fiddles/fiddle';
 
 interface AiEditProps extends React.Props<AiEdit> {
 }
 
 interface AiEditState {
+  user?: UserResponse;
   playerInfo?: PlayerInfo;
+  enemyInfo?: PlayerInfo;
+  isSavedSnackbarActive?: boolean;
 }
 
 export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
+  static contextTypes: React.ValidationMap<any> = {
+    router: React.PropTypes.object
+  };
+
   constructor() {
     super();
     this.state = {
-      playerInfo: null
+      playerInfo: null,
+      isSavedSnackbarActive: false
     };
   }
 
@@ -32,32 +44,60 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
     this.state.playerInfo.ai = value;
   };
 
-  request: RequestPromise<UserResponse>;
+  selectBot = (bot: string) => {
+    this.state.enemyInfo.ai = bot;
+    this.reload();
+  };
+
+  requests: RequestPromise<any>[] = [];
 
   componentDidMount() {
-    this.request = User.select();
-    this.request.then((user) => {
+    let request = User.select();
+    request.then((user) => {
       this.sourceOfResponse = user.source;
       this.editingSource = user.source;
       this.setState({
-        playerInfo: {
-          name: "You",
-          ai: user.source,
-          color: '#866'
-        }
+        user: user,
+        playerInfo: { name: "You", ai: user.source, color: '#866' },
+        enemyInfo: { name: "Enemy", ai: fiddle, color: '#262' }
       });
     });
+    this.requests.push(request);
   }
 
   componentWillUnmount() {
-    this.request && this.request.abort();
+    this.requests.forEach(request => request.abort());
   }
 
-  handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    User.update({ source: this.editingSource });
+  save(event?: React.FormEvent) {
+    let request = User.update({ source: this.editingSource });
+    request.then(() => {
+      this.showSavedSnackbar();
+    });
+    this.requests.push(request);
   }
 
+  saveAndFindAgainst() {
+    let request = User.update({ source: this.editingSource });
+    request.then(() => {
+      let context = this.context as any;
+      context.router.replace('/');
+    });
+    this.requests.push(request);
+  }
+
+  reload(event?: React.FormEvent) {
+    // HACK...
+    (this.refs['arena'] as any).onReload();
+  }
+
+  showSavedSnackbar() {
+    this.setState({ isSavedSnackbarActive: true });
+  }
+
+  hideSavedSnackbar() {
+    this.setState({ isSavedSnackbarActive: false });
+  }
 
   render() {
     let resource = strings();
@@ -66,74 +106,31 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
 
       let players: PlayerInfo[] = [
         this.state.playerInfo,
-        { name: "Enemy", ai: code, color: '#262' }
+        this.state.enemyInfo
       ];
 
       return (
         <Grid>
           <Cell col={6}>
-            <p><Button raised ripple colored onClick={this.handleSubmit.bind(this) }><Icon name="save" /> {resource.save}</Button></p>
-            <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} />
+            <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
+              <CardTitle>
+                <Button raised ripple colored onClick={this.save.bind(this) }><Icon name="save" /> {resource.save}</Button>
+                <Spacer />
+                <Button raised ripple colored onClick={this.saveAndFindAgainst.bind(this) } style={{ marginLeft: '8px' }}><Icon name="whatshot" /> {resource.save_and_find_against}</Button>
+                <Button raised ripple colored onClick={this.reload.bind(this) } style={{ marginLeft: '8px' }}><Icon name="play_arrow" /> {resource.test}</Button>
+              </CardTitle>
+            </Card>
+            <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} onSave={this.save.bind(this) } className="mdl-shadow--2dp" />
+            <Snackbar active={this.state.isSavedSnackbarActive} onTimeout={this.hideSavedSnackbar.bind(this) }>{resource.saved}</Snackbar>
           </Cell>
           <Cell col={6}>
-            <Arena players={players} />
+            <BotSelector selected={fiddle} onSelect={this.selectBot} />
+            <Arena players={players} ref="arena" />
           </Cell>
-        </Grid>
+        </Grid >
       );
     }
 
     return (<div>{resource.loading}</div>);
   }
 }
-
-var code = `
-var missileAi = function(controller) {
-  if(controller.scanEnemy(90, 180)) {
-      controller.turnLeft();
-  } else {
-      controller.turnRight();
-  }
-  controller.speedUp();
-};
-var ai = function(controller) {
-  if (controller.scanAttack(0, 60, 60)) {
-      controller.back();
-      controller.descent();
-      return;
-  }
-  if (controller.altitude() < 100) {
-      controller.ascent();
-      return;
-  }
-  if (!controller.scanEnemy(0, 180)) {
-      controller.turn();
-      return;
-  }
-  if (controller.scanEnemy(0, 30, 200)) {
-      if (80 < controller.temperature()) {
-          return;
-      }
-      if (controller.frame() % 5 === 0) {
-          controller.fireMissile(missileAi);
-      } else {
-          controller.fireLaser(0, 8);
-      }
-      return;
-  }
-  if (controller.scanEnemy(0, 180, 60)) {
-      controller.back();
-      return;
-  }
-  if (controller.scanEnemy(0, 30)) {
-      controller.ahead();
-      return;
-  }
-  if (controller.scanEnemy(-45, 90)) {
-      controller.descent();
-      return;
-  }
-  controller.ascent();
-  return;
-};
-return ai;
-`;

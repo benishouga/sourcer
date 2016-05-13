@@ -25,15 +25,13 @@ export default class MatchShow extends React.Component<MatchShowProps, MatchShow
 
   requests: RequestPromise<any>[] = [];
   componentDidMount() {
-    {
-      let request = Match.replay(this.props.params.matchId);;
-      request.then((gameDump) => {
-        this.setState({
-          gameDump: gameDump
-        });
+    let request = Match.replay(this.props.params.matchId);;
+    request.then((gameDump) => {
+      this.setState({
+        gameDump: gameDump
       });
-      this.requests.push(request);
-    }
+    });
+    this.requests.push(request);
   }
 
   componentWillUnmount() {

@@ -66,6 +66,17 @@ pre.code {
   padding: 4px;
 }
 
+.replay-controller .replay-controller-frame {
+  width: 64px;
+  font-size: 12px;
+  margin: auto 0;
+  text-align: center;
+}
+
+.replay-controller .replay-controller-frame span {
+  font-size: 8px;
+}
+
 .replay-slider {
   flex-grow: 1;
 }

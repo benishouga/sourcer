@@ -79,18 +79,11 @@ export default class App extends React.Component<AppProps, AppState> {
         <Content>
           <Grid>
             <Cell col={1} hideTablet hidePhone />
-            <Cell col={10}>
+            <Cell col={10} tablet={12} phone={12}>
               {this.props.children}
             </Cell>
           </Grid>
         </Content>
-        <Footer size="mini">
-          <FooterSection type="left">
-            <FooterLinkList>
-              {/* */}
-            </FooterLinkList>
-          </FooterSection>
-        </Footer>
       </div>
     );
   }

@@ -37,4 +37,15 @@ export class En implements StringResource {
   fuel = 'Fuel';
   temperature = 'Temperature';
   ammo = 'Missile ammo';
+  test = 'Run A.I.';
+  saved = 'Saved !';
+  save_and_find_against = 'Save and find a opponent';
+  select_enemy = 'Select a practice enemy';
+  fiddle = 'Fiddle';
+  few_attack = 'Few attack';
+  few_missile = 'Few missile';
+  escape = 'Escape around';
+  fixed_battery = 'Fixed battery';
+  standard = 'Standard';
+  view_code = 'View code';
 }

@@ -89,24 +89,27 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
       return (
         <div ref="root">
-          <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
-            <g transform={"scale(" + scale + ", " + scale + ")"}>
-              <FieldTag
-                field={frame}
-                result={result}
-                players={players}
-                width={scaledWidth}
-                height={scaledHeight}
-                scale={scale}
-                hideStatus={true}
-                hideController={true} />
-              {this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null}
-            </g>
-          </svg>
+          <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }}>
+            <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
+              <g transform={"scale(" + scale + ", " + scale + ")"}>
+                <FieldTag
+                  field={frame}
+                  result={result}
+                  players={players}
+                  width={scaledWidth}
+                  height={scaledHeight}
+                  scale={scale}
+                  hideStatus={true}
+                  hideController={true} />
+                {this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null}
+              </g>
+            </svg>
+          </div>
           <div className="replay-controller">
             <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this) }><Icon name="replay" /></FABButton></div>
             <div className="replay-controller-button">{playOrPause}</div>
             <div className="replay-slider"><Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
+            <div className="replay-controller-frame">{this.state.frame} <span>(frame) </span></div>
           </div>
           <Grid>
             <Cell col={6} tablet={6}>{player1Status}</Cell>

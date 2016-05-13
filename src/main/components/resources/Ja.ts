@@ -37,4 +37,15 @@ export class Ja implements StringResource {
   fuel = '燃料';
   temperature = '温度';
   ammo = 'ミサイル';
+  test = '実行する';
+  saved = '保存しました！';
+  save_and_find_against = '保存して対戦相手を探す';
+  select_enemy = '練習相手のタイプを変更する';
+  fiddle = '浮いているだけ';
+  few_attack = '少し攻撃してくる';
+  few_missile = 'ミサイルも使ってくる';
+  escape = '逃げまわる';
+  fixed_battery = '低い位置から正確に攻撃してくる';
+  standard = 'スタンダードな動き';
+  view_code = '練習相手のコードを見る';
 }

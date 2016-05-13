@@ -14,11 +14,23 @@ declare module Ace {
     on(type: string, listener: Function): void;
     setValue(value: string, cursorStart?: number): void;
     getValue(): string;
+
     $blockScrolling: number;
+    commands: Commands;
   }
   interface Session {
     setMode(mode: string): void;
     setTabSize(size: number): void;
+  }
+  interface Commands {
+    addCommand(command: Command): void;
+  }
+  interface Command {
+    name: string;
+    exec: (editor: Editor) => void;
+    bindKey: {win: string, mac: string};
+    scrollIntoView?: string;
+    readOnly: boolean;
   }
 }
 

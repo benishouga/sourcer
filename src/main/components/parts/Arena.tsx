@@ -41,7 +41,7 @@ class Standalone {
           break;
         case "PreThink":
           this.thinking = e.data.index;
-          this.handler = setTimeout(() => { this.timeout(); }, 10); // 10 milliseconds think timeout
+          this.handler = setTimeout(() => { this.timeout(); }, 400); // 400 milliseconds think timeout
           break;
         case "PostThink":
           this.thinking = null;
