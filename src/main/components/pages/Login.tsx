@@ -59,7 +59,7 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
           </CardTitle>
           <CardText>
             <Textfield label={resource.field_label_account} floatingLabel ref="account" />
-            <Textfield label={resource.field_label_password} floatingLabel ref="password" />
+            <Textfield label={resource.field_label_password} floatingLabel ref="password" type="password" />
             {this.state.error && (
               <p>{resource.bad_request}</p>
             ) }

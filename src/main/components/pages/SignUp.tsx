@@ -72,7 +72,7 @@ export default class Login extends React.Component<LoginProps, LoginStats> {
           </CardTitle>
           <CardText>
             <Textfield label={resource.field_label_account} floatingLabel ref="account" />
-            <Textfield label={resource.field_label_password} floatingLabel ref="password" />
+            <Textfield label={resource.field_label_password} floatingLabel ref="password" type="password" />
             <Textfield label={resource.field_label_name} floatingLabel ref="name" />
             <div className="headered-list">
               <p>{resource.members}</p>

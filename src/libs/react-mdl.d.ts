@@ -490,6 +490,7 @@ declare module "react-mdl" {
     rows?: any;
     style?: any;
     value?: any;
+    type?: string;
   }
   export class Textfield extends React.Component<TextfieldProps, {}> { }
 
