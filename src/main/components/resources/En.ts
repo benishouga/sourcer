@@ -48,4 +48,5 @@ export class En implements StringResource {
   fixed_battery = 'Fixed battery';
   standard = 'Standard';
   view_code = 'View code';
+  reselect = 'Reselect';
 }

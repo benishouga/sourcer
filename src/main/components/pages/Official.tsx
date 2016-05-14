@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router';
-import {Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar, List, ListItem, ListItemContent} from 'react-mdl';
+import {Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar, List, ListItem, ListItemContent, Icon} from 'react-mdl';
 
 import {strings} from '../resources/Strings';
 
@@ -10,10 +10,10 @@ import Match from '../../service/Match';
 import {RouteParams} from '../routes';
 import ProfileCard from '../parts/ProfileCard';
 
-interface AdminProps extends RouteComponentProps<RouteParams, {}> {
+interface OfficialProps extends RouteComponentProps<RouteParams, {}> {
 }
 
-interface AdminStats {
+interface OfficialStats {
   users?: UserResponse[];
   player1?: UserResponse;
   player2?: UserResponse;
@@ -21,7 +21,7 @@ interface AdminStats {
 }
 
 
-export default class Admin extends React.Component<AdminProps, AdminStats> {
+export default class Official extends React.Component<OfficialProps, OfficialStats> {
   static contextTypes: React.ValidationMap<any> = {
     router: React.PropTypes.object
   };
@@ -77,14 +77,28 @@ export default class Admin extends React.Component<AdminProps, AdminStats> {
 
     let player1: React.ReactElement<any>;
     if (this.state.player1) {
-      player1 = (<ProfileCard user={this.state.player1} />);
+      player1 = (
+        <div>
+          <Button raised ripple colored onClick={() => { this.setState({ player1: null }); } }>
+            <Icon name="cancel" /> {resource.reselect}
+          </Button>
+          <ProfileCard user={this.state.player1} />
+        </div>
+      );
     } else {
       player1 = this.userList((user: UserResponse) => { this.setState({ player1: user }); });
     }
 
     let player2: React.ReactElement<any>;
     if (this.state.player2) {
-      player2 = (<ProfileCard user={this.state.player2} />);
+      player2 = (
+        <div>
+          <Button raised ripple colored onClick={() => { this.setState({ player2: null }); } }>
+            <Icon name="cancel" /> {resource.reselect}
+          </Button>
+          <ProfileCard user={this.state.player2} />
+        </div>
+      );
     } else {
       player2 = this.userList((user: UserResponse) => { this.setState({ player2: user }); });
     }
@@ -96,7 +110,7 @@ export default class Admin extends React.Component<AdminProps, AdminStats> {
         </Cell>
         <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
           <div style={{ height: '120px' }}></div>
-          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple>{resource.fight}</Button>
+          <Button colored onClick={this.handleOpenDialog.bind(this) } raised ripple disabled={!this.state.player1 || !this.state.player2}>{resource.fight}</Button>
           <Dialog open={this.state.openDialog}>
             <DialogTitle>{resource.fighting}</DialogTitle>
             <DialogContent>

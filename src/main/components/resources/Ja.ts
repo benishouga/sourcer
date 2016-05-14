@@ -48,4 +48,5 @@ export class Ja implements StringResource {
   fixed_battery = '低い位置から正確に攻撃してくる';
   standard = 'スタンダードな動き';
   view_code = '練習相手のコードを見る';
+  reselect = '再選択する';
 }

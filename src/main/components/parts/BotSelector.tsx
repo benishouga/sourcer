@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {Button, Menu, MenuItem, Icon} from 'react-mdl';
+import {Button, Menu, MenuItem, Icon, Tooltip} from 'react-mdl';
 import {strings} from '../resources/Strings';
 
 import AceEditor from '../parts/AceEditor';
@@ -77,7 +77,11 @@ export default class BotSelector extends React.Component<BotSelectorProps, BotSe
             <MenuItem onClick={this.onSelect.bind(this, fixedBattery, resource.fixed_battery) }>{resource.fixed_battery}</MenuItem>
             <MenuItem onClick={this.onSelect.bind(this, standard, resource.standard) }>{resource.standard}</MenuItem>
           </Menu>
-          <Button raised ripple colored mini style={rightButtonStyle} onClick={this.toggleCodeViewer.bind(this) }><Icon name="visibility" /></Button>
+          <Tooltip label={resource.view_code} position="bottom">
+            <Button raised ripple colored mini style={rightButtonStyle} onClick={this.toggleCodeViewer.bind(this) }>
+              <Icon name={this.state.isShowCode ? "visibility_off" : "visibility"} />
+            </Button>
+          </Tooltip>
         </div>
         <div style={{ display: this.state.isShowCode ? 'block' : 'none' }}>
           <AceEditor key={this.state.selectedSource /* HACK */} code={this.state.selectedSource} className="mdl-shadow--4dp" readOnly={true} />

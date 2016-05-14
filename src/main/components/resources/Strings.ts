@@ -49,6 +49,7 @@ export interface StringResource {
   fixed_battery: string;
   standard: string;
   view_code: string;
+  reselect: string;
 }
 
 let stringsMap: { [key: string]: StringResource } = {
