@@ -2,7 +2,7 @@ import {StringResource} from './Strings';
 
 export class Ja implements StringResource {
   api_document = 'API ドキュメント';
-  write_code = 'AIを書く';
+  write_code = 'プログラムを書く';
   login = 'ログイン';
   logout = 'ログアウト';
   sign_up = 'サインアップ';
@@ -24,7 +24,7 @@ export class Ja implements StringResource {
   fight = '対戦する';
   fighting = '対戦中...';
   members = 'メンバー';
-  service_description = 'JavaScript で AI をコーディングして対戦させよう！';
+  service_description = 'JavaScript でプログラムを書いて対戦させよう！';
   service_benefit = 'ライバルと競い合うことで、あなたの JavaScript コーディングスキルも上達するかも！';
   wins = '勝';
   losses = '敗';
