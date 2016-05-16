@@ -19,6 +19,8 @@ export default class Field {
   result: ResultDump;
   isFinished: boolean = false;
 
+  dummyEnemy: V = new V(0, 150);
+
   constructor() {
     this.frame = 0;
     this.sourcers = [];
@@ -53,6 +55,10 @@ export default class Field {
     if (0 <= index) {
       this.fxs.splice(index, 1);
     }
+  }
+
+  isSoloDemo() {
+    return this.sourcers.length === 1;
   }
 
   tick(listener: TickEventListener) {
@@ -104,6 +110,17 @@ export default class Field {
   }
 
   checkFinish(listener: TickEventListener) {
+    if (this.isSoloDemo()) {
+      if (256 < this.frame) {
+        this.result = {
+          isSoloDemo: true,
+          frame: this.frame
+        };
+        listener.onFinished(this.result);
+      }
+      return;
+    }
+
     // 決定済み
     if (this.result) {
       return;
@@ -119,6 +136,7 @@ export default class Field {
     if (survivers.length === 1) {
       var surviver = survivers[0];
       this.result = {
+        isSoloDemo: false,
         winnerId: surviver.id,
         frame: this.frame,
         isDraw: false
@@ -129,6 +147,7 @@ export default class Field {
 
     // no surviver.. draw...
     this.result = {
+      isSoloDemo: false,
       winnerId: null,
       frame: this.frame,
       isDraw: true
@@ -145,6 +164,12 @@ export default class Field {
       return;
     }
 
+    if (this.isSoloDemo()) {
+      this.isFinished = true;
+      listener.onEndOfGame();
+      return;
+    }
+
     if (this.result.frame < this.frame - 90) { // 勝敗が決したあとも若干フレームを記録する
       this.isFinished = true;
       listener.onEndOfGame();
@@ -152,6 +177,10 @@ export default class Field {
   }
 
   scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
+    if (this.isSoloDemo()) {
+      return radar(this.dummyEnemy);
+    }
+
     return this.sourcers.some((sourcer) => {
       return sourcer.alive && sourcer !== owner && radar(sourcer.position);
     });

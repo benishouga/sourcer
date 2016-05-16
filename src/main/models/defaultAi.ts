@@ -51,6 +51,8 @@ return function(controller) {
       // 前方（0度）へ向けて 強さ8で アサルト弾を発射する
       controller.fireLaser(0, 8);
     }
+    return;
   }
-  return;
+  // 近くにいなければ前進する
+  controller.ahead();
 };`;

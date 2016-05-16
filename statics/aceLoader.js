@@ -32,7 +32,7 @@
           let session = editor.getSession();
           session.setMode("ace/mode/javascript");
           session.setTabSize(2);
-          editor.setOption("maxLines", 22);
+          editor.setOption("maxLines", 40);
           editor.setAutoScrollEditorIntoView(false);
           editor.$blockScrolling = Infinity;
           session.on('change', function(e) {

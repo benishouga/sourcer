@@ -11,6 +11,10 @@ export default class ResultHudTag extends React.Component<{ result: ResultDump; 
     var result = this.props.result;
     var profile = this.props.profile;
 
+    if (result.isSoloDemo) {
+      return null;
+    }
+
     var text = result.isDraw ? "Draw !!" : profile.name + " Win !!";
     var color = result.isDraw ? "#000" : profile.color;
 

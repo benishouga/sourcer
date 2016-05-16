@@ -13,7 +13,7 @@ export interface PlayerInfo {
 }
 
 class Standalone {
-  worker = new Worker("arena.js");
+  worker: Worker;
   game: GameDump = {
     result: null,
     players: null,
@@ -33,7 +33,8 @@ class Standalone {
     this.worker.terminate();
   }
 
-  constructor(players: PlayerInfo[]) {
+  constructor(players: PlayerInfo[], path: string = "arena.js") {
+    this.worker = new Worker(path);
     this.worker.addEventListener('message', (e: MessageEvent) => {
       switch (e.data.command) {
         case "Players":
@@ -71,6 +72,7 @@ interface ArenaProps {
   height?: number;
   scale?: number;
   players: PlayerInfo[];
+  path?: string;
 }
 
 interface ArenaStats {
@@ -104,7 +106,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
     }
     this.setState({
       gameDump: null,
-      standalone: new Standalone(this.props.players)
+      standalone: new Standalone(this.props.players, this.props.path)
     });
     if (!this.animationFrameHandler) {
       this.animationFrameHandler = requestAnimationFrame(() => this.tick());
@@ -168,7 +170,7 @@ export default class Arena extends React.Component<ArenaProps, ArenaStats> {
 
   componentDidMount() {
     this.animationFrameHandler = requestAnimationFrame(() => this.tick());
-    this.setState({ standalone: new Standalone(this.props.players) });
+    this.setState({ standalone: new Standalone(this.props.players, this.props.path) });
   }
   componentWillUnmount() {
     cancelAnimationFrame(this.animationFrameHandler)

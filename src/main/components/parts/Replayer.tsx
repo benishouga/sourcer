@@ -7,7 +7,7 @@ import Configs from '../../core/Configs';
 import {strings} from '../resources/Strings';
 
 import FieldTag from '../core/FieldTag';
-import {GameDump, FieldDump, ResultDump, ProfileDump, SourcerDump} from '../../core/Dump';
+import {GameDump, FieldDump, ResultDump, ProfileDump, SourcerDump, PlayersDump} from '../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import ReadyHudTag from '../core/ReadyHudTag';
 
@@ -79,13 +79,14 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       let result = this.props.gameDump.result && this.props.gameDump.result.frame <= this.state.frame && this.props.gameDump.result;
       let players = this.props.gameDump.players;
       let frame = this.props.gameDump.frames[this.state.frame];
+      let solo = this.props.gameDump.result.isSoloDemo;
 
       let playOrPause = this.state.playing ?
         (<FABButton mini colored ripple onClick={this.onPause.bind(this) }><Icon name="pause" /></FABButton>) :
         (<FABButton mini colored ripple onClick={this.onPlay.bind(this) }><Icon name="play_arrow"  /></FABButton>);
 
-      let player1Status = this.status(frame.s[0], players[frame.s[0].i]);
-      let player2Status = this.status(frame.s[1], players[frame.s[1].i]);
+      let statuses = solo ? null : this.statuses(frame, players);
+      let readyHud = !solo && this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null;
 
       return (
         <div ref="root">
@@ -101,7 +102,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
                   scale={scale}
                   hideStatus={true}
                   hideController={true} />
-                {this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null}
+                {readyHud}
               </g>
             </svg>
           </div>
@@ -111,10 +112,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <div className="replay-slider"><Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this) } /></div>
             <div className="replay-controller-frame">{this.state.frame} <span>(frame) </span></div>
           </div>
-          <Grid>
-            <Cell col={6} tablet={6}>{player1Status}</Cell>
-            <Cell col={6} tablet={6}>{player2Status}</Cell>
-          </Grid>
+          {statuses}
         </div>
       );
     }
@@ -137,6 +135,18 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         this.setState({ frame: nextFrame });
       }
     }
+  }
+
+  statuses(frame: FieldDump, players: PlayersDump) {
+    let player1Status = this.status(frame.s[0], players[frame.s[0].i]);
+    let player2Status = this.status(frame.s[1], players[frame.s[1].i]);
+
+    return (
+      <Grid>
+        <Cell col={6} tablet={6}>{player1Status}</Cell>
+        <Cell col={6} tablet={6}>{player2Status}</Cell>
+      </Grid>
+    );
   }
 
   status(model: SourcerDump, profile: ProfileDump) {

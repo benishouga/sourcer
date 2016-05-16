@@ -69,7 +69,8 @@ export interface ProfileDump {
 }
 
 export interface ResultDump {
-  isDraw: boolean;
-  winnerId: number;
+  isSoloDemo: boolean;
+  isDraw?: boolean;
+  winnerId?: number;
   frame: number;
 }
