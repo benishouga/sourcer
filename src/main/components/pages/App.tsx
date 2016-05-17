@@ -72,7 +72,7 @@ export default class App extends React.Component<AppProps, AppState> {
                 !this.state.authResponse.authenticated ?
                   (<Link to="/signup"><Icon name="create" /> {resource.sign_up}</Link>) : null
               }
-              <a target="_new" href="/docs.html"><Icon name="help" /> {resource.api_document}</a>
+              <a target="_new" href="http://benishouga.github.io/sourcer/"><Icon name="help" /> {resource.api_document}</a>
             </Navigation>
           </HeaderRow>
         </Header>

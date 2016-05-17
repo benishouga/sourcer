@@ -16,7 +16,7 @@
   <div class="scr-layout mdl-layout mdl-layout--fixed-header mdl-js-layout is-upgraded">
     <header class="scr-header mdl-layout__header mdl-layout__header--scroll">
       <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title">Sourcer</span>
+        <span class="mdl-layout-title" style="font-weight: 200;">Sourcer</span>
       </div>
     </header>
     <main class="mdl-layout__content scr-main">
@@ -142,7 +142,7 @@ return ai;</textarea>
             <dl>
               <dt>シールド(Shield)</dt>
               <dd>初期値 100 でダメージをうけると減ります。0 になると戦闘不能となり、相手より先に戦闘不能になると負けとなってしまいます。</dd>
-              <dt>熱量(temperature)</dt>
+              <dt>温度(temperature)</dt>
               <dd>初期値 0 で攻撃を行ったり、ダメージをうけると上昇します。温度が 100 を超えると、徐々に耐久力が減っていきます。温度は時間経過で徐々に減っていきます。</dd>
               <dt>燃料(fuel)</dt>
               <dd>Sourcer が移動を行うと徐々に減っていきます。0 になると移動が行えなくなります。</dd>
@@ -189,7 +189,7 @@ return ai;</pre>
                 <dt>移動</dt><dd>前進、後退、上昇、下降など</dd>
                 <dt>レーダー</dt><dd>敵機の探知と、自機に飛来してくる攻撃の探知など</dd>
                 <dt>攻撃</dt><dd>レーザーの発射、AIミサイルの発射</dd>
-                <dt>ステータスの確認</dt><dd>耐久力、熱量、燃料、高度、AIミサイル残弾数などの確認</dd>
+                <dt>ステータスの確認</dt><dd>耐久力、温度、燃料、高度、AIミサイル残弾数などの確認</dd>
               </dl>
               <p>レーダーは呼び出す回数が増えると、次の行動までの時間が長くなります。</p>
               <p>攻撃操作は一度に1つしか受け付けません。</p>
@@ -255,8 +255,8 @@ return ai;</pre>
             </div>
             <div class="method">
               <h5>temperature()</h5>
-              <p>自機の熱量を取得します。</p>
-              <dl><dt>returns {number}</dt><dd>自機の熱量</dd>
+              <p>自機の温度を取得します。</p>
+              <dl><dt>returns {number}</dt><dd>自機の温度</dd>
             </div>
             <div class="method">
               <h5>missileAmmo()</h5>
