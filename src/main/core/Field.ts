@@ -21,7 +21,7 @@ export default class Field {
 
   dummyEnemy: V = new V(0, 150);
 
-  constructor() {
+  constructor(public isDemo?: boolean) {
     this.frame = 0;
     this.sourcers = [];
     this.shots = [];
@@ -55,10 +55,6 @@ export default class Field {
     if (0 <= index) {
       this.fxs.splice(index, 1);
     }
-  }
-
-  isSoloDemo() {
-    return this.sourcers.length === 1;
   }
 
   tick(listener: TickEventListener) {
@@ -110,12 +106,9 @@ export default class Field {
   }
 
   checkFinish(listener: TickEventListener) {
-    if (this.isSoloDemo()) {
+    if (this.isDemo) {
       if (256 < this.frame) {
-        this.result = {
-          isSoloDemo: true,
-          frame: this.frame
-        };
+        this.result = { frame: this.frame };
         listener.onFinished(this.result);
       }
       return;
@@ -136,7 +129,6 @@ export default class Field {
     if (survivers.length === 1) {
       var surviver = survivers[0];
       this.result = {
-        isSoloDemo: false,
         winnerId: surviver.id,
         frame: this.frame,
         isDraw: false
@@ -147,7 +139,6 @@ export default class Field {
 
     // no surviver.. draw...
     this.result = {
-      isSoloDemo: false,
       winnerId: null,
       frame: this.frame,
       isDraw: true
@@ -164,7 +155,7 @@ export default class Field {
       return;
     }
 
-    if (this.isSoloDemo()) {
+    if (this.isDemo) {
       this.isFinished = true;
       listener.onEndOfGame();
       return;
@@ -177,7 +168,7 @@ export default class Field {
   }
 
   scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
-    if (this.isSoloDemo()) {
+    if (this.isDemo && this.sourcers.length === 1) {
       return radar(this.dummyEnemy);
     }
 

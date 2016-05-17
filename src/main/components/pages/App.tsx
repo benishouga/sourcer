@@ -76,13 +76,8 @@ export default class App extends React.Component<AppProps, AppState> {
             </Navigation>
           </HeaderRow>
         </Header>
-        <Content>
-          <Grid>
-            <Cell col={1} hideTablet hidePhone />
-            <Cell col={10} tablet={12} phone={12}>
-              {this.props.children}
-            </Cell>
-          </Grid>
+        <Content className="scr-main">
+          {this.props.children}
         </Content>
       </div>
     );

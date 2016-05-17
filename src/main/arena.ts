@@ -15,6 +15,7 @@ function create(field: Field, source: SourcerSource, index: number) {
 }
 
 onmessage = function(e) {
+  var isDemo = e.data.isDemo as boolean;
   var sources = e.data.sources as SourcerSource[];
   var idToIndex: { [key: number]: number } = {};
   var listener: TickEventListener = {
@@ -57,7 +58,7 @@ onmessage = function(e) {
     }
   };
 
-  var field = new Field();
+  var field = new Field(isDemo);
   sources.forEach((value, index) => {
     var sourcer = create(field, value, index);
     field.addSourcer(sourcer);

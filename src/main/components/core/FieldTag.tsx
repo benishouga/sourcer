@@ -12,6 +12,7 @@ import BackgroundTag from './BackgroundTag';
 import Utils from '../../core/Utils';
 
 export default class FieldTag extends React.Component<{
+  isDemo: boolean;
   height: number;
   width: number;
   scale: number;
@@ -101,6 +102,11 @@ export default class FieldTag extends React.Component<{
       return <FxTag key={b.i} model={b} />
     });
 
+    var hudTag: JSX.Element = null;
+    if (!this.props.isDemo) {
+      hudTag = <HudTag field={field} result={result} players={players} screen={screen} hideStatus={this.props.hideStatus} hideController={this.props.hideController} />;
+    }
+
     return (
       <g>
         <BackgroundTag screen={screen} />
@@ -112,8 +118,7 @@ export default class FieldTag extends React.Component<{
           </g>
           {fxs}
         </g>
-
-        <HudTag field={field} result={result} players={players} screen={screen} hideStatus={this.props.hideStatus} hideController={this.props.hideController} />
+        {hudTag}
       </g>
     );
   }

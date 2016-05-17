@@ -111,7 +111,7 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
 
       return (
         <Grid>
-          <Cell col={6}>
+          <Cell col={6} tablet={12} phone={12}>
             <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
               <CardTitle>
                 <Button raised ripple colored onClick={this.save.bind(this) }><Icon name="save" /> {resource.save}</Button>
@@ -123,7 +123,7 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
             <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} onSave={this.save.bind(this) } className="mdl-shadow--2dp" />
             <Snackbar active={this.state.isSavedSnackbarActive} onTimeout={this.hideSavedSnackbar.bind(this) }>{resource.saved}</Snackbar>
           </Cell>
-          <Cell col={6}>
+          <Cell col={6} tablet={12} phone={12}>
             <BotSelector selected={fiddle} onSelect={this.selectBot} />
             <Arena players={players} ref="arena" />
           </Cell>

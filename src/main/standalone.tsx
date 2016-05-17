@@ -11,6 +11,7 @@ for (let i = 0; i < screens.length; i++) {
   let width = parseInt(output.getAttribute('data-width')) || -1;
   let height = parseInt(output.getAttribute('data-height')) || 384;
   let scale = parseFloat(output.getAttribute('data-scale')) || 1.0;
+  let isDemo = output.hasAttribute('data-demo');
   let playerIdsText = output.getAttribute('data-players');
   if (playerIdsText) {
     let players = playerIdsText.split(',').map((value, index) => {
@@ -25,10 +26,10 @@ for (let i = 0; i < screens.length; i++) {
         }
         setTimeout(r, 1000);
       } else {
-        playerInfo = { name: 'solodemo', color: colors[index], ai: element.innerText };
+        playerInfo = { name: 'demo', color: colors[index], ai: element.innerText };
       }
       return playerInfo;
     });
-    render(<Arena width={width} height={height} scale={scale} players={players} path="dist/arena.js" />, output);
+    render(<Arena width={width} height={height} scale={scale} players={players} isDemo={isDemo} path="dist/arena.js" />, output);
   }
 }

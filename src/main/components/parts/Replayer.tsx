@@ -41,7 +41,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   constructor(props: ReplayerProps) {
     super();
     this.state = {
-      playing: false,
+      playing: props.gameDump.isDemo,
       frame: 0
     };
   }
@@ -79,14 +79,14 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       let result = this.props.gameDump.result && this.props.gameDump.result.frame <= this.state.frame && this.props.gameDump.result;
       let players = this.props.gameDump.players;
       let frame = this.props.gameDump.frames[this.state.frame];
-      let solo = this.props.gameDump.result.isSoloDemo;
+      let demo = this.props.gameDump.isDemo;
 
       let playOrPause = this.state.playing ?
         (<FABButton mini colored ripple onClick={this.onPause.bind(this) }><Icon name="pause" /></FABButton>) :
         (<FABButton mini colored ripple onClick={this.onPlay.bind(this) }><Icon name="play_arrow"  /></FABButton>);
 
-      let statuses = solo ? null : this.statuses(frame, players);
-      let readyHud = !solo && this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null;
+      let statuses = demo ? null : this.statuses(frame, players);
+      let readyHud = !demo && this.state.frame === 0 && !this.state.playing ? <ReadyHudTag screenHeight={scaledHeight} player1={players[0]} player2={players[1]} /> : null;
 
       return (
         <div ref="root">
@@ -94,6 +94,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
               <g transform={"scale(" + scale + ", " + scale + ")"}>
                 <FieldTag
+                  isDemo={this.props.gameDump.isDemo}
                   field={frame}
                   result={result}
                   players={players}
@@ -131,8 +132,11 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (this.props.gameDump.frames && this.state.playing) {
       var nextFrame = this.state.frame + 1;
       if (nextFrame < this.props.gameDump.frames.length) {
-
         this.setState({ frame: nextFrame });
+      } else {
+        if (this.props.gameDump.isDemo) {
+          this.setState({ frame: 0 });
+        }
       }
     }
   }
@@ -143,8 +147,8 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     return (
       <Grid>
-        <Cell col={6} tablet={6}>{player1Status}</Cell>
-        <Cell col={6} tablet={6}>{player2Status}</Cell>
+        <Cell col={6} tablet={12} phone={12}>{player1Status}</Cell>
+        <Cell col={6} tablet={12} phone={12}>{player2Status}</Cell>
       </Grid>
     );
   }

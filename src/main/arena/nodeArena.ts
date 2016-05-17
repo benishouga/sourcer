@@ -31,6 +31,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
 
   return new Promise<GameDump>((resolve, reject) => {
     let game: GameDump = {
+      isDemo: false,
       result: null,
       players: {},
       frames: []

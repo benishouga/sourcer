@@ -1,6 +1,26 @@
 body {
   background-color: #fafafa;
 }
+.scr-main {
+  max-width: 1240px;
+  padding: 0;
+  margin: 8px auto 0;
+  width: 100%;
+}
+
+.scr-match-show {
+  max-width: 800px;
+  padding: 0;
+  margin: 8px auto 0;
+  width: 100%;
+}
+
+.scr-edit {
+  max-width: 800px;
+  padding: 0;
+  margin: 8px auto 0;
+  width: 100%;
+}
 
 .scr-header .mdl-layout__header-row {
   padding-left: 40px;

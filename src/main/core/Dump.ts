@@ -56,6 +56,8 @@ export interface GameDump {
   players: PlayersDump;
   /** Frames */
   frames: FieldDump[];
+  /** Frames */
+  isDemo: boolean;
 }
 
 export interface PlayersDump {
@@ -69,7 +71,6 @@ export interface ProfileDump {
 }
 
 export interface ResultDump {
-  isSoloDemo: boolean;
   isDraw?: boolean;
   winnerId?: number;
   frame: number;
