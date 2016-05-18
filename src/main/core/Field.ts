@@ -7,6 +7,8 @@ import Utils from './Utils';
 import TickEventListener from './TickEventListener';
 import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump} from './Dump';
 
+const DEMO_FRAME_LENGTH = 128;
+
 export default class Field {
   currentId = 0;
   sourcers: Sourcer[];
@@ -107,7 +109,7 @@ export default class Field {
 
   checkFinish(listener: TickEventListener) {
     if (this.isDemo) {
-      if (256 < this.frame) {
+      if (DEMO_FRAME_LENGTH < this.frame) {
         this.result = { frame: this.frame };
         listener.onFinished(this.result);
       }
