@@ -41,9 +41,13 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   constructor(props: ReplayerProps) {
     super();
     this.state = {
-      playing: props.gameDump.isDemo,
+      playing: false,
       frame: 0
     };
+  }
+
+  onPlayPauseToggle() {
+    this.setState({ playing: !this.state.playing });
   }
 
   onPlay() {
@@ -90,7 +94,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
       return (
         <div ref="root">
-          <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }}>
+          <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }} onClick={this.onPlayPauseToggle.bind(this) }>
             <svg width={width} height={height} viewBox={(-width / 2) + " 0 " + width + " " + height}>
               <g transform={"scale(" + scale + ", " + scale + ")"}>
                 <FieldTag
