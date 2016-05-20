@@ -1,6 +1,6 @@
 export var fewAttack = `
-let current = 150; // 維持する高さを決定するための変数
-return function(controller) {
+var current = 150; // 維持する高さを決定するための変数
+var ai = function(controller) {
   if (controller.frame() % 32 === 0) {
     // 32 frame に一度 高さを変える
     current = Math.random() * 200 + 50;
@@ -23,7 +23,7 @@ return function(controller) {
   }
 
   // 10 frame に一度 攻撃する
-  if(controller.frame() % 10 === 0) {
+  if (controller.frame() % 10 === 0) {
     // 温度が低い場合だけ攻撃する
     if (controller.temperature() < 80) {
 
@@ -42,4 +42,5 @@ return function(controller) {
     }
   }
 };
+return ai;
 `;

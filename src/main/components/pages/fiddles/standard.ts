@@ -3,7 +3,7 @@ export var standard = `
 var missileAi = function(controller) {
   // 相手が左側にいるか判定する
   // （左90度の角度から、180度の範囲、距離10000以内に敵が存在するか判定）
-  if(controller.scanEnemy(90, 180)) {
+  if (controller.scanEnemy(90, 180)) {
     // 左側にいる場合は、左へ回転
     controller.turnLeft();
   } else {
@@ -15,7 +15,7 @@ var missileAi = function(controller) {
 };
 
 // **** 本体用のAIを定義 ****
-return function(controller) {
+var ai = function(controller) {
   // 前方からの攻撃を避ける
   // （相手の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
   if (controller.scanAttack(0, 60, 60)) {
@@ -81,4 +81,5 @@ return function(controller) {
   controller.ascent();
   return;
 };
+return ai;
 `;

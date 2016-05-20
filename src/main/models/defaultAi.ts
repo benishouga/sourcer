@@ -13,9 +13,8 @@ var missileAi = function(controller) {
   controller.speedUp();
 };
 
-
 // **** 本体用のAIを定義 ****
-return function(controller) {
+var ai = function(controller) {
   // 前方からの攻撃を避ける
   // （敵の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
   if (controller.scanAttack(0, 60, 60)) {
@@ -55,4 +54,5 @@ return function(controller) {
   }
   // 近くにいなければ前進する
   controller.ahead();
-};`;
+};
+return ai;`;

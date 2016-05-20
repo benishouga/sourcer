@@ -1,5 +1,5 @@
 export var fixedBattery = `
-return function(controller) {
+var ai = function(controller) {
 
   // 低い位置で浮き続ける
   if (controller.altitude() < 15) {
@@ -7,7 +7,7 @@ return function(controller) {
   }
 
   // 4 frame に一度 攻撃する
-  if(controller.frame() % 4 === 0) {
+  if (controller.frame() % 4 === 0) {
     if (controller.temperature() < 80) {
 
       // 20 度ずつ敵を探し、見つけた方に攻撃する
@@ -51,4 +51,5 @@ return function(controller) {
     }
   }
 };
+return ai;
 `;

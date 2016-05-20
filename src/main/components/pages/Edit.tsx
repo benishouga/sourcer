@@ -36,7 +36,6 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
     };
   }
 
-  sourceOfResponse: string;
   editingSource: string;
 
   onTextChange = (value: string) => {
@@ -54,7 +53,6 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
   componentDidMount() {
     let request = User.select();
     request.then((user) => {
-      this.sourceOfResponse = user.source;
       this.editingSource = user.source;
       this.setState({
         user: user,
@@ -120,7 +118,7 @@ export default class AiEdit extends React.Component<AiEditProps, AiEditState> {
                 <Button raised ripple colored onClick={this.reload.bind(this) } style={{ marginLeft: '8px' }}><Icon name="play_arrow" /> {resource.test}</Button>
               </CardTitle>
             </Card>
-            <AceEditor code={this.sourceOfResponse} onChange={this.onTextChange} onSave={this.save.bind(this) } className="mdl-shadow--2dp" />
+            <AceEditor code={this.editingSource} onChange={this.onTextChange} onSave={this.save.bind(this) } className="mdl-shadow--2dp" />
             <Snackbar active={this.state.isSavedSnackbarActive} onTimeout={this.hideSavedSnackbar.bind(this) }>{resource.saved}</Snackbar>
           </Cell>
           <Cell col={6} tablet={12} phone={12}>

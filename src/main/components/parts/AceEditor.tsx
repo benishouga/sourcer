@@ -49,14 +49,8 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     });
   }
 
-  componentWillReceiveProps(nextProps: AceEditorProps) {
-    let oldProps = this.props;
-    console.log(nextProps);
-    if (this.editor.getValue() !== nextProps.code) {
-      this.silent = true;
-      this.editor.setValue(nextProps.code, nextProps.cursorStart);
-      this.silent = false;
-    }
+  shouldComponentUpdate(nextProps: AceEditorProps) {
+    return false;
   }
 
   onChange() {

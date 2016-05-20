@@ -12,9 +12,9 @@ var missileAi = function(controller) {
   }
 };
 
-let current = 150;
-return function(controller) {
-  if(controller.frame() % 32 === 0) {
+var current = 150;
+var ai = function(controller) {
+  if (controller.frame() % 32 === 0) {
     current = Math.random() * 200 + 50;
   }
 
@@ -31,7 +31,7 @@ return function(controller) {
     controller.ahead();
   }
 
-  if(controller.frame() % 10 === 0) {
+  if (controller.frame() % 10 === 0) {
     if (controller.temperature() < 80) {
       if (controller.scanEnemy(0, 20)) {
         controller.fireLaser(0, 100);
@@ -46,4 +46,5 @@ return function(controller) {
     controller.fireMissile(missileAi);
   }
 };
+return ai;
 `;
