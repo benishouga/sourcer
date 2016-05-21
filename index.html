@@ -138,17 +138,10 @@ return ai;</textarea>
             <h2>概要</h2>
             <p>Sourcer というプログラムで動かす機体を使い対戦をするゲームです。</p>
             <p>Sourcer のプログラムは JavaScript というプログラミング言語を使い記述できます。</p>
-            <h4>ステータス</h4>
-            <dl>
-              <dt>シールド(Shield)</dt>
-              <dd>初期値 100 でダメージをうけると減ります。0 になると戦闘不能となり、相手より先に戦闘不能になると負けとなってしまいます。</dd>
-              <dt>温度(temperature)</dt>
-              <dd>初期値 0 で攻撃を行ったり、ダメージをうけると上昇します。温度が 100 を超えると、徐々に耐久力が減っていきます。温度は時間経過で徐々に減っていきます。</dd>
-              <dt>燃料(fuel)</dt>
-              <dd>Sourcer が移動を行うと徐々に減っていきます。0 になると移動が行えなくなります。</dd>
-              <dt>AIミサイル残弾(missileAmmo)</dt>
-              <dd>初期値 20 でミサイルを使うごとに減少します。0 になるとミサイルが発射できなくなります。</dd>
-            </dl>
+
+            <h4>ルール</h4>
+            <p>対戦相手のシールドを先に 0 にした方が勝ちとなります。</p>
+
             <h4>攻撃手段</h4>
             <dl>
               <dt>レーザー</dt>
@@ -156,6 +149,19 @@ return ai;</textarea>
               <dt>AIミサイル</dt>
               <dd>Sourcerと同様、プログラムで動かすことができる攻撃手段です。20発まで発射することができます。AIミサイルはレーザーで撃ち落とすことができます。</dd>
             </dl>
+
+            <h4>ステータス</h4>
+            <dl>
+              <dt>シールド</dt>
+              <dd>初期値 100 でダメージをうけると減ります。0 になると戦闘不能となり、相手より先に戦闘不能になると負けとなってしまいます。</dd>
+              <dt>温度</dt>
+              <dd>初期値 0 で攻撃を行ったり、ダメージをうけると上昇します。温度が 100 を超えると、徐々に耐久力が減っていきます。温度は時間経過で徐々に減っていきます。</dd>
+              <dt>燃料</dt>
+              <dd>Sourcer が移動を行うと徐々に減っていきます。0 になると移動が行えなくなります。</dd>
+              <dt>AIミサイル残弾</dt>
+              <dd>初期値 20 でミサイルを使うごとに減少します。0 になるとミサイルが発射できなくなります。</dd>
+            </dl>
+
             <h4>その他</h4>
             <ul>
               <li>高度が0の位置に地面があり、地面に触れるとダメージをうけます。</li>
@@ -171,7 +177,7 @@ return ai;</textarea>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
                   <pre class="code" id="sample1">var ai = function(controller) {
   if (controller.altitude() < 100) {
-    // 高度が下がってきたら上昇する
+    // 高度が下がったら上昇
     controller.ascent();
   }
   // 前進する
@@ -196,25 +202,52 @@ return ai;</pre>
               <p>AIミサイル の AI は、発射命令の際、引数に指定します。</p>
               <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-                  <pre class="code" id="sample2">var missileAi = function(missileController) {
-  // 左に回転しながら スピードを上げる
-  missileController.turnLeft();
-  missileController.speedUp();
+                  <pre style="display:none;" id="sample2">var missileAi = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
+  }
+  controller.speedUp();
 };
 var ai = function(controller) {
   if (controller.altitude() < 100) {
-    // 高度が下がってきたら上昇する
     controller.ascent();
   }
-  // 16フレームに一回　ミサイルを発射する
   if (controller.frame() % 16 === 0) {
     controller.fireMissile(missileAi);
   }
 };
 return ai;</pre>
+<pre id="fiddle100" style="display: none;">
+	return function(controller) {
+		if (controller.altitude() < 100) {
+	    controller.ascent();
+	    return;
+	  }
+	};
+</pre>
+<pre class="code">var missileAi = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    // 左側にいる場合は、左へ回転
+    controller.turnLeft();
+  } else {
+    // それ以外は、右へ回転
+    controller.turnRight();
+  }
+  // 今向いている方向へ、加速する
+  controller.speedUp();
+};
+
+var ai = function(controller) {
+  // ・・・省略・・・
+  controller.fireMissile(missileAi);
+  // ・・・省略・・・
+};
+return ai;</pre>
                 </div>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-                  <div class="sourcer-standalone" data-height="256" data-players="sample2" data-demo></div>
+                  <div class="sourcer-standalone" data-height="256" data-players="sample2,fiddle100" data-demo></div>
                 </div>
               </div>
           </div>
@@ -272,7 +305,7 @@ return ai;</pre>
                 <dt>{number} angle</dt>
                 <dd>レーダーの範囲・角度。</dd>
                 <dt>{number} renge</dt>
-                <dd>レーダーの距離。</dd>
+                <dd>レーダーの距離。省略した場合、距離に関係無く判定される。</dd>
               </dl>
               <dl><dt>returns {boolean}</dt><dd>指定範囲内に敵が入っていた場合 true</dd>
               <h6>Sample</h6>
@@ -316,7 +349,7 @@ return ai;</pre>
                 <dt>{number} angle</dt>
                 <dd>レーダーの範囲・角度。</dd>
                 <dt>{number} renge</dt>
-                <dd>レーダーの距離。</dd>
+                <dd>レーダーの距離。省略した場合、距離に関係無く判定される。</dd>
               </dl>
               <dl><dt>returns {boolean}</dt><dd>指定範囲内に敵の攻撃が入っていた場合 true</dd>
             </div>
@@ -402,7 +435,7 @@ return ai;</pre>
                 <dt>{number} angle</dt>
                 <dd>レーダーの範囲・角度。</dd>
                 <dt>{number} renge</dt>
-                <dd>レーダーの距離。</dd>
+                <dd>レーダーの距離。省略した場合、距離に関係無く判定される。</dd>
               </dl>
               <dl><dt>returns {boolean}</dt><dd>指定範囲内に敵が入っていた場合 true</dd>
               <h6>Sample</h6>

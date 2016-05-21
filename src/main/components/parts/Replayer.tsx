@@ -47,15 +47,26 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   }
 
   onPlayPauseToggle() {
-    this.setState({ playing: !this.state.playing });
+    if (this.state.playing) {
+      this.onPause();
+    } else {
+      this.onPlay();
+    }
   }
 
   onPlay() {
     this.setState({ playing: true });
+    if (!this.animationFrameHandler) {
+      this.animationFrameHandler = requestAnimationFrame(() => this.tick());
+    }
   }
 
   onPause() {
     this.setState({ playing: false });
+    if (this.animationFrameHandler) {
+      cancelAnimationFrame(this.animationFrameHandler);
+      this.animationFrameHandler = null;
+    }
   }
 
   onReload() {
@@ -196,9 +207,6 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     );
   }
 
-  componentDidMount() {
-    this.animationFrameHandler = requestAnimationFrame(() => this.tick());
-  }
   componentWillUnmount() {
     cancelAnimationFrame(this.animationFrameHandler)
   }
