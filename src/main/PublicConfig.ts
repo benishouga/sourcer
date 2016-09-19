@@ -6,4 +6,4 @@ export default {
   storage: {
     bucket: 'dev-sourcer'
   }
-}
+};

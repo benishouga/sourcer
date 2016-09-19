@@ -18,7 +18,7 @@
     "gulp-nodemon": "^2.0.4",
     "gulp-stylus": "^2.0.6",
     "gulp-tslint": "^4.3.0",
-    "gulp-typescript": "^2.7.4",
+    "gulp-typescript": "2.13.0",
     "mocha": "^2.2.5",
     "mockgoose": "^5.2.0",
     "power-assert": "^1.2.0",
