@@ -2,24 +2,24 @@ import Field from './Field';
 import Actor from './Actor';
 
 export default class Controller {
-  field: Field;
-  frame: () => number;
-  altitude: () => number;
-  wait: (frame: number) => void;
-  fuel: () => number;
-  log: (...messages: any[]) => void;
+  public field: Field;
+  public frame: () => number;
+  public altitude: () => number;
+  public wait: (frame: number) => void;
+  public fuel: () => number;
+  public log: (...messages: any[]) => void;
 
-  countOfThinks: number = 0;
-  preThink = () => {
-    this.countOfThinks++;
-  };
+  private framesOfLife: number = 0;
+  public preThink = () => {
+    this.framesOfLife++;
+  }
 
   constructor(actor: Actor) {
     this.log = (...messages: any[]) => {
       console.log.apply(console, messages);
     };
     this.field = actor.field;
-    this.frame = () => this.countOfThinks;
+    this.frame = () => this.framesOfLife;
     this.altitude = () => actor.position.y;
     this.wait = (frame: number) => {
       if (0 < frame) {

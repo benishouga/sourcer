@@ -1,9 +1,8 @@
-import chainchomp from '../../libs/chainchomp';
 import Actor from './Actor';
 import Field from './Field';
 import SourcerCommand from './SourcerCommand';
 import SourcerController from './SourcerController';
-import ShotParam from './ShotParam';
+import FireParam from './FireParam';
 import Configs from './Configs';
 import Consts from './Consts';
 import Utils from './Utils';
@@ -11,45 +10,47 @@ import V from './V';
 import Shot from './Shot';
 import Laser from './Laser';
 import Missile from './Missile';
-import {SourcerDump} from './Dump';
+import { SourcerDump } from './Dump';
 import Fx from './Fx';
+import ScriptLoader from './ScriptLoader';
 
 interface ExportScope {
   module: {
-    exports: Function;
+    exports: ((controller: SourcerController) => void) | null;
   };
 }
 
 export default class Sourcer extends Actor {
-  alive = true;
-  temperature = 0;
-  shield = Configs.INITIAL_SHIELD;
-  missileAmmo = Configs.INITIAL_MISSILE_AMMO;
-  fuel = Configs.INITIAL_FUEL;
+  public alive = true;
+  public temperature = 0;
+  public shield = Configs.INITIAL_SHIELD;
+  public missileAmmo = Configs.INITIAL_MISSILE_AMMO;
+  public fuel = Configs.INITIAL_FUEL;
 
-  command: SourcerCommand;
-  controller: SourcerController;
-  ai: Function;
+  public command: SourcerCommand;
+  private controller: SourcerController;
+  private ai: ((controller: SourcerController) => void) | null;
 
-  constructor(field: Field, x: number, y: number, ai: string, public account: string, public name: string, public color: string) {
+  constructor(
+    field: Field, x: number, y: number, public aiSource: string,
+    public account: string, public name: string, public color: string) {
+
     super(field, x, y);
+
     this.direction = Math.random() < 0.5 ? Consts.DIRECTION_RIGHT : Consts.DIRECTION_LEFT;
     this.command = new SourcerCommand(this);
     this.controller = new SourcerController(this);
+  }
 
+  public compile(scriptLoader: ScriptLoader) {
     try {
-      let scope: ExportScope = {
-        module: {
-          exports: null
-        }
-      };
-      this.ai = chainchomp(ai, scope) || scope.module && scope.module.exports;
+      this.ai = scriptLoader.load(this.aiSource);
     } catch (error) {
       this.ai = null;
     }
   }
 
-  onThink() {
+  public onThink() {
     if (this.ai === null || !this.alive) {
       return;
     }
@@ -65,11 +66,11 @@ export default class Sourcer extends Actor {
     }
   }
 
-  action() {
+  public action() {
     if (!this.alive && Utils.rand(8) < 1) {
-      var position = this.position.add(Utils.rand(16) - 8, Utils.rand(16) - 8);
-      var speed = new V(Utils.rand(1) - 0.5, Utils.rand(1) + 0.5);
-      var length = Utils.rand(8) + 4;
+      const position = this.position.add(Utils.rand(16) - 8, Utils.rand(16) - 8);
+      const speed = new V(Utils.rand(1) - 0.5, Utils.rand(1) + 0.5);
+      const length = Utils.rand(8) + 4;
       this.field.addFx(new Fx(this.field, position, speed, length));
     }
 
@@ -81,15 +82,15 @@ export default class Sourcer extends Actor {
 
     // control altitude by the invisible hand
     if (Configs.TOP_INVISIBLE_HAND < this.position.y) {
-      var invisiblePower = (this.position.y - Configs.TOP_INVISIBLE_HAND) * 0.1;
+      const invisiblePower = (this.position.y - Configs.TOP_INVISIBLE_HAND) * 0.1;
       this.speed = this.speed.subtract(0, Configs.GRAVITY * invisiblePower);
     }
 
     // control distance by the invisible hand
-    var diff = this.field.center - this.position.x;
+    const diff = this.field.center - this.position.x;
     if (Configs.DISTANCE_BORDAR < Math.abs(diff)) {
-      var n = diff < 0 ? -1 : 1;
-      var invisibleHand = (Math.abs(diff) - Configs.DISTANCE_BORDAR) * Configs.DISTANCE_INVISIBLE_HAND * n;
+      const n = diff < 0 ? -1 : 1;
+      const invisibleHand = (Math.abs(diff) - Configs.DISTANCE_BORDAR) * Configs.DISTANCE_INVISIBLE_HAND * n;
       this.position = new V(this.position.x + invisibleHand, this.position.y);
     }
 
@@ -104,10 +105,10 @@ export default class Sourcer extends Actor {
     this.temperature = Math.max(this.temperature, 0);
 
     // overheat
-    var overheat = (this.temperature - Configs.OVERHEAT_BORDER);
+    const overheat = (this.temperature - Configs.OVERHEAT_BORDER);
     if (0 < overheat) {
-      var linearDamage = overheat * Configs.OVERHEAT_DAMAGE_LINEAR_WEIGHT;
-      var powerDamage = Math.pow(overheat * Configs.OVERHEAT_DAMAGE_POWER_WEIGHT, 2);
+      const linearDamage = overheat * Configs.OVERHEAT_DAMAGE_LINEAR_WEIGHT;
+      const powerDamage = Math.pow(overheat * Configs.OVERHEAT_DAMAGE_POWER_WEIGHT, 2);
       this.shield -= (linearDamage + powerDamage);
     }
     this.shield = Math.max(0, this.shield);
@@ -116,17 +117,17 @@ export default class Sourcer extends Actor {
     this.command.reset();
   }
 
-  fire(param: ShotParam) {
-    if (param.shotType === "Laser") {
-      var direction = this.opposite(param.direction);
-      var shot = new Laser(this.field, this, direction, param.power);
+  public fire(param: FireParam) {
+    if (param.shotType === 'Laser') {
+      const direction = this.opposite(param.direction);
+      const shot = new Laser(this.field, this, direction, param.power);
       shot.reaction(this);
       this.field.addShot(shot);
     }
 
     if (param.shotType === 'Missile') {
       if (0 < this.missileAmmo) {
-        var missile = new Missile(this.field, this, param.ai);
+        const missile = new Missile(this.field, this, param.ai);
         missile.reaction(this);
         this.missileAmmo--;
         this.field.addShot(missile);
@@ -134,7 +135,7 @@ export default class Sourcer extends Actor {
     }
   }
 
-  opposite(direction: number): number {
+  public opposite(direction: number): number {
     if (this.direction === Consts.DIRECTION_LEFT) {
       return Utils.toOpposite(direction);
     } else {
@@ -142,22 +143,22 @@ export default class Sourcer extends Actor {
     }
   }
 
-  onHit(shot: Shot) {
+  public onHit(shot: Shot) {
     this.speed = this.speed.add(shot.speed.multiply(Configs.ON_HIT_SPEED_GIVEN_RATE));
     this.shield -= shot.damage();
     this.shield = Math.max(0, this.shield);
     this.field.removeShot(shot);
   }
 
-  dump(): SourcerDump {
+  public dump(): SourcerDump {
     return {
       i: this.id,
       p: this.position.minimize(),
       d: this.direction,
-      h: Math.round(this.shield),
-      t: Math.round(this.temperature),
+      h: Math.ceil(this.shield),
+      t: Math.ceil(this.temperature),
       a: this.missileAmmo,
-      f: Math.round(this.fuel)
+      f: Math.ceil(this.fuel)
     };
   }
 }

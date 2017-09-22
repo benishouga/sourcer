@@ -51,12 +51,12 @@ export interface FieldDump {
 
 export interface GameDump {
   /** Result */
-  result: ResultDump;
-  /** Frames */
+  result: ResultDump | null;
+  /** Players */
   players: PlayersDump;
   /** Frames */
   frames: FieldDump[];
-  /** Frames */
+  /** isDemo */
   isDemo: boolean;
 }
 
@@ -71,7 +71,8 @@ export interface ProfileDump {
 }
 
 export interface ResultDump {
-  isDraw?: boolean;
-  winnerId?: number;
+  isDraw: boolean | null;
+  timeout: string | null;
+  winnerId: number | null;
   frame: number;
 }

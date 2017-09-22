@@ -3,24 +3,25 @@ import Sourcer from './Sourcer';
 import Field from './Field';
 import Configs from './Configs';
 import Utils from './Utils';
-import ShotParam from './ShotParam';
+import FireParam from './FireParam';
+import MissileController from './MissileController';
 
 export default class SourcerController extends Controller {
-  shield: () => number;
-  temperature: () => number;
-  missileAmmo: () => number;
+  public shield: () => number;
+  public temperature: () => number;
+  public missileAmmo: () => number;
 
-  scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
-  scanAttack: (direction: number, angle: number, renge?: number) => boolean;
+  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
+  public scanAttack: (direction: number, angle: number, renge?: number) => boolean;
 
-  ahead: () => void;
-  back: () => void;
-  ascent: () => void;
-  descent: () => void;
-  turn: () => void;
+  public ahead: () => void;
+  public back: () => void;
+  public ascent: () => void;
+  public descent: () => void;
+  public turn: () => void;
 
-  fireLaser: (direction: number, power: number) => void;
-  fireMissile: (ai: Function) => void;
+  public fireLaser: (direction: number, power: number) => void;
+  public fireMissile: (ai: (controller: MissileController) => void) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);
@@ -30,22 +31,22 @@ export default class SourcerController extends Controller {
     this.missileAmmo = () => sourcer.missileAmmo;
     this.fuel = () => sourcer.fuel;
 
-    var field = sourcer.field;
-    var command = sourcer.command;
+    const field = sourcer.field;
+    const command = sourcer.command;
     this.scanEnemy = (direction, angle, renge) => {
       command.validate();
       sourcer.wait += Configs.SCAN_WAIT;
-      direction = sourcer.opposite(direction);
-      renge = renge || Number.MAX_VALUE;
-      var radar = Utils.createRadar(sourcer.position, direction, angle, renge);
+      const oppositedDirection = sourcer.opposite(direction);
+      const normalizedRenge = renge || Number.MAX_VALUE;
+      const radar = Utils.createRadar(sourcer.position, oppositedDirection, angle, normalizedRenge);
       return field.scanEnemy(sourcer, radar);
     };
     this.scanAttack = (direction, angle, renge) => {
       command.validate();
       sourcer.wait += Configs.SCAN_WAIT;
-      direction = sourcer.opposite(direction);
-      renge = renge || Number.MAX_VALUE;
-      var radar = Utils.createRadar(sourcer.position, direction, angle, renge);
+      const oppositedDirection = sourcer.opposite(direction);
+      const normalizedRenge = renge || Number.MAX_VALUE;
+      const radar = Utils.createRadar(sourcer.position, normalizedRenge, angle, normalizedRenge);
       return field.scanAttack(sourcer, radar);
     };
     this.ahead = () => {
@@ -71,17 +72,12 @@ export default class SourcerController extends Controller {
 
     this.fireLaser = (direction, power) => {
       command.validate();
-      command.fire = new ShotParam();
-      command.fire.power = Math.min(Math.max(power || 8, 3), 8);
-      command.fire.direction = direction;
-      command.fire.shotType = 'Laser';
+      command.fire = FireParam.laser(power, direction);
     };
 
     this.fireMissile = (ai) => {
       command.validate();
-      command.fire = new ShotParam();
-      command.fire.ai = ai;
-      command.fire.shotType = 'Missile';
+      command.fire = FireParam.missile(ai);
     };
 
   }

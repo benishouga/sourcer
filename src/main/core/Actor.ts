@@ -5,12 +5,12 @@ import Configs from './Configs';
 import Shot from './Shot';
 
 export default class Actor {
-  id: number;
-  position: V;
-  speed: V;
-  direction: number;
-  size = Configs.COLLISION_SIZE;
-  wait = 0;
+  public id: number;
+  public position: V;
+  public speed: V;
+  public direction: number;
+  public size = Configs.COLLISION_SIZE;
+  public wait = 0;
 
   constructor(public field: Field, x: number, y: number) {
     this.wait = 0;
@@ -18,32 +18,32 @@ export default class Actor {
     this.speed = new V(0, 0);
   }
 
-  think() {
+  public think() {
     if (this.wait <= 0) {
       this.wait = 0;
       this.onThink();
     } else {
-      this.wait--;
+      this.wait = this.wait - 1;
     }
   }
 
-  onThink(): void {
+  public onThink(): void {
     // not think anything.
-  };
+  }
 
-  action() {
+  public action(): void {
     // do nothing
   }
 
-  move() {
+  public move() {
     this.position = this.position.add(this.speed);
   }
 
-  onHit(shot: Shot) {
+  public onHit(shot: Shot) {
     // do nothing
   }
 
-  dump() {
+  public dump() {
     throw new Error('not implimentation');
   }
 }

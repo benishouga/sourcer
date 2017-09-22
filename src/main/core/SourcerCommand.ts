@@ -1,27 +1,27 @@
 import Command from './Command';
 import Sourcer from './Sourcer';
 import Configs from './Configs';
-import ShotParam from './ShotParam';
+import FireParam from './FireParam';
 
 export default class SourcerCommand extends Command {
-  ahead: number;
-  ascent: number;
-  turn: boolean;
-  fire: ShotParam;
+  public ahead: number;
+  public ascent: number;
+  public turn: boolean;
+  public fire: FireParam | null;
 
   constructor(public sourcer: Sourcer) {
     super();
     this.reset();
   }
 
-  reset() {
+  public reset() {
     this.ahead = 0;
     this.ascent = 0;
     this.turn = false;
     this.fire = null;
   }
 
-  execute() {
+  public execute() {
     if (this.fire) {
       this.sourcer.fire(this.fire);
     }

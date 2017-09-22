@@ -1,44 +1,48 @@
 import V from './V';
 import Consts from './Consts';
 
-var EPSILON = 10e-12;
+const EPSILON = 10e-12;
 
 export default class Utils {
-  static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
-    var checkDistance = (t: V) => c.distance(t) <= renge;
+  public static wait() {
+    return new Promise<void>(resolve => setTimeout(resolve, 0));
+  }
+
+  public static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
+    const checkDistance = (t: V) => c.distance(t) <= renge;
 
     if (360 <= angle) {
       return checkDistance;
     }
 
-    var checkLeft = Utils.side(c, direction + angle / 2);
-    var checkRight = Utils.side(c, direction + 180 - angle / 2);
+    const checkLeft = Utils.side(c, direction + angle / 2);
+    const checkRight = Utils.side(c, direction + 180 - angle / 2);
 
     if (angle < 180) {
-      return (t) => checkLeft(t) && checkRight(t) && checkDistance(t);
+      return t => checkLeft(t) && checkRight(t) && checkDistance(t);
     } else {
-      return (t) => (checkLeft(t) || checkRight(t)) && checkDistance(t);
+      return t => (checkLeft(t) || checkRight(t)) && checkDistance(t);
     }
   }
 
-  static side(base: V, degree: number): (t: V) => boolean {
-    var radian = Utils.toRadian(degree);
-    var direction = new V(Math.cos(radian), Math.sin(radian));
-    var previously = base.x * direction.y - base.y * direction.x - EPSILON;
+  public static side(base: V, degree: number): (t: V) => boolean {
+    const radian = Utils.toRadian(degree);
+    const direction = new V(Math.cos(radian), Math.sin(radian));
+    const previously = base.x * direction.y - base.y * direction.x - EPSILON;
     return (target: V) => {
       return 0 <= target.x * direction.y - target.y * direction.x - previously;
     };
   }
 
-  static calcDistance(f: V, t: V, p: V): number {
-    var toFrom = t.subtract(f);
-    var pFrom = p.subtract(f);
+  public static calcDistance(f: V, t: V, p: V): number {
+    const toFrom = t.subtract(f);
+    const pFrom = p.subtract(f);
     if (toFrom.dot(pFrom) < EPSILON) {
       return pFrom.length();
     }
 
-    var fromTo = f.subtract(t);
-    var pTo = p.subtract(t);
+    const fromTo = f.subtract(t);
+    const pTo = p.subtract(t);
     if (fromTo.dot(pTo) < EPSILON) {
       return pTo.length();
     }
@@ -46,23 +50,24 @@ export default class Utils {
     return Math.abs(toFrom.cross(pFrom) / toFrom.length());
   }
 
-  static toRadian(degree: number): number {
+  public static toRadian(degree: number): number {
     return degree * (Math.PI / 180);
   }
 
-  static toOpposite(degree: number): number {
-    degree = degree % 360;
-    if (degree < 0) {
-      degree = degree + 360;
+  public static toOpposite(degree: number): number {
+    const normalized = Utils.normalizeDegree(degree);
+    if (normalized <= 180) {
+      return (90 - normalized) * 2 + normalized;
     }
-    if (degree <= 180) {
-      return (90 - degree) * 2 + degree;
-    } else {
-      return (270 - degree) * 2 + degree;
-    }
+    return (270 - normalized) * 2 + normalized;
   }
 
-  static rand(renge: number): number {
+  private static normalizeDegree(degree: number) {
+    const remainder = degree % 360;
+    return remainder < 0 ? remainder + 360 : remainder;
+  }
+
+  public static rand(renge: number): number {
     return Math.random() * renge;
   }
 }

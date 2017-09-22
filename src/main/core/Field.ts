@@ -5,114 +5,161 @@ import Shot from './Shot';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import {FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump} from './Dump';
+import { FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump } from './Dump';
+import ScriptLoader from './ScriptLoader';
 
 const DEMO_FRAME_LENGTH = 128;
 
 export default class Field {
-  currentId = 0;
-  sourcers: Sourcer[];
-  shots: Shot[];
-  fxs: Fx[];
-  actorCounter: number;
-  frame: number;
-  finishedFrame: number;
-  center: number;
-  result: ResultDump;
-  isFinished: boolean = false;
+  private currentId = 0;
+  private sourcers: Sourcer[];
+  private shots: Shot[];
+  private fxs: Fx[];
+  private frame: number;
+  private result: ResultDump;
+  public center: number;
+  public isFinished: boolean = false;
 
-  dummyEnemy: V = new V(0, 150);
+  private dummyEnemy: V = new V(0, 150);
 
-  constructor(public isDemo?: boolean) {
+  constructor(private scriptLoader: ScriptLoader, public isDemo: boolean = false) {
     this.frame = 0;
     this.sourcers = [];
     this.shots = [];
     this.fxs = [];
   }
 
-  addSourcer(sourcer: Sourcer) {
+  public registerSourcer(ai: string, account: string, name: string, color: string) {
+    const side = (this.sourcers.length % 2 === 0) ? -1 : 1;
+    const x = Utils.rand(80) + 160 * side;
+    const y = Utils.rand(160) + 80;
+    this.addSourcer(new Sourcer(this, x, y, ai, account, name, color));
+  }
+
+  public process(listener: TickEventListener, think: (sourcer: Sourcer) => void, callback: () => void) {
+    let i = 0;
+    const next = () => {
+      if (i >= this.sourcers.length) {
+        callback();
+        return;
+      }
+
+      const sourcer = this.sourcers[i];
+      listener.onPreThink(sourcer.id);
+      listener.onImmediate(() => {
+        think(sourcer);
+        listener.onPostThink(sourcer.id);
+        listener.onImmediate(() => {
+          i++;
+          next();
+        });
+      });
+    };
+    next();
+  }
+
+  public compile(listener: TickEventListener, onComplete: () => void) {
+    this.process(listener, (sourcer: Sourcer) => {
+      sourcer.compile(this.scriptLoader);
+    }, onComplete);
+  }
+
+  public addSourcer(sourcer: Sourcer) {
     sourcer.id = this.currentId++;
     this.sourcers.push(sourcer);
   }
 
-  addShot(shot: Shot) {
+  public addShot(shot: Shot) {
     shot.id = this.currentId++;
     this.shots.push(shot);
   }
 
-  removeShot(target: Shot) {
-    var index = this.shots.indexOf(target);
+  public removeShot(target: Shot) {
+    const index = this.shots.indexOf(target);
     if (0 <= index) {
       this.shots.splice(index, 1);
     }
   }
 
-  addFx(fx: Fx) {
+  public addFx(fx: Fx) {
     fx.id = this.currentId++;
     this.fxs.push(fx);
   }
 
-  removeFx(target: Fx) {
-    var index = this.fxs.indexOf(target);
+  public removeFx(target: Fx) {
+    const index = this.fxs.indexOf(target);
     if (0 <= index) {
       this.fxs.splice(index, 1);
     }
   }
 
-  tick(listener: TickEventListener) {
+  public tick(listener: TickEventListener, onComplete: () => void) {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
     // Think phase
-    this.sourcers.forEach((sourcer: Sourcer) => {
-      listener.onPreThink(sourcer.id);
+    this.process(listener, (sourcer: Sourcer) => {
       sourcer.think();
-      listener.onPostThink(sourcer.id);
-    });
-    this.shots.forEach((shot: Shot) => {
-      listener.onPreThink(shot.owner.id);
-      shot.think();
-      listener.onPostThink(shot.owner.id);
-    });
+      this.shots.filter((shot => shot.owner.id === sourcer.id)).forEach(shot => shot.think());
+    }, () => {
+      // Action phase
+      this.sourcers.forEach((actor) => {
+        actor.action();
+      });
+      this.shots.forEach((actor) => {
+        actor.action();
+      });
+      this.fxs.forEach((fx: Fx) => {
+        fx.action();
+      });
 
-    // Action phase
-    this.sourcers.forEach((actor: Actor) => {
-      actor.action();
-    });
-    this.shots.forEach((actor: Actor) => {
-      actor.action();
-    });
-    this.fxs.forEach((fx: Fx) => {
-      fx.action();
-    });
+      // Move phase
+      this.sourcers.forEach((actor) => {
+        actor.move();
+      });
+      this.shots.forEach((actor) => {
+        actor.move();
+      });
+      this.fxs.forEach((fx) => {
+        fx.move();
+      });
 
-    // Move phase
-    this.sourcers.forEach((actor: Actor) => {
-      actor.move();
-    });
-    this.shots.forEach((actor: Actor) => {
-      actor.move();
-    });
-    this.fxs.forEach((fx: Fx) => {
-      fx.move();
-    });
+      // Check phase
+      this.checkFinish(listener);
+      this.checkEndOfGame(listener);
 
-    // Check phase
-    this.checkFinish(listener);
-    this.checkEndOfGame(listener);
+      this.frame++;
 
-    this.frame++;
+      // onFrame
+      listener.onFrame(this.dump());
 
-    // onFrame
-    listener.onFrame(this.dump());
+      onComplete();
+    });
   }
 
-  checkFinish(listener: TickEventListener) {
+  private checkFinish(listener: TickEventListener) {
     if (this.isDemo) {
       if (DEMO_FRAME_LENGTH < this.frame) {
-        this.result = { frame: this.frame };
+        this.result = {
+          frame: this.frame,
+          timeout: null,
+          isDraw: null,
+          winnerId: null
+        };
         listener.onFinished(this.result);
       }
+      return;
+    }
+
+    // TODO: .....
+    if (DEMO_FRAME_LENGTH < 40) {
+      this.result = {
+        frame: this.frame,
+        timeout: null,
+        isDraw: null,
+        winnerId: null
+      };
+      listener.onFinished(this.result);
       return;
     }
 
@@ -122,17 +169,18 @@ export default class Field {
     }
 
     this.sourcers.forEach((sourcer) => { sourcer.alive = 0 < sourcer.shield; });
-    var survivers = this.sourcers.filter((sourcer) => { return sourcer.alive; });
+    const survivers = this.sourcers.filter(sourcer => sourcer.alive);
 
     if (1 < survivers.length) {
       return;
     }
 
     if (survivers.length === 1) {
-      var surviver = survivers[0];
+      const surviver = survivers[0];
       this.result = {
         winnerId: surviver.id,
         frame: this.frame,
+        timeout: null,
         isDraw: false
       };
       listener.onFinished(this.result);
@@ -142,13 +190,14 @@ export default class Field {
     // no surviver.. draw...
     this.result = {
       winnerId: null,
+      timeout: null,
       frame: this.frame,
       isDraw: true
     };
     listener.onFinished(this.result);
   }
 
-  checkEndOfGame(listener: TickEventListener) {
+  private checkEndOfGame(listener: TickEventListener) {
     if (this.isFinished) {
       return;
     }
@@ -169,7 +218,7 @@ export default class Field {
     }
   }
 
-  scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
+  public scanEnemy(owner: Sourcer, radar: (t: V) => boolean): boolean {
     if (this.isDemo && this.sourcers.length === 1) {
       return radar(this.dummyEnemy);
     }
@@ -179,54 +228,50 @@ export default class Field {
     });
   }
 
-  scanAttack(owner: Sourcer, radar: (t: V) => boolean): boolean {
+  public scanAttack(owner: Sourcer, radar: (t: V) => boolean): boolean {
     return this.shots.some((shot) => {
       return shot.owner !== owner && radar(shot.position) && this.isIncoming(owner, shot);
     });
   }
 
-  isIncoming(owner: Sourcer, shot: Shot) {
-    var ownerPosition = owner.position;
-    var actorPosition = shot.position;
-    var currentDistance = ownerPosition.distance(actorPosition);
-    var nextDistance = ownerPosition.distance(actorPosition.add(shot.speed));
+  private isIncoming(owner: Sourcer, shot: Shot) {
+    const ownerPosition = owner.position;
+    const actorPosition = shot.position;
+    const currentDistance = ownerPosition.distance(actorPosition);
+    const nextDistance = ownerPosition.distance(actorPosition.add(shot.speed));
     return nextDistance < currentDistance;
   }
 
-  checkCollision(shot: Shot): Actor {
-    var f = shot.position;
-    var t = shot.position.add(shot.speed);
+  public checkCollision(shot: Shot): Actor | null {
+    const f = shot.position;
+    const t = shot.position.add(shot.speed);
 
-    for (var i = 0; i < this.shots.length; i++) {
-      var actor = this.shots[i];
-      if (actor.breakable && actor.owner !== shot.owner) {
-        var distance = Utils.calcDistance(f, t, actor.position);
-        if (distance < shot.size + actor.size) {
-          return actor;
-        }
-      }
+    const collidedShot = this.shots.find((actor) => {
+      return actor.breakable && actor.owner !== shot.owner &&
+        Utils.calcDistance(f, t, actor.position) < shot.size + actor.size;
+    });
+    if (collidedShot) {
+      return collidedShot;
     }
 
-    for (var i = 0; i < this.sourcers.length; i++) {
-      var sourcer = this.sourcers[i];
-      if (sourcer.alive && sourcer !== shot.owner) {
-        var distance = Utils.calcDistance(f, t, sourcer.position);
-        if (distance < shot.size + sourcer.size) {
-          return sourcer;
-        }
-      }
+    const collidedSourcer = this.sourcers.find((sourcer) => {
+      return sourcer.alive && sourcer !== shot.owner &&
+        Utils.calcDistance(f, t, sourcer.position) < shot.size + sourcer.size;
+    });
+    if (collidedSourcer) {
+      return collidedSourcer;
     }
 
     return null;
   }
 
-  checkCollisionEnviroment(shot: Shot): boolean {
+  public checkCollisionEnviroment(shot: Shot): boolean {
     return shot.position.y < 0;
   }
 
   private computeCenter(): number {
-    var count = 0;
-    var sumX = 0;
+    let count = 0;
+    let sumX = 0;
     this.sourcers.forEach((sourcer: Sourcer) => {
       if (sourcer.alive) {
         sumX += sourcer.position.x;
@@ -236,26 +281,31 @@ export default class Field {
     return sumX / count;
   }
 
-  players() {
-    let players: PlayersDump = {};
+  public players() {
+    const players: PlayersDump = {};
     this.sourcers.forEach((sourcer) => {
-      players[sourcer.id] = { name: sourcer.name || sourcer.account, account: sourcer.account, color: sourcer.color };
+      players[sourcer.id] = {
+        name: sourcer.name || sourcer.account,
+        account: sourcer.account,
+        color: sourcer.color
+      };
     });
     return players;
   }
 
-  dump(): FieldDump {
-    var sourcersDump: any[] = [];
-    var shotsDump: any[] = [];
-    var fxDump: any[] = [];
+  private dump(): FieldDump {
+    const sourcersDump: SourcerDump[] = [];
+    const shotsDump: ShotDump[] = [];
+    const fxDump: FxDump[] = [];
 
-    this.sourcers.forEach((actor: Actor) => {
+    this.sourcers.forEach((actor) => {
       sourcersDump.push(actor.dump());
     });
-    this.shots.forEach((actor: Actor) => {
+
+    this.shots.forEach((actor) => {
       shotsDump.push(actor.dump());
     });
-    this.fxs.forEach((fx: Fx) => {
+    this.fxs.forEach((fx) => {
       fxDump.push(fx.dump());
     });
 

@@ -1,14 +1,14 @@
 export default class Command {
-  isAccepted = false;
-  validate() {
+  private isAccepted = false;
+  public validate() {
     if (!this.isAccepted) {
-      throw new Error("Invalid command. ");
+      throw new Error('Invalid command.');
     }
   }
-  accept() {
+  public accept() {
     this.isAccepted = true;
   }
-  unaccept() {
+  public unaccept() {
     this.isAccepted = false;
   }
 }

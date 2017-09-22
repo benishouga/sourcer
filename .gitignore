@@ -1,10 +1,6 @@
+out
+node_modules
 *.log
 .DS_Store
-
-node_modules
-typings
-
-intermediate/*
-dist/*
-
-src/main/config.ts
+coverage
+.nyc_output

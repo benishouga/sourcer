@@ -1,62 +1,56 @@
 export default class V {
-  calculatedLength: number;
-  calculatedAngle: number;
+  private calculatedLength: number;
+  private calculatedAngle: number;
 
   constructor(public x: number, public y: number) {
   }
 
-  add(v: V): V;
-  add(x: number, y: number): V;
-  add(v: any, y?: number): V {
+  public add(v: V): V;
+  public add(x: number, y: number): V;
+  public add(v: any, y?: number): V {
     if (v instanceof V) {
-      return new V(this.x + v.x, this.y + v.y);
+      return new V(this.x + (v.x || 0), this.y + (v.y || 0));
     } else {
-      return new V(this.x + v, this.y + y);
+      return new V(this.x + (v || 0), this.y + (y || 0));
     }
   }
-  subtract(v: V): V;
-  subtract(x: number, y: number): V;
-  subtract(v: any, y?: number): V {
+  public subtract(v: V): V;
+  public subtract(x: number, y: number): V;
+  public subtract(v: any, y?: number): V {
     if (v instanceof V) {
-      return new V(this.x - v.x, this.y - v.y);
+      return new V(this.x - (v.x || 0), this.y - (v.y || 0));
     } else {
-      return new V(this.x - v, this.y - y);
+      return new V(this.x - (v || 0), this.y - (y || 0));
     }
   }
-  multiply(v: V): V;
-  multiply(n: number): V;
-  multiply(v: any): V {
+  public multiply(v: V | number): V {
     if (v instanceof V) {
       return new V(this.x * v.x, this.y * v.y);
     } else {
       return new V(this.x * v, this.y * v);
     }
   }
-  divide(v: V): V;
-  divide(n: number): V;
-  divide(v: any): V {
+  public divide(v: V | number): V {
     if (v instanceof V) {
       return new V(this.x / v.x, this.y / v.y);
     } else {
       return new V(this.x / v, this.y / v);
     }
   }
-  modulo(v: V): V;
-  modulo(n: number): V;
-  modulo(v: any): V {
+  public modulo(v: V | number): V {
     if (v instanceof V) {
       return new V(this.x % v.x, this.y % v.y);
     } else {
       return new V(this.x % v, this.y % v);
     }
   }
-  negate(): V {
+  public negate(): V {
     return new V(-this.x, -this.y);
   }
-  distance(v: V): number {
+  public distance(v: V): number {
     return this.subtract(v).length();
   }
-  length(): number {
+  public length(): number {
     if (this.calculatedLength) {
       return this.calculatedLength;
     } else {
@@ -64,15 +58,15 @@ export default class V {
       return this.calculatedLength;
     }
   }
-  normalize(): V {
-    var current = this.length();
-    var scale = current !== 0 ? 1 / current : 0;
+  public normalize(): V {
+    const current = this.length();
+    const scale = current !== 0 ? 1 / current : 0;
     return this.multiply(scale);
   }
-  angle(): number {
+  public angle(): number {
     return this.angleInRadians() * 180 / Math.PI;
   }
-  angleInRadians(): number {
+  public angleInRadians(): number {
     if (this.calculatedAngle) {
       return this.calculatedAngle;
     } else {
@@ -80,25 +74,22 @@ export default class V {
       return this.calculatedAngle;
     }
   }
-  dot(point?: V): number {
-    if (point === undefined) {
-      point = this;
-    }
+  public dot(point: V = this): number {
     return this.x * point.x + this.y * point.y;
   }
-  cross(point: V): number {
+  public cross(point: V): number {
     return this.x * point.y - this.y * point.x;
   }
-  rotate(degree: number) {
-    var radian = degree * (Math.PI / 180);
-    var cos = Math.cos(radian);
-    var sin = Math.sin(radian);
+  public rotate(degree: number) {
+    const radian = degree * (Math.PI / 180);
+    const cos = Math.cos(radian);
+    const sin = Math.sin(radian);
     return new V(cos * this.x - sin * this.y, cos * this.y + sin * this.x);
   }
-  static direction(degree: number) {
+  public static direction(degree: number) {
     return new V(1, 0).rotate(degree);
   }
-  minimize() {
+  public minimize() {
     return { x: Math.round(this.x), y: Math.round(this.y) } as V;
   }
 }

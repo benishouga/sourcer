@@ -11,16 +11,16 @@ import MissileController from './MissileController';
 import Consts from './Consts';
 
 export default class Missile extends Shot {
-  temperature = 10;
-  damage = () => 10 + this.speed.length() * 2;
-  fuel = 100;
-  breakable = true;
+  public temperature = 10;
+  public damage = () => 10 + this.speed.length() * 2;
+  public fuel = 100;
+  public breakable = true;
 
-  command: MissileCommand;
-  controller: MissileController;
+  public command: MissileCommand;
+  public controller: MissileController;
 
-  constructor(field: Field, owner: Sourcer, public ai: Function) {
-    super(field, owner, "Missile");
+  constructor(field: Field, owner: Sourcer, public ai: (controller: MissileController) => void) {
+    super(field, owner, 'Missile');
     this.ai = ai;
     this.direction = owner.direction === Consts.DIRECTION_RIGHT ? 0 : 180;
     this.speed = owner.speed;
@@ -29,8 +29,13 @@ export default class Missile extends Shot {
     this.controller = new MissileController(this);
   }
 
-  onThink() {
+  public onThink() {
     this.command.reset();
+
+    if (this.fuel <= 0) { // Cancel thinking
+      return;
+    }
+
     try {
       this.command.accept();
       this.controller.preThink();
@@ -41,18 +46,18 @@ export default class Missile extends Shot {
     }
   }
 
-  onAction() {
+  public onAction() {
     this.speed = this.speed.multiply(Configs.SPEED_RESISTANCE);
     this.command.execute();
     this.command.reset();
   }
 
-  onHit(attack: Shot) {
+  public onHit(attack: Shot) {
     this.field.removeShot(this);
     this.field.removeShot(attack);
   }
 
-  opposite(direction: number): number {
+  public opposite(direction: number): number {
     return this.direction + direction;
   }
 }

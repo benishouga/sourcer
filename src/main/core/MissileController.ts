@@ -4,28 +4,27 @@ import Missile from './Missile';
 import Utils from './Utils';
 
 export default class MissileController extends Controller {
-  direction: () => number;
-  scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
-  speedUp: () => void;
-  speedDown: () => void;
-  turnRight: () => void;
-  turnLeft: () => void;
+  public direction: () => number;
+  public scanEnemy: (direction: number, angle: number, renge?: number) => boolean;
+  public speedUp: () => void;
+  public speedDown: () => void;
+  public turnRight: () => void;
+  public turnLeft: () => void;
 
   constructor(missile: Missile) {
     super(missile);
     this.direction = () => missile.direction;
 
-    var field = missile.field;
-    var command = missile.command;
+    const field = missile.field;
+    const command = missile.command;
 
     this.fuel = () => missile.fuel;
 
     this.scanEnemy = (direction, angle, renge) => {
       command.validate();
       missile.wait += 1.5;
-      direction = missile.opposite(direction);
-      renge = renge || Number.MAX_VALUE;
-      var radar = Utils.createRadar(missile.position, direction, angle, renge);
+      const missileDirection = missile.opposite(direction);
+      const radar = Utils.createRadar(missile.position, missileDirection, angle, renge || Number.MAX_VALUE);
       return missile.field.scanEnemy(missile.owner, radar);
     };
 

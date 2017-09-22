@@ -1,27 +1,27 @@
 import Field from './Field';
 import V from './V';
-import {FxDump} from './Dump';
+import { FxDump } from './Dump';
 
 export default class Fx {
-  frame: number;
-  id: number;
+  private frame: number;
+  public id: number;
 
   constructor(public field: Field, public position: V, public speed: V, public length: number) {
     this.frame = 0;
   }
 
-  action() {
+  public action() {
     this.frame++;
     if (this.length <= this.frame) {
       this.field.removeFx(this);
     }
   }
 
-  move() {
+  public move() {
     this.position = this.position.add(this.speed);
   }
 
-  dump(): FxDump {
+  public dump(): FxDump {
     return {
       i: this.id,
       p: this.position.minimize(),

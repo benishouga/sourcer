@@ -1,9 +1,9 @@
-import SourcerController from '../src/main/core/SourcerController';
+import SourcerController from '../src/core/SourcerController';
 
 class SourcerAi {
-  port = (ctrl: SourcerController) => this.think(ctrl);
+  public port = (ctrl: SourcerController) => this.think(ctrl);
 
-  think(ctrl: SourcerController) {
+  private think(ctrl: SourcerController) {
     // thinking ....
     if (ctrl.altitude() < 100) {
       ctrl.ascent();
