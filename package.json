@@ -22,6 +22,7 @@
   "author": "benishouga",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.16.1",
     "mongoose": "^4.11.11",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -30,6 +31,8 @@
     "vm2": "^3.5.0"
   },
   "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/express-session": "^1.15.3",
     "@types/mocha": "^2.2.41",
     "@types/mongodb": "^2.2.11",
     "@types/mongoose": "^4.7.21",

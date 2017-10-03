@@ -5,6 +5,7 @@ export type MatchDocument = Document & {
   _id: Types.ObjectId;
   winner: UserDocument;
   players: UserDocument[];
+  dump: string;
   created: Date;
   updated: Date;
 };
@@ -12,6 +13,7 @@ export type MatchDocument = Document & {
 const schema = new Schema({
   winner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   players: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+  dump: { type: String },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
 }).pre('save', (next) => {
