@@ -16,7 +16,7 @@ describe('Match', () => {
   });
 
   beforeEach(() => {
-    return TestUtils.reset(config).then(() => {
+    return TestUtils.clearDb().then(() => {
       console.log('UserModel save start');
       user = new UserModel();
       user.account = 'account';
@@ -29,18 +29,16 @@ describe('Match', () => {
     });
   });
 
-  it('find', () => {
+  it('createAndRegisterToUser', async () => {
     const match = new MatchModel();
     if (!user) {
       throw new Error();
     }
     match.winner = user;
     match.players = [user];
-    return match.save().then(() => {
-      console.log('match save resolved');
-      return UserService.loadWithMatchees('account');
-    }).then((savedUser) => {
-      console.log('savedUser ', savedUser);
-    });
+    await MatchService.createAndRegisterToUser(match);
+    console.log('match save resolved');
+    const savedUser = await UserService.loadWithMatchees('account');
+    console.log('savedUser ', savedUser);
   });
 });

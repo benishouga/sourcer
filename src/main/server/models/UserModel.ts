@@ -45,19 +45,16 @@ export class UserService extends UserModel {
     return UserService.findOne({ account }).exec();
   }
 
-  public static loadWithMatchees(account: string) {
-    return UserService.findOne({ account })
+  public static async loadWithMatchees(account: string) {
+    let res = await UserService.findOne({ account })
       .populate({ path: 'matches', options: { sort: { created: -1 } } })
-      .exec().then<UserDocument>((res) => {
-        if (!res) {
-          return Promise.reject('find user error');
-        }
-        // model は UserService で参照する必要があるっぽい
-        return UserService.populate(res, { path: 'matches.winner', model: 'User' });
-      }).then<UserDocument>((res) => {
-        // model は UserService で参照する必要があるっぽい
-        return UserService.populate(res, { path: 'matches.players', model: 'User' });
-      });
+      .exec();
+    if (!res) {
+      throw new Error('find user error');
+    }
+    res = await UserService.populate<UserDocument>(res, { path: 'matches.winner', model: 'User' });
+    res = await UserService.populate<UserDocument>(res, { path: 'matches.players', model: 'User' });
+    return res;
   }
 
   public static loadById(id: Types.ObjectId) {
@@ -82,17 +79,15 @@ export class UserService extends UserModel {
     return user.save();
   }
 
-  public static recent(excludeUser: string) {
+  public static async recent(excludeUser: string) {
     const query = { account: { $ne: excludeUser } };
-    return UserService.find(query)
+    const res = await UserService.find(query)
       .populate({ path: 'matches' })
       .sort({ updated: -1 })
       .limit(10)
-      .exec()
-      .then<UserDocument[]>((res) => {
-        // model は UserService で参照する必要があるっぽい
-        return UserService.populate(res, { path: 'matches.winner', model: 'User' });
-      });
+      .exec();
+
+    return UserService.populate(res, { path: 'matches.winner', model: 'User' });
   }
 
   public static hash(account: string, password: string) {

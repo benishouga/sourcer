@@ -27,32 +27,25 @@ export default MatchModel;
 
 export class MatchService extends MatchModel {
 
-  public static load(argId: Types.ObjectId | string): Promise<MatchDocument | null> {
+  public static async load(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
-
-    return this.findOne({ _id: id })
-      .populate('winner')
-      .populate('players')
-      .exec();
+    return this.findOne({ _id: id }).populate('winner').populate('players').exec();
   }
 
-  public static createAndRegisterToUser(match: MatchDocument): Promise<MatchDocument> {
-    return match.save().then(() => {
-      console.log('Match saved');
-      return this.load(match._id);
-    }).then((loaded) => {
-      return loaded ? Promise.resolve(loaded) : Promise.reject('save error');
-    }).then((loaded) => {
-      console.log('Loading for SavedMatch is successful');
-      const promises = loaded.players.map((player) => {
-        player.matches = player.matches || [];
-        player.matches.push(loaded);
-        return player.save();
-      });
-      return Promise.all(promises).then(() => {
-        console.log('Players saved');
-        return Promise.resolve(loaded);
-      });
-    });
+  public static async createAndRegisterToUser(match: MatchDocument) {
+    await match.save();
+    console.log('Match saved');
+    const loaded = await this.load(match._id);
+    if (!loaded) {
+      throw new Error();
+    }
+    console.log('Loading for SavedMatch is successful');
+    await Promise.all(loaded.players.map((player) => {
+      player.matches = player.matches || [];
+      player.matches.push(loaded);
+      return player.save();
+    }));
+    console.log('Players saved');
+    return loaded;
   }
 }

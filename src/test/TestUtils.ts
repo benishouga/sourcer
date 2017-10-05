@@ -6,24 +6,11 @@ export default class TestUtils {
     return collection.deleteMany({});
   }
 
-  public static clearDb(): Promise<void> {
-    const promises = Object.keys(mongoose.connection.collections).map((key) => {
+  public static async clearDb() {
+    await Promise.all(Object.keys(mongoose.connection.collections).map((key) => {
       return TestUtils.clearCollection(mongoose.connection.collections[key]);
-    });
-    return Promise.all(promises).then(() => {
-      console.log('mongodb all cleard');
-      return Promise.resolve();
-    });
-  }
-
-  public static reset(config: { mongodb: { test: string; }; }) {
-    if (mongoose.connection.readyState === 0) {
-      return TestUtils.connect(config.mongodb.test).then(() => {
-        return TestUtils.clearDb();
-      });
-    } else {
-      return TestUtils.clearDb();
-    }
+    }));
+    console.log('mongodb all cleard');
   }
 
   public static connect(dbUri: string) {
