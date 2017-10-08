@@ -3,8 +3,8 @@ import config from '../main/server/config';
 import db from '../main/server/db';
 import * as mongoose from 'mongoose';
 
-import UserModel, { UserDocument, UserService } from '../main/server/models/UserModel'; assert.ok(UserModel); // import文が最適化により省略されないように
-import MatchModel, { MatchService } from '../main/server/models/MatchModel'; assert.ok(MatchModel); // import文が最適化により省略されないように
+import UserModel, { UserDocument, UserService } from '../main/server/models/UserModel';
+import MatchModel, { MatchService } from '../main/server/models/MatchModel';
 
 import TestUtils from './TestUtils';
 
