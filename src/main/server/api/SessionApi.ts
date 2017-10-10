@@ -4,8 +4,6 @@ import ResponseCreator from './ResponseCreator';
 
 import UserModel, { UserDocument, UserService } from '../models/UserModel';
 
-import config from '../config';
-
 export function show(req: Request, res: Response) {
   if (!req.session) {
     return res.status(400).end('Bad Request');
@@ -29,7 +27,7 @@ export async function create(req: Request, res: Response) {
   }
 
   if (account === 'admin') {
-    if (password === config.app.admin) {
+    if (password === process.env.ADMIN_PASSWORD) {
       req.session.authenticated = true;
       req.session.admin = true;
       req.session.user = null;

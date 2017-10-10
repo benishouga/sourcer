@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import UserModel, { UserDocument, UserService } from '../models/UserModel';
 import Validator from '../utils/Validator';
-import config from '../config';
 import ResponseCreator from './ResponseCreator';
 
 export async function show(req: Request, res: Response) {
@@ -27,7 +26,7 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-  if (req.body.appKey !== config.app.key) {
+  if (req.body.appKey !== process.env.APP_KEY) {
     return res.status(403).end();
   }
   try {

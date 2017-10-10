@@ -24,8 +24,8 @@
   "dependencies": {
     "express": "^4.16.1",
     "mongoose": "^4.11.11",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-mdl": "^1.10.3",
     "react-router": "^4.2.0",
     "vm2": "^3.5.0"

@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import config from '../main/server/config';
 import db from '../main/server/db';
 import * as mongoose from 'mongoose';
 
@@ -10,9 +9,9 @@ import TestUtils from './TestUtils';
 
 describe('Match', () => {
   let user: UserDocument | null = null;
-  before(function () {
+  before(async function () {
     this.timeout(5000);
-    return db(config.mongodb.test);
+    await db(process.env.MONGO_TEST);
   });
 
   beforeEach(() => {

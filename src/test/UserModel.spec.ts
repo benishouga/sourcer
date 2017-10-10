@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import config from '../main/server/config';
 import db from '../main/server/db';
 import * as mongoose from 'mongoose';
 
@@ -12,7 +11,7 @@ describe('User', () => {
   let user: UserDocument | null = null;
   before(async function () {
     this.timeout(5000);
-    await db(config.mongodb.test);
+    await db(process.env.MONGO_TEST);
   });
 
   beforeEach(async () => {
