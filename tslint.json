@@ -37,7 +37,8 @@
         ],
         "max-classes-per-file": false,
         "no-boolean-literal-compare": false,
-        "strict-boolean-expressions": false
+        "strict-boolean-expressions": false,
+        "array-type": false
     },
     "rulesDirectory": []
 }

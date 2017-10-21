@@ -94,12 +94,12 @@ class Arena {
 }
 
 interface ArenaProps {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   scale: number;
   players: PlayerInfo[];
   isDemo: boolean;
-  path: string;
+  path?: string;
 }
 
 interface ArenaStats {
@@ -151,7 +151,7 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaStats> {
   public render() {
     const scale = this.props.scale;
     const width = (this.props.width !== -1 ? this.props.width : this.state.dynamicWidth) || 512;
-    const height = this.props.height;
+    const height = this.props.height || 384;
     const scaledWidth = width / scale;
     const scaledHeight = height / scale;
 

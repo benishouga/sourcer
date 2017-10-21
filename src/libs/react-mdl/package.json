@@ -1,0 +1,39 @@
+{
+  "contributors": [
+    {
+      "name": "Brad Zacher",
+      "url": "https://github.com/bradzacher"
+    }
+  ],
+  "dependencies": {
+    "@types/react": "*"
+  },
+  "description": "TypeScript definitions for react-mdl",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-5DQ8ucxzbmX9gW2Jx42uQEAGCUbTQsjUU0UZ0ChXN3iwWuHqm0wKDv1EyiEB+cp77MjUPohU7XA+NmgdfHX+cw==",
+    "shasum": "d8879bbfc6c1ec9479f1f54b3d4c1bac3b761b37",
+    "tarball": "https://registry.npmjs.org/@types/react-mdl/-/react-mdl-1.7.22.tgz"
+  },
+  "license": "MIT",
+  "main": "",
+  "maintainers": [
+    {
+      "name": "types",
+      "email": "ts-npm-types@microsoft.com"
+    }
+  ],
+  "name": "@types/react-mdl",
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.3",
+  "typesPublisherContentHash": "10ebd771ee9cf73f44a0bd1d1833f13d165c33411ffe5c22aaf698fc29b3ba71",
+  "version": "1.7.22"
+}
