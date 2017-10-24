@@ -16,10 +16,10 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
   private editor: Ace.Editor | null;
   private silent: boolean = false;
 
-  private static propTypes = {
-    code: React.PropTypes.string,
-    cursorStart: React.PropTypes.number
-  };
+  // private static propTypes = {
+  //   code: React.PropTypes.string,
+  //   cursorStart: React.PropTypes.number
+  // };
 
   private static defaultProps = {
     code: '//write your code here',

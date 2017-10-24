@@ -27,8 +27,8 @@ interface ReplayerStats {
 export default class Replayer extends React.Component<ReplayerProps, ReplayerStats> {
   private animationFrameHandler: number | null;
 
-  private static propTypes = {
-  };
+  // private static propTypes = {
+  // };
 
   private static defaultProps = {
     gameDump: {},

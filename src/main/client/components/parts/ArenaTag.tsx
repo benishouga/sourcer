@@ -112,8 +112,8 @@ interface ArenaStats {
 export default class ArenaTag extends React.Component<ArenaProps, ArenaStats> {
   private animationFrameHandler: number | null;
 
-  private static propTypes = {
-  };
+  // private static propTypes = {
+  // };
 
   private static defaultProps = {
     width: -1,

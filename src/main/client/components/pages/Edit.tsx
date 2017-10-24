@@ -22,9 +22,9 @@ interface AiEditState {
 }
 
 export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditState> {
-  public static contextTypes: React.ValidationMap<any> = {
-    router: React.PropTypes.object
-  };
+  // public static contextTypes: React.ValidationMap<any> = {
+  //   router: React.PropTypes.object
+  // };
 
   constructor() {
     super();

@@ -4,10 +4,12 @@
   "scripts": {
     "prebuild:common:tsc": "npm run lint",
     "build:common:tsc": "tsc",
-    "build:common:libs": "cpx \"./src/**/*.js\" ./out",
+    "build:common:resource:html": "cpx \"./src/**/*.html\" ./out",
+    "build:common:resource": "npm-run-all -p build:common:resource:*",
     "build:common": "npm-run-all -p build:common:*",
     "build:client:statics": "cpx \"./src/statics/**/*.*\" ./dist",
-    "build:client:css": "postcss \"src/**/*.css\" -o dist/main.css",
+    "build:client:css": "postcss \"src/**/*.css\" -o ./dist/main.css",
+    "build:client:bundle:main": "browserify ./out/main/client/main.js -o ./dist/main.js",
     "build:client:bundle:arena": "browserify ./out/main/client/arena.js -o ./dist/arena.js",
     "build:client:bundle:arenaWorker": "browserify ./out/main/client/arenaWorker.js -o ./dist/arenaWorker.js",
     "build:client:bundle": "npm-run-all -p build:client:bundle:*",
@@ -17,12 +19,18 @@
     "test": "cross-env NODE_ENV=test mocha --bail out/test/**/*.spec.js",
     "cover": "nyc npm test",
     "lint": "tslint -c tslint.json 'src/main/**/*.ts' 'src/test/**/*.ts'",
-    "clean": "rimraf out coverage"
+    "prestart": "npm run build",
+    "start": "node out/main/server/index.js",
+    "clean": "rimraf out coverage dist"
   },
   "author": "benishouga",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-mongo": "^2.0.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.1",
+    "express-session": "^1.15.6",
     "mongoose": "^4.12.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
@@ -32,6 +40,9 @@
     "vm2": "^3.5.0"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.16.5",
+    "@types/connect-mongo": "0.0.34",
+    "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.0.37",
     "@types/express-session": "^1.15.3",
     "@types/mocha": "^2.2.41",
@@ -45,6 +56,7 @@
     "@types/superagent": "^3.5.6",
     "autoprefixer": "^7.1.4",
     "browserify": "^14.4.0",
+    "browserify-shim": "^3.8.14",
     "cpx": "^1.5.0",
     "cross-env": "^5.0.5",
     "css-mqpacker": "^6.0.1",
@@ -74,5 +86,13 @@
       "text"
     ],
     "all": true
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "ace": "global:ace"
   }
 }

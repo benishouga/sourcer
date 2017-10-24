@@ -18,9 +18,9 @@ interface OfficialStats {
 }
 
 export default class Official extends React.Component<RouteComponentProps<RouteParams>, OfficialStats> {
-  public static contextTypes: React.ValidationMap<any> = {
-    router: React.PropTypes.object
-  };
+  // public static contextTypes: React.ValidationMap<any> = {
+  //   router: React.PropTypes.object
+  // };
 
   constructor() {
     super();

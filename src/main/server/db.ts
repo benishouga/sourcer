@@ -1,8 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import UserModel from './models/UserModel';
-import MatchModel from './models/MatchModel';
-console.log(typeof UserModel, typeof MatchModel);
+import './models/UserModel';
+import './models/MatchModel';
 
 (mongoose as any).Promise = Promise;
 
@@ -19,8 +18,8 @@ export default function (dbURI: string): Promise<mongoose.Connection> {
     });
 
     mongoose.connection.on('connected', () => {
-      console.log('Mongoose> connected: ' + dbURI);
-      resolve();
+      console.log('MongoDB connected', mongoose.connection.db.databaseName);
+      resolve(mongoose.connection);
     });
   });
 }

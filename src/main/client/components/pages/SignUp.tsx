@@ -12,9 +12,9 @@ interface LoginStats {
 }
 
 export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
-  public static contextTypes: React.ValidationMap<any> = {
-    router: React.PropTypes.object
-  };
+  // public static contextTypes: React.ValidationMap<any> = {
+  //   router: React.PropTypes.object
+  // };
 
   constructor() {
     super();
