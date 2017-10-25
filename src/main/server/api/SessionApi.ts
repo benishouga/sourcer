@@ -23,7 +23,7 @@ export async function create(req: Request, res: Response) {
     req.session.authenticated = false;
     req.session.admin = false;
     req.session.user = null;
-    return res.status(400).type('json').end(ResponseCreator.auth(req.session));
+    return res.status(400).type('json').send(ResponseCreator.auth(req.session)).end();
   }
 
   if (account === 'admin') {
@@ -31,13 +31,13 @@ export async function create(req: Request, res: Response) {
       req.session.authenticated = true;
       req.session.admin = true;
       req.session.user = null;
-      return res.status(200).type('json').end(ResponseCreator.auth(req.session));
+      return res.status(200).type('json').send(ResponseCreator.auth(req.session)).end();
     }
 
     req.session.authenticated = false;
     req.session.admin = false;
     req.session.user = null;
-    return res.status(200).type('json').end(ResponseCreator.auth(req.session));
+    return res.status(200).type('json').send(ResponseCreator.auth(req.session)).end();
   }
 
   const hash = UserService.hash(account, password);
@@ -47,13 +47,13 @@ export async function create(req: Request, res: Response) {
     req.session.authenticated = false;
     req.session.admin = false;
     req.session.user = null;
-    return res.status(403).end(ResponseCreator.auth(req.session));
+    return res.status(403).send(ResponseCreator.auth(req.session)).end();
   }
 
   req.session.authenticated = true;
   req.session.admin = false;
   req.session.user = user;
-  return res.status(200).type('json').end(ResponseCreator.auth(req.session));
+  return res.status(200).type('json').send(ResponseCreator.auth(req.session)).end();
 }
 
 export function destroy(req: Request, res: Response) {
@@ -66,6 +66,6 @@ export function destroy(req: Request, res: Response) {
       return res.status(400).end('Bad Request');
     }
 
-    res.send(ResponseCreator.auth(req.session));
+    res.send(ResponseCreator.auth(req.session)).end();
   });
 }

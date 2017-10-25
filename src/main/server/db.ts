@@ -5,10 +5,13 @@ import './models/MatchModel';
 
 (mongoose as any).Promise = Promise;
 
-export default function (dbURI: string): Promise<mongoose.Connection> {
+export default function (uri: string): Promise<mongoose.Connection> {
+  if (!uri) {
+    throw new Error('MongoDB uri is undfined');
+  }
 
   return new Promise<mongoose.Connection>((resolve, reject) => {
-    mongoose.connect(dbURI, {
+    mongoose.connect(uri, {
       useMongoClient: true
     });
 

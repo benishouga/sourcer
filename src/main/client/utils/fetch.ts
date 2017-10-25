@@ -24,6 +24,7 @@ export interface RequestPromise<T> {
 
 function send<T>(request: sa.Request, option?: Option): RequestPromise<T> {
   request.accept('application/json');
+  request.withCredentials();
   if (option && option.query) {
     request.query(option.query);
   }

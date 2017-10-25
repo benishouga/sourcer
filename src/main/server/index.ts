@@ -21,6 +21,13 @@ const MongoStore = connectMongo(session);
 db(process.env.MONGO_URL).then((mongooseConnection) => {
   const app = express();
 
+  app.use((req, res, next) => {
+    console.log('--------------------------');
+    console.log(req.url);
+    console.log(req.headers);
+    return next();
+  });
+
   app.use(express.static('dist'));
 
   app.use(cookieParser());
@@ -41,10 +48,6 @@ db(process.env.MONGO_URL).then((mongooseConnection) => {
       if (error) {
         return res.status(503).end();
       }
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
-      res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-      res.setHeader('Access-Control-Max-Age', '0');
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.end(text);
     });
   });

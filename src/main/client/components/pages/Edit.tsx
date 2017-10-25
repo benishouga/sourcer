@@ -108,6 +108,7 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
     if (this.state.playerInfo !== null) {
 
       const players: PlayerInfo[] = [];
+      players.push(this.state.playerInfo);
       if (this.state.enemyInfo) {
         players.push(this.state.enemyInfo);
       }

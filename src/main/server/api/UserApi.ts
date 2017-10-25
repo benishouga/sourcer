@@ -19,10 +19,10 @@ export async function show(req: Request, res: Response) {
 
   const user = await UserService.loadWithMatchees(account);
   if (!user) {
-    return res.status(404).send('');
+    return res.status(404).send('').end();
   }
 
-  return res.status(200).type('json').send(ResponseCreator.user(user));
+  return res.status(200).type('json').send(ResponseCreator.user(user)).end();
 }
 
 export async function create(req: Request, res: Response) {
@@ -51,7 +51,7 @@ export async function create(req: Request, res: Response) {
     return res.status(201).type('json').end();
 
   } catch (error) {
-    return res.status(400).end(error);
+    return res.status(400).send(error).end();
   }
 }
 
@@ -74,7 +74,7 @@ export async function update(req: Request, res: Response) {
   user.source = req.body.source;
   user.updated = new Date();
   user.save();
-  return res.status(200).type('json').end(ResponseCreator.user(user));
+  return res.status(200).type('json').send(ResponseCreator.user(user)).end();
 }
 
 export async function all(req: Request, res: Response) {
@@ -87,7 +87,7 @@ export async function all(req: Request, res: Response) {
   }
 
   const users = await UserService.find({}).sort({ updated: -1 }).exec();
-  return res.status(200).type('json').end(users.map(user => ResponseCreator.user(user)));
+  return res.status(200).type('json').send(users.map(user => ResponseCreator.user(user))).end();
 }
 
 export async function recent(req: Request, res: Response) {
@@ -100,5 +100,5 @@ export async function recent(req: Request, res: Response) {
   }
 
   const users = await UserService.recent(sessionUser.account);
-  return res.status(200).type('json').end(users.map(user => ResponseCreator.user(user)));
+  return res.status(200).type('json').send(users.map(user => ResponseCreator.user(user))).end();
 }

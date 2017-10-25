@@ -21,6 +21,8 @@
     "lint": "tslint -c tslint.json 'src/main/**/*.ts' 'src/test/**/*.ts'",
     "prestart": "npm run build",
     "start": "node out/main/server/index.js",
+    "predebug": "npm run build",
+    "debug": "node  --inspect --debug-brk out/main/server/index.js",
     "clean": "rimraf out coverage dist"
   },
   "author": "benishouga",
@@ -31,6 +33,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.1",
     "express-session": "^1.15.6",
+    "moment": "^2.19.1",
     "mongoose": "^4.12.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
