@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { List, ListItem, ListItemContent, Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
@@ -9,6 +9,7 @@ import ComponentExplorer from '../../utils/ComponentExplorer';
 
 interface LoginStats {
   error?: boolean;
+  redirectToReferrer: boolean;
 }
 
 export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
@@ -18,7 +19,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
 
   constructor() {
     super();
-    this.state = { error: false };
+    this.state = { error: false, redirectToReferrer: false };
   }
 
   private handleSubmit(event: React.FormEvent<{}>) {
@@ -31,22 +32,32 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
       if (!loggedIn.authenticated) {
         return this.setState({ error: true });
       }
+      this.setState({ redirectToReferrer: true });
 
-      const { location } = this.props;
-      const state = location.state as any;
-      const context = this.context as any;
+      // const { location } = this.props;
+      // const state = location.state as any;
+      // const context = this.context as any;
 
-      if (loggedIn.admin) {
-        context.router.replace('/official');
-      } else if (state && state.nextPathname) {
-        context.router.replace(state.nextPathname);
-      } else {
-        context.router.replace('/');
-      }
+      // if (loggedIn.admin) {
+      //   context.router.replace('/official');
+      // } else if (state && state.nextPathname) {
+      //   context.router.replace(state.nextPathname);
+      // } else {
+      //   context.router.replace('/');
+      // }
     });
   }
 
   public render() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const { redirectToReferrer } = this.state;
+
+    if (redirectToReferrer) {
+      return (
+        <Redirect to={from} />
+      );
+    }
+
     const resource = strings();
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
