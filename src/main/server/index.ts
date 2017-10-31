@@ -18,7 +18,7 @@ import db from './db';
 // tslint:disable-next-line:variable-name
 const MongoStore = connectMongo(session);
 
-db(process.env.MONGO_URL).then((mongooseConnection) => {
+db(process.env.MONGODB_URI).then((mongooseConnection) => {
   const app = express();
 
   app.use((req, res, next) => {
