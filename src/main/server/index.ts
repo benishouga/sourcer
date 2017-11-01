@@ -5,7 +5,6 @@ import { renderToString } from 'react-dom/server';
 import { match } from 'react-router-dom';
 import * as history from 'history';
 
-// import Routes from './components/routes';
 import apis from './api/apis';
 
 import * as bodyParser from 'body-parser';
@@ -23,7 +22,7 @@ db(process.env.MONGODB_URI).then((mongooseConnection) => {
 
   app.use((req, res, next) => {
     console.log('--------------------------');
-    console.log(req.url);
+    console.log(req.method, req.url);
     console.log(req.headers);
     return next();
   });

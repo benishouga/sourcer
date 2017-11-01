@@ -62,10 +62,6 @@ export function destroy(req: Request, res: Response) {
   }
 
   req.session.destroy(() => {
-    if (!req.session) {
-      return res.status(400).end('Bad Request');
-    }
-
-    res.send(ResponseCreator.auth(req.session)).end();
+    res.status(200).end();
   });
 }

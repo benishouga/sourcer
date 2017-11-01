@@ -28,9 +28,6 @@ export default class App extends React.Component<{}, AppState> {
 
   public componentWillMount() {
     Auth.addOnChangeListener(this.updateAuth);
-    Auth.login().then((authInfo) => {
-      this.updateAuth(authInfo);
-    });
   }
 
   public componentWillUnmount() {

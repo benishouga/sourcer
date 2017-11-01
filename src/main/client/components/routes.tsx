@@ -20,28 +20,18 @@ export interface RouteParams {
 // tslint:disable-next-line:variable-name
 const RequireAuthRoute = ({ component: Component, ...rest }: any) => (
   <Route {...rest} render={props => (
-    Auth.authResponse.authenticated ? (
-      <Component {...props} />
-    ) : (
-        <Redirect to={{
-          pathname: '/login',
-          state: { from: props.location }
-        }} />
-      )
+    Auth.authResponse.authenticated ?
+      <Component {...props} /> :
+      <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
   )} />
 );
 
 // tslint:disable-next-line:variable-name
 const RequireAdminRoute = ({ component: Component, ...rest }: any) => (
   <Route {...rest} render={props => (
-    Auth.authResponse.admin ? (
-      <Component {...props} />
-    ) : (
-        <Redirect to={{
-          pathname: '/logout',
-          state: { from: props.location }
-        }} />
-      )
+    Auth.authResponse.admin ?
+      <Component {...props} /> :
+      <Redirect to={{ pathname: '/logout', state: { from: props.location } }} />
   )} />
 );
 

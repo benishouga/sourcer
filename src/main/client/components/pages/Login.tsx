@@ -10,16 +10,13 @@ import ComponentExplorer from '../../utils/ComponentExplorer';
 interface LoginStats {
   error?: boolean;
   redirectToReferrer: boolean;
+  admin: boolean;
 }
 
 export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
-  // public static contextTypes: React.ValidationMap<any> = {
-  //   router: React.PropTypes.object
-  // };
-
   constructor() {
     super();
-    this.state = { error: false, redirectToReferrer: false };
+    this.state = { error: false, redirectToReferrer: false, admin: false };
   }
 
   private handleSubmit(event: React.FormEvent<{}>) {
@@ -32,30 +29,16 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
       if (!loggedIn.authenticated) {
         return this.setState({ error: true });
       }
-      this.setState({ redirectToReferrer: true });
-
-      // const { location } = this.props;
-      // const state = location.state as any;
-      // const context = this.context as any;
-
-      // if (loggedIn.admin) {
-      //   context.router.replace('/official');
-      // } else if (state && state.nextPathname) {
-      //   context.router.replace(state.nextPathname);
-      // } else {
-      //   context.router.replace('/');
-      // }
+      this.setState({ redirectToReferrer: true, admin: loggedIn.admin });
     });
   }
 
   public render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { redirectToReferrer } = this.state;
+    const { redirectToReferrer, admin } = this.state;
 
     if (redirectToReferrer) {
-      return (
-        <Redirect to={from} />
-      );
+      return <Redirect to={admin ? '/official' : from} />;
     }
 
     const resource = strings();

@@ -1,9 +1,9 @@
 import { EventEmitter } from 'events';
-import { get, post, chain } from '../utils/fetch';
+import { get, post, del, chain } from '../utils/fetch';
 
 export default class Auth {
   public static emitter = new EventEmitter();
-  private static response: AuthResponse = { admin: false, authenticated: false };
+  private static response: AuthResponse;
   public static get authResponse() {
     return this.response;
   }
@@ -41,10 +41,7 @@ export default class Auth {
 
   public static logout() {
     this.authResponse = { admin: false, authenticated: false };
-    return post('/api/session', {
-      method: 'delete',
-      credentials: 'same-origin'
-    });
+    return del('/api/session');
   }
 
   public static addOnChangeListener(cb: (authResponse: AuthResponse) => void) {

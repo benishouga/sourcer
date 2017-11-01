@@ -17,10 +17,6 @@ interface MatchNewStats {
 }
 
 export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewStats> {
-  // public static contextTypes: React.ValidationMap<any> = {
-  //   router: React.PropTypes.object
-  // };
-
   constructor() {
     super();
     this.state = {};

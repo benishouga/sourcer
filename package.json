@@ -23,7 +23,7 @@
     "prestart": "npm run build",
     "start": "node out/main/server/index.js",
     "predebug": "npm run build",
-    "debug": "node  --inspect --debug-brk out/main/server/index.js",
+    "debug": "node --inspect --debug-brk out/main/server/index.js",
     "clean": "rimraf out coverage dist"
   },
   "author": "benishouga",
