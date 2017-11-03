@@ -38,7 +38,7 @@ db(mongoDbUri).then((mongooseConnection) => {
   app.use(bodyParser.json());
 
   app.use(session({
-    secret: 'seecreeeeet',
+    secret: process.env.SESSION_SECRET || 'seecreeeeet',
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection, collection: 'session' })
