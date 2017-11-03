@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { get, post, del, chain } from '../utils/fetch';
+import { get, post, del, AbortSignal } from '../utils/fetch';
 
 export default class Auth {
   public static emitter = new EventEmitter();
@@ -15,33 +15,24 @@ export default class Auth {
     this.response = authResponse;
   }
 
-  public static login(account?: string, password?: string) {
-    if (!account && !password) {
-      return chain(get<AuthResponse>('/api/session'), (abortable) => {
-        return abortable.then((res) => {
-          this.authResponse = res;
-        }).catch(() => {
-          this.authResponse = { admin: false, authenticated: false };
-        }).then(() => {
-          return this.authResponse;
-        });
-      });
+  public static async login({ signal, account, password }: { signal?: AbortSignal, account?: string, password?: string } = {}) {
+    try {
+      let authResponse: AuthResponse;
+      if (!account && !password) {
+        authResponse = await get<AuthResponse>('/api/session', { signal });
+      } else {
+        authResponse = await post<AuthResponse>('/api/session', { signal, body: { account, password } });
+      }
+      this.authResponse = authResponse;
+    } catch (error) {
+      this.authResponse = { admin: false, authenticated: false };
     }
-
-    return chain(post('/api/session', { account, password }), (abortable) => {
-      return abortable.then((res: AuthResponse) => {
-        this.authResponse = res;
-      }).catch(() => {
-        this.authResponse = { admin: false, authenticated: false };
-      }).then(() => {
-        return this.authResponse;
-      });
-    });
+    return this.authResponse;
   }
 
-  public static logout() {
+  public static logout({ signal }: { signal?: AbortSignal } = {}) {
     this.authResponse = { admin: false, authenticated: false };
-    return del('/api/session');
+    return del('/api/session', { signal });
   }
 
   public static addOnChangeListener(cb: (authResponse: AuthResponse) => void) {

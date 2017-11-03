@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { strings } from '../resources/Strings';
 
 import User from '../../service/User';
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 
 interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
   account?: string;
@@ -23,21 +23,18 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     this.state = { users: null };
   }
 
-  private request: RequestPromise<UserResponse[]>;
+  private abortController: AbortController;
 
-  public componentDidMount() {
-    this.request = User.recent();
-    this.request.then((users) => {
-      this.setState({
-        users
-      });
-    });
+  public async componentDidMount() {
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    const users = await User.recent({ signal });
+    this.setState({ users });
+
   }
 
   public componentWillUnmount() {
-    if (this.request) {
-      this.request.abort();
-    }
+    this.abortController.abort();
   }
 
   public render() {

@@ -6,6 +6,7 @@ import { strings } from '../resources/Strings';
 
 import Auth from '../../service/Auth';
 import ComponentExplorer from '../../utils/ComponentExplorer';
+import { AbortController } from '../../utils/fetch';
 
 interface LoginStats {
   error?: boolean;
@@ -19,18 +20,18 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
     this.state = { error: false, redirectToReferrer: false, admin: false };
   }
 
-  private handleSubmit(event: React.FormEvent<{}>) {
+  private async handleSubmit(event: React.FormEvent<{}>) {
     event.preventDefault();
 
     const account = ComponentExplorer.extractInputValue(this.refs.account);
     const password = ComponentExplorer.extractInputValue(this.refs.password);
 
-    Auth.login(account, password).then((loggedIn) => {
-      if (!loggedIn.authenticated) {
-        return this.setState({ error: true });
-      }
-      this.setState({ redirectToReferrer: true, admin: loggedIn.admin });
-    });
+    const loggedIn = await Auth.login({ account, password });
+
+    if (!loggedIn.authenticated) {
+      return this.setState({ error: true });
+    }
+    this.setState({ redirectToReferrer: true, admin: loggedIn.admin });
   }
 
   public render() {

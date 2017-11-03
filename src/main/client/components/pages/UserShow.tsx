@@ -4,7 +4,7 @@ import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import Matches from '../parts/Matches';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
@@ -26,33 +26,29 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     this.state = {};
   }
 
-  private request: RequestPromise<UserResponse>;
+  private abortController: AbortController;
 
-  public componentDidMount() {
-    if (Auth.authResponse.authenticated) {
-      this.request = User.select(this.props.match.params.account);
-      this.request.then((user) => {
-        this.setState({ user });
-      });
-    }
+  public async componentDidMount() {
+    const account = this.props.match.params.account;
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    const user = await User.select({ signal, account });
+    this.setState({ user });
   }
 
   public componentWillUnmount() {
-    if (this.request) {
-      this.request.abort();
-    }
+    this.abortController.abort();
   }
 
-  public componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
+  public async componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
     if (Auth.authResponse.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
-      if (this.request) {
-        this.request.abort();
-      }
-      this.request = User.select(nextProps.match.params.account);
+      this.abortController.abort();
+      this.abortController = new AbortController();
+      const account = nextProps.match.params.account;
+      const signal = this.abortController.signal;
       this.setState({ user: undefined });
-      this.request.then((user) => {
-        this.setState({ user });
-      });
+      const user = await User.select({ signal, account });
+      this.setState({ user });
     }
   }
 

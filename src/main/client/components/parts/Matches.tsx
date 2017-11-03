@@ -6,7 +6,7 @@ import * as moment from 'moment';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 
 interface MatchesProps extends React.Props<Matches> {
@@ -24,37 +24,36 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     this.state = { matches: props.matches };
   }
 
-  private request: RequestPromise<UserResponse>;
+  private abortController: AbortController;
 
   public componentWillReceiveProps(nextProps: MatchesProps) {
     this.setState({ matches: nextProps.matches });
   }
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    this.abortController = new AbortController();
+
     if (!this.props.matches) {
-      this.request = User.select(this.props.account);
-      this.request.then((user) => {
-        this.setState({
-          matches: user.matches
-        });
-      });
+      const signal = this.abortController.signal;
+      const account = this.props.account;
+      const user = await User.select({ signal, account });
+      this.setState({ matches: user.matches });
     }
   }
 
   public componentWillUnmount() {
-    if (this.request) {
-      this.request.abort();
-    }
+    this.abortController.abort();
   }
 
-  public componentWillUpdate(nextProps: MatchesProps, nextState: MatchesState) {
+  public async componentWillUpdate(nextProps: MatchesProps, nextState: MatchesState) {
     if (!nextProps.matches) {
-      this.request = User.select(nextProps.account);
-      this.request.then((user) => {
-        this.setState({
-          matches: user.matches
-        });
-      });
+      this.abortController.abort();
+      this.abortController = new AbortController();
+      const account = nextProps.account;
+      const signal = this.abortController.signal;
+      this.setState({ matches: undefined });
+      const user = await User.select({ signal, account });
+      this.setState({ matches: user.matches });
     }
   }
 
@@ -96,16 +95,20 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     if (!match.players) {
       return null;
     }
-    match.players.map((contestant) => {
-      if (!match.winner) {
-        return null;
+    match.players.map((contestant, index) => {
+      let winOrLoseIcon = null;
+      if (match.winner) {
+        winOrLoseIcon = match.winner.account === contestant.account ?
+          (<span><Icon name="mood" className="inline" /> Win</span>) :
+          (<span><Icon name="sentiment_very_dissatisfied" className="inline" /> Lose</span>);
       }
-      const isWin = match.winner.account === contestant.account;
-      const winOrLoseIcon = isWin ?
-        (<span><Icon name="mood" className="inline" /> Win</span>) :
-        (<span><Icon name="sentiment_very_dissatisfied" className="inline" /> Lose</span>);
 
-      return (<span><span className={isWin ? 'win' : 'lose'}><Link to={`/user/${contestant.account}`}>{contestant.name}</Link></span> {winOrLoseIcon}</span>);
+      return (
+        <span key={'contestant' + index}>
+          <Link to={`/user/${contestant.account}`}>{contestant.name}</Link>
+          {winOrLoseIcon}
+        </span>
+      );
     }).forEach((element) => {
       if (players.length !== 0) {
         players.push(<span> vs </span>);

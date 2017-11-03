@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar, List, ListItem, ListItemContent, Icon } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 import Match from '../../service/Match';
 import { RouteParams } from '../routes';
@@ -15,6 +15,7 @@ interface OfficialStats {
   player1?: UserResponse;
   player2?: UserResponse;
   openDialog?: boolean;
+  redirectTo?: string;
 }
 
 export default class Official extends React.Component<RouteComponentProps<RouteParams>, OfficialStats> {
@@ -23,7 +24,7 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
     this.state = {};
   }
 
-  private handleOpenDialog() {
+  private async  handleOpenDialog() {
     this.setState({
       openDialog: true
     });
@@ -33,25 +34,22 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
     if (!this.state.player1.account || !this.state.player2.account) {
       throw new Error('player account unknown');
     }
-    Match.official(this.state.player1.account, this.state.player2.account).then((match: MatchResponse) => {
-      const context = this.context as any;
-      context.router.replace(`/match/${match._id}`);
-    });
+    const player1 = this.state.player1.account;
+    const player2 = this.state.player2.account;
+    const match = await Match.official({ player1, player2 });
+    this.setState({ redirectTo: `/match/${match._id}` });
   }
 
-  private requests: RequestPromise<UserResponse[]>[] = [];
-  public componentDidMount() {
-    const request = User.all();
-    request.then((users) => {
-      this.setState({
-        users
-      });
-    });
-    this.requests.push(request);
+  private abortController: AbortController;
+  public async componentDidMount() {
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    const users = await User.all({ signal });
+    this.setState({ users });
   }
 
   public componentWillUnmount() {
-    this.requests.forEach(request => request.abort());
+    this.abortController.abort();
   }
 
   public userList(callback: (user: UserResponse) => void) {
@@ -71,6 +69,10 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
   }
 
   public render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+
     const resource = strings();
 
     let player1: React.ReactElement<any>;

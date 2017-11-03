@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 
 import { strings } from '../resources/Strings';
 
@@ -9,6 +9,7 @@ import ComponentExplorer from '../../utils/ComponentExplorer';
 
 interface LoginStats {
   error?: boolean;
+  redirectTo?: string;
 }
 
 export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
@@ -17,7 +18,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
     this.state = { error: false };
   }
 
-  private handleSubmit(event: React.FormEvent<{}>) {
+  private async handleSubmit(event: React.FormEvent<{}>) {
     event.preventDefault();
 
     const account = ComponentExplorer.extractInputValue(this.refs.account);
@@ -32,26 +33,22 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
       ComponentExplorer.extractInputValue(this.refs.member5)
     ].map(v => v.trim()).filter(v => !!v);
 
-    User.create({
-      account, password, name, members, appKey
-    }).then((succeeded) => {
+    try {
+      const succeeded = await User.create({ parameter: { account, password, name, members, appKey } });
       if (!succeeded) { return this.setState({ error: true }); }
-      const { location } = this.props;
-      const state = location.state as any;
-      const context = this.context as any;
-      if (state && state.nextPathname) {
-        context.router.replace(state.nextPathname);
-      } else {
-        context.router.replace('/');
-      }
-    }).catch(() => {
-      return this.setState({ error: true });
-    });
+      this.setState({ redirectTo: '/' });
+    } catch (error) {
+      this.setState({ error: true });
+    }
   }
 
   public render() {
-    const resource = strings();
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
 
+    const resource = strings();
+    
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
         <Card shadow={0} style={{ width: '400px', margin: 'auto' }}>

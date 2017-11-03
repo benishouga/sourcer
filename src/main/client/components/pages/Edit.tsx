@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Icon, Card, CardTitle, CardMenu, Snackbar, Spacer, Menu, MenuItem } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import ArenaTag from '../parts/ArenaTag';
 import { PlayerInfo } from '../../arenaWorker';
@@ -19,6 +19,7 @@ interface AiEditState {
   playerInfo: PlayerInfo | null;
   enemyInfo?: PlayerInfo;
   isSavedSnackbarActive?: boolean;
+  redirectToTop: boolean;
 }
 
 export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditState> {
@@ -26,7 +27,8 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
     super();
     this.state = {
       playerInfo: null,
-      isSavedSnackbarActive: false
+      isSavedSnackbarActive: false,
+      redirectToTop: false
     };
   }
 
@@ -46,48 +48,41 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
     this.reload();
   }
 
-  private requests: RequestPromise<any>[] = [];
+  private abortController: AbortController;
 
-  public componentDidMount() {
-    const request = User.select();
-    request.then((user) => {
-      if (user.source === undefined) {
-        return;
-      }
-      this.editingSource = user.source;
-      this.setState({
-        user,
-        playerInfo: { name: 'You', ai: user.source, color: '#866' },
-        enemyInfo: { name: 'Enemy', ai: fiddle, color: '#262' }
-      });
+  public async componentDidMount() {
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    const user = await User.select({ signal });
+    if (user.source === undefined) {
+      return;
+    }
+    this.editingSource = user.source;
+    this.setState({
+      user,
+      playerInfo: { name: 'You', ai: user.source, color: '#866' },
+      enemyInfo: { name: 'Enemy', ai: fiddle, color: '#262' }
     });
-    this.requests.push(request);
   }
 
   public componentWillUnmount() {
-    this.requests.forEach(request => request.abort());
+    this.abortController.abort();
   }
 
-  public save(event?: React.FormEvent<{}>) {
-    const request = User.update({ source: this.editingSource });
-    request.then(() => {
-      this.showSavedSnackbar();
-    });
-    this.requests.push(request);
+  public async save(event?: React.FormEvent<{}>) {
+    const signal = this.abortController.signal;
+    await User.update({ signal, user: { source: this.editingSource } });
+    this.showSavedSnackbar();
   }
 
-  public saveAndFindAgainst() {
-    const request = User.update({ source: this.editingSource });
-    request.then(() => {
-      const context = this.context as any;
-      context.router.replace('/');
-    });
-    this.requests.push(request);
+  public async saveAndFindAgainst() {
+    const signal = this.abortController.signal;
+    await User.update({ signal, user: { source: this.editingSource } });
+    this.setState({ redirectToTop: true });
   }
 
   public reload(event?: React.FormEvent<{}>) {
-    // HACK...
-    (this.refs.arena as any).onReload();
+    (this.refs.arena as ArenaTag).onReload();
   }
 
   public showSavedSnackbar() {
@@ -99,6 +94,12 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
   }
 
   public render() {
+    const { redirectToTop } = this.state;
+
+    if (redirectToTop) {
+      return <Redirect to={'/'} />;
+    }
+
     const resource = strings();
 
     if (this.state.playerInfo !== null) {

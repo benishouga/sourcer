@@ -4,7 +4,7 @@ import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
 import Matches from '../parts/Matches';
@@ -20,23 +20,19 @@ export default class Top extends React.Component<{}, TopStats> {
     super();
     this.state = {};
   }
-  private request: RequestPromise<UserResponse>;
+  private abortController: AbortController;
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    this.abortController = new AbortController();
     if (Auth.authResponse.authenticated) {
-      this.request = User.select();
-      this.request.then((user) => {
-        this.setState({
-          user
-        });
-      });
+      const signal = this.abortController.signal;
+      const user = await User.select({ signal });
+      this.setState({ user });
     }
   }
 
   public componentWillUnmount() {
-    if (this.request) {
-      this.request.abort();
-    }
+    this.abortController.abort();
   }
 
   public render() {

@@ -4,7 +4,7 @@ import { Grid, Cell, Card, CardTitle } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import { GameDump } from '../../../core/Dump';
 import { RouteParams } from '../routes';
 import Replayer from '../parts/Replayer';
@@ -20,17 +20,21 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
     this.state = {};
   }
 
-  private requests: RequestPromise<any>[] = [];
-  public componentDidMount() {
-    const request = Match.replay(this.props.match.params.matchId);
-    request.then((gameDump) => {
-      this.setState({ gameDump });
-    });
-    this.requests.push(request);
+  private abortController: AbortController;
+  public async componentDidMount() {
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    const matchId = this.props.match.params.matchId;
+    if (!matchId) {
+      console.log(`matchId: ${matchId}`);
+      return;
+    }
+    const gameDump = await Match.replay({ matchId });
+    this.setState({ gameDump });
   }
 
   public componentWillUnmount() {
-    this.requests.forEach(request => request.abort());
+    this.abortController.abort();
   }
 
   public render() {

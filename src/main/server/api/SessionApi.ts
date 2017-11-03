@@ -8,7 +8,12 @@ export function show(req: Request, res: Response) {
   if (!req.session) {
     return res.status(400).end('Bad Request');
   }
-  return res.send({ authenticated: req.session.authenticated }).end();
+
+  if (!req.session.admin && req.session.user) {
+    return req.session.destroy(() => res.send({ admin: false, authenticated: false }).end());
+  }
+
+  return res.send({ admin: req.session.admin, authenticated: req.session.authenticated }).end();
 }
 
 export async function create(req: Request, res: Response) {

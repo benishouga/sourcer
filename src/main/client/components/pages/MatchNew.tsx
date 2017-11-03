@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { RequestPromise } from '../../utils/fetch';
+import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 import Match from '../../service/Match';
 import { RouteParams } from '../routes';
@@ -14,6 +14,7 @@ interface MatchNewStats {
   user?: UserResponse;
   against?: UserResponse;
   openDialog?: boolean;
+  redirectTo?: string;
 }
 
 export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewStats> {
@@ -22,41 +23,47 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     this.state = {};
   }
 
-  public handleOpenDialog() {
+  public async handleOpenDialog() {
+    const against = this.props.match.params.account;
+    if (!against) {
+      console.log(`against: ${against}`);
+      return;
+    }
+
     this.setState({
       openDialog: true
     });
-    Match.create(this.props.match.params.account).then((match: MatchResponse) => {
-      const context = this.context as any;
-      context.router.replace(`/match/${match._id}`);
-    });
+    const match = await Match.create({ against });
+    this.setState({ redirectTo: `/match/${match._id}` });
   }
 
-  private requests: RequestPromise<UserResponse>[] = [];
+  private abortController: AbortController;
   public componentDidMount() {
-    {
-      const request = User.select();
-      request.then((user) => {
-        this.setState({ user });
-      });
-      this.requests.push(request);
-    }
-    {
-      const request = User.select(this.props.match.params.account);
-      request.then((user) => {
-        this.setState({
-          against: user
-        });
-      });
-      this.requests.push(request);
-    }
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+
+    // process in parallel...
+    (async () => {
+      const user = await User.select({ signal });
+      this.setState({ user });
+    })();
+
+    (async () => {
+      const account = this.props.match.params.account;
+      const user = await User.select({ signal, account });
+      this.setState({ against: user });
+    })();
   }
 
   public componentWillUnmount() {
-    this.requests.forEach(request => request.abort());
+    this.abortController.abort();
   }
 
   public render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+
     const resource = strings();
 
     let userCard: React.ReactElement<any>;
