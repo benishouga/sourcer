@@ -11,7 +11,11 @@ describe('User', () => {
   let user: UserDocument | null = null;
   before(async function () {
     this.timeout(5000);
-    await db(process.env.MONGO_TEST);
+    const mongoDbUri = process.env.MONGO_TEST;
+    if (!mongoDbUri) {
+      throw new Error('env.MONGO_TEST is not defined.');
+    }
+    await db(mongoDbUri);
   });
 
   beforeEach(async () => {

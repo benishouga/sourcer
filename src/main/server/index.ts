@@ -17,7 +17,12 @@ import db from './db';
 // tslint:disable-next-line:variable-name
 const MongoStore = connectMongo(session);
 
-db(process.env.MONGODB_URI).then((mongooseConnection) => {
+const mongoDbUri = process.env.MONGODB_URI;
+if (!mongoDbUri) {
+  throw new Error('env.MONGODB_URI is not defined.');
+}
+
+db(mongoDbUri).then((mongooseConnection) => {
   const app = express();
 
   app.use((req, res, next) => {
