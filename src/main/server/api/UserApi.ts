@@ -46,6 +46,7 @@ export async function create(req: Request, res: Response) {
       return res.status(503).send('Internal Server Error').end();
     }
 
+    req.session.admin = false;
     req.session.authenticated = true;
     req.session.user = user;
     return res.status(201).type('json').end();

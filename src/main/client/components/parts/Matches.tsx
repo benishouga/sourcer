@@ -18,7 +18,7 @@ interface MatchesState {
   matches?: MatchResponse[];
 }
 
-export default class Matches extends React.Component<MatchesProps, MatchesState>{
+export default class Matches extends React.Component<MatchesProps, MatchesState> {
   constructor(props: MatchesProps) {
     super();
     this.state = { matches: props.matches };
@@ -109,9 +109,9 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
           {winOrLoseIcon}
         </span>
       );
-    }).forEach((element) => {
+    }).forEach((element, index) => {
       if (players.length !== 0) {
-        players.push(<span> vs </span>);
+        players.push(<span key={index}> vs </span>);
       }
       players.push(element);
     });

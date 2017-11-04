@@ -48,7 +48,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
     }
 
     const resource = strings();
-    
+
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
         <Card shadow={0} style={{ width: '400px', margin: 'auto' }}>

@@ -9,7 +9,7 @@ export function show(req: Request, res: Response) {
     return res.status(400).end('Bad Request');
   }
 
-  if (!req.session.admin && req.session.user) {
+  if (!req.session.admin && !req.session.user) {
     return req.session.destroy(() => res.send({ admin: false, authenticated: false }).end());
   }
 

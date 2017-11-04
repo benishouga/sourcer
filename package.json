@@ -19,7 +19,7 @@
     "pretest": "npm run build:common",
     "test": "cross-env NODE_ENV=test mocha --bail out/test/**/*.spec.js",
     "cover": "nyc npm test",
-    "lint": "tslint -c tslint.json 'src/main/**/*.ts' 'src/test/**/*.ts'",
+    "lint": "tslint -c tslint.json 'src/main/**/*.ts' 'src/main/**/*.tsx' 'src/test/**/*.ts'",
     "prestart": "npm run build",
     "start": "node out/main/server/index.js",
     "predebug": "npm run build",

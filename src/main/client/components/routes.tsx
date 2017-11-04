@@ -41,7 +41,6 @@ const routes = (
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
       <Route path="/logout" component={Logout} />
-      <RequireAuthRoute path="/match/new" component={MatchNew} />
       <RequireAuthRoute path="/match/new/:account" component={MatchNew} />
       <RequireAuthRoute path="/match/:matchId" component={MatchShow} />
       <RequireAuthRoute path="/edit" component={Edit} />
