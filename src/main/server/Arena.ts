@@ -60,8 +60,7 @@ enum Command {
 
 const GAME_TIMEOUT_MILLS = 15 * 1000; // 15 sec
 const THINK_TIMEOUT = 20; // 20 msec
-const DELAY_FOR_POSTMESSAGE = 10 * 1000; // 10 sec
-const DELAY_FOR_END_OF_GAME = 10 * 1000; // 10 sec
+const DELAY_FOR_END_OF_GAME = 1000; // 1 sec
 
 export function arena(players: SourcerSource[]): Promise<GameDump> {
   const id = players.map(p => p.account).join(',');
@@ -241,7 +240,7 @@ if (cluster.isWorker) {
               setTimeout(() => {
                 console.log('arena', id, 'process.exit');
                 process.exit(0);
-              }, DELAY_FOR_POSTMESSAGE);
+              }, DELAY_FOR_END_OF_GAME);
             }
           });
         };

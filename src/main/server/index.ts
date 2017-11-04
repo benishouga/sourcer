@@ -48,7 +48,6 @@ db(mongoDbUri).then((mongooseConnection) => {
 
   app.use((req, res) => {
     fs.readFile(__dirname + '/index.html', (error, text) => {
-      console.error(error);
       if (error) {
         return res.status(503).end();
       }

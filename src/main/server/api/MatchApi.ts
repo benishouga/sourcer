@@ -75,7 +75,7 @@ export async function create(req: Request, res: Response) {
   match.dump = deflated;
   match.players = [user1, user2];
 
-  const id = await MatchService.createAndRegisterToUser(match);
+  const matchDocument = await MatchService.createAndRegisterToUser(match);
 
-  return res.status(200).type('json').send({ _id: id }).end();
+  return res.status(200).type('json').send({ _id: matchDocument._id }).end();
 }
