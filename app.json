@@ -1,0 +1,11 @@
+{
+  "name": "Sourcer",
+  "website": "https://github.com/benishouga/sourcer",
+  "repository": "https://github.com/benishouga/sourcer",
+  "logo": "https://raw.githubusercontent.com/benishouga/sourcer/master/src/statics/favicon.ico",
+  "success_url": "/",
+  "keywords": [],
+  "addons": [
+    "mongolab"
+  ]
+}
