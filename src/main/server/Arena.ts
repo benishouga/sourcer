@@ -59,8 +59,8 @@ enum Command {
 }
 
 const GAME_TIMEOUT_MILLS = 15 * 1000; // 15 sec
-const THINK_TIMEOUT = 20; // 20 msec
-const DELAY_FOR_END_OF_GAME = 1000; // 1 sec
+const THINK_TIMEOUT = 40; // 40 msec
+const DELAY_FOR_END_OF_GAME = 500; // 500 msec
 
 export function arena(players: SourcerSource[]): Promise<GameDump> {
   const id = players.map(p => p.account).join(',');
@@ -79,6 +79,15 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
     };
     let currentThink: number | null = null;
     let thinkTimer: NodeJS.Timer | null = null;
+
+    const kill = () => {
+      try {
+        process.kill(child.process.pid);
+      } catch (error) {
+        console.log('process.kill', error);
+      }
+    };
+
     const thinkTimeout = () => {
       const timeoutedName = currentThink !== null ? game.players[currentThink].name : null;
       const others = Object.keys(game.players).map(key => Number(key)).filter(key => key !== currentThink);
@@ -98,7 +107,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           frame: 0
         };
       }
-      process.kill(child.process.pid);
+      kill();
       clearTimeout(gameTimer);
       resolved = true;
       resolve(game);
@@ -107,7 +116,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
       if (thinkTimer) {
         clearTimeout(thinkTimer);
       }
-      process.kill(child.process.pid);
+      kill();
       resolved = true;
       resolve(game);
     }, GAME_TIMEOUT_MILLS);
@@ -142,7 +151,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           clearTimeout(gameTimer);
           setTimeout(() => {
             console.log('arena', id, 'finish', new Date().getTime() - start);
-            process.kill(child.process.pid);
+            kill();
           }, DELAY_FOR_END_OF_GAME);
           break;
         case Command.LOG:
