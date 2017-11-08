@@ -2,44 +2,40 @@ import { EventEmitter } from 'events';
 import { get, post, del, AbortSignal } from '../utils/fetch';
 
 export default class Auth {
-  public static emitter = new EventEmitter();
+  private static emitter = new EventEmitter();
   private static response: AuthResponse;
-  public static get authResponse() {
+  public static get status() {
     return this.response;
   }
 
-  public static set authResponse(authResponse: AuthResponse) {
-    if (this.response !== authResponse) {
-      this.emitter.emit('onchange', authResponse);
+  public static set status(response: AuthResponse) {
+    if (this.response !== response) {
+      this.emitter.emit('onchange', response);
     }
-    this.response = authResponse;
+    this.response = response;
   }
 
   public static async login({ signal, account, password }: { signal?: AbortSignal, account?: string, password?: string } = {}) {
     try {
-      let authResponse: AuthResponse;
-      if (!account && !password) {
-        authResponse = await get<AuthResponse>('/api/session', { signal });
-      } else {
-        authResponse = await post<AuthResponse>('/api/session', { signal, body: { account, password } });
-      }
-      this.authResponse = authResponse;
+      this.status = !account && !password ?
+        await get<AuthResponse>('/api/session', { signal }) :
+        await post<AuthResponse>('/api/session', { signal, body: { account, password } });
     } catch (error) {
-      this.authResponse = { admin: false, authenticated: false };
+      this.status = { admin: false, authenticated: false };
     }
-    return this.authResponse;
+    return this.status;
   }
 
   public static logout({ signal }: { signal?: AbortSignal } = {}) {
-    this.authResponse = { admin: false, authenticated: false };
+    this.status = { admin: false, authenticated: false };
     return del('/api/session', { signal });
   }
 
-  public static addOnChangeListener(cb: (authResponse: AuthResponse) => void) {
+  public static addOnChangeListener(cb: (response: AuthResponse) => void) {
     this.emitter.on('onchange', cb);
   }
 
-  public static removeOnChangeListener(cb: (authResponse: AuthResponse) => void) {
+  public static removeOnChangeListener(cb: (response: AuthResponse) => void) {
     this.emitter.removeListener('onchange', cb);
   }
 }

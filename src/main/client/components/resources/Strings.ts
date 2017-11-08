@@ -15,6 +15,7 @@ export interface StringResource {
   fieldLabelAccount: string;
   fieldLabelPassword: string;
   fieldLabelName: string;
+  fieldLabelNameForTeamGame: string;
   fieldLabelMember1: string;
   fieldLabelMember2: string;
   fieldLabelMember3: string;

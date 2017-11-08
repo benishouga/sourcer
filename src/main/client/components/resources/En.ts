@@ -13,7 +13,8 @@ export class En implements StringResource {
   public signUpTitle = 'Sign Up';
   public fieldLabelAccount = 'Account...';
   public fieldLabelPassword = 'Password...';
-  public fieldLabelName = 'Team Name...';
+  public fieldLabelName = 'Player Name...';
+  public fieldLabelNameForTeamGame = 'Team Name...';
   public fieldLabelMember1 = 'Member 1...';
   public fieldLabelMember2 = 'Member 2...';
   public fieldLabelMember3 = 'Member 3...';

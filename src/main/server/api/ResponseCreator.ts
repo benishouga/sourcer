@@ -53,4 +53,11 @@ export default class ResponseCreator {
       admin: session.admin
     };
   }
+
+  public static config(): ConfigResponse {
+    return {
+      requireAppKey: !!process.env.APP_KEY,
+      teamGame: !!process.env.TEAM_GAME && (process.env.TEAM_GAME as string).toUpperCase() === 'TRUE'
+    };
+  }
 }

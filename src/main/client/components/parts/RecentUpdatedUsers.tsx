@@ -78,7 +78,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     const members = user.members.join(', ');
     return (
       <div>
-        {`${members}`}<br />
+        {`${members}`}{members.length ? <br /> : null}
         <Icon name="mood" className="inline" />
         {user.wins}
         {resource.wins}

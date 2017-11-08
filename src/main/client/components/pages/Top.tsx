@@ -24,7 +24,7 @@ export default class Top extends React.Component<{}, TopStats> {
 
   public async componentDidMount() {
     this.abortController = new AbortController();
-    if (Auth.authResponse.authenticated) {
+    if (Auth.status.authenticated) {
       const signal = this.abortController.signal;
       const user = await User.select({ signal });
       this.setState({ user });
@@ -37,7 +37,7 @@ export default class Top extends React.Component<{}, TopStats> {
 
   public render() {
     const resource = strings();
-    if (!Auth.authResponse.authenticated) {
+    if (!Auth.status.authenticated) {
       return (
         <div>
           <h2>Sourcer</h2>

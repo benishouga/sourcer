@@ -26,9 +26,10 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-  if (req.body.appKey !== process.env.APP_KEY) {
+  if (!!process.env.APP_KEY && req.body.appKey !== process.env.APP_KEY) {
     return res.status(403).end();
   }
+
   try {
     const account = Validator.validateAccount(req.body.account);
     const name = Validator.validateName(req.body.name);

@@ -2,6 +2,7 @@ import { Express } from 'express';
 import * as UserApi from './UserApi';
 import * as MatchApi from './MatchApi';
 import * as SessionApi from './SessionApi';
+import * as ConfigApi from './ConfigApi';
 
 export default (app: Express) => {
   app.get('/api/user/recent', UserApi.recent);
@@ -20,4 +21,6 @@ export default (app: Express) => {
   app.post('/api/session', SessionApi.create);
   app.get('/api/session', SessionApi.show);
   app.delete('/api/session', SessionApi.destroy);
+
+  app.get('/api/config', ConfigApi.show);
 };

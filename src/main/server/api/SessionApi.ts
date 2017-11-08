@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import ResponseCreator from './ResponseCreator';
 
-import UserModel, { UserDocument, UserService } from '../models/UserModel';
+import { UserService } from '../models/UserModel';
 
 export function show(req: Request, res: Response) {
   if (!req.session) {

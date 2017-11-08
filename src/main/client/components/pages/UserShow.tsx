@@ -41,7 +41,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
   }
 
   public async componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
-    if (Auth.authResponse.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
+    if (Auth.status.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
       this.abortController.abort();
       this.abortController = new AbortController();
       const account = nextProps.match.params.account;

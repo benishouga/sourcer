@@ -5,6 +5,28 @@
   "logo": "https://raw.githubusercontent.com/benishouga/sourcer/master/src/statics/favicon.ico",
   "success_url": "/",
   "keywords": [],
+  "env": {
+    "APP_KEY": {
+      "description": "This is the key to use when signing up. It is used to limit the user of the application.",
+      "required": false,
+      "value": ""
+    },
+    "TEAM_GAME": {
+      "description": "Set it to 'true' when used in group work. It can enter the name of the teammate.",
+      "required": true,
+      "value": "false"
+    },
+    "ADMIN_PASSWORD": {
+      "description": "Password of 'admin' with special authority.",
+      "required": true,
+      "value": "hogehoge"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "Do not change.",
+      "required": true,
+      "value": "false"
+    }
+  },
   "addons": [
     "mongolab"
   ]

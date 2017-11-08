@@ -13,7 +13,8 @@ export class Ja implements StringResource {
   public signUpTitle = 'サインアップ';
   public fieldLabelAccount = 'アカウントID...';
   public fieldLabelPassword = 'パスワード...';
-  public fieldLabelName = 'チーム名...';
+  public fieldLabelName = 'プレイヤー名...';
+  public fieldLabelNameForTeamGame = 'チーム名...';
   public fieldLabelMember1 = 'メンバー１...';
   public fieldLabelMember2 = 'メンバー２...';
   public fieldLabelMember3 = 'メンバー３...';

@@ -4,6 +4,7 @@ import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { strings } from '../resources/Strings';
 
 import User from '../../service/User';
+import Config from '../../service/Config';
 import { Card, CardTitle, CardText, CardActions, Button, Textfield, TextfieldProps, Icon, List, ListItem, ListItemContent } from 'react-mdl';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 
@@ -58,8 +59,8 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
           <CardText>
             <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" />
             <Textfield label={resource.fieldLabelPassword} floatingLabel ref="password" type="password" />
-            <Textfield label={resource.fieldLabelName} floatingLabel ref="name" />
-            <div className="headered-list">
+            <Textfield label={Config.values.teamGame ? resource.fieldLabelNameForTeamGame : resource.fieldLabelName} floatingLabel ref="name" />
+            <div className="headered-list" style={{ display: Config.values.teamGame ? '' : 'none' }}>
               <p>{resource.members}</p>
               <List className="list-text-fields">
                 <ListItem>
@@ -79,7 +80,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
                 </ListItem>
               </List>
             </div>
-            <Textfield label={resource.fieldLabelAppKey} floatingLabel ref="appKey" />
+            <Textfield label={resource.fieldLabelAppKey} floatingLabel ref="appKey" style={{ display: Config.values.requireAppKey ? '' : 'none' }} />
             {this.state.error && (
               <p>{resource.badRequest}</p>
             )}
