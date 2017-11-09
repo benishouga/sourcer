@@ -46,7 +46,7 @@ export default class SourcerController extends Controller {
       sourcer.wait += Configs.SCAN_WAIT;
       const oppositedDirection = sourcer.opposite(direction);
       const normalizedRenge = renge || Number.MAX_VALUE;
-      const radar = Utils.createRadar(sourcer.position, normalizedRenge, angle, normalizedRenge);
+      const radar = Utils.createRadar(sourcer.position, oppositedDirection, angle, normalizedRenge);
       return field.scanAttack(sourcer, radar);
     };
     this.ahead = () => {
