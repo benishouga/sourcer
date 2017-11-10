@@ -6,12 +6,13 @@ import UserModel, { UserDocument, UserService } from '../main/server/models/User
 import MatchModel, { MatchService } from '../main/server/models/MatchModel';
 
 import TestUtils from './TestUtils';
+import Env from '../main/server/Env';
 
 describe('Match', () => {
   let user: UserDocument | null = null;
   before(async function () {
     this.timeout(5000);
-    const mongoDbUri = process.env.MONGO_TEST;
+    const mongoDbUri = Env.mongoTest;
     if (!mongoDbUri) {
       throw new Error('env.MONGO_TEST is not defined.');
     }

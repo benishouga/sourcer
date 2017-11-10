@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import ResponseCreator from './ResponseCreator';
 
 import { UserService } from '../models/UserModel';
+import Env from '../Env';
 
 export function show(req: Request, res: Response) {
   if (!req.session) {
@@ -32,7 +33,7 @@ export async function create(req: Request, res: Response) {
   }
 
   if (account === 'admin') {
-    if (password === process.env.ADMIN_PASSWORD) {
+    if (password === Env.adminPassword) {
       req.session.authenticated = true;
       req.session.admin = true;
       req.session.user = null;

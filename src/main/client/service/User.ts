@@ -26,8 +26,7 @@ export default class User {
   }
 
   public static async create({ signal, parameter }: { signal?: AbortSignal, parameter: SignUpParameter }) {
-    await post('/api/user', { signal, body: parameter });
-    return Auth.login();
+    return await post<ErrorResponse>('/api/user', { signal, body: parameter });
   }
 
   public static update({ signal, user }: { signal?: AbortSignal, user: UserResponse }) {

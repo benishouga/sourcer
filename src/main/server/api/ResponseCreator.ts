@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { UserDocument } from '../models/UserModel';
 import { MatchDocument } from '../models/MatchModel';
+import Env from '../Env';
 
 export default class ResponseCreator {
   public static inflated(document: any): boolean {
@@ -56,8 +57,12 @@ export default class ResponseCreator {
 
   public static config(): ConfigResponse {
     return {
-      requireAppKey: !!process.env.APP_KEY,
-      teamGame: !!process.env.TEAM_GAME && (process.env.TEAM_GAME as string).toUpperCase() === 'TRUE'
+      requireAppKey: !!Env.appKey,
+      teamGame: Env.isTeamGame
     };
+  }
+
+  public static error(errors: (ResourceId)[]): ErrorResponse {
+    return { errors };
   }
 }

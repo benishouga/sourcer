@@ -1,0 +1,3 @@
+interface ErrorResponse {
+  errors: ResourceId[];
+}

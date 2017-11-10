@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import UserModel, { UserDocument, UserService } from '../models/UserModel';
 import Validator from '../utils/Validator';
 import ResponseCreator from './ResponseCreator';
+import Normalizer from '../utils/Normalizer';
+import Env from '../Env';
 
 export async function show(req: Request, res: Response) {
   if (!req.session) {
@@ -26,35 +28,39 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-  if (!!process.env.APP_KEY && req.body.appKey !== process.env.APP_KEY) {
+  if (!!Env.appKey && req.body.appKey !== Env.appKey) {
     return res.status(403).end();
   }
 
-  try {
-    const account = Validator.validateAccount(req.body.account);
-    const name = Validator.validateName(req.body.name);
-    const password = Validator.validatePassword(req.body.password);
-    const members = Validator.validateMembers(req.body.members);
+  const account = Normalizer.normalize(req.body.account);
+  const name = Normalizer.normalize(req.body.name);
+  const password = Normalizer.normalize(req.body.password);
+  const members = Normalizer.normalizeArray(req.body.members);
 
-    const userExist = await UserService.loadByAccount(account);
+  const validationResults: ResourceId[] = [];
+  Validator.validateAccount(validationResults, account);
+  Validator.validateName(validationResults, name);
+  Validator.validatePassword(validationResults, password);
 
-    if (userExist) {
-      return res.status(409).end();
-    }
-
-    const user = await UserService.createFromAccount(account, name, members, 'own', UserService.hash(account, password));
-    if (!req.session) {
-      return res.status(503).send('Internal Server Error').end();
-    }
-
-    req.session.admin = false;
-    req.session.authenticated = true;
-    req.session.user = user;
-    return res.status(201).type('json').end();
-
-  } catch (error) {
-    return res.status(400).send(error).end();
+  if (validationResults.length) {
+    return res.status(400).send(ResponseCreator.error(validationResults)).end();
   }
+
+  const userExist = await UserService.loadByAccount(account);
+
+  if (userExist) {
+    return res.status(409).send(ResponseCreator.error(['invalidAccountExist'])).end();
+  }
+
+  const user = await UserService.createFromAccount(account, name, members, 'own', UserService.hash(account, password));
+  if (!req.session) {
+    return res.status(503).send('Internal Server Error').end();
+  }
+
+  req.session.admin = false;
+  req.session.authenticated = true;
+  req.session.user = user;
+  return res.status(201).type('json').end();
 }
 
 export async function update(req: Request, res: Response) {

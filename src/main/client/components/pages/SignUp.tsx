@@ -7,16 +7,17 @@ import User from '../../service/User';
 import Config from '../../service/Config';
 import { Card, CardTitle, CardText, CardActions, Button, Textfield, TextfieldProps, Icon, List, ListItem, ListItemContent } from 'react-mdl';
 import ComponentExplorer from '../../utils/ComponentExplorer';
+import Auth from '../../service/Auth';
 
 interface LoginStats {
-  error?: boolean;
+  errors: ResourceId[] | null;
   redirectTo?: string;
 }
 
 export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
   constructor() {
     super();
-    this.state = { error: false };
+    this.state = { errors: null };
   }
 
   private async handleSubmit(event: React.FormEvent<{}>) {
@@ -35,12 +36,13 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
     ].map(v => v.trim()).filter(v => !!v);
 
     try {
-      const succeeded = await User.create({ parameter: { account, password, name, members, appKey } });
-      if (!succeeded) { return this.setState({ error: true }); }
-      this.setState({ redirectTo: '/' });
+      await User.create({ parameter: { account, password, name, members, appKey } });
     } catch (error) {
-      this.setState({ error: true });
+      this.setState({ errors: (error.response.body as ErrorResponse).errors });
+      return;
     }
+    await Auth.login();
+    this.setState({ redirectTo: '/' });
   }
 
   public render() {
@@ -81,9 +83,9 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
               </List>
             </div>
             <Textfield label={resource.fieldLabelAppKey} floatingLabel ref="appKey" style={{ display: Config.values.requireAppKey ? '' : 'none' }} />
-            {this.state.error && (
-              <p>{resource.badRequest}</p>
-            )}
+            {this.state.errors && this.state.errors.map((error) => {
+              return <p>{resource[error]}</p>;
+            })}
           </CardText>
           <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
             <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>{resource.signUp}</Button>

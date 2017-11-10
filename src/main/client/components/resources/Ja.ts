@@ -1,5 +1,3 @@
-import { StringResource } from './Strings';
-
 export class Ja implements StringResource {
   public apiDocument = 'API ドキュメント';
   public writeCode = 'プログラムを書く';
@@ -50,4 +48,13 @@ export class Ja implements StringResource {
   public standard = 'スタンダードな動き';
   public viewCode = '練習相手のコードを見る';
   public reselect = '再選択する';
+  public invalidAccountTooShort = 'アカウントIDは4文字以上である必要があります。';
+  public invalidAccountCharacterClass = 'アカウントIDの文字種は半角英数字である必要があります。';
+  public invalidAccountReserved = 'このアカウントIDはすでに利用されています。';
+  public invalidAccountExist = 'このアカウントIDはすでに利用されています。';
+  public invalidPasswordTooShort = 'パスワードは4文字以上である必要があります。';
+  public invalidNameEmpty = 'プレイヤー名が未入力です。';
+  public invalidNameTooLong = 'プレイヤー名が20文字以内である必要があります。';
+  public invalidTeamNameEmpty = 'チーム名が未入力です。';
+  public invalidTeamNameTooLong = 'チーム名が20文字以内である必要があります。';
 }

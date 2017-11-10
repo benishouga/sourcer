@@ -13,11 +13,12 @@ import * as cookieParser from 'cookie-parser';
 import * as connectMongo from 'connect-mongo';
 
 import db from './db';
+import Env from './Env';
 
 // tslint:disable-next-line:variable-name
 const MongoStore = connectMongo(session);
 
-const mongoDbUri = process.env.MONGODB_URI;
+const mongoDbUri = Env.mongodbUri;
 if (!mongoDbUri) {
   throw new Error('env.MONGODB_URI is not defined.');
 }
@@ -38,7 +39,7 @@ db(mongoDbUri).then((mongooseConnection) => {
   app.use(bodyParser.json());
 
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'seecreeeeet',
+    secret: Env.sessionSecret || 'seecreeeeet',
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection, collection: 'session' })
@@ -55,7 +56,7 @@ db(mongoDbUri).then((mongooseConnection) => {
     });
   });
 
-  const port = process.env.PORT || 5000;
+  const port = Env.port || 5000;
   console.log('listening...' + port);
   app.listen(port);
 }).catch((error) => {

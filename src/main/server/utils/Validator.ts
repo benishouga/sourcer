@@ -1,59 +1,33 @@
-function normalize(v: string) {
-  if (!v) {
-    return '';
-  }
-  return v.trim();
-}
-function normalizeArray(strings: string[]): string[] {
-  if (!strings) {
-    return [];
-  }
-  return strings.map(string => string.trim()).filter(v => !!v);
-}
-
-export enum ValidationErrorType {
-  Account = 'Account ',
-  Password = 'Password ',
-  Name = 'Name '
-}
-
-export class ValidationError extends Error {
-  constructor(public type: ValidationErrorType, message: string) {
-    super(message);
-  }
-}
+import Env from '../Env';
 
 export default class Validator {
-  public static validateAccount(input: string): string {
-    const account = normalize(input);
-    if (account.length < 4 || /[^a-zA-Z0-9_]/.test(account)) {
-      throw new ValidationError(ValidationErrorType.Account, 'Validation error : account');
+  public static validateAccount(validationResults: ResourceId[], input: string): void {
+    if (input.length < 4) {
+      validationResults.push('invalidAccountTooShort');
     }
 
-    if ('recent' === account || 'admin' === account || 'all' === account) {
-      throw new ValidationError(ValidationErrorType.Account, 'Validation error : account reserved');
+    if (/[^a-zA-Z0-9_]/.test(input)) {
+      validationResults.push('invalidAccountCharacterClass');
     }
 
-    return account;
+    if ('recent' === input || 'admin' === input || 'all' === input) {
+      validationResults.push('invalidAccountReserved');
+    }
   }
 
-  public static validatePassword(input: string): string {
-    const password = normalize(input);
-    if (password.length < 4) {
-      throw new ValidationError(ValidationErrorType.Password, 'Validation error : password');
+  public static validatePassword(validationResults: ResourceId[], input: string): void {
+    if (input.length < 4) {
+      validationResults.push('invalidPasswordTooShort');
     }
-    return password;
   }
 
-  public static validateName(input: string): string {
-    const name = normalize(input);
-    if (!name || 11 < name.length) {
-      throw new ValidationError(ValidationErrorType.Name, 'Validation error : name');
+  public static validateName(validationResults: ResourceId[], input: string): void {
+    if (!input) {
+      validationResults.push(Env.isTeamGame ? 'invalidTeamNameEmpty' : 'invalidNameEmpty');
     }
-    return name;
-  }
 
-  public static validateMembers(value: string[]) {
-    return normalizeArray(value);
+    if (21 < input.length) {
+      validationResults.push(Env.isTeamGame ? 'invalidTeamNameTooLong' : 'invalidNameTooLong');
+    }
   }
 }

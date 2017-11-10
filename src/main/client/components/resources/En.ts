@@ -1,5 +1,3 @@
-import { StringResource } from './Strings';
-
 export class En implements StringResource {
   public apiDocument = 'API documents';
   public writeCode = 'Write code';
@@ -50,4 +48,13 @@ export class En implements StringResource {
   public standard = 'Standard';
   public viewCode = 'View code';
   public reselect = 'Reselect';
+  public invalidAccountTooShort = 'Account is too short.';
+  public invalidAccountCharacterClass = 'Account is invalid character class.';
+  public invalidAccountReserved = 'Account is reserved.';
+  public invalidAccountExist = 'Account is exist.';
+  public invalidPasswordTooShort = 'Password is too short.';
+  public invalidNameEmpty = 'Name is empty.';
+  public invalidNameTooLong = 'Name is too long.';
+  public invalidTeamNameEmpty = 'Team name is empty.';
+  public invalidTeamNameTooLong = 'Team name is too long.';
 }
