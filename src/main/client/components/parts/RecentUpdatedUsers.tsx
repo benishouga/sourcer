@@ -28,9 +28,8 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
   public async componentDidMount() {
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
-    const users = await User.recent({ signal });
-    this.setState({ users });
-
+    const users = await User.recent({ signal }).catch(error => console.log(error));
+    if (users) { this.setState({ users }); }
   }
 
   public componentWillUnmount() {

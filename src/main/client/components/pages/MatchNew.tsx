@@ -44,14 +44,14 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
 
     // process in parallel...
     (async () => {
-      const user = await User.select({ signal });
-      this.setState({ user });
+      const user = await User.select({ signal }).catch(error => console.log(error));
+      if (user) { this.setState({ user }); }
     })();
 
     (async () => {
       const account = this.props.match.params.account;
-      const user = await User.select({ signal, account });
-      this.setState({ against: user });
+      const against = await User.select({ signal, account }).catch(error => console.log(error));
+      if (against) { this.setState({ against }); }
     })();
   }
 

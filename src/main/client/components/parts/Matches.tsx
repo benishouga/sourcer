@@ -30,30 +30,30 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     this.setState({ matches: nextProps.matches });
   }
 
-  public async componentDidMount() {
+  private async loadMatches(account?: string) {
     this.abortController = new AbortController();
+    const signal = this.abortController.signal;
+    this.setState({ matches: undefined });
+    const user = await User.select({ signal, account }).catch(error => console.log(error));
+    if (user) { this.setState({ matches: user.matches }); }
+  }
 
+  public async componentDidMount() {
     if (!this.props.matches) {
-      const signal = this.abortController.signal;
-      const account = this.props.account;
-      const user = await User.select({ signal, account });
-      this.setState({ matches: user.matches });
+      this.loadMatches(this.props.account);
     }
   }
 
   public componentWillUnmount() {
-    this.abortController.abort();
+    if (this.abortController) {
+      this.abortController.abort();
+    }
   }
 
   public async componentWillUpdate(nextProps: MatchesProps, nextState: MatchesState) {
     if (!nextProps.matches) {
       this.abortController.abort();
-      this.abortController = new AbortController();
-      const account = nextProps.account;
-      const signal = this.abortController.signal;
-      this.setState({ matches: undefined });
-      const user = await User.select({ signal, account });
-      this.setState({ matches: user.matches });
+      this.loadMatches(nextProps.account);
     }
   }
 

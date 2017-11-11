@@ -53,8 +53,8 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
   public async componentDidMount() {
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
-    const user = await User.select({ signal });
-    if (user.source === undefined) {
+    const user = await User.select({ signal }).catch(error => console.log(error));
+    if (!user || user.source === undefined) {
       return;
     }
     this.editingSource = user.source;
@@ -71,13 +71,13 @@ export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditS
 
   public async save(event?: React.FormEvent<{}>) {
     const signal = this.abortController.signal;
-    await User.update({ signal, user: { source: this.editingSource } });
+    await User.update({ signal, user: { source: this.editingSource } }).catch(error => console.log(error));
     this.showSavedSnackbar();
   }
 
   public async saveAndFindAgainst() {
     const signal = this.abortController.signal;
-    await User.update({ signal, user: { source: this.editingSource } });
+    await User.update({ signal, user: { source: this.editingSource } }).catch(error => console.log(error));
     this.setState({ redirectToTop: true });
   }
 

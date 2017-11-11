@@ -28,12 +28,16 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
 
   private abortController: AbortController;
 
-  public async componentDidMount() {
-    const account = this.props.match.params.account;
+  private async loadUser(account?: string) {
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
-    const user = await User.select({ signal, account });
-    this.setState({ user });
+    this.setState({ user: undefined });
+    const user = await User.select({ signal, account }).catch(error => console.log(error));
+    if (user) { this.setState({ user }); }
+  }
+
+  public async componentDidMount() {
+    this.loadUser(this.props.match.params.account);
   }
 
   public componentWillUnmount() {
@@ -43,12 +47,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
   public async componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
     if (Auth.status.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
       this.abortController.abort();
-      this.abortController = new AbortController();
-      const account = nextProps.match.params.account;
-      const signal = this.abortController.signal;
-      this.setState({ user: undefined });
-      const user = await User.select({ signal, account });
-      this.setState({ user });
+      this.loadUser(nextProps.match.params.account);
     }
   }
 

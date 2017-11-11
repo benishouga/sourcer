@@ -44,8 +44,8 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
   public async componentDidMount() {
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
-    const users = await User.all({ signal });
-    this.setState({ users });
+    const users = await User.all({ signal }).catch(error => console.log(error));
+    if (users) { this.setState({ users }); }
   }
 
   public componentWillUnmount() {

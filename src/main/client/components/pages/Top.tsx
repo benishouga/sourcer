@@ -26,8 +26,8 @@ export default class Top extends React.Component<{}, TopStats> {
     this.abortController = new AbortController();
     if (Auth.status.authenticated) {
       const signal = this.abortController.signal;
-      const user = await User.select({ signal });
-      this.setState({ user });
+      const user = await User.select({ signal }).catch(error => console.log(error));
+      if (user) { this.setState({ user }); }
     }
   }
 

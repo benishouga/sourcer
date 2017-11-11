@@ -29,8 +29,8 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
       console.log(`matchId: ${matchId}`);
       return;
     }
-    const gameDump = await Match.replay({ matchId });
-    this.setState({ gameDump });
+    const gameDump = await Match.replay({ signal, matchId }).catch(error => console.log(error));
+    if (gameDump) { this.setState({ gameDump }); }
   }
 
   public componentWillUnmount() {
