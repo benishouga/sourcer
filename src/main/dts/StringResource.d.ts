@@ -1,4 +1,5 @@
 interface StringResource {
+  none: string;
   apiDocument: string;
   writeCode: string;
   login: string;

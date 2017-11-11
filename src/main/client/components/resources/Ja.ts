@@ -1,4 +1,5 @@
 export class Ja implements StringResource {
+  public none = 'なし';
   public apiDocument = 'API ドキュメント';
   public writeCode = 'プログラムを書く';
   public login = 'ログイン';

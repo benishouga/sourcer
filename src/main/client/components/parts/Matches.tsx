@@ -87,7 +87,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         );
       });
     }
-    return [];
+    return <p>{resource.none}</p>;
   }
 
   private players(match: MatchResponse) {

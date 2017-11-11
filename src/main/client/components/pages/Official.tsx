@@ -13,7 +13,9 @@ import ProfileCard from '../parts/ProfileCard';
 interface OfficialStats {
   users?: UserResponse[];
   player1?: UserResponse;
+  player1Loading?: boolean;
   player2?: UserResponse;
+  player2Loading?: boolean;
   openDialog?: boolean;
   redirectTo?: string;
 }
@@ -58,7 +60,11 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
       return (<span>{resource.loading}</span>);
     }
     const lists = this.state.users.map((user) => {
-      return (<ListItem key={user.account}><ListItemContent icon="person"><a onClick={() => { callback(user); }}>{user.name}</a></ListItemContent></ListItem>);
+      return (
+        <ListItem key={user.account}>
+          <ListItemContent icon="person"><a onClick={() => { callback(user); }}>{user.name}</a></ListItemContent>
+        </ListItem>
+      );
     });
 
     return (
@@ -66,6 +72,14 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
         {lists}
       </List>
     );
+  }
+
+  private async onSelected(user: UserResponse) {
+    const signal = this.abortController.signal;
+    return await User.select({ signal, account: user.account }).catch((error) => {
+      console.log(error);
+      return undefined;
+    });
   }
 
   public render() {
@@ -76,7 +90,9 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
     const resource = strings();
 
     let player1: React.ReactElement<any>;
-    if (this.state.player1) {
+    if (this.state.player1Loading) {
+      player1 = <p>{resource.loading}</p>;
+    } else if (this.state.player1) {
       player1 = (
         <div>
           <Button raised ripple colored onClick={() => { this.setState({ player1: undefined }); }}>
@@ -86,11 +102,16 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
         </div>
       );
     } else {
-      player1 = this.userList((user: UserResponse) => { this.setState({ player1: user }); });
+      player1 = this.userList((user) => {
+        this.setState({ player1: undefined, player1Loading: true });
+        this.onSelected(user).then(filledUser => this.setState({ player1: filledUser, player1Loading: false }));
+      });
     }
 
     let player2: React.ReactElement<any>;
-    if (this.state.player2) {
+    if (this.state.player2Loading) {
+      player2 = <p>{resource.loading}</p>;
+    } else if (this.state.player2) {
       player2 = (
         <div>
           <Button raised ripple colored onClick={() => { this.setState({ player2: undefined }); }}>
@@ -100,7 +121,10 @@ export default class Official extends React.Component<RouteComponentProps<RouteP
         </div>
       );
     } else {
-      player2 = this.userList((user: UserResponse) => { this.setState({ player2: user }); });
+      player2 = this.userList((user) => {
+        this.setState({ player2: undefined, player2Loading: true });
+        this.onSelected(user).then(filledUser => this.setState({ player2: filledUser, player2Loading: false }));
+      });
     }
 
     return (

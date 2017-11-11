@@ -1,4 +1,5 @@
 export class En implements StringResource {
+  public none = 'none';
   public apiDocument = 'API documents';
   public writeCode = 'Write code';
   public login = 'Login';

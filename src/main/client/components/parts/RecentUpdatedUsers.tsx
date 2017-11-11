@@ -50,6 +50,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
   }
 
   private elements() {
+    const resource = strings();
     if (this.state.users && this.state.users.length !== 0) {
       return this.state.users.map((user) => {
         return (
@@ -66,7 +67,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
         );
       });
     }
-    return [];
+    return <p>{resource.none}</p>;
   }
 
   private subtitle(user: UserResponse) {
@@ -81,9 +82,11 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
         <Icon name="mood" className="inline" />
         {user.wins}
         {resource.wins}
+        &ensp;
         <Icon name="sentiment_very_dissatisfied" className="inline" />
         {user.losses}
         {resource.losses}
+        &ensp;
         <span className="updated">{resource.updatedAt} {moment(user.updated).fromNow()}</span>
       </div>
     );
