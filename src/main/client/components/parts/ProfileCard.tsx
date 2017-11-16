@@ -6,7 +6,7 @@ import { strings } from '../resources/Strings';
 
 import Auth from '../../service/Auth';
 
-interface ProfileCardProps extends React.Props<ProfileCard> {
+interface ProfileCardProps {
   user: UserResponse;
   showWriteCode?: boolean;
   showFight?: boolean;

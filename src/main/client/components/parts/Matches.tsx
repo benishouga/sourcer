@@ -9,7 +9,7 @@ import { strings } from '../resources/Strings';
 import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 
-interface MatchesProps extends React.Props<Matches> {
+interface MatchesProps {
   account?: string;
   matches?: MatchResponse[];
 }
@@ -20,7 +20,7 @@ interface MatchesState {
 
 export default class Matches extends React.Component<MatchesProps, MatchesState> {
   constructor(props: MatchesProps) {
-    super();
+    super(props);
     this.state = { matches: props.matches };
   }
 

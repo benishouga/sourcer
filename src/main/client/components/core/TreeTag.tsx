@@ -7,7 +7,7 @@ export interface Tree {
   height: number;
 }
 
-interface TreeTagProps extends React.Props<TreeTag> {
+interface TreeTagProps {
   model: Tree;
   far: number;
 }

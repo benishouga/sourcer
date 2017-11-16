@@ -15,8 +15,8 @@ interface MatchShowState {
 }
 
 export default class MatchShow extends React.Component<RouteComponentProps<RouteParams>, MatchShowState> {
-  constructor() {
-    super();
+  constructor(props: RouteComponentProps<RouteParams>) {
+    super(props);
     this.state = {};
   }
 

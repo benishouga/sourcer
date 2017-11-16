@@ -9,7 +9,7 @@ import { strings } from '../resources/Strings';
 import User from '../../service/User';
 import { AbortController } from '../../utils/fetch';
 
-interface RecentUpdatedUsersProps extends React.Props<RecentUpdatedUsers> {
+interface RecentUpdatedUsersProps {
   account?: string;
 }
 
@@ -18,8 +18,8 @@ interface RecentUpdatedUsersState {
 }
 
 export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUsersProps, RecentUpdatedUsersState> {
-  constructor() {
-    super();
+  constructor(props: RecentUpdatedUsersProps) {
+    super(props);
     this.state = { users: null };
   }
 

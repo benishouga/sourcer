@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as Ace from 'ace';
 
-interface AceEditorProps extends React.Props<AceEditor> {
+interface AceEditorProps {
   className?: string;
   code: string;
   onChange?: (value: string) => void;
@@ -15,11 +15,6 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
 
   private editor: Ace.Editor | null;
   private silent: boolean = false;
-
-  // private static propTypes = {
-  //   code: React.PropTypes.string,
-  //   cursorStart: React.PropTypes.number
-  // };
 
   private static defaultProps = {
     code: '//write your code here',

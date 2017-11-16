@@ -102,18 +102,15 @@ interface ArenaProps {
   path?: string;
 }
 
-interface ArenaStats {
+interface ArenaState {
   arena: Arena | null;
   loadedFrame: number;
   dynamicWidth: number;
   gameDump: GameDump | null;
 }
 
-export default class ArenaTag extends React.Component<ArenaProps, ArenaStats> {
+export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
   private animationFrameHandler: number | null;
-
-  // private static propTypes = {
-  // };
 
   private static defaultProps = {
     width: -1,
@@ -121,8 +118,8 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaStats> {
     scale: 1.0
   };
 
-  constructor() {
-    super();
+  constructor(props: ArenaProps) {
+    super(props);
     this.state = {
       arena: null,
       loadedFrame: 0,
@@ -167,13 +164,13 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaStats> {
           gameDump={this.state.gameDump}
           onReload={this.onReload.bind(this)} />
       );
-    } else {
-      return (
-        <div ref="root">
-          {'Loading ...' + loadedFrame}
-        </div>
-      );
     }
+
+    return (
+      <div ref="root">
+        {'Loading ...' + loadedFrame}
+      </div>
+    );
   }
 
   public tick() {

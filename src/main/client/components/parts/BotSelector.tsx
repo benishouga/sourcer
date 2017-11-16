@@ -12,20 +12,20 @@ import { fewMissile } from '../pages/fiddles/fewMissile';
 import { fixedBattery } from '../pages/fiddles/fixedBattery';
 import { standard } from '../pages/fiddles/standard';
 
-interface BotSelectorProps extends React.Props<BotSelector> {
+interface BotSelectorProps {
   onSelect?: (source: string) => void;
   selected?: string;
 }
 
-interface BotSelectorStats {
+interface BotSelectorState {
   selectedSource?: string;
   isShowCode?: boolean;
   selectButtonLabel?: string;
 }
 
-export default class BotSelector extends React.Component<BotSelectorProps, BotSelectorStats> {
+export default class BotSelector extends React.Component<BotSelectorProps, BotSelectorState> {
   constructor(props: BotSelectorProps) {
-    super();
+    super(props);
     const resource = strings();
     this.state = {
       selectedSource: props.selected,

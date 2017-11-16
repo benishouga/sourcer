@@ -15,8 +15,8 @@ interface AppState {
 }
 
 export default class App extends React.Component<{}, AppState> {
-  constructor() {
-    super();
+  constructor(props: {}) {
+    super(props);
     this.state = {
       authResponse: Auth.status
     };

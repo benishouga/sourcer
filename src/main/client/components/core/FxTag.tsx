@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FxDump } from '../../../core/Dump';
 
-interface FxTagProps extends React.Props<any> {
+interface FxTagProps {
   model: FxDump;
 }
 

@@ -10,16 +10,16 @@ import Match from '../../service/Match';
 import { RouteParams } from '../routes';
 import ProfileCard from '../parts/ProfileCard';
 
-interface MatchNewStats {
+interface MatchNewState {
   user?: UserResponse;
   against?: UserResponse;
   openDialog?: boolean;
   redirectTo?: string;
 }
 
-export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewStats> {
-  constructor() {
-    super();
+export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewState> {
+  constructor(props: RouteComponentProps<RouteParams>) {
+    super(props);
     this.state = {};
   }
 

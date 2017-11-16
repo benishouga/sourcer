@@ -138,9 +138,8 @@ export default class Sourcer extends Actor {
   public opposite(direction: number): number {
     if (this.direction === Consts.DIRECTION_LEFT) {
       return Utils.toOpposite(direction);
-    } else {
-      return direction;
     }
+    return direction;
   }
 
   public onHit(shot: Shot) {

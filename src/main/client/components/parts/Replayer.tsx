@@ -18,17 +18,14 @@ interface ReplayerProps {
   onReload?: () => void;
 }
 
-interface ReplayerStats {
+interface ReplayerState {
   playing?: boolean;
   frame: number;
   dynamicWidth?: number;
 }
 
-export default class Replayer extends React.Component<ReplayerProps, ReplayerStats> {
+export default class Replayer extends React.Component<ReplayerProps, ReplayerState> {
   private animationFrameHandler: number | null;
-
-  // private static propTypes = {
-  // };
 
   private static defaultProps = {
     gameDump: {},
@@ -38,7 +35,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   };
 
   constructor(props: ReplayerProps) {
-    super();
+    super(props);
     this.state = {
       playing: false,
       frame: 0
@@ -129,9 +126,9 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
           {statuses}
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 
   private adjustWidth() {

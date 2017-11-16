@@ -7,10 +7,9 @@ import { strings } from '../resources/Strings';
 import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 import Match from '../../service/Match';
-import { RouteParams } from '../routes';
 import ProfileCard from '../parts/ProfileCard';
 
-interface OfficialStats {
+interface OfficialState {
   users?: UserResponse[];
   player1?: UserResponse;
   player1Loading?: boolean;
@@ -20,9 +19,9 @@ interface OfficialStats {
   redirectTo?: string;
 }
 
-export default class Official extends React.Component<RouteComponentProps<RouteParams>, OfficialStats> {
-  constructor() {
-    super();
+export default class Official extends React.Component<RouteComponentProps<{}>, OfficialState> {
+  constructor(props: RouteComponentProps<{}>) {
+    super(props);
     this.state = {};
   }
 

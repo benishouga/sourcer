@@ -15,14 +15,14 @@ interface UserShowProps extends RouteComponentProps<RouteParams> {
   user?: UserResponse;
 }
 
-interface UserShowStats {
+interface UserShowState {
   user?: UserResponse;
 }
 
-export default class UserShow extends React.Component<UserShowProps, UserShowStats> {
+export default class UserShow extends React.Component<UserShowProps, UserShowState> {
 
-  constructor() {
-    super();
+  constructor(props: UserShowProps) {
+    super(props);
     this.state = {};
   }
 
@@ -44,7 +44,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     this.abortController.abort();
   }
 
-  public async componentWillUpdate(nextProps: UserShowProps, nextState: UserShowStats) {
+  public async componentWillUpdate(nextProps: UserShowProps, nextState: UserShowState) {
     if (Auth.status.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
       this.abortController.abort();
       this.loadUser(nextProps.match.params.account);

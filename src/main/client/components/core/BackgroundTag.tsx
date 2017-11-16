@@ -4,10 +4,21 @@ import DomeTag, { Dome } from './DomeTag';
 import Screen from './Screen';
 import Utils from '../../../core/Utils';
 
-export default class BackgroundTag extends React.Component<{ screen: Screen; }, { trees1: Tree[], trees2: Tree[], trees3: Tree[], domes1: Dome[] }> {
+interface BackgroundProps {
+  screen: Screen;
+}
 
-  constructor() {
-    super();
+interface BackgroundState {
+  trees1: Tree[];
+  trees2: Tree[];
+  trees3: Tree[];
+  domes1: Dome[];
+}
+
+export default class BackgroundTag extends React.Component<BackgroundProps, BackgroundState> {
+
+  constructor(props: BackgroundProps) {
+    super(props);
     this.state = {
       trees1: this.makeTrees(),
       trees2: this.makeTrees(),

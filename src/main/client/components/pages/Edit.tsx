@@ -22,9 +22,9 @@ interface AiEditState {
   redirectToTop: boolean;
 }
 
-export default class AiEdit extends React.Component<React.Props<AiEdit>, AiEditState> {
-  constructor() {
-    super();
+export default class Edit extends React.Component<{}, AiEditState> {
+  constructor(props: {}) {
+    super(props);
     this.state = {
       playerInfo: null,
       isSavedSnackbarActive: false,

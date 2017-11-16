@@ -6,7 +6,7 @@ export interface Dome {
   size: number;
 }
 
-interface DomeTagProps extends React.Props<any> {
+interface DomeTagProps {
   model: Dome;
   far: number;
 }

@@ -11,13 +11,13 @@ import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 import ProfileCard from '../parts/ProfileCard';
 
-interface TopStats {
+interface TopState {
   user?: UserResponse;
 }
 
-export default class Top extends React.Component<{}, TopStats> {
-  constructor() {
-    super();
+export default class Top extends React.Component<{}, TopState> {
+  constructor(props: {}) {
+    super(props);
     this.state = {};
   }
   private abortController: AbortController;

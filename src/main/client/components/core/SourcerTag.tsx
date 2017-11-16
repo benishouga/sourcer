@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SourcerDump, ProfileDump } from '../../../core/Dump';
 
-interface SourcerTagProps extends React.Props<any> {
+interface SourcerTagProps {
   profile: ProfileDump;
   model: SourcerDump;
 }

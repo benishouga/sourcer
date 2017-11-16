@@ -9,14 +9,14 @@ import { Card, CardTitle, CardText, CardActions, Button, Textfield, TextfieldPro
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import Auth from '../../service/Auth';
 
-interface LoginStats {
+interface LoginState {
   errors: ResourceId[] | null;
   redirectTo?: string;
 }
 
-export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
-  constructor() {
-    super();
+export default class Login extends React.Component<RouteComponentProps<{}>, LoginState> {
+  constructor(props: RouteComponentProps<{}>) {
+    super(props);
     this.state = { errors: null };
   }
 

@@ -5,7 +5,7 @@ import Screen from './Screen';
 import ResultHudTag from './ResultHudTag';
 import ReadyHudTag from './ReadyHudTag';
 
-interface HudTagProps extends React.Props<HudTag> {
+interface HudTagProps {
   players: PlayersDump;
   frame: number;
   result: ResultDump | null;

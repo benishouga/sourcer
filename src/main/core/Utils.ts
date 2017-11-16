@@ -20,9 +20,8 @@ export default class Utils {
 
     if (angle < 180) {
       return t => checkLeft(t) && checkRight(t) && checkDistance(t);
-    } else {
-      return t => (checkLeft(t) || checkRight(t)) && checkDistance(t);
     }
+    return t => (checkLeft(t) || checkRight(t)) && checkDistance(t);
   }
 
   public static side(base: V, degree: number): (t: V) => boolean {

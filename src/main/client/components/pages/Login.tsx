@@ -8,15 +8,15 @@ import Auth from '../../service/Auth';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import { AbortController } from '../../utils/fetch';
 
-interface LoginStats {
+interface LoginState {
   error?: boolean;
   redirectToReferrer: boolean;
   admin: boolean;
 }
 
-export default class Login extends React.Component<RouteComponentProps<{}>, LoginStats> {
-  constructor() {
-    super();
+export default class Login extends React.Component<RouteComponentProps<{}>, LoginState> {
+  constructor(props: RouteComponentProps<{}>) {
+    super(props);
     this.state = { error: false, redirectToReferrer: false, admin: false };
   }
 
