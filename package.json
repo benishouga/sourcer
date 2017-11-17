@@ -57,7 +57,7 @@
     "@types/node": "^8.0.47",
     "@types/react": "^16.0.19",
     "@types/react-dom": "^16.0.2",
-    "@types/react-mdl": "file:src\\libs\\react-mdl",
+    "@types/react-mdl": "^1.7.25",
     "@types/react-router-dom": "^4.2.0",
     "@types/superagent": "^3.5.6",
     "autoprefixer": "^7.1.6",
