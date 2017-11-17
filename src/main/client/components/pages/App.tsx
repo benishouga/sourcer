@@ -8,7 +8,7 @@ import { strings } from '../resources/Strings';
 import Auth from '../../service/Auth';
 
 import 'moment/locale/ja';
-moment.locale('ja');
+moment.locale([navigator.language, 'en']);
 
 interface AppState {
   authResponse: AuthResponse;

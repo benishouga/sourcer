@@ -41,7 +41,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     const elements = this.elements();
     return (
       <div>
-        <p>{resource.recentUpdatedUsersTitle}</p>
+        <h5>{resource.recentUpdatedUsersTitle}</h5>
         <List>
           {elements}
         </List>
@@ -79,13 +79,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     return (
       <div>
         {`${members}`}{members.length ? <br /> : null}
-        <Icon name="mood" className="inline" />
-        {user.wins}
-        {resource.wins}
+        <Icon name="mood" className="inline" /> {user.wins} {resource.wins}
         &ensp;
-        <Icon name="sentiment_very_dissatisfied" className="inline" />
-        {user.losses}
-        {resource.losses}
+        <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
         &ensp;
         <span className="updated">{resource.updatedAt} {moment(user.updated).fromNow()}</span>
       </div>

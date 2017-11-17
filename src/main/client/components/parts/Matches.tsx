@@ -62,7 +62,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     const elements = this.elements();
     return (
       <div>
-        <p>{resource.matchesTitle} {this.props.account}</p>
+        <h5>{resource.matchesTitle} {this.props.account}</h5>
         {elements}
       </div>
     );
@@ -105,8 +105,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
 
       return (
         <span key={'contestant' + index}>
-          <Link to={`/user/${contestant.account}`}>{contestant.name}</Link>
-          {winOrLoseIcon}
+          <Link to={`/user/${contestant.account}`}>{contestant.name}</Link> {winOrLoseIcon}
         </span>
       );
     }).forEach((element, index) => {

@@ -45,7 +45,7 @@ interface StringResource {
   fewAttack: string;
   fewMissile: string;
   escape: string;
-  fixedBattery: string;
+  attacksFromLow: string;
   standard: string;
   viewCode: string;
   reselect: string;

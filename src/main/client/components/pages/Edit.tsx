@@ -133,7 +133,6 @@ export default class Edit extends React.Component<{}, AiEditState> {
         </Grid >
       );
     }
-
-    return (<div>{resource.loading}</div>);
+    return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
   }
 }

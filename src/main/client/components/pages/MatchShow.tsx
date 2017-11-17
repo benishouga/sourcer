@@ -38,10 +38,10 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
   }
 
   public render() {
-    const resources = strings();
+    const resource = strings();
 
     if (!this.state.gameDump) {
-      return (<p>{resources.loading}</p>);
+      return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
     }
 
     return (

@@ -45,7 +45,7 @@ export class Ja implements StringResource {
   public fewAttack = '少し攻撃してくる';
   public fewMissile = 'ミサイルも使ってくる';
   public escape = '逃げまわる';
-  public fixedBattery = '低い位置から正確に攻撃してくる';
+  public attacksFromLow = '低い位置から正確に攻撃してくる';
   public standard = 'スタンダードな動き';
   public viewCode = '練習相手のコードを見る';
   public reselect = '再選択する';

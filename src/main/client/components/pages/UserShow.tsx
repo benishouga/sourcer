@@ -58,7 +58,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     const user = this.state.user;
 
     if (!user) {
-      return (<p>Loading...</p>);
+      return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
     }
 
     return (

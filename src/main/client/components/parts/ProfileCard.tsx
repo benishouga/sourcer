@@ -34,13 +34,9 @@ export default class ProfileCard extends React.Component<ProfileCardProps, {}> {
         <CardTitle>{user.name}</CardTitle>
         <CardText>
           <p>
-            <Icon name="mood" className="inline" />
-            {user.wins}
-            {resource.wins}
+            <Icon name="mood" className="inline" /> {user.wins} {resource.wins}
             &ensp;
-            <Icon name="sentiment_very_dissatisfied" className="inline" />
-            {user.losses}
-            {resource.losses}
+            <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
           </p>
           <List>
             {members}

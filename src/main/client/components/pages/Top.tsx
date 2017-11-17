@@ -39,18 +39,20 @@ export default class Top extends React.Component<{}, TopState> {
     const resource = strings();
     if (!Auth.status.authenticated) {
       return (
-        <div>
-          <h2>Sourcer</h2>
-          <p>{resource.serviceDescription}<br />
-            {resource.serviceBenefit}</p>
-        </div>
+        <Grid>
+          <Cell col={12}>
+            <h2>Sourcer</h2>
+            <p>{resource.serviceDescription}<br />
+              {resource.serviceBenefit}</p>
+          </Cell>
+        </Grid>
       );
     }
 
     const user = this.state.user;
 
     if (!user) {
-      return (<p>{resource.loading}</p>);
+      return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
     }
 
     return (
