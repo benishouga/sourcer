@@ -27,8 +27,8 @@
         </div>
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
-            <textarea id="player1" class="code" rows="22" style="width: 100%; ">// **** ミサイル用のAIを定義 ****
-var missileAi = function(controller) {
+            <textarea id="player1" class="code" rows="22" style="width: 100%; ">// **** ミサイル用のプログラムを定義 ****
+var missile = function(controller) {
   // 相手が左側にいるか判定する
   // （左90度の角度から、180度の範囲に敵が居るか判定）
   if(controller.scanEnemy(90, 180)) {
@@ -47,8 +47,8 @@ var missileAi = function(controller) {
   controller.speedUp();
 };
 
-// **** 本体用のAIを定義 ****
-var ai = function(controller) {
+// **** 本体用のプログラムを定義 ****
+var bot = function(controller) {
   // 前方からの攻撃を避ける
   // （敵の攻撃が 前方0度 の角度から
   //   60度の範囲、距離60 以内にあるか判定）
@@ -87,8 +87,8 @@ var ai = function(controller) {
     // 5フレームに一度、ミサイルを発射する
     if (controller.frame() % 5 === 0) {
 
-      // ミサイル用AIを使用し、ミサイルを発射する
-      controller.fireMissile(missileAi);
+      // ミサイル用プログラムを使用し、ミサイルを発射する
+      controller.fireMissile(missile);
 
     } else {
 
@@ -126,8 +126,8 @@ var ai = function(controller) {
   return;
 };
 
-// 定義した AI を return し登録する。
-return ai;</textarea>
+// 定義した プログラム を return し登録する。
+return bot;</textarea>
           </div>
           <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
             <div class="sourcer-standalone"　data-height="384" data-players="player1,player2"></div>
@@ -146,8 +146,8 @@ return ai;</textarea>
             <dl>
               <dt>レーザー</dt>
               <dd>発射すると真っ直ぐに飛んでいく攻撃手段です。残弾数は無制限です。</dd>
-              <dt>AIミサイル</dt>
-              <dd>Sourcerと同様、プログラムで動かすことができる攻撃手段です。20発まで発射することができます。AIミサイルはレーザーで撃ち落とすことができます。</dd>
+              <dt>ミサイル</dt>
+              <dd>Sourcerと同様、プログラムで動かすことができる攻撃手段です。20発まで発射することができます。ミサイルはレーザーで撃ち落とすことができます。</dd>
             </dl>
 
             <h4>ステータス</h4>
@@ -158,24 +158,24 @@ return ai;</textarea>
               <dd>初期値 0 で攻撃を行ったり、ダメージをうけると上昇します。温度が 100 を超えると、徐々に耐久力が減っていきます。温度は時間経過で徐々に減っていきます。</dd>
               <dt>燃料</dt>
               <dd>Sourcer が移動を行うと徐々に減っていきます。0 になると移動が行えなくなります。</dd>
-              <dt>AIミサイル残弾</dt>
+              <dt>ミサイル残弾</dt>
               <dd>初期値 20 でミサイルを使うごとに減少します。0 になるとミサイルが発射できなくなります。</dd>
             </dl>
 
             <h4>その他</h4>
             <ul>
               <li>高度が0の位置に地面があり、地面に触れるとダメージをうけます。</li>
-              <li>Sourcerは重力に引っ張られ、移動を行わないと、徐々に地面に引き寄せられます。レーザーやAIミサイルは重力の影響をうけません。</li>
+              <li>Sourcerは重力に引っ張られ、移動を行わないと、徐々に地面に引き寄せられます。レーザーやミサイルは重力の影響をうけません。</li>
             </ul>
           </div>
 
           <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
             <h2>プログラム</h2>
-              <p>function を return することで AI を登録します。</p>
+              <p>function を return することで プログラム を登録します。</p>
               <p>引数の コントローラ を通して操作できます。</p>
               <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-                  <pre class="code" id="sample1">var ai = function(controller) {
+                  <pre class="code" id="sample1">var bot = function(controller) {
   if (controller.altitude() < 100) {
     // 高度が下がったら上昇
     controller.ascent();
@@ -183,7 +183,7 @@ return ai;</textarea>
   // 前進する
   controller.ahead();
 };
-return ai;</pre>
+return bot;</pre>
                 </div>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
                   <div class="sourcer-standalone" data-height="256" data-players="sample1" data-demo></div>
@@ -194,15 +194,15 @@ return ai;</pre>
               <dl>
                 <dt>移動</dt><dd>前進、後退、上昇、下降など</dd>
                 <dt>レーダー</dt><dd>敵機の探知と、自機に飛来してくる攻撃の探知など</dd>
-                <dt>攻撃</dt><dd>レーザーの発射、AIミサイルの発射</dd>
-                <dt>ステータスの確認</dt><dd>耐久力、温度、燃料、高度、AIミサイル残弾数などの確認</dd>
+                <dt>攻撃</dt><dd>レーザーの発射、ミサイルの発射</dd>
+                <dt>ステータスの確認</dt><dd>耐久力、温度、燃料、高度、ミサイル残弾数などの確認</dd>
               </dl>
               <p>レーダーは呼び出す回数が増えると、次の行動までの時間が長くなります。</p>
               <p>攻撃操作は一度に1つしか受け付けません。</p>
-              <p>AIミサイル の AI は、発射命令の際、引数に指定します。</p>
+              <p>ミサイル の プログラム は、発射命令の際、引数に指定します。</p>
               <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-                  <pre style="display:none;" id="sample2">var missileAi = function(controller) {
+                  <pre style="display:none;" id="sample2">var missile = function(controller) {
   if(controller.scanEnemy(90, 180)) {
     controller.turnLeft();
   } else {
@@ -210,15 +210,15 @@ return ai;</pre>
   }
   controller.speedUp();
 };
-var ai = function(controller) {
+var bot = function(controller) {
   if (controller.altitude() < 100) {
     controller.ascent();
   }
   if (controller.frame() % 16 === 0) {
-    controller.fireMissile(missileAi);
+    controller.fireMissile(missile);
   }
 };
-return ai;</pre>
+return bot;</pre>
 <pre id="fiddle100" style="display: none;">
 	return function(controller) {
 		if (controller.altitude() < 100) {
@@ -227,7 +227,7 @@ return ai;</pre>
 	  }
 	};
 </pre>
-<pre class="code">var missileAi = function(controller) {
+<pre class="code">var missile = function(controller) {
   if(controller.scanEnemy(90, 180)) {
     // 左側にいる場合は、左へ回転
     controller.turnLeft();
@@ -239,12 +239,12 @@ return ai;</pre>
   controller.speedUp();
 };
 
-var ai = function(controller) {
+var bot = function(controller) {
   // ・・・省略・・・
-  controller.fireMissile(missileAi);
+  controller.fireMissile(missile);
   // ・・・省略・・・
 };
-return ai;</pre>
+return bot;</pre>
                 </div>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
                   <div class="sourcer-standalone" data-height="256" data-players="sample2,fiddle100" data-demo></div>
@@ -293,8 +293,8 @@ return ai;</pre>
             </div>
             <div class="method">
               <h5>missileAmmo()</h5>
-              <p>自機のAIミサイル残弾数を取得します。</p>
-              <dl><dt>returns {number}</dt><dd>自機のAIミサイルの残段数</dd>
+              <p>ミサイル残弾数を取得します。</p>
+              <dl><dt>returns {number}</dt><dd>ミサイルの残段数</dd>
             </div>
             <div class="method">
               <h5>scanEnemy(direction, angle, renge)</h5>
@@ -384,17 +384,17 @@ return ai;</pre>
               </dl>
             </div>
             <div class="method">
-              <h5>fireMissile(ai)</h5>
-              <p>AIミサイルを発射します。</p>
+              <h5>fireMissile(source)</h5>
+              <p>ミサイルを発射します。</p>
               <dl>
-                <dt>{function} ai</dt>
+                <dt>{function} source</dt>
                 <dd>ミサイルの動きを制御するための function</dd>
               </dl>
             </div>
           </div>
           <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
             <h3>MissileController</h3>
-            <p>AIミサイルを操作するためのコントローラ。</p>
+            <p>ミサイルを操作するためのコントローラ。</p>
             <h4>Methods</h4>
             <div class="method">
               <h5>frame()</h5>
@@ -487,8 +487,8 @@ return ai;</pre>
             </div>
           </div>
         </div>
-<textarea id="player2" rows="22" style="width: 320px; display:none;">// **** ミサイル用のAIを定義 ****
-var missileAi = function(controller) {
+<textarea id="player2" rows="22" style="width: 320px; display:none;">// **** ミサイル用のプログラムを定義 ****
+var missile = function(controller) {
 
   // 相手が左側にいるか判定する
   // （左90度の角度から、180度の範囲、距離10000以内に敵が居るか判定）
@@ -509,8 +509,8 @@ var missileAi = function(controller) {
 };
 
 
-// **** 本体用のAIを定義 ****
-var ai = function(controller) {
+// **** 本体用のプログラムを定義 ****
+var bot = function(controller) {
   // 前方からの攻撃を避ける
   // （相手の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
   if (controller.scanAttack(0, 60, 60)) {
@@ -548,8 +548,8 @@ var ai = function(controller) {
       // 5フレームに一度、ミサイルを発射する
       if (controller.frame() % 5 === 0) {
 
-          // 先に定義済みの、ミサイル用AIを使用し、ミサイルを発射する
-          controller.fireMissile(missileAi);
+          // 先に定義済みの、ミサイル用プログラムを使用し、ミサイルを発射する
+          controller.fireMissile(missile);
 
       } else {
 
@@ -587,8 +587,8 @@ var ai = function(controller) {
   return;
 };
 
-// 定義した AI を return し登録する。
-return ai;</textarea>
+// 定義したプログラムを return し登録する。
+return bot;</textarea>
       </div>
     </main>
   </div>
