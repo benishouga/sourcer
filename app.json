@@ -26,11 +26,6 @@
       "required": false,
       "value": ""
     },
-    "MONGODB_URI": {
-      "description": "MongoDB connection string.",
-      "required": true,
-      "value": ""
-    },
     "NPM_CONFIG_PRODUCTION": {
       "description": "Do not change.",
       "required": true,
