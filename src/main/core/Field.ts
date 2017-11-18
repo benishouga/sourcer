@@ -29,11 +29,11 @@ export default class Field {
     this.fxs = [];
   }
 
-  public registerSourcer(ai: string, account: string, name: string, color: string) {
+  public registerSourcer(source: string, account: string, name: string, color: string) {
     const side = (this.sourcers.length % 2 === 0) ? -1 : 1;
     const x = Utils.rand(80) + 160 * side;
     const y = Utils.rand(160) + 80;
-    this.addSourcer(new Sourcer(this, x, y, ai, account, name, color));
+    this.addSourcer(new Sourcer(this, x, y, source, account, name, color));
   }
 
   public process(listener: TickEventListener, think: (sourcer: Sourcer) => void, callback: () => void) {

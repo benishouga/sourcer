@@ -49,6 +49,7 @@ export class En implements StringResource {
   public standard = 'Standard';
   public viewCode = 'View code';
   public reselect = 'Reselect';
+  public returnTop = 'Return top';
   public invalidAccountTooShort = 'Account is too short.';
   public invalidAccountCharacterClass = 'Account is invalid character class.';
   public invalidAccountReserved = 'Account is reserved.';

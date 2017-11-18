@@ -8,7 +8,7 @@ import ExposedScriptLoader from '../core/ExposedScriptLoader';
 export interface PlayerInfo {
   name: string;
   color: string;
-  ai: string;
+  source: string;
 }
 
 export interface InitialParameter {
@@ -120,7 +120,7 @@ onmessage = ({ data }) => {
 
   const field = new Field(new ExposedScriptLoader(), isDemo);
   sources.forEach((value, index) => {
-    field.registerSourcer(value.ai, value.account, value.name, value.color);
+    field.registerSourcer(value.source, value.account, value.name, value.color);
   });
 
   postMessage({

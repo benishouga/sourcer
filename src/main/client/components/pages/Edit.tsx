@@ -14,7 +14,7 @@ import Auth from '../../service/Auth';
 
 import { fiddle } from './fiddles/fiddle';
 
-interface AiEditState {
+interface EditState {
   user?: UserResponse;
   playerInfo: PlayerInfo | null;
   enemyInfo?: PlayerInfo;
@@ -22,7 +22,7 @@ interface AiEditState {
   redirectToTop: boolean;
 }
 
-export default class Edit extends React.Component<{}, AiEditState> {
+export default class Edit extends React.Component<{}, EditState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -37,13 +37,13 @@ export default class Edit extends React.Component<{}, AiEditState> {
   private onTextChange = (value: string) => {
     this.editingSource = value;
     if (this.state.playerInfo) {
-      this.state.playerInfo.ai = value;
+      this.state.playerInfo.source = value;
     }
   }
 
   private selectBot = (bot: string) => {
     if (this.state.enemyInfo) {
-      this.state.enemyInfo.ai = bot;
+      this.state.enemyInfo.source = bot;
     }
     this.reload();
   }
@@ -60,8 +60,8 @@ export default class Edit extends React.Component<{}, AiEditState> {
     this.editingSource = user.source;
     this.setState({
       user,
-      playerInfo: { name: 'You', ai: user.source, color: '#866' },
-      enemyInfo: { name: 'Enemy', ai: fiddle, color: '#262' }
+      playerInfo: { name: 'You', source: user.source, color: '#866' },
+      enemyInfo: { name: 'Enemy', source: fiddle, color: '#262' }
     });
   }
 

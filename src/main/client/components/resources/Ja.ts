@@ -49,6 +49,7 @@ export class Ja implements StringResource {
   public standard = 'スタンダードな動き';
   public viewCode = '練習相手のコードを見る';
   public reselect = '再選択する';
+  public returnTop = 'トップへ戻る';
   public invalidAccountTooShort = 'アカウントIDは4文字以上である必要があります。';
   public invalidAccountCharacterClass = 'アカウントIDの文字種は半角英数字である必要があります。';
   public invalidAccountReserved = 'このアカウントIDはすでに利用されています。';

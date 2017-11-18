@@ -19,9 +19,8 @@ export default class Missile extends Shot {
   public command: MissileCommand;
   public controller: MissileController;
 
-  constructor(field: Field, owner: Sourcer, public ai: (controller: MissileController) => void) {
+  constructor(field: Field, owner: Sourcer, public bot: (controller: MissileController) => void) {
     super(field, owner, 'Missile');
-    this.ai = ai;
     this.direction = owner.direction === Consts.DIRECTION_RIGHT ? 0 : 180;
     this.speed = owner.speed;
     this.command = new MissileCommand(this);
@@ -39,7 +38,7 @@ export default class Missile extends Shot {
     try {
       this.command.accept();
       this.controller.preThink();
-      this.ai(this.controller);
+      this.bot(this.controller);
       this.command.unaccept();
     } catch (error) {
       this.command.reset();

@@ -20,12 +20,12 @@ Array.prototype.forEach.call(screens, (output: HTMLElement) => {
         return null;
       }
       if (element.tagName !== 'TEXTAREA') {
-        return { name: 'demo', color: COLORS[index], ai: element.innerText };
+        return { name: 'demo', color: COLORS[index], source: element.innerText };
       }
       const player = element as HTMLTextAreaElement;
-      const playerInfo = { name: value, color: COLORS[index], ai: player.value };
+      const playerInfo = { name: value, color: COLORS[index], source: player.value };
       const polling = () => {
-        playerInfo.ai = player.value;
+        playerInfo.source = player.value;
         setTimeout(polling, 1000);
       };
       setTimeout(polling, 1000);

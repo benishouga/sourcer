@@ -1,6 +1,6 @@
 export const fewAttack = `
 var current = 150; // 維持する高さを決定するための変数
-var ai = function(controller) {
+var bot = function(controller) {
   if (controller.frame() % 32 === 0) {
     // 32 frame に一度 高さを変える
     current = Math.random() * 200 + 50;
@@ -42,5 +42,5 @@ var ai = function(controller) {
     }
   }
 };
-return ai;
+return bot;
 `;

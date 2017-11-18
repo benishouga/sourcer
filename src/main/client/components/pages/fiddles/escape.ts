@@ -1,6 +1,6 @@
 export const escape = `
 var current = 150;
-var ai = function(controller) {
+var bot = function(controller) {
   if (controller.frame() % 32 === 0) {
     current = Math.random() * 100 + 50;
   }
@@ -18,5 +18,5 @@ var ai = function(controller) {
     controller.ahead();
   }
 };
-return ai;
+return bot;
 `;

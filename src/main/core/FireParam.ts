@@ -8,13 +8,13 @@ export default class FireParam {
     result.shotType = 'Laser';
     return result;
   }
-  public static missile(ai: (controller: MissileController) => void) {
+  public static missile(bot: (controller: MissileController) => void) {
     const result = new FireParam();
-    result.ai = ai;
+    result.bot = bot;
     result.shotType = 'Missile';
     return result;
   }
-  public ai: (controller: MissileController) => void;
+  public bot: (controller: MissileController) => void;
   public direction: number;
   public power: number;
   public shotType: string;

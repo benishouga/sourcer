@@ -23,7 +23,7 @@ export async function show(req: Request, res: Response) {
 
 export async function replay(req: Request, res: Response) {
   const matchId: string = req.params.id;
-  const match = await MatchService.load(matchId);
+  const match = await MatchService.loadWithReplay(matchId);
   if (!match) {
     return res.status(400).send('Bad Request').end();
   }
@@ -62,8 +62,8 @@ export async function create(req: Request, res: Response) {
   }
 
   const matchResult = await arena([
-    { account: user1.account, name: user1.name, color: colors[0], ai: user1.source },
-    { account: user2.account, name: user2.name, color: colors[1], ai: user2.source }
+    { account: user1.account, name: user1.name, color: colors[0], source: user1.source },
+    { account: user2.account, name: user2.name, color: colors[1], source: user2.source }
   ]);
 
   const deflated = await Zip.deflate(JSON.stringify(matchResult));

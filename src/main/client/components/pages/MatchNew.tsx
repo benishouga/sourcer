@@ -81,24 +81,29 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     }
 
     return (
-      <Grid>
-        <Cell col={5}>
-          {userCard}
-        </Cell>
-        <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-          <div style={{ height: '120px' }}></div>
-          <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>{resource.fight}</Button>
-          <Dialog open={this.state.openDialog}>
-            <DialogTitle>{resource.fighting}</DialogTitle>
-            <DialogContent>
-              <ProgressBar indeterminate />
-            </DialogContent>
-          </Dialog>
-        </Cell>
-        <Cell col={5}>
-          {againstCard}
-        </Cell>
-      </Grid>
+      <div>
+        <Grid>
+          <Cell col={12}><Link to="/">{resource.returnTop}</Link></Cell>
+        </Grid>
+        <Grid>
+          <Cell col={5}>
+            {userCard}
+          </Cell>
+          <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+            <div style={{ height: '120px' }}></div>
+            <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>{resource.fight}</Button>
+            <Dialog open={this.state.openDialog}>
+              <DialogTitle>{resource.fighting}</DialogTitle>
+              <DialogContent>
+                <ProgressBar indeterminate />
+              </DialogContent>
+            </Dialog>
+          </Cell>
+          <Cell col={5}>
+            {againstCard}
+          </Cell>
+        </Grid>
+      </div >
     );
   }
 }

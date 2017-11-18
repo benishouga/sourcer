@@ -27,7 +27,12 @@ export default MatchModel;
 
 export class MatchService extends MatchModel {
 
-  public static async load(argId: Types.ObjectId | string) {
+  public static load(argId: Types.ObjectId | string) {
+    const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
+    return this.findOne({ _id: id }, '-dump').populate('winner').populate('players').exec();
+  }
+
+  public static loadWithReplay(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
     return this.findOne({ _id: id }).populate('winner').populate('players').exec();
   }

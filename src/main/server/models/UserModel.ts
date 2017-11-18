@@ -2,7 +2,7 @@ import { Schema, Document, model, Types } from 'mongoose';
 
 import * as crypto from 'crypto';
 
-import { defaultAi } from './defaultAi';
+import { defaultBot } from './defaultBot';
 import { MatchDocument } from './MatchModel';
 
 export type UserDocument = Document & {
@@ -25,8 +25,7 @@ const schema = new Schema({
     service: { type: String, required: true },
     account: { type: String, required: true }
   },
-  source: { type: String, default: defaultAi },
-  isClosedSource: { type: Boolean, default: false },
+  source: { type: String, default: defaultBot },
   members: [{ type: String }],
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],
   created: { type: Date, default: Date.now },
@@ -47,7 +46,7 @@ export class UserService extends UserModel {
 
   public static async loadWithMatchees(account: string) {
     let res = await UserService.findOne({ account })
-      .populate({ path: 'matches', options: { sort: { created: -1 } } })
+      .populate({ path: 'matches', select: '-dump', options: { sort: { created: -1 } } })
       .exec();
     if (!res) {
       throw new Error('find user error');
@@ -82,7 +81,7 @@ export class UserService extends UserModel {
   public static async recent(excludeUser: string) {
     const query = { account: { $ne: excludeUser } };
     const res = await UserService.find(query)
-      .populate({ path: 'matches' })
+      .populate({ path: 'matches', select: '-dump' })
       .sort({ updated: -1 })
       .limit(10)
       .exec();

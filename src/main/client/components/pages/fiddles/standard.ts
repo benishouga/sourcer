@@ -1,6 +1,6 @@
 export const standard = `
-// **** ミサイル用のAIを定義 ****
-var missileAi = function(controller) {
+// **** ミサイル用のプログラムを定義 ****
+var missile = function(controller) {
   // 相手が左側にいるか判定する
   // （左90度の角度から、180度の範囲、距離10000以内に敵が存在するか判定）
   if (controller.scanEnemy(90, 180)) {
@@ -14,8 +14,8 @@ var missileAi = function(controller) {
   controller.speedUp();
 };
 
-// **** 本体用のAIを定義 ****
-var ai = function(controller) {
+// **** 本体用のプログラムを定義 ****
+var bot = function(controller) {
   // 前方からの攻撃を避ける
   // （相手の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
   if (controller.scanAttack(0, 60, 60)) {
@@ -48,8 +48,8 @@ var ai = function(controller) {
     }
     // 5フレームに一度、ミサイルを発射する
     if (controller.frame() % 5 === 0) {
-      // 先に定義済みの、ミサイル用AIを使用し、ミサイルを発射する
-      controller.fireMissile(missileAi);
+      // 先に定義済みの、ミサイル用プログラムを使用し、ミサイルを発射する
+      controller.fireMissile(missile);
     } else {
       // 敵が居る方へ攻撃
       if (controller.scanEnemy(0, 20)) {
@@ -81,5 +81,5 @@ var ai = function(controller) {
   controller.ascent();
   return;
 };
-return ai;
+return bot;
 `;

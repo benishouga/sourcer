@@ -1,5 +1,5 @@
 export const fixedBattery = `
-var ai = function(controller) {
+var bot = function(controller) {
 
   // 低い位置で浮き続ける
   if (controller.altitude() < 15) {
@@ -51,5 +51,5 @@ var ai = function(controller) {
     }
   }
 };
-return ai;
+return bot;
 `;

@@ -173,7 +173,7 @@ if (cluster.isWorker) {
     if (!process.send) { return; }
     const field = new Field(new SandboxedScriptLoader());
     message.sourcers.forEach((value, index) => {
-      field.registerSourcer(value.ai, value.account, value.name, value.color);
+      field.registerSourcer(value.source, value.account, value.name, value.color);
     });
 
     const players = field.players();

@@ -29,7 +29,7 @@ export default class Sourcer extends Actor {
 
   public command: SourcerCommand;
   private controller: SourcerController;
-  private ai: ((controller: SourcerController) => void) | null;
+  private bot: ((controller: SourcerController) => void) | null;
 
   constructor(
     field: Field, x: number, y: number, public aiSource: string,
@@ -44,21 +44,21 @@ export default class Sourcer extends Actor {
 
   public compile(scriptLoader: ScriptLoader) {
     try {
-      this.ai = scriptLoader.load(this.aiSource);
+      this.bot = scriptLoader.load(this.aiSource);
     } catch (error) {
-      this.ai = null;
+      this.bot = null;
     }
   }
 
   public onThink() {
-    if (this.ai === null || !this.alive) {
+    if (this.bot === null || !this.alive) {
       return;
     }
 
     try {
       this.command.accept();
       this.controller.preThink();
-      this.ai(this.controller);
+      this.bot(this.controller);
     } catch (error) {
       this.command.reset();
     } finally {
@@ -127,7 +127,7 @@ export default class Sourcer extends Actor {
 
     if (param.shotType === 'Missile') {
       if (0 < this.missileAmmo) {
-        const missile = new Missile(this.field, this, param.ai);
+        const missile = new Missile(this.field, this, param.bot);
         missile.reaction(this);
         this.missileAmmo--;
         this.field.addShot(missile);

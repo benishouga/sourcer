@@ -21,7 +21,7 @@ export default class SourcerController extends Controller {
   public turn: () => void;
 
   public fireLaser: (direction: number, power: number) => void;
-  public fireMissile: (ai: (controller: MissileController) => void) => void;
+  public fireMissile: (bot: (controller: MissileController) => void) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);
@@ -75,9 +75,9 @@ export default class SourcerController extends Controller {
       command.fire = FireParam.laser(power, direction);
     };
 
-    this.fireMissile = (ai) => {
+    this.fireMissile = (bot) => {
       command.validate();
-      command.fire = FireParam.missile(ai);
+      command.fire = FireParam.missile(bot);
     };
 
   }

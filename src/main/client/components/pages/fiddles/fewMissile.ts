@@ -1,6 +1,5 @@
 export const fewMissile = `
-// ミサイルのAI
-var missileAi = function(controller) {
+var missile = function(controller) {
   if(controller.scanEnemy(90, 180)) {
       controller.turnLeft();
   } else {
@@ -13,7 +12,7 @@ var missileAi = function(controller) {
 };
 
 var current = 150;
-var ai = function(controller) {
+var bot = function(controller) {
   if (controller.frame() % 32 === 0) {
     current = Math.random() * 200 + 50;
   }
@@ -43,8 +42,8 @@ var ai = function(controller) {
     }
   } else if(controller.frame() % 32 === 0) {
     // 32 frame に一度 ミサイルを発射する
-    controller.fireMissile(missileAi);
+    controller.fireMissile(missile);
   }
 };
-return ai;
+return bot;
 `;

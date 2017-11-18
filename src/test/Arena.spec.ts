@@ -10,8 +10,8 @@ describe('NodeArena', () => {
 
     const startTime = new Date().getTime();
     return arena([
-      { account: 'player1', name: 'player1', color: '#f00', ai: fs.readFileSync('samples/standard.js', 'utf-8') },
-      { account: 'player2', name: 'player2', color: '#0f0', ai: fs.readFileSync('samples/fiddle.js', 'utf-8') }
+      { account: 'player1', name: 'player1', color: '#f00', source: fs.readFileSync('samples/standard.js', 'utf-8') },
+      { account: 'player2', name: 'player2', color: '#0f0', source: fs.readFileSync('samples/fiddle.js', 'utf-8') }
     ]).then((matchResult) => {
       if (matchResult.result) {
         assert.equal(matchResult.result.isDraw, false);
@@ -30,14 +30,13 @@ describe('NodeArena', () => {
 
     const code = `
       while(true);
-      return ai;
     `;
 
-    const standardAi = fs.readFileSync('samples/standard.js', 'utf-8');
+    const standardBot = fs.readFileSync('samples/standard.js', 'utf-8');
     const startTime = new Date().getTime();
     return arena([
-      { account: 'player1', name: 'player1', color: '#f00', ai: standardAi },
-      { account: 'player2', name: 'player2', color: '#0f0', ai: code }
+      { account: 'player1', name: 'player1', color: '#f00', source: standardBot },
+      { account: 'player2', name: 'player2', color: '#0f0', source: code }
     ]).then((matchResult) => {
       if (matchResult.result) {
         assert.equal(matchResult.result.isDraw, false);
@@ -60,11 +59,11 @@ describe('NodeArena', () => {
       };
     `;
 
-    const standardAi = fs.readFileSync('samples/standard.js', 'utf-8');
+    const standardBot = fs.readFileSync('samples/standard.js', 'utf-8');
     const startTime = new Date().getTime();
     return arena([
-      { account: 'player1', name: 'player1', color: '#f00', ai: code },
-      { account: 'player2', name: 'player2', color: '#0f0', ai: standardAi }
+      { account: 'player1', name: 'player1', color: '#f00', source: code },
+      { account: 'player2', name: 'player2', color: '#0f0', source: standardBot }
     ]).then((matchResult) => {
       if (matchResult.result) {
         assert.equal(matchResult.result.isDraw, false);

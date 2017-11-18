@@ -45,9 +45,15 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
     }
 
     return (
-      <div className="scr-match-show">
-        <Replayer gameDump={this.state.gameDump} scale={1.2} />
-      </div>
+      <div>
+        <Grid>
+          <Cell col={12}><Link to="/">{resource.returnTop}</Link></Cell>
+        </Grid>
+
+        <div className="scr-match-show">
+          <Replayer gameDump={this.state.gameDump} scale={1.2} />
+        </div>
+      </div >
     );
   }
 }
