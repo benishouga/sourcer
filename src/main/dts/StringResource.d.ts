@@ -50,6 +50,7 @@ interface StringResource {
   viewCode: string;
   reselect: string;
   returnTop: string;
+  apiUrl: string;
   invalidAccountTooShort: string;
   invalidAccountCharacterClass: string;
   invalidAccountReserved: string;
