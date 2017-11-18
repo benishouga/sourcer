@@ -19,7 +19,17 @@
     "ADMIN_PASSWORD": {
       "description": "Password of 'admin' with special authority.",
       "required": true,
-      "value": "hogehoge"
+      "value": ""
+    },
+    "SESSION_SECRET": {
+      "description": "Session cookie secret.",
+      "required": false,
+      "value": ""
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string.",
+      "required": true,
+      "value": ""
     },
     "NPM_CONFIG_PRODUCTION": {
       "description": "Do not change.",

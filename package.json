@@ -23,7 +23,7 @@
     "lint": "tslint -c tslint.json 'src/main/**/*.ts' 'src/main/**/*.tsx' 'src/test/**/*.ts'",
     "prestart": "npm run build",
     "start": "node out/main/server/index.js",
-    "heroku": "node out/main/server/index.js",
+    "app": "node out/main/server/index.js",
     "predebug": "npm run build",
     "debug": "node --inspect --debug-brk out/main/server/index.js",
     "clean": "rimraf out coverage dist"
