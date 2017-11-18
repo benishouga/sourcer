@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>sourcer</title>
+  <title>Sourcer</title>
   <link href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="//code.getmdl.io/1.1.3/material.indigo-blue.min.css" />
@@ -32,17 +32,12 @@ var missile = function(controller) {
   // 相手が左側にいるか判定する
   // （左90度の角度から、180度の範囲に敵が居るか判定）
   if(controller.scanEnemy(90, 180)) {
-
     // 左側にいる場合は、左へ回転
     controller.turnLeft();
-
   } else {
-
     // それ以外は、右へ回転
     controller.turnRight();
-
   }
-
   // 今向いている方向へ、加速する
   controller.speedUp();
 };
@@ -56,7 +51,6 @@ var bot = function(controller) {
     // 後退しながら、高度を下げる
     controller.back();
     controller.descent();
-
     return;
   }
 
@@ -64,7 +58,6 @@ var bot = function(controller) {
   if (controller.altitude() < 100) {
     // 高度を上げる
     controller.ascent();
-
     return;
   }
 
@@ -72,12 +65,11 @@ var bot = function(controller) {
   if (!controller.scanEnemy(0, 180)) {
     // 現在向いている方向と逆方向を向く
     controller.turn();
-
     return;
   }
 
   // 敵が前方近くに居た場合、攻撃する
-  // 向き 0度、30度, 距離 200の居たら攻撃する
+  // 向き 0度、幅 30度, 距離 200の居たら攻撃する
   if (controller.scanEnemy(0, 30, 200)) {
     // 機体の温度が高い場合は、攻撃しない
     if (80 < controller.temperature()) {
@@ -86,47 +78,22 @@ var bot = function(controller) {
 
     // 5フレームに一度、ミサイルを発射する
     if (controller.frame() % 5 === 0) {
-
       // ミサイル用プログラムを使用し、ミサイルを発射する
       controller.fireMissile(missile);
-
     } else {
-
       // 前方（0度）へ向けて 強さ8で レーザーを発射する
       controller.fireLaser(0, 8);
-
     }
-    return;
-  }
-
-  // 敵が前方すぐ近くに居た場合、後退する
-  if (controller.scanEnemy(0, 180, 60)) {
-    controller.back();
-
     return;
   }
 
   // 敵が前方の遠い位置に居た場合、前進する
   if (controller.scanEnemy(0, 30)) {
     controller.ahead();
-
     return;
   }
-
-  // 敵が自分より下方向に居た場合、下降する
-  if (controller.scanEnemy(-45, 90)) {
-    controller.descent();
-
-    return;
-  }
-
-  // 敵が自分より上方向に居た場合、上昇する
-  controller.ascent();
-
-  return;
 };
 
-// 定義した プログラム を return し登録する。
 return bot;</textarea>
           </div>
           <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
@@ -189,7 +156,7 @@ return bot;</pre>
                   <div class="sourcer-standalone" data-height="256" data-players="sample1" data-demo></div>
                 </div>
               </div>
-              <p>コントローラによる命令⇒命令の実施⇒命令⇒実施⇒...と繰り返し動作します。</p>
+              <p>コントローラによる命令 ⇒ 命令の実施 ⇒ 命令 ⇒ 実施 ⇒ ...と繰り返し動作します。</p>
               <h4>コントローラで行える操作</h4>
               <dl>
                 <dt>移動</dt><dd>前進、後退、上昇、下降など</dd>
@@ -487,107 +454,52 @@ return bot;</pre>
             </div>
           </div>
         </div>
-<textarea id="player2" rows="22" style="width: 320px; display:none;">// **** ミサイル用のプログラムを定義 ****
+        <textarea id="player2" rows="22" style="width: 320px; display:none;">// for missile
 var missile = function(controller) {
-
-  // 相手が左側にいるか判定する
-  // （左90度の角度から、180度の範囲、距離10000以内に敵が居るか判定）
   if(controller.scanEnemy(90, 180)) {
-
-      // 左側にいる場合は、左へ回転
-      controller.turnLeft();
-
+    controller.turnLeft();
   } else {
-
-      // それ以外は、右へ回転
-      controller.turnRight();
-
+    controller.turnRight();
   }
-
-  // 今向いている方向へ、加速する
   controller.speedUp();
 };
 
-
-// **** 本体用のプログラムを定義 ****
 var bot = function(controller) {
-  // 前方からの攻撃を避ける
-  // （相手の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
   if (controller.scanAttack(0, 60, 60)) {
-      // 後退しながら、高度を下げる
-      controller.back();
-      controller.descent();
-
-      return;
+    controller.back();
+    controller.descent();
+    return;
   }
 
-  // 自機の高度が高さ 100 以下になっていた場合
   if (controller.altitude() < 100) {
-      // 高度を上げる
-      controller.ascent();
-
-      return;
+    controller.ascent();
+    return;
   }
 
-  // 敵が後方に居た場合 (前方180度内に居なかった場合)
   if (!controller.scanEnemy(0, 180)) {
-      // 現在向いている方向と逆方向を向く
-      controller.turn();
-
-      return;
+    controller.turn();
+    return;
   }
 
-  // 敵が前方近くに居た場合、攻撃する
-  // 向き 0度、30度, 距離 200の範囲内に存在していた場合、攻撃する
   if (controller.scanEnemy(0, 30, 200)) {
-      // 機体の温度が高い場合は、攻撃しない
-      if (80 < controller.temperature()) {
-          return;
-      }
-
-      // 5フレームに一度、ミサイルを発射する
-      if (controller.frame() % 5 === 0) {
-
-          // 先に定義済みの、ミサイル用プログラムを使用し、ミサイルを発射する
-          controller.fireMissile(missile);
-
-      } else {
-
-          // 前方（0度）へ向けて 強さ8で レーザーを発射する
-          controller.fireLaser(0, 8);
-
-      }
+    if (80 < controller.temperature()) {
       return;
+    }
+
+    if (controller.frame() % 5 === 0) {
+      controller.fireMissile(missile);
+    } else {
+      controller.fireLaser(0, 8);
+    }
+    return;
   }
 
-  // 敵が前方すぐ近くに居た場合、後退する
-  if (controller.scanEnemy(0, 180, 60)) {
-      controller.back();
-
-      return;
-  }
-
-  // 敵が前方の遠い位置に居た場合、前進する
   if (controller.scanEnemy(0, 30)) {
-      controller.ahead();
-
-      return;
+    controller.ahead();
+    return;
   }
-
-  // 敵が自分より下方向に居た場合、下降する
-  if (controller.scanEnemy(-45, 90)) {
-      controller.descent();
-
-      return;
-  }
-
-  // 敵が自分より上方向に居た場合、上昇する
-  controller.ascent();
-
-  return;
 };
 
-// 定義したプログラムを return し登録する。
 return bot;</textarea>
       </div>
     </main>
