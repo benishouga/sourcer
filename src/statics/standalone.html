@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sourcer</title>
+  <link href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="//code.getmdl.io/1.1.3/material.indigo-blue.min.css" />
+  <link rel="stylesheet" href="./main.css" />
+</head>
+
+<body>
+  <div class="scr-layout mdl-layout mdl-layout--fixed-header mdl-js-layout is-upgraded">
+    <header class="scr-header mdl-layout__header mdl-layout__header--scroll">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title" style="font-weight: 200;">Sourcer</span>
+      </div>
+    </header>
+    <main class="mdl-layout__content scr-main">
+      <div class="scr-content content">
+        <div>
+          <h1>Sourcer <small>Battle game using programs</small></h1>
+          <p>Let's write your sourcer program and fight against others' sourcer.</p>
+        </div>
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <textarea id="player1" class="code" rows="22" style="width: 100%; ">// for missile
+var missile = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
+  }
+  controller.speedUp();
+};
+
+// for sourcer
+var bot = function(controller) {
+  // Avoid front attacks.
+  //   - Is it enemy attack exists front 0 degrees,
+  //       width 60 degrees, distance 60.
+  if (controller.scanAttack(0, 60, 60)) {
+    controller.back();
+    controller.descent();
+    return;
+  }
+
+  if (controller.altitude() < 100) {
+    controller.ascent();
+    return;
+  }
+
+  // Is not it enemy exists front.
+  if (!controller.scanEnemy(0, 180)) {
+    controller.turn();
+    return;
+  }
+
+  // Attack if the enemy is nearby
+  //   - Is it enemy exists front 0 degrees,
+  //       width 30 degrees, distance 200.
+  if (controller.scanEnemy(0, 30, 200)) {
+    // Check temperature
+    if (80 < controller.temperature()) {
+      return;
+    }
+
+    // Fire a missile once in 5 frames.
+    if (controller.frame() % 5 === 0) {
+      controller.fireMissile(missile);
+    } else {
+      controller.fireLaser(0, 8);
+    }
+    return;
+  }
+
+  // Go ahead if the enemy is far.
+  if (controller.scanEnemy(0, 30)) {
+    controller.ahead();
+    return;
+  }
+};
+
+return bot;</textarea>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <div class="sourcer-standalone"　data-height="384" data-players="player1,player2"></div>
+          </div>
+        </div>
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <h2>Overview</h2>
+            <p>This is a game playing a match using an aircraft operating with a JavaScript program called sourcer.</p>
+
+            <h4>Rule</h4>
+            <p>The goal of a game is for attack the opponent's shield to 0, winning the game.</p>
+
+            <h4>Attack</h4>
+            <dl>
+              <dt>Laser</dt>
+              <dd>The laser flies straight. The laser ammo is unlimited.</dd>
+              <dt>Missile</dt>
+              <dd>The missile can be operating with a JavaScript program like sourcer. The missile ammo is 20. Missiles can be shot down with a laser.</dd>
+            </dl>
+
+            <h4>Status</h4>
+            <dl>
+              <dt>Shield</dt>
+              <dd>Initial value 100. The shield will decrease when attacked. When the shield of your sourcer runs out, you lose.</dd>
+              <dt>Temperature</dt>
+              <dd>Initial value 0. It will rise when you attack or get damaged. When the temperature exceeds 100, the shield gradually decreases. The temperature gradually decreases.</dd>
+              <dt>Fuel</dt>
+              <dd>Initial value 100. Fuel is reduced as you move. When the fuel runs out, it can not move.</dd>
+              <dt>Missile ammo</dt>
+              <dd>Initial value 20.</dd>
+            </dl>
+
+            <h4>Other</h4>
+            <ul>
+              <li>There is a ground at a position where the altitude is 0, Touching the ground reduces shielding.</li>
+              <li>Sourcer is pulled by gravity and gradually attracted to the ground unless it moves. Lasers and missiles are not affected by gravity.</li>
+            </ul>
+          </div>
+
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <h2>Program</h2>
+              <p>Register the program by returning function.</p>
+              <p>You can operate with the controller of the argument.</p>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <pre class="code" id="sample1">var bot = function(controller) {
+  if (controller.altitude() < 100) {
+    // ascent when the altitude goes down.
+    controller.ascent();
+  }
+  controller.ahead();
+};
+return bot;</pre>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <div class="sourcer-standalone" data-height="256" data-players="sample1" data-demo></div>
+                </div>
+              </div>
+              <p>Entry commands by the controller => Command execution => Entry command => Execution => ... will be repeated.</p>
+              <h4>Behavior that can be done with the controller.</h4>
+              <dl>
+                <dt>Move</dt><dd>Ahead, back, ascent, descent.</dd>
+                <dt>Radar</dt><dd>Scanning enemies, Scanning flying attacks.</dd>
+                <dt>Attack</dt><dd>Laser launch, missile launch.</dd>
+                <dt>Check status</dt><dd>Check shield, temperature, fuel, missile ammo.</dd>
+              </dl>
+              <p>If you use radar, the time to the next action will be longer.</p>
+              <p>Only one attack is accepted in a single action.</p>
+              <p>The missile program is specified as an argument when fire command.</p>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <pre style="display:none;" id="sample2">var missile = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
+  }
+  controller.speedUp();
+};
+var bot = function(controller) {
+  if (controller.altitude() < 100) {
+    controller.ascent();
+  }
+  if (controller.frame() % 16 === 0) {
+    controller.fireMissile(missile);
+  }
+};
+return bot;</pre>
+<pre id="fiddle100" style="display: none;">
+	return function(controller) {
+		if (controller.altitude() < 100) {
+	    controller.ascent();
+	    return;
+	  }
+	};
+</pre>
+<pre class="code">var missile = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
+  }
+  controller.speedUp();
+};
+
+var bot = function(controller) {
+  // ...
+  controller.fireMissile(missile);
+  // ...
+};
+return bot;</pre>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <div class="sourcer-standalone" data-height="256" data-players="sample2,fiddle100" data-demo></div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <h2>API Documents</h2>
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <h3>SourcerController</h3>
+            <p>Controller for operating sourcer.</p>
+            <h4>Methods</h4>
+            <div class="method">
+              <h5>frame()</h5>
+              <p>Get the number of frames since starting.</p>
+              <dl><dt>returns {number}</dt><dd>The number of frames since starting.</dd>
+            </div>
+            <div class="method">
+              <h5>altitude()</h5>
+              <p>Get current altitude.</p>
+              <dl><dt>returns {number}</dt><dd>Current altitude.</dd>
+            </div>
+            <div class="method">
+              <h5>wait(frame)</h5>
+              <p>Wait for the specified number of frames.</p>
+              <dl>
+                <dt>{number} frame</dt>
+                <dd>Number of frames to make to wait.</dd>
+              </dl>
+            </div>
+            <div class="method">
+              <h5>shield()</h5>
+              <p>Get the shield value.</p>
+              <dl><dt>returns {number}</dt><dd>The shield value.</dd>
+            </div>
+            <div class="method">
+              <h5>fuel()</h5>
+              <p>Get the fuel value.</p>
+              <dl><dt>returns {number}</dt><dd>The fuel value.</dd>
+            </div>
+            <div class="method">
+              <h5>temperature()</h5>
+              <p>Get the temperature value.</p>
+              <dl><dt>returns {number}</dt><dd>The temperature value.</dd>
+            </div>
+            <div class="method">
+              <h5>missileAmmo()</h5>
+              <p>Get the missile ammo value.</p>
+              <dl><dt>returns {number}</dt><dd>The missile ammo value.</dd>
+            </div>
+            <div class="method">
+              <h5>scanEnemy(direction, angle, renge)</h5>
+              <p>Scans for enemies in the specified direction, range and distance.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the radar. The direction of Sourcer is 0, the upward direction is a positive value, the downward direction is a negative value.</dd>
+                <dt>{number} angle</dt>
+                <dd>The width angle of the radar.</dd>
+                <dt>{number} renge</dt>
+                <dd>The distance renge of the radar. If omitted, it is judged regardless of the distance.</dd>
+              </dl>
+              <dl><dt>returns {boolean}</dt><dd>True if an enemy was in the specified range.</dd>
+              <h6>Sample</h6>
+              <pre class="code">controller.scanEnemy(45, 60, 75);</pre>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of rightward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="-45" data-angle="60"
+                    data-distance="80" data-arrow="0"></canvas>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of leftward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="-135" data-angle="60"
+                    data-distance="80" data-arrow="180"></canvas>
+                </div>
+              </div>
+              <pre class="code">controller.scanEnemy(-45, 120, 50);</pre>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of rightward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="45" data-angle="120"
+                    data-distance="50" data-arrow="0"></canvas>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of leftward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="135" data-angle="120"
+                    data-distance="50" data-arrow="180"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="method">
+              <h5>scanAttack(direction, angle, renge)</h5>
+              <p>Scans for enemy attack in the specified direction, range and distance.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the radar. The direction of Sourcer is 0, the upward direction is a positive value, the downward direction is a negative value.</dd>
+                <dt>{number} angle</dt>
+                <dd>The width angle of the radar.</dd>
+                <dt>{number} renge</dt>
+                <dd>The distance renge of the radar. If omitted, it is judged regardless of the distance.</dd>
+              </dl>
+              <dl><dt>returns {boolean}</dt><dd>True if an enemy attack was in the specified range.</dd>
+            </div>
+            <div class="method">
+              <h5>ahead()</h5>
+              <p>Move forward.</p>
+            </div>
+            <div class="method">
+              <h5>back()</h5>
+              <p>Move backward.</p>
+            </div>
+            <div class="method">
+              <h5>ascent()</h5>
+              <p>Move upward.</p>
+            </div>
+            <div class="method">
+              <h5>descent()</h5>
+              <p>Move downward.</p>
+            </div>
+            <div class="method">
+              <h5>turn()</h5>
+              <p>Turn the opposite direction.</p>
+            </div>
+            <div class="method">
+              <h5>fireLaser(direction, power)</h5>
+              <p>Fire the laser.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the radar. The direction of Sourcer is 0, the upward direction is a positive value, the downward direction is a negative value.</dd>
+                <dt>{number} power</dt>
+                <dd>Power to launch.</dd>
+              </dl>
+            </div>
+            <div class="method">
+              <h5>fireMissile(source)</h5>
+              <p>Fire the missile.</p>
+              <dl>
+                <dt>{function} source</dt>
+                <dd>Function for controlling missiles.</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+            <h3>MissileController</h3>
+            <p>Controller for operating missile.</p>
+            <h4>Methods</h4>
+            <div class="method">
+                <h5>frame()</h5>
+                <p>Get the number of frames since starting.</p>
+                <dl><dt>returns {number}</dt><dd>The number of frames since starting.</dd>
+              </div>
+              <div class="method">
+                <h5>altitude()</h5>
+                <p>Get current altitude.</p>
+                <dl><dt>returns {number}</dt><dd>Current altitude.</dd>
+              </div>
+              <div class="method">
+                <h5>wait(frame)</h5>
+                <p>Wait for the specified number of frames.</p>
+                <dl>
+                  <dt>{number} frame</dt>
+                  <dd>Number of frames to make to wait.</dd>
+                </dl>
+              </div>
+              <div class="method">
+                <h5>fuel()</h5>
+                <p>Get the fuel value.</p>
+                <dl><dt>returns {number}</dt><dd>The fuel value.</dd>
+              </div>
+              <div class="method">
+              <h5>direction()</h5>
+              <p>Get the direction of the missile.<br />
+                The right horizontal direction is 0, the counterclockwise direction is a positive value, the clockwise direction is a negative value.</p>
+              <dl><dt>returns {number}</dt><dd>The direction of the missile.</dd>
+            </div>
+            <div class="method">
+              <h5>scanEnemy(direction, angle, renge)</h5>
+              <p>Scans for enemies in the specified direction, range and distance.<br />
+                Please note that the range specification method is different from Source.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the radar. The direction of missile is 0, the counterclockwise direction is a positive value, the clockwise direction is a negative value.</dd>
+                <dt>{number} angle</dt>
+                <dd>The width angle of the radar.</dd>
+                <dt>{number} renge</dt>
+                <dd>The distance renge of the radar. If omitted, it is judged regardless of the distance.</dd>
+              </dl>
+              <dl><dt>returns {boolean}</dt><dd>True if an enemy attack was in the specified range.</dd>
+              <h6>Sample</h6>
+              <pre class="code">controller.scanEnemy(45, 60, 75);</pre>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of upward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="-135" data-angle="60"
+                    data-distance="80" data-arrow="90"></canvas>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of downward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="45" data-angle="60"
+                    data-distance="80" data-arrow="-90"></canvas>
+                </div>
+              </div>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of rightward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="-45" data-angle="60"
+                    data-distance="80" data-arrow="0"></canvas>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+                  <p>In case of leftward</p>
+                  <canvas class="arc" width="160" height="160"
+                    data-direction="135" data-angle="60"
+                    data-distance="80" data-arrow="-180"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="method">
+              <h5>speedUp()</h5>
+              <p>Increase the speed.</p>
+            </div>
+            <div class="method">
+              <h5>speedDown()</h5>
+              <p>Reduce the speed.</p>
+            </div>
+            <div class="method">
+              <h5>turnRight()</h5>
+              <p>Turn to the right.</p>
+            </div>
+            <div class="method">
+              <h5>turnLeft()</h5>
+              <p>Turn to the left.</p>
+            </div>
+          </div>
+        </div>
+        <textarea id="player2" rows="22" style="width: 320px; display:none;">// for missile
+var missile = function(controller) {
+  if(controller.scanEnemy(90, 180)) {
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
+  }
+  controller.speedUp();
+};
+
+var bot = function(controller) {
+  if (controller.scanAttack(0, 60, 60)) {
+    controller.back();
+    controller.descent();
+    return;
+  }
+
+  if (controller.altitude() < 100) {
+    controller.ascent();
+    return;
+  }
+
+  if (!controller.scanEnemy(0, 180)) {
+    controller.turn();
+    return;
+  }
+
+  if (controller.scanEnemy(0, 30, 200)) {
+    if (80 < controller.temperature()) {
+      return;
+    }
+
+    if (controller.frame() % 5 === 0) {
+      controller.fireMissile(missile);
+    } else {
+      controller.fireLaser(0, 8);
+    }
+    return;
+  }
+
+  if (controller.scanEnemy(0, 30)) {
+    controller.ahead();
+    return;
+  }
+};
+
+return bot;</textarea>
+      </div>
+    </main>
+  </div>
+
+  <script src="//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+  <script src="./arc.js"></script>
+  <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./aceLoader.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./arena.js"></script>
+</body>
+
+</html>
