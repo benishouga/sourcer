@@ -50,15 +50,21 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     }
   }
 
+  private updateFrame({ playing, frame }: { playing: boolean, frame: number }): void {
+    this.startFrame = frame;
+    this.startTime = performance.now();
+    this.setState({ playing, frame });
+  }
+
   private onPlay() {
-    this.setState({ playing: true });
+    this.updateFrame({ playing: true, frame: this.state.frame });
     if (!this.animationFrameHandler) {
       this.animationFrameHandler = requestAnimationFrame(() => this.tick());
     }
   }
 
   private onPause() {
-    this.setState({ playing: false });
+    this.updateFrame({ playing: false, frame: this.state.frame });
     if (this.animationFrameHandler) {
       cancelAnimationFrame(this.animationFrameHandler);
       this.animationFrameHandler = null;
@@ -69,14 +75,12 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (this.props.onReload) {
       this.props.onReload();
     } else {
-      this.setState({ frame: 0 });
+      this.updateFrame({ playing: !!this.state.playing, frame: 0 });
     }
   }
 
   private onFrameChanged(frameEvent: any) {
-    this.setState({
-      frame: ComponentExplorer.extractSliderOnChange(frameEvent)
-    });
+    this.updateFrame({ playing: !!this.state.playing, frame: ComponentExplorer.extractSliderOnChange(frameEvent) });
   }
 
   public render() {
@@ -140,13 +144,18 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     }
   }
 
+  private FRAME_MILLS = 1000 / 60;
+  private startTime = performance.now();
+  private startFrame = 0;
   private tick() {
     this.animationFrameHandler = requestAnimationFrame(() => this.tick());
 
     this.adjustWidth();
 
+    const delta = performance.now() - this.startTime;
+    const frame = Math.floor(delta / this.FRAME_MILLS);
     if (this.props.gameDump.frames && this.state.playing) {
-      const nextFrame = this.state.frame + 1;
+      const nextFrame = this.startFrame + frame;
       if (nextFrame < this.props.gameDump.frames.length) {
         this.setState({ frame: nextFrame });
       } else {
