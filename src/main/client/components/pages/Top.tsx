@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
@@ -47,6 +47,10 @@ export default class Top extends React.Component<{}, TopState> {
           </Cell>
         </Grid>
       );
+    }
+
+    if (Auth.status.admin) {
+      return <Redirect to="/official" />;
     }
 
     const user = this.state.user;
