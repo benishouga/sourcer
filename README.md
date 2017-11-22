@@ -1,19 +1,21 @@
 # Sourcer
-Battle game using programs.
+Match game that fights using JavaScript programs.
 
+![pr](https://raw.githubusercontent.com/benishouga/sourcer/master/pr.gif)
 
+[Try it.](https://benishouga.github.io/sourcer/)
 
-[What's Sourcer ?](https://benishouga.github.io/sourcer/)
+[Matching Server](https://sourcer.herokuapp.com/)
 
-[Try it.](https://sourcer.herokuapp.com/)
+## Sourcer
 
-You can set up a private server.
+You can set up a private matching server.
 
 ### Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-### Manual
+### Local
 
 ```
 git clone https://github.com/benishouga/sourcer.git
