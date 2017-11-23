@@ -7,9 +7,9 @@ Match game that fights using JavaScript programs.
 
 [Matching Server](https://sourcer.herokuapp.com/)
 
-## Sourcer
+## Private matching server
 
-You can set up a private matching server.
+You can set up a private matching server. You can use it in your community.
 
 ### Heroku
 
