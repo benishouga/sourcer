@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserModel, { UserDocument, UserService } from '../models/UserModel';
+import { UserDocument, UserService } from '../models/UserModel';
 import Validator from '../utils/Validator';
 import ResponseCreator from './ResponseCreator';
 import Normalizer from '../utils/Normalizer';
@@ -11,15 +11,17 @@ export async function show(req: Request, res: Response) {
   }
 
   let account: string = req.params.id;
+  let withSource = false;
   if (!account) {
     const sessionUser = req.session.user as UserDocument;
     if (!sessionUser) {
       return res.status(403).send('').end();
     }
     account = sessionUser.account;
+    withSource = true;
   }
 
-  const user = await UserService.loadWithMatchees(account);
+  const user = await UserService.loadWithMatches(account, withSource);
   if (!user) {
     return res.status(404).send('').end();
   }
@@ -46,7 +48,7 @@ export async function create(req: Request, res: Response) {
     return res.status(400).send(ResponseCreator.error(validationResults)).end();
   }
 
-  const userExist = await UserService.loadByAccount(account);
+  const userExist = await UserService.loadByAccount(account, false);
 
   if (userExist) {
     return res.status(409).send(ResponseCreator.error(['invalidAccountExist'])).end();
@@ -74,7 +76,7 @@ export async function update(req: Request, res: Response) {
   }
 
   const account = sessionUser.account;
-  const user = await UserService.loadWithMatchees(account);
+  const user = await UserService.loadWithMatches(account, false);
   if (!user) {
     return res.status(404).end('');
   }

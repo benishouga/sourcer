@@ -40,19 +40,19 @@ const UserModel = model<UserDocument>('User', schema);
 export default UserModel;
 
 export class UserService extends UserModel {
-  public static loadByAccount(account: string) {
-    return UserService.findOne({ account }).exec();
+  public static loadByAccount(account: string, withSource: boolean) {
+    return UserService.findOne({ account }, withSource ? '' : '-source').exec();
   }
 
-  public static async loadWithMatchees(account: string) {
-    let res = await UserService.findOne({ account })
+  public static async loadWithMatches(account: string, withSource: boolean) {
+    let res = await UserService.findOne({ account }, withSource ? '' : '-source')
       .populate({ path: 'matches', select: '-dump', options: { sort: { created: -1 } } })
       .exec();
     if (!res) {
       throw new Error('find user error');
     }
-    res = await UserService.populate<UserDocument>(res, { path: 'matches.winner', model: 'User' });
-    res = await UserService.populate<UserDocument>(res, { path: 'matches.players', model: 'User' });
+    res = await UserService.populate<UserDocument>(res, { path: 'matches.winner', model: 'User', select: '-source' });
+    res = await UserService.populate<UserDocument>(res, { path: 'matches.players', model: 'User', select: '-source' });
     return res;
   }
 
@@ -80,13 +80,13 @@ export class UserService extends UserModel {
 
   public static async recent(excludeUser: string) {
     const query = { account: { $ne: excludeUser } };
-    const res = await UserService.find(query)
+    const res = await UserService.find(query, '-source')
       .populate({ path: 'matches', select: '-dump' })
       .sort({ updated: -1 })
       .limit(10)
       .exec();
 
-    return UserService.populate(res, { path: 'matches.winner', model: 'User' });
+    return UserService.populate(res, { path: 'matches.winner', model: 'User', select: '-source' });
   }
 
   public static hash(account: string, password: string) {

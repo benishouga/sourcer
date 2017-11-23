@@ -42,7 +42,7 @@ describe('Match', () => {
     match.players = [user];
     await MatchService.createAndRegisterToUser(match);
     console.log('match save resolved');
-    const savedUser = await UserService.loadWithMatchees('account');
+    const savedUser = await UserService.loadWithMatches('account', true);
     console.log('savedUser ', savedUser);
   });
 });

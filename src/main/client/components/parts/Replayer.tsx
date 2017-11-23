@@ -160,7 +160,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         this.setState({ frame: nextFrame });
       } else {
         if (this.props.gameDump.isDemo) {
-          this.setState({ frame: 0 });
+          this.updateFrame({ playing: !!this.state.playing, frame: 0 });
         }
       }
     }

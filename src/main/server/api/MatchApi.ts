@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { arena } from '../Arena';
 import { GameDump } from '../../core/Dump';
-import UserModel, { UserDocument, UserService } from '../models/UserModel';
+import { UserDocument, UserService } from '../models/UserModel';
 import MatchModel, { MatchDocument, MatchService } from '../models/MatchModel';
 import ResponseCreator from './ResponseCreator';
 import Zip from '../utils/Zip';
@@ -54,8 +54,8 @@ export async function create(req: Request, res: Response) {
       return res.status(400).send('').end();
     }
   }
-  const user1 = await UserService.loadByAccount(player1);
-  const user2 = await UserService.loadByAccount(player2);
+  const user1 = await UserService.loadByAccount(player1, true);
+  const user2 = await UserService.loadByAccount(player2, true);
 
   if (!user1 || !user2) {
     return res.status(400).send('').end();

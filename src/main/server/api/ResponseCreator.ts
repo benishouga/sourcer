@@ -45,7 +45,7 @@ export default class ResponseCreator {
       winner: this.user(match.winner),
       players: match.players ? match.players.map(v => this.user(v)) : [],
       created: match.created
-    } : match as any;
+    } : match as MatchResponse;
   }
 
   public static auth(session: Express.Session): AuthResponse {

@@ -42,7 +42,7 @@ describe('User', () => {
   });
 
   it('loadByAccount', async () => {
-    const loadedUser = await UserService.loadByAccount('account');
+    const loadedUser = await UserService.loadByAccount('account', false);
     if (!loadedUser) {
       throw new Error('failed');
     }
@@ -63,7 +63,7 @@ describe('User', () => {
     await MatchService.createAndRegisterToUser(match);
     console.log('createAndRegisterToUser successful');
     console.log('loadWithMatchees start');
-    const loadedUser = await UserService.loadWithMatchees('account');
+    const loadedUser = await UserService.loadWithMatches('account', true);
     console.log('loadWithMatchees successful');
     assert.ok(loadedUser.matches.length === 1, 'matches');
     assert.ok(loadedUser.matches[0].winner.account === 'account', 'winner account');
