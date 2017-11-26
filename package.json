@@ -8,7 +8,7 @@
     "build:common:resource": "npm-run-all -p build:common:resource:*",
     "build:common": "npm-run-all -p build:common:*",
     "build:client:statics": "cpx \"./src/statics/**/*.*\" ./dist",
-    "build:client:css": "postcss \"src/**/*.css\" -o ./dist/main.css",
+    "build:client:css": "postcss \"src/css/main.css\" -o ./dist/main.css",
     "build:client:bundle:main": "browserify ./src/main/client/main.tsx --debug -p [ tsify --noImplicitAny ] -o ./dist/main.js",
     "build:client:bundle:arena": "browserify ./src/main/client/arena.tsx --debug -p [ tsify --noImplicitAny ] -o ./dist/arena.js",
     "build:client:bundle:arenaWorker": "browserify ./src/main/client/arenaWorker.ts --debug -p [ tsify --noImplicitAny ] -o ./dist/arenaWorker.js",

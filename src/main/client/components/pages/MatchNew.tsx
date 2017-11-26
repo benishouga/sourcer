@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar } from 'react-mdl';
 
@@ -18,6 +19,8 @@ interface MatchNewState {
 }
 
 export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewState> {
+  private dialog: Dialog;
+
   constructor(props: RouteComponentProps<RouteParams>) {
     super(props);
     this.state = {};
@@ -39,6 +42,11 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
 
   private abortController: AbortController;
   public componentDidMount() {
+    const dialog = ReactDOM.findDOMNode(this.dialog) as any;
+    if (!dialog.showModal) {
+      ((window as any).dialogPolyfill).registerDialog(dialog);
+    }
+
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
 
@@ -92,7 +100,7 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
           <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
             <div style={{ height: '120px' }}></div>
             <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>{resource.fight}</Button>
-            <Dialog open={this.state.openDialog}>
+            <Dialog open={this.state.openDialog} ref={(dialog: any) => { this.dialog = dialog; }}>
               <DialogTitle>{resource.fighting}</DialogTitle>
               <DialogContent>
                 <ProgressBar indeterminate />

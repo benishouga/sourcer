@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar, List, ListItem, ListItemContent, Icon } from 'react-mdl';
 
@@ -20,6 +21,8 @@ interface OfficialState {
 }
 
 export default class Official extends React.Component<RouteComponentProps<{}>, OfficialState> {
+  private dialog: Dialog;
+
   constructor(props: RouteComponentProps<{}>) {
     super(props);
     this.state = {};
@@ -43,6 +46,11 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
 
   private abortController: AbortController;
   public async componentDidMount() {
+    const dialog = ReactDOM.findDOMNode(this.dialog) as any;
+    if (!dialog.showModal) {
+      ((window as any).dialogPolyfill).registerDialog(dialog);
+    }
+
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const users = await User.all({ signal }).catch(error => console.log(error));
@@ -135,7 +143,7 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
           <div style={{ height: '120px' }}></div>
           <Button colored onClick={this.handleOpenDialog.bind(this)}
             raised ripple disabled={!this.state.player1 || !this.state.player2}>{resource.fight}</Button>
-          <Dialog open={this.state.openDialog}>
+          <Dialog open={this.state.openDialog} ref={(dialog: any) => { this.dialog = dialog; }}>
             <DialogTitle>{resource.fighting}</DialogTitle>
             <DialogContent>
               <ProgressBar indeterminate />
