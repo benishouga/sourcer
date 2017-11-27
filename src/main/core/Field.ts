@@ -163,7 +163,6 @@ export default class Field {
       return;
     }
 
-    // 決定済み
     if (this.result) {
       return;
     }
@@ -212,7 +211,7 @@ export default class Field {
       return;
     }
 
-    if (this.result.frame < this.frame - 90) { // 勝敗が決したあとも若干フレームを記録する
+    if (this.result.frame < this.frame - 90) { // Record some frames even after decided.
       this.isFinished = true;
       listener.onEndOfGame();
     }

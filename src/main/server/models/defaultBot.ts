@@ -1,58 +1,58 @@
-export const defaultBot = `// **** ミサイル用のプログラムを定義 ****
+export const defaultBot = `// for missile
 var missile = function(controller) {
-
-  // 相手が左側にいるか判定する
-  // （左90度の角度から、180度の範囲に敵が存在するか判定）
   if(controller.scanEnemy(90, 180)) {
-    controller.turnLeft(); // 左へ回転
-  } else { // 左側にいない場合
-    controller.turnRight(); // 右へ回転
+    controller.turnLeft();
+  } else {
+    controller.turnRight();
   }
-
-  // 今向いている方向へ、加速する
   controller.speedUp();
 };
 
-// **** 本体用のプログラムを定義 ****
+// for sourcer
 var bot = function(controller) {
-  // 前方からの攻撃を避ける
-  // （敵の攻撃が 前方0度 の角度から 60度の範囲、距離60 以内にあるか判定）
+  // Avoid front attacks.
+  //   - Is it enemy attack exists front 0 degrees,
+  //       width 60 degrees, distance 60.
   if (controller.scanAttack(0, 60, 60)) {
-    controller.descent(); // 高度を下げる
+    controller.back();
+    controller.descent();
     return;
   }
 
-  // 地面にぶつからないように自機の高度が高さ 100 以下になっていた場合
   if (controller.altitude() < 100) {
-    controller.ascent(); // 高度を上げる
+    controller.ascent();
     return;
   }
 
-  // 敵が後方に居た場合 (前方180度内に居なかった場合)
+  // Is not it enemy exists front.
   if (!controller.scanEnemy(0, 180)) {
-    controller.turn(); // 現在向いている方向と逆方向を向く
+    controller.turn();
     return;
   }
 
-  // 敵が前方近くに居た場合
-  // （向き 0度、90度, 距離 200の範囲内に存在していた場合）
-  if (controller.scanEnemy(0, 90, 200)) {
-    // 機体の温度が高い場合は、攻撃しない
+  // Attack if the enemy is nearby
+  //   - Is it enemy exists front 0 degrees,
+  //       width 30 degrees, distance 200.
+  if (controller.scanEnemy(0, 30, 200)) {
+    // Check temperature
     if (80 < controller.temperature()) {
       return;
     }
 
-    // 5フレームに一度、ミサイルを発射する
+    // Fire a missile once in 5 frames.
     if (controller.frame() % 5 === 0) {
-      // ミサイル用プログラムを使用し、ミサイルを発射する
       controller.fireMissile(missile);
     } else {
-      // 前方（0度）へ向けて 強さ8で アサルト弾を発射する
       controller.fireLaser(0, 8);
     }
     return;
   }
-  // 近くにいなければ前進する
-  controller.ahead();
+
+  // Go ahead if the enemy is far.
+  if (controller.scanEnemy(0, 30)) {
+    controller.ahead();
+    return;
+  }
 };
+
 return bot;`;

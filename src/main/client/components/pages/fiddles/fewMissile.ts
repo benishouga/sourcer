@@ -6,7 +6,6 @@ var missile = function(controller) {
       controller.turnRight();
   }
   if(controller.frame() % 2 === 0) {
-    // 2 frame に一度加速する（ゆっくりと敵を追尾する）
     controller.speedUp();
   }
 };
@@ -41,7 +40,6 @@ var bot = function(controller) {
       }
     }
   } else if(controller.frame() % 32 === 0) {
-    // 32 frame に一度 ミサイルを発射する
     controller.fireMissile(missile);
   }
 };

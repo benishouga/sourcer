@@ -1,16 +1,10 @@
 export const fixedBattery = `
 var bot = function(controller) {
-
-  // 低い位置で浮き続ける
   if (controller.altitude() < 15) {
     controller.ascent();
   }
-
-  // 4 frame に一度 攻撃する
   if (controller.frame() % 4 === 0) {
     if (controller.temperature() < 80) {
-
-      // 20 度ずつ敵を探し、見つけた方に攻撃する
       if (controller.scanEnemy(0, 20)) {
         controller.fireLaser(0);
       } else if(controller.scanEnemy(20, 20)) {

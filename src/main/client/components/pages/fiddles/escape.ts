@@ -6,7 +6,6 @@ var bot = function(controller) {
   }
 
   if (controller.frame() % 64 === 0) {
-    // ランダムを使い、２分の１の確立でターンする(Math.random() は 0 〜 1 のランダムな値を取得できる)
     if (Math.random() < 0.5) {
       controller.turn();
     }
