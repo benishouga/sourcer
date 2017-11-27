@@ -36,32 +36,20 @@ export default class Field {
     this.addSourcer(new Sourcer(this, x, y, source, account, name, color));
   }
 
-  public process(listener: TickEventListener, think: (sourcer: Sourcer) => void, callback: () => void) {
-    let i = 0;
-    const next = () => {
-      if (i >= this.sourcers.length) {
-        callback();
-        return;
-      }
-
-      const sourcer = this.sourcers[i];
+  public async process(listener: TickEventListener, think: (sourcer: Sourcer) => void) {
+    for (const sourcer of this.sourcers) {
       listener.onPreThink(sourcer.id);
-      listener.onImmediate(() => {
-        think(sourcer);
-        listener.onPostThink(sourcer.id);
-        listener.onImmediate(() => {
-          i++;
-          next();
-        });
-      });
-    };
-    next();
+      await listener.waitNextTick();
+      think(sourcer);
+      listener.onPostThink(sourcer.id);
+      await listener.waitNextTick();
+    }
   }
 
-  public compile(listener: TickEventListener, onComplete: () => void) {
-    this.process(listener, (sourcer: Sourcer) => {
+  public async compile(listener: TickEventListener) {
+    return this.process(listener, (sourcer: Sourcer) => {
       sourcer.compile(this.scriptLoader);
-    }, onComplete);
+    });
   }
 
   public addSourcer(sourcer: Sourcer) {
@@ -93,48 +81,34 @@ export default class Field {
     }
   }
 
-  public tick(listener: TickEventListener, onComplete: () => void) {
+  public async tick(listener: TickEventListener) {
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
     // Think phase
-    this.process(listener, (sourcer: Sourcer) => {
+    await this.process(listener, (sourcer: Sourcer) => {
       sourcer.think();
       this.shots.filter((shot => shot.owner.id === sourcer.id)).forEach(shot => shot.think());
-    }, () => {
-      // Action phase
-      this.sourcers.forEach((actor) => {
-        actor.action();
-      });
-      this.shots.forEach((actor) => {
-        actor.action();
-      });
-      this.fxs.forEach((fx: Fx) => {
-        fx.action();
-      });
-
-      // Move phase
-      this.sourcers.forEach((actor) => {
-        actor.move();
-      });
-      this.shots.forEach((actor) => {
-        actor.move();
-      });
-      this.fxs.forEach((fx) => {
-        fx.move();
-      });
-
-      // Check phase
-      this.checkFinish(listener);
-      this.checkEndOfGame(listener);
-
-      this.frame++;
-
-      // onFrame
-      listener.onFrame(this.dump());
-
-      onComplete();
     });
+
+    // Action phase
+    this.sourcers.forEach(actor => actor.action());
+    this.shots.forEach(actor => actor.action());
+    this.fxs.forEach(actor => actor.action());
+
+    // Move phase
+    this.sourcers.forEach(actor => actor.move());
+    this.shots.forEach(actor => actor.move());
+    this.fxs.forEach(actor => actor.move());
+
+    // Check phase
+    this.checkFinish(listener);
+    this.checkEndOfGame(listener);
+
+    this.frame++;
+
+    // onFrame
+    listener.onFrame(this.dump());
   }
 
   private checkFinish(listener: TickEventListener) {
@@ -148,18 +122,6 @@ export default class Field {
         };
         listener.onFinished(this.result);
       }
-      return;
-    }
-
-    // TODO: .....
-    if (DEMO_FRAME_LENGTH < 40) {
-      this.result = {
-        frame: this.frame,
-        timeout: null,
-        isDraw: null,
-        winnerId: null
-      };
-      listener.onFinished(this.result);
       return;
     }
 

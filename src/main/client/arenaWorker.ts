@@ -72,12 +72,14 @@ onmessage = ({ data }) => {
   const sources = initialParameter.sources as SourcerSource[];
   const frames: FieldDump[] = [];
   const listener: TickEventListener = {
-    onImmediate: (callback: () => void) => {
-      const issuedId = issue();
-      callbacks[issuedId] = callback;
-      postMessage({
-        issuedId,
-        command: 'Next'
+    waitNextTick: async () => {
+      return new Promise<void>((resolve) => {
+        const issuedId = issue();
+        callbacks[issuedId] = resolve;
+        postMessage({
+          issuedId,
+          command: 'Next'
+        });
       });
     },
     onPreThink: (sourcerId: number) => {
@@ -128,18 +130,10 @@ onmessage = ({ data }) => {
     players: field.players()
   });
 
-  setTimeout(() => {
-    field.compile(listener, () => {
-      let count = 0;
-      const next = () => {
-        field.tick(listener, () => {
-          if (count < 10000 && !field.isFinished) {
-            count++;
-            next();
-          }
-        });
-      };
-      next();
-    });
+  setTimeout(async () => {
+    await field.compile(listener);
+    for (let count = 0; count < 10000 && !field.isFinished; count++) {
+      await field.tick(listener);
+    }
   }, 0);
 };

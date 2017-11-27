@@ -4,10 +4,6 @@ import Consts from './Consts';
 const EPSILON = 10e-12;
 
 export default class Utils {
-  public static wait() {
-    return new Promise<void>(resolve => setTimeout(resolve, 0));
-  }
-
   public static createRadar(c: V, direction: number, angle: number, renge: number): (t: V) => boolean {
     const checkDistance = (t: V) => c.distance(t) <= renge;
 

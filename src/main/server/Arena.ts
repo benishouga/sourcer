@@ -189,9 +189,7 @@ if (cluster.isWorker) {
     const frames: FieldDump[] = [];
 
     const listener: TickEventListener = {
-      onImmediate: (callback: () => void) => {
-        setImmediate(callback);
-      },
+      waitNextTick: () => new Promise<void>(resolve => setImmediate(resolve)),
       onPreThink: (sourcerId: number) => {
         if (!process.send) { return; }
         process.send({
@@ -237,24 +235,15 @@ if (cluster.isWorker) {
       }
     };
 
-    setTimeout(() => {
-      field.compile(listener, () => {
-        let count = 0;
-        const next = () => {
-          field.tick(listener, () => {
-            if (count < 10000 && !field.isFinished) {
-              count++;
-              next();
-            } else {
-              setTimeout(() => {
-                console.log('arena', id, 'process.exit');
-                process.exit(0);
-              }, DELAY_FOR_END_OF_GAME);
-            }
-          });
-        };
-        next();
-      });
+    setTimeout(async () => {
+      await field.compile(listener);
+      for (let count = 0; count < 10000 && !field.isFinished; count++) {
+        await field.tick(listener);
+      }
+      setTimeout(() => {
+        console.log('arena', id, 'process.exit');
+        process.exit(0);
+      }, DELAY_FOR_END_OF_GAME);
     }, 0);
   });
 }

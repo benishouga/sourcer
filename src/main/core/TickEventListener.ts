@@ -2,7 +2,7 @@ import Sourcer from './Sourcer';
 import { FieldDump, ResultDump } from './Dump';
 
 interface TickEventListener {
-  onImmediate(callback: () => void): void;
+  waitNextTick(): Promise<void>;
   onPreThink(targetId: number): void;
   onPostThink(targetId: number): void;
   onFrame(field: FieldDump): void;
