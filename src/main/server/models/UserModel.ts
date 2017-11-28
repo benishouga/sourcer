@@ -46,7 +46,7 @@ export class UserService extends UserModel {
 
   public static async loadWithMatches(account: string, withSource: boolean) {
     let res = await UserService.findOne({ account }, withSource ? '' : '-source')
-      .populate({ path: 'matches', select: '-dump', options: { sort: { created: -1 } } })
+      .populate({ path: 'matches', select: '-dump', options: { sort: { created: -1 }, limit: 8 } })
       .exec();
     if (!res) {
       throw new Error('find user error');
