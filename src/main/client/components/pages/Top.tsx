@@ -10,6 +10,7 @@ import User from '../../service/User';
 import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 import ProfileCard from '../parts/ProfileCard';
+import Config from '../../service/Config';
 
 interface TopState {
   user?: UserResponse;
@@ -37,13 +38,17 @@ export default class Top extends React.Component<{}, TopState> {
 
   public render() {
     const resource = strings();
+    const configStrings = Config.strings();
     if (!Auth.status.authenticated) {
+      const topMessage = configStrings.topMessage ? <div dangerouslySetInnerHTML={{ __html: configStrings.topMessage }}></div> : null;
+
       return (
         <Grid>
           <Cell col={12}>
             <h2>Sourcer</h2>
             <p>{resource.serviceDescription}<br />
               {resource.serviceBenefit}</p>
+            {topMessage}
           </Cell>
         </Grid>
       );

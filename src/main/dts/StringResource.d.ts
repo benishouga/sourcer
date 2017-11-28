@@ -63,3 +63,7 @@ interface StringResource {
 }
 
 type ResourceId = keyof StringResource;
+
+interface EnvMessage {
+  topMessage?: string;
+}

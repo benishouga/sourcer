@@ -58,7 +58,8 @@ export default class ResponseCreator {
   public static config(): ConfigResponse {
     return {
       requireAppKey: !!Env.appKey,
-      teamGame: Env.isTeamGame
+      teamGame: Env.isTeamGame,
+      envMessages: Env.envMessages
     };
   }
 
