@@ -14,6 +14,8 @@ export type UserDocument = Document & {
   isClosedSource: boolean;
   members: string[];
   matches: MatchDocument[];
+  wins: number;
+  losses: number;
   created: Date;
   updated: Date;
 };
@@ -28,6 +30,8 @@ const schema = new Schema({
   source: { type: String, default: defaultBot },
   members: [{ type: String }],
   matches: [{ type: Schema.Types.ObjectId, ref: 'Match' }],
+  wins: { type: Number, default: 0 },
+  losses: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
 }).pre('save', (next) => {

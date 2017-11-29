@@ -44,8 +44,8 @@ export class MatchService extends MatchModel {
     if (!loaded) {
       throw new Error();
     }
-    console.log('Loading for SavedMatch is successful');
     await Promise.all(loaded.players.map((player) => {
+      player._id.equals(match.winner._id) ? player.wins++ : player.losses++;
       player.matches = player.matches || [];
       player.matches.push(loaded);
       return player.save();
