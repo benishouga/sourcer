@@ -33,7 +33,7 @@ db(mongoDbUri).then((mongooseConnection) => {
     return next();
   });
 
-  app.use(express.static('dist'));
+  app.use(express.static('docs'));
 
   app.use(cookieParser());
   app.use(bodyParser.json());

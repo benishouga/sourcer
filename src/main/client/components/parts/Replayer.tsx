@@ -172,8 +172,8 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     return (
       <Grid>
-        <Cell col={6} tablet={12} phone={12}>{player1Status}</Cell>
-        <Cell col={6} tablet={12} phone={12}>{player2Status}</Cell>
+        <Cell col={6} tablet={4} phone={4}>{player1Status}</Cell>
+        <Cell col={6} tablet={4} phone={4}>{player2Status}</Cell>
       </Grid>
     );
   }

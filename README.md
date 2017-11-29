@@ -3,7 +3,7 @@ Match game that fights using JavaScript programs.
 
 ![pr](https://raw.githubusercontent.com/benishouga/sourcer/master/pr.gif)
 
-[Try it.](https://benishouga.github.io/sourcer/)
+[Try it.](https://benishouga.github.io/sourcer/standalone.html)
 
 [Matching Server](https://sourcer.herokuapp.com/)
 
