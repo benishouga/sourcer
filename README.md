@@ -32,6 +32,7 @@ TEAM_GAME | Set it to 'true' when used in group work. It can enter the name of t
 ADMIN_PASSWORD | Password of 'admin' with special authority. 'admin' can play any match. | true | (none)
 SESSION_SECRET | Session cookie secret. | false | (none)
 MONGODB_URI | MongoDB connection string. | true | (none)
+PUBLISH_GAMES | Set it to 'true' to show the game to the guest. | false | false
 ENV_MESSAGE_EN | Display messages on some screens. | false | (none)
 ENV_MESSAGE_JA | Same as above. (for Japanese) | false | (none)
 
