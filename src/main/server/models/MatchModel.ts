@@ -29,12 +29,12 @@ export class MatchService extends MatchModel {
 
   public static load(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
-    return this.findOne({ _id: id }, '-dump').populate('winner').populate('players').exec();
+    return this.findOne({ _id: id }, '-dump').populate('winner', '-source').populate('players', '-source').exec();
   }
 
   public static loadWithReplay(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
-    return this.findOne({ _id: id }).populate('winner').populate('players').exec();
+    return this.findOne({ _id: id }).populate('winner', '-source').populate('players', '-source').exec();
   }
 
   public static async createAndRegisterToUser(match: MatchDocument) {
@@ -52,5 +52,9 @@ export class MatchService extends MatchModel {
     }));
     console.log('Players saved');
     return loaded;
+  }
+
+  public static async matches() {
+    return await this.find({}, '-dump').populate('winner', '-source').populate('players', '-source').sort({ updated: -1 }).limit(10).exec();
   }
 }

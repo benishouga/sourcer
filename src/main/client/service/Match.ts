@@ -5,6 +5,13 @@ import { GameDump } from '../../core/Dump';
 export default class Match {
   public static emitter = new EventEmitter();
 
+  public static matches(options?: { signal?: AbortSignal }) {
+    let signal;
+    if (options) {
+      signal = options.signal;
+    }
+    return get<MatchResponse[]>(`/api/match/`, { signal });
+  }
   public static create({ signal, against }: { signal?: AbortSignal, against: string }) {
     if (!against) {
       throw new Error('bad parameter against: ' + against);

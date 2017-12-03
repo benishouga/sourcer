@@ -45,7 +45,8 @@ export default class ResponseCreator {
     return {
       requireAppKey: !!Env.appKey,
       teamGame: Env.isTeamGame,
-      envMessages: Env.envMessages
+      envMessages: Env.envMessages,
+      publishGames: Env.isPublishGames
     };
   }
 

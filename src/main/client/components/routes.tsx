@@ -11,11 +11,22 @@ import Logout from './pages/Logout';
 import SignUp from './pages/SignUp';
 import Auth from '../service/Auth';
 import Official from './pages/Official';
+import PublishGames from './parts/PublishGames';
+import Config from '../service/Config';
 
 export interface RouteParams {
   account?: string;
   matchId?: string;
 }
+
+// tslint:disable-next-line:variable-name
+const PublishGamesRoute = ({ component: Component, ...rest }: any) => {
+  return <Route {...rest} render={props => (
+    Auth.status.authenticated || Config.values.publishGames ?
+      <Component {...props} /> :
+      <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+  )} />;
+};
 
 // tslint:disable-next-line:variable-name
 const RequireAuthRoute = ({ component: Component, ...rest }: any) => (
@@ -42,7 +53,7 @@ const routes = (
       <Route path="/signup" component={SignUp} />
       <Route path="/logout" component={Logout} />
       <RequireAuthRoute path="/match/new/:account" component={MatchNew} />
-      <RequireAuthRoute path="/match/:matchId" component={MatchShow} />
+      <PublishGamesRoute path="/match/:matchId" component={MatchShow} />
       <RequireAuthRoute path="/edit" component={Edit} />
       <RequireAuthRoute path="/user/:account" component={UserShow} />
       <RequireAuthRoute path="/official" component={Official} />

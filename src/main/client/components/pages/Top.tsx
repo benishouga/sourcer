@@ -11,9 +11,12 @@ import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 import ProfileCard from '../parts/ProfileCard';
 import Config from '../../service/Config';
+import PublishGames from '../parts/PublishGames';
+import Match from '../../service/Match';
 
 interface TopState {
   user?: UserResponse;
+  matches?: MatchResponse[];
 }
 
 export default class Top extends React.Component<{}, TopState> {
@@ -30,6 +33,11 @@ export default class Top extends React.Component<{}, TopState> {
       const user = await User.select({ signal }).catch(error => console.log(error));
       if (user) { this.setState({ user }); }
     }
+    if (!Auth.status.authenticated && Config.values.publishGames) {
+      const signal = this.abortController.signal;
+      const matches = await Match.matches({ signal }).catch(error => console.log(error));
+      if (matches) { this.setState({ matches }); }
+    }
   }
 
   public componentWillUnmount() {
@@ -41,6 +49,10 @@ export default class Top extends React.Component<{}, TopState> {
     const configStrings = Config.strings();
     if (!Auth.status.authenticated) {
       const topMessage = configStrings.topMessage ? <div dangerouslySetInnerHTML={{ __html: configStrings.topMessage }}></div> : null;
+      let matches: JSX.Element | null = null;
+      if (this.state.matches && Config.values.publishGames) {
+        matches = <PublishGames matches={this.state.matches} />;
+      }
 
       return (
         <Grid>
@@ -49,8 +61,9 @@ export default class Top extends React.Component<{}, TopState> {
             <p>{resource.serviceDescription}<br />
               {resource.serviceBenefit}</p>
             {topMessage}
+            {matches}
           </Cell>
-        </Grid>
+        </Grid >
       );
     }
 
@@ -59,7 +72,6 @@ export default class Top extends React.Component<{}, TopState> {
     }
 
     const user = this.state.user;
-
     if (!user) {
       return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
     }

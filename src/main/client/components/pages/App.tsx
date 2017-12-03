@@ -52,7 +52,7 @@ export default class App extends React.Component<{}, AppState> {
               {
                 this.state.authResponse.authenticated ?
                   (<Link to="/logout"><Icon name="open_in_new" /><span className="optional-label"> {resource.logout}</span></Link>) :
-                  (<Link to="login"><Icon name="input" /><span className="optional-label"> {resource.login}</span></Link>)
+                  (<Link to="/login"><Icon name="input" /><span className="optional-label"> {resource.login}</span></Link>)
               }
               {
                 !this.state.authResponse.authenticated ?
@@ -60,7 +60,7 @@ export default class App extends React.Component<{}, AppState> {
               }
               <a target="_new" href={resource.apiUrl}><Icon name="help" /><span className="optional-label"> {resource.apiDocument}</span></a>
               <a target="_new" className="mdl-navigation__link" href="https://github.com/benishouga/sourcer">
-                <img src="./github.png" width="22" height="22" /><span className="optional-label"> Github</span>
+                <img src="/github.png" width="22" height="22" /><span className="optional-label"> Github</span>
               </a>
             </Navigation>
           </HeaderRow>

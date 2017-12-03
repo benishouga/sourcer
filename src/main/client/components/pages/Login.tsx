@@ -37,7 +37,6 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
   public render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { redirectToReferrer, admin } = this.state;
-
     if (redirectToReferrer) {
       return <Redirect to={admin ? '/official' : from} />;
     }

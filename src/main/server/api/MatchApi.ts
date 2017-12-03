@@ -5,14 +5,27 @@ import { UserDocument, UserService } from '../models/UserModel';
 import MatchModel, { MatchDocument, MatchService } from '../models/MatchModel';
 import ResponseCreator from './ResponseCreator';
 import Zip from '../utils/Zip';
+import Env from '../Env';
 
 const colors = ['#866', '#262', '#c55', '#44b'];
 
-export function list(req: Request, res: Response) {
-  throw new Error('Not Implemented');
+export async function list(req: Request, res: Response) {
+  if (!req.session && !Env.isPublishGames) {
+    return res.status(400).send('Bad Request').end();
+  }
+
+  const matches = await MatchService.matches();
+  const matchesResponse = matches.map((v) => {
+    return ResponseCreator.match(v);
+  });
+  res.status(200).type('json').send(matchesResponse).end();
 }
 
 export async function show(req: Request, res: Response) {
+  if (!req.session && !Env.isPublishGames) {
+    return res.status(400).send('Bad Request').end();
+  }
+
   const matchId: string = req.params.id;
   const match = await MatchService.load(matchId);
   if (!match) {
@@ -22,6 +35,10 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function replay(req: Request, res: Response) {
+  if (!req.session && !Env.isPublishGames) {
+    return res.status(400).send('Bad Request').end();
+  }
+
   const matchId: string = req.params.id;
   const match = await MatchService.loadWithReplay(matchId);
   if (!match) {
