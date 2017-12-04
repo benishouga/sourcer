@@ -2,11 +2,12 @@ import V from './V';
 import Actor from './Actor';
 import Sourcer from './Sourcer';
 import Shot from './Shot';
+import Missile from './Missile';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import { FieldDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump } from './Dump';
-import ScriptLoader from './ScriptLoader';
+import { FrameDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump, DebugDump } from './Dump';
+import ScriptLoader, { ScriptLoaderConstructor } from './ScriptLoader';
 
 const DEMO_FRAME_LENGTH = 128;
 
@@ -22,7 +23,7 @@ export default class Field {
 
   private dummyEnemy: V = new V(0, 150);
 
-  constructor(private scriptLoader: ScriptLoader, public isDemo: boolean = false) {
+  constructor(private scriptLoaderConstructor: ScriptLoaderConstructor, public isDemo: boolean = false) {
     this.frame = 0;
     this.sourcers = [];
     this.shots = [];
@@ -48,7 +49,11 @@ export default class Field {
 
   public async compile(listener: TickEventListener) {
     return this.process(listener, (sourcer: Sourcer) => {
-      sourcer.compile(this.scriptLoader);
+      try {
+        sourcer.compile(new this.scriptLoaderConstructor());
+      } catch (error) {
+        listener.onError(`There is an error in your code:　${error.message}`);
+      }
     });
   }
 
@@ -82,6 +87,10 @@ export default class Field {
   }
 
   public async tick(listener: TickEventListener) {
+    if (this.frame === 0) {
+      listener.onFrame(this.dump()); // Save the 0 frame.
+    }
+
     // To be used in the invisible hand.
     this.center = this.computeCenter();
 
@@ -254,17 +263,25 @@ export default class Field {
     return players;
   }
 
-  private dump(): FieldDump {
+  private dump(): FrameDump {
     const sourcersDump: SourcerDump[] = [];
     const shotsDump: ShotDump[] = [];
     const fxDump: FxDump[] = [];
+    const debugDump: DebugDump = { logs: [] };
 
     this.sourcers.forEach((actor) => {
       sourcersDump.push(actor.dump());
+      if (actor.scriptLoader.isDebuggable) {
+        debugDump.logs = debugDump.logs.concat(actor.dumpDebug().logs);
+      }
     });
 
+    const isThinkable = (x: Shot): x is Missile => x.type === 'Missile';
     this.shots.forEach((actor) => {
       shotsDump.push(actor.dump());
+      if (actor.owner.scriptLoader.isDebuggable && isThinkable(actor)) {
+        debugDump.logs = debugDump.logs.concat(actor.dumpDebug().logs);
+      }
     });
     this.fxs.forEach((fx) => {
       fxDump.push(fx.dump());
@@ -274,7 +291,8 @@ export default class Field {
       f: this.frame,
       s: sourcersDump,
       b: shotsDump,
-      x: fxDump
+      x: fxDump,
+      debug: debugDump
     };
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FieldDump, PlayersDump, ResultDump, ProfileDump } from '../../../core/Dump';
+import { PlayersDump, ResultDump, ProfileDump } from '../../../core/Dump';
 import V from '../../../core/V';
 import Screen from './Screen';
 import ResultHudTag from './ResultHudTag';

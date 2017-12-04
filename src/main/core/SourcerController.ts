@@ -5,6 +5,7 @@ import Configs from './Configs';
 import Utils from './Utils';
 import FireParam from './FireParam';
 import MissileController from './MissileController';
+import { ConsoleLike } from './ScriptLoader';
 
 export default class SourcerController extends Controller {
   public shield: () => number;
@@ -22,6 +23,8 @@ export default class SourcerController extends Controller {
 
   public fireLaser: (direction: number, power: number) => void;
   public fireMissile: (bot: (controller: MissileController) => void) => void;
+
+  public log: (...messages: any[]) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);
@@ -80,5 +83,15 @@ export default class SourcerController extends Controller {
       command.fire = FireParam.missile(bot);
     };
 
+    const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';
+    this.log = (...message: any[]) => {
+      sourcer.log(message.map(value => isString(value) ? value : JSON.stringify(value)).join(', '));
+    };
+  }
+
+  public connectConsole(console: ConsoleLike | null) {
+    if (console) {
+      console.log = this.log.bind(this);
+    }
   }
 }

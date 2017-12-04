@@ -9,6 +9,7 @@ import Configs from './Configs';
 import MissileCommand from './MissileCommand';
 import MissileController from './MissileController';
 import Consts from './Consts';
+import { DebugDump } from './Dump';
 
 export default class Missile extends Shot {
   public temperature = 10;
@@ -18,6 +19,7 @@ export default class Missile extends Shot {
 
   public command: MissileCommand;
   public controller: MissileController;
+  private debugDump: DebugDump = { logs: [] };
 
   constructor(field: Field, owner: Sourcer, public bot: (controller: MissileController) => void) {
     super(field, owner, 'Missile');
@@ -38,6 +40,8 @@ export default class Missile extends Shot {
     try {
       this.command.accept();
       this.controller.preThink();
+      this.debugDump = { logs: [] };
+      this.controller.connectConsole(this.owner.scriptLoader.getExposedConsole());
       this.bot(this.controller);
       this.command.unaccept();
     } catch (error) {
@@ -58,5 +62,13 @@ export default class Missile extends Shot {
 
   public opposite(direction: number): number {
     return this.direction + direction;
+  }
+
+  public log(message: string) {
+    this.debugDump.logs.push(message);
+  }
+
+  public dumpDebug(): DebugDump {
+    return this.debugDump;
   }
 }

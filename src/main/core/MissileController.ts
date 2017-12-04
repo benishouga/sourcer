@@ -2,6 +2,7 @@ import Controller from './Controller';
 import Field from './Field';
 import Missile from './Missile';
 import Utils from './Utils';
+import { ConsoleLike } from './ScriptLoader';
 
 export default class MissileController extends Controller {
   public direction: () => number;
@@ -10,6 +11,8 @@ export default class MissileController extends Controller {
   public speedDown: () => void;
   public turnRight: () => void;
   public turnLeft: () => void;
+
+  public log: (...messages: any[]) => void;
 
   constructor(missile: Missile) {
     super(missile);
@@ -47,5 +50,15 @@ export default class MissileController extends Controller {
       command.validate();
       command.turn = 9;
     };
+    const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';
+    this.log = (...message: any[]) => {
+      missile.log(message.map(value => isString(value) ? value : JSON.stringify(value)).join(', '));
+    };
+  }
+
+  public connectConsole(console: ConsoleLike | null) {
+    if (console) {
+      console.log = this.log.bind(this);
+    }
   }
 }

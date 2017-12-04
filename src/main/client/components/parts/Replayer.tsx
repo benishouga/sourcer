@@ -6,12 +6,13 @@ import Configs from '../../../core/Configs';
 
 import FieldTag from '../core/FieldTag';
 import HudTag from '../core/HudTag';
-import { GameDump, FieldDump, ResultDump, ProfileDump, SourcerDump, PlayersDump } from '../../../core/Dump';
+import { GameDump, FrameDump, ResultDump, ProfileDump, SourcerDump, PlayersDump } from '../../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import { strings } from '../resources/Strings';
 
 interface ReplayerProps {
   gameDump: GameDump;
+  error?: string | null;
   width?: number;
   height?: number;
   scale: number;
@@ -102,22 +103,35 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
       const statuses = demo || !frame ? null : this.statuses(frame, players);
 
-      const field = !frame ? null : <FieldTag field={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />;
+      const field = !frame ? null : <FieldTag frame={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />;
 
       let hudTag: JSX.Element | null = null;
       if (!demo) {
         hudTag = <HudTag result={result} players={players} screenHeight={height} frame={this.state.frame} />;
       }
 
+      const debugLogs: JSX.Element[] = [];
+      if (this.props.error) {
+        debugLogs.push(<span style={{ color: '#f00' }}>{this.props.error}<br /></span>);
+      }
+      if (frame.debug) {
+        frame.debug.logs.forEach((log, index) => {
+          debugLogs.push(<span key={`log${index}`}>{log}<br /></span>);
+        });
+      }
+
       return (
         <div ref="root">
           <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }} onClick={this.onPlayPauseToggle.bind(this)}>
-            <svg width={width} height={height} viewBox={`${-width / 2} 0 ${width} ${height}`}>
-              <g transform={`scale(${scale}, ${scale})`}>
-                {field}
-                {hudTag}
-              </g>
-            </svg>
+            <div style={{ width, height, position: 'relative' }} >
+              <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000, fontFamily: 'monospace', fontSize: '80%' }}>{debugLogs}</div>
+              <svg width={width} height={height} viewBox={`${-width / 2} 0 ${width} ${height}`}>
+                <g transform={`scale(${scale}, ${scale})`}>
+                  {field}
+                  {hudTag}
+                </g>
+              </svg>
+            </div>
           </div>
           <div className="replay-controller">
             <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this)}><Icon name="replay" /></FABButton></div>
@@ -166,7 +180,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     }
   }
 
-  private statuses(frame: FieldDump, players: PlayersDump) {
+  private statuses(frame: FrameDump, players: PlayersDump) {
     const player1Status = this.status(frame.s[0], players[frame.s[0].i]);
     const player2Status = this.status(frame.s[1], players[frame.s[1].i]);
 

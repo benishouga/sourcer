@@ -2,13 +2,14 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Replayer from './Replayer';
 import { Data, PlayerInfo } from '../../arenaWorker';
-import { GameDump, FieldDump, ResultDump, PlayersDump } from '../../../core/Dump';
+import { GameDump, ResultDump, PlayersDump } from '../../../core/Dump';
 
 const COLORS = ['#866', '#262', '#c55', '#44b'];
 
 class Arena {
   public worker: Worker;
   public game: GameDump;
+  public error: string;
   public endOfGame = false;
   public loadedFrame: number;
   private thinking: number | null = null;
@@ -81,8 +82,9 @@ class Arena {
           this.game.frames = data.frames;
           this.endOfGame = true;
           break;
-        case 'Log':
-          console.log.apply(console, data.messages.unshift(this.game.players[data.id].name));
+        case 'Error':
+          console.error(data.error);
+          this.error = data.error;
           break;
       }
     });
@@ -107,6 +109,7 @@ interface ArenaState {
   loadedFrame: number;
   dynamicWidth: number;
   gameDump: GameDump | null;
+  error: string | null;
 }
 
 export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
@@ -124,7 +127,8 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
       arena: null,
       loadedFrame: 0,
       dynamicWidth: 512,
-      gameDump: null
+      gameDump: null,
+      error: null
     };
   }
 
@@ -152,9 +156,6 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
     const scaledWidth = width / scale;
     const scaledHeight = height / scale;
 
-    const standalone = this.state.arena;
-    const loadedFrame = this.state.loadedFrame;
-
     if (this.state.gameDump) {
       return (
         <Replayer
@@ -162,10 +163,12 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
           height={this.props.height}
           scale={this.props.scale}
           gameDump={this.state.gameDump}
+          error={this.state.error}
           onReload={this.onReload.bind(this)} />
       );
     }
 
+    const loadedFrame = this.state.loadedFrame;
     return (
       <div ref="root">
         {'Loading ...' + loadedFrame}
@@ -177,17 +180,25 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
     this.animationFrameHandler = requestAnimationFrame(() => this.tick());
 
     const arena = this.state.arena;
-    const loadedFrame = arena && arena.loadedFrame || 0;
-    if (this.state.loadedFrame !== loadedFrame) {
-      this.setState({ loadedFrame });
-    }
 
-    if (arena && arena.endOfGame) {
-      cancelAnimationFrame(this.animationFrameHandler);
-      this.animationFrameHandler = null;
-      this.setState({
-        gameDump: arena.game
-      });
+    if (arena) {
+      const error = arena.error;
+      if (this.state.error !== error) {
+        this.setState({ error });
+      }
+
+      const loadedFrame = arena.loadedFrame || 0;
+      if (this.state.loadedFrame !== loadedFrame) {
+        this.setState({ loadedFrame });
+      }
+
+      if (arena.endOfGame) {
+        cancelAnimationFrame(this.animationFrameHandler);
+        this.animationFrameHandler = null;
+        this.setState({
+          gameDump: arena.game
+        });
+      }
     }
   }
 

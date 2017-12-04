@@ -1,4 +1,4 @@
-import ScriptLoader from './ScriptLoader';
+import ScriptLoader, { ConsoleLike } from './ScriptLoader';
 
 import { VM, VMScript } from 'vm2';
 
@@ -7,6 +7,14 @@ export default class SandboxedScriptLoader implements ScriptLoader {
 
   constructor() {
     this.vm = new VM();
+  }
+
+  public isDebuggable(): boolean {
+    return false;
+  }
+
+  public getExposedConsole(): ConsoleLike | null {
+    return null;
   }
 
   public load(script: string): any {

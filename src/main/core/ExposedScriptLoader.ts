@@ -1,6 +1,4 @@
-import ScriptLoader from './ScriptLoader';
-
-const allowLibs = { Object, String, Number, Boolean, Array, Date, Math, RegExp, JSON, NaN, Infinity, undefined, parseInt, parseFloat, isNaN, isFinite };
+import ScriptLoader, { ConsoleLike } from './ScriptLoader';
 
 function construct(constructor: any, args: string[]) {
   function fun() {
@@ -14,8 +12,15 @@ export default class ExposedScriptLoader implements ScriptLoader {
   private argValues: any[];
   private argNames: string[];
   private banlist: string[];
+  private console: ConsoleLike;
 
   constructor() {
+    this.console = { log: (...message) => { /* nothing.. */ } };
+    const allowLibs = {
+      Object, String, Number, Boolean, Array, Date, Math, RegExp, JSON, NaN, Infinity, undefined, parseInt, parseFloat, isNaN, isFinite,
+      console: this.console
+    };
+
     // tslint:disable-next-line:no-function-constructor-with-string-args
     const global = new Function('return this')();
     this.banlist = ['__proto__', 'prototype'];
@@ -28,6 +33,14 @@ export default class ExposedScriptLoader implements ScriptLoader {
     argNames = argNames.concat(this.banlist.filter(value => argNames.indexOf(value) >= 0));
     this.argNames = argNames;
     this.argValues = Object.keys(allowLibs).map(key => (allowLibs as any)[key]);
+  }
+
+  public isDebuggable(): boolean {
+    return true;
+  }
+
+  public getExposedConsole(): ConsoleLike | null {
+    return this.console;
   }
 
   public load(script: string): any {

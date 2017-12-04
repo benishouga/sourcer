@@ -23,12 +23,12 @@ Array.prototype.forEach.call(screens, (output: HTMLElement) => {
         return { name: 'demo', color: COLORS[index], source: element.innerText };
       }
       const player = element as HTMLTextAreaElement;
-      const playerInfo = { name: value, color: COLORS[index], source: player.value };
+      const playerInfo = { name: value, color: COLORS[index], source: player.value } as PlayerInfo;
       const polling = () => {
         playerInfo.source = player.value;
-        setTimeout(polling, 1000);
+        setTimeout(polling, 500);
       };
-      setTimeout(polling, 1000);
+      polling();
       return playerInfo;
     }).filter(playerInfo => playerInfo) as PlayerInfo[];
 

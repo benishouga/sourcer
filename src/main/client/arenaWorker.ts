@@ -2,7 +2,7 @@ import Field from '../core/Field';
 import Sourcer from '../core/Sourcer';
 import Utils from '../core/Utils';
 import TickEventListener from '../core/TickEventListener';
-import { PlayersDump, FieldDump, ResultDump } from '../core/Dump';
+import { PlayersDump, FrameDump, ResultDump } from '../core/Dump';
 import ExposedScriptLoader from '../core/ExposedScriptLoader';
 
 export interface PlayerInfo {
@@ -16,7 +16,7 @@ export interface InitialParameter {
   sources: PlayerInfo[];
 }
 
-export type Data = NextCommand | PlayersCommand | PreThinkCommand | PostThinkCommand | FinishedCommand | EndOfGameCommand | LogCommand;
+export type Data = NextCommand | PlayersCommand | PreThinkCommand | PostThinkCommand | FinishedCommand | EndOfGameCommand | ErrorCommand;
 
 interface NextCommand {
   command: 'Next';
@@ -46,13 +46,12 @@ interface FinishedCommand {
 
 interface EndOfGameCommand {
   command: 'EndOfGame';
-  frames: FieldDump[];
+  frames: FrameDump[];
 }
 
-interface LogCommand {
-  command: 'Log';
-  id: number;
-  messages: any[];
+interface ErrorCommand {
+  command: 'Error';
+  error: string;
 }
 
 declare function postMessage(message: Data): void;
@@ -69,8 +68,8 @@ onmessage = ({ data }) => {
   }
   const initialParameter = data as InitialParameter;
   const isDemo = initialParameter.isDemo as boolean;
-  const sources = initialParameter.sources as SourcerSource[];
-  const frames: FieldDump[] = [];
+  const players = initialParameter.sources as PlayerInfo[];
+  const frames: FrameDump[] = [];
   const listener: TickEventListener = {
     waitNextTick: async () => {
       return new Promise<void>((resolve) => {
@@ -95,7 +94,7 @@ onmessage = ({ data }) => {
         loadedFrame: frames.length
       });
     },
-    onFrame: (fieldDump: FieldDump) => {
+    onFrame: (fieldDump: FrameDump) => {
       frames.push(fieldDump);
     },
     onFinished: (result: ResultDump) => {
@@ -110,19 +109,17 @@ onmessage = ({ data }) => {
         command: 'EndOfGame'
       });
     },
-    onLog: (sourcerId: number, ...messages: any[]) => {
-      console.log('onLog');
+    onError: (error: string) => {
       postMessage({
-        messages,
-        command: 'Log',
-        id: sourcerId
+        error,
+        command: 'Error'
       });
     }
   };
 
-  const field = new Field(new ExposedScriptLoader(), isDemo);
-  sources.forEach((value, index) => {
-    field.registerSourcer(value.source, value.account, value.name, value.color);
+  const field = new Field(ExposedScriptLoader, isDemo);
+  players.forEach((value, index) => {
+    field.registerSourcer(value.source, value.name, value.name, value.color);
   });
 
   postMessage({

@@ -1,13 +1,13 @@
 import Sourcer from './Sourcer';
-import { FieldDump, ResultDump } from './Dump';
+import { FrameDump, ResultDump } from './Dump';
 
 interface TickEventListener {
   waitNextTick(): Promise<void>;
   onPreThink(targetId: number): void;
   onPostThink(targetId: number): void;
-  onFrame(field: FieldDump): void;
+  onFrame(field: FrameDump): void;
   onFinished(result: ResultDump): void;
   onEndOfGame(): void;
-  onLog(targetId: number, ...message: any[]): void;
+  onError(error: string): void;
 }
 export default TickEventListener;

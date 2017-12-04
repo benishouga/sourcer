@@ -10,9 +10,9 @@ import V from './V';
 import Shot from './Shot';
 import Laser from './Laser';
 import Missile from './Missile';
-import { SourcerDump } from './Dump';
+import { SourcerDump, DebugDump } from './Dump';
 import Fx from './Fx';
-import ScriptLoader from './ScriptLoader';
+import ScriptLoader, { ConsoleLike } from './ScriptLoader';
 
 interface ExportScope {
   module: {
@@ -28,8 +28,10 @@ export default class Sourcer extends Actor {
   public fuel = Configs.INITIAL_FUEL;
 
   public command: SourcerCommand;
+  public scriptLoader: ScriptLoader;
   private controller: SourcerController;
-  private bot: ((controller: SourcerController) => void) | null;
+  private bot: ((controller: SourcerController) => void) | null = null;
+  private debugDump: DebugDump = { logs: [] };
 
   constructor(
     field: Field, x: number, y: number, public aiSource: string,
@@ -43,10 +45,13 @@ export default class Sourcer extends Actor {
   }
 
   public compile(scriptLoader: ScriptLoader) {
-    try {
-      this.bot = scriptLoader.load(this.aiSource);
-    } catch (error) {
-      this.bot = null;
+    this.scriptLoader = scriptLoader;
+    this.bot = scriptLoader.load(this.aiSource);
+    if (!this.bot) {
+      throw { message: 'Function has not been returned.' };
+    }
+    if (typeof this.bot !== 'function') {
+      throw { message: 'Returned is not a Function.' };
     }
   }
 
@@ -58,6 +63,8 @@ export default class Sourcer extends Actor {
     try {
       this.command.accept();
       this.controller.preThink();
+      this.debugDump = { logs: [] };
+      this.controller.connectConsole(this.scriptLoader.getExposedConsole());
       this.bot(this.controller);
     } catch (error) {
       this.command.reset();
@@ -149,6 +156,10 @@ export default class Sourcer extends Actor {
     this.field.removeShot(shot);
   }
 
+  public log(message: string) {
+    this.debugDump.logs.push(message);
+  }
+
   public dump(): SourcerDump {
     return {
       i: this.id,
@@ -159,5 +170,9 @@ export default class Sourcer extends Actor {
       a: this.missileAmmo,
       f: Math.ceil(this.fuel)
     };
+  }
+
+  public dumpDebug(): DebugDump {
+    return this.debugDump;
   }
 }

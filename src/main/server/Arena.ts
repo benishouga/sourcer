@@ -1,5 +1,5 @@
 import * as cluster from 'cluster';
-import { FieldDump, SourcerDump, GameDump, ResultDump, PlayersDump } from '../core/Dump';
+import { FrameDump, SourcerDump, GameDump, ResultDump, PlayersDump } from '../core/Dump';
 
 import Field from '../core/Field';
 import Sourcer from '../core/Sourcer';
@@ -41,7 +41,7 @@ interface FinishedCommand {
 interface EndOfGameCommand {
   command: Command.END_OF_GAME;
   data: {
-    frames: FieldDump[];
+    frames: FrameDump[];
   };
 }
 
@@ -171,7 +171,7 @@ if (cluster.isWorker) {
 
   process.on('message', (message: { sourcers: SourcerSource[] }) => {
     if (!process.send) { return; }
-    const field = new Field(new SandboxedScriptLoader());
+    const field = new Field(SandboxedScriptLoader);
     message.sourcers.forEach((value, index) => {
       field.registerSourcer(value.source, value.account, value.name, value.color);
     });
@@ -186,7 +186,7 @@ if (cluster.isWorker) {
     const start = new Date().getTime();
     console.log('arena', id, 'forked');
 
-    const frames: FieldDump[] = [];
+    const frames: FrameDump[] = [];
 
     const listener: TickEventListener = {
       waitNextTick: () => new Promise<void>(resolve => setImmediate(resolve)),
@@ -204,7 +204,7 @@ if (cluster.isWorker) {
           data: { id: sourcerId }
         });
       },
-      onFrame: (fieldDump: FieldDump) => {
+      onFrame: (fieldDump: FrameDump) => {
         frames.push(fieldDump);
       },
       onFinished: (result: ResultDump) => {
@@ -223,16 +223,7 @@ if (cluster.isWorker) {
           data: { frames }
         });
       },
-      onLog: (sourcerId: number, ...messages: any[]) => {
-        if (!process.send) { return; }
-        process.send({
-          command: Command.LOG,
-          data: {
-            messages,
-            id: sourcerId
-          }
-        });
-      }
+      onError: (error: string) => { /* nothing */ }
     };
 
     setTimeout(async () => {

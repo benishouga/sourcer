@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SourcerDump, FieldDump, ResultDump, PlayersDump } from '../../../core/Dump';
+import { SourcerDump, FrameDump, ResultDump, PlayersDump } from '../../../core/Dump';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
 import ShotTag from './ShotTag';
@@ -12,11 +12,11 @@ export default class FieldTag extends React.Component<{
   height: number;
   width: number;
   scale: number;
-  field: FieldDump;
+  frame: FrameDump;
   players: PlayersDump;
 }, {}> {
   public render() {
-    const field = this.props.field;
+    const frame = this.props.frame;
     const players = this.props.players;
 
     const screen: Screen = {
@@ -35,7 +35,7 @@ export default class FieldTag extends React.Component<{
     let maxTop = -Number.MAX_VALUE;
     let sumX = 0;
 
-    const sourcers: JSX.Element[] = field.s.map((b) => {
+    const sourcers: JSX.Element[] = frame.s.map((b) => {
       sumX += b.p.x;
       maxTop = Math.max(maxTop, b.p.y);
       maxRight = Math.max(maxRight, b.p.x);
@@ -62,7 +62,7 @@ export default class FieldTag extends React.Component<{
     const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
     const viewTop = (screen.height - 8) / screen.scale;
 
-    const shots: JSX.Element[] = field.b.filter((b) => {
+    const shots: JSX.Element[] = frame.b.filter((b) => {
       const x = b.p.x;
       const y = b.p.y;
       return viewLeft < x && x < viewRight && y < viewTop;
@@ -73,7 +73,7 @@ export default class FieldTag extends React.Component<{
       return <LaserTag key={b.i} model={b} profile={players[b.o]} />;
     });
 
-    const fxs: JSX.Element[] = field.x.map((b) => {
+    const fxs: JSX.Element[] = frame.x.map((b) => {
       return <FxTag key={b.i} model={b} />;
     });
 

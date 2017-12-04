@@ -38,7 +38,7 @@ export interface FxDump {
   l: number;
 }
 
-export interface FieldDump {
+export interface FrameDump {
   /** Frame */
   f: number;
   /** Sourcers */
@@ -47,6 +47,8 @@ export interface FieldDump {
   b: ShotDump[];
   /** fXs */
   x: FxDump[];
+  /** for debugging on the client */
+  debug?: DebugDump;
 }
 
 export interface GameDump {
@@ -55,7 +57,7 @@ export interface GameDump {
   /** Players */
   players: PlayersDump;
   /** Frames */
-  frames: FieldDump[];
+  frames: FrameDump[];
   /** isDemo */
   isDemo: boolean;
 }
@@ -75,4 +77,8 @@ export interface ResultDump {
   timeout: string | null;
   winnerId: number | null;
   frame: number;
+}
+
+export interface DebugDump {
+  logs: string[];
 }
