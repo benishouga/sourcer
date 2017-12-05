@@ -19,7 +19,6 @@ export interface RouteParams {
   matchId?: string;
 }
 
-// tslint:disable-next-line:variable-name
 const PublishGamesRoute = ({ component: Component, ...rest }: any) => {
   return <Route {...rest} render={props => (
     Auth.status.authenticated || Config.values.publishGames ?
@@ -28,7 +27,6 @@ const PublishGamesRoute = ({ component: Component, ...rest }: any) => {
   )} />;
 };
 
-// tslint:disable-next-line:variable-name
 const RequireAuthRoute = ({ component: Component, ...rest }: any) => (
   <Route {...rest} render={props => (
     Auth.status.authenticated ?
@@ -37,7 +35,6 @@ const RequireAuthRoute = ({ component: Component, ...rest }: any) => (
   )} />
 );
 
-// tslint:disable-next-line:variable-name
 const RequireAdminRoute = ({ component: Component, ...rest }: any) => (
   <Route {...rest} render={props => (
     Auth.status.admin ?

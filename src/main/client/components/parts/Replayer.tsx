@@ -58,7 +58,9 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   }
 
   private onPlay() {
-    this.updateFrame({ playing: true, frame: this.state.frame });
+    const isEndOfFrame = this.state.frame === this.props.gameDump.frames.length - 1;
+    this.updateFrame({ playing: true, frame: isEndOfFrame ? 0 : this.state.frame });
+
     if (!this.animationFrameHandler) {
       this.animationFrameHandler = requestAnimationFrame(() => this.tick());
     }
@@ -76,7 +78,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (this.props.onReload) {
       this.props.onReload();
     } else {
-      this.updateFrame({ playing: !!this.state.playing, frame: 0 });
+      this.updateFrame({ playing: true, frame: 0 });
     }
   }
 
@@ -166,18 +168,21 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     this.adjustWidth();
 
+    if (!this.props.gameDump.frames || !this.state.playing) {
+      return;
+    }
+
     const delta = performance.now() - this.startTime;
     const frame = Math.floor(delta / this.FRAME_MILLS);
-    if (this.props.gameDump.frames && this.state.playing) {
-      const nextFrame = this.startFrame + frame;
-      if (nextFrame < this.props.gameDump.frames.length) {
-        this.setState({ frame: nextFrame });
-      } else {
-        if (this.props.gameDump.isDemo) {
-          this.updateFrame({ playing: !!this.state.playing, frame: 0 });
-        }
-      }
+    const nextFrame = this.startFrame + frame;
+    if (nextFrame < this.props.gameDump.frames.length) {
+      this.setState({ frame: nextFrame });
+    } else if (this.props.gameDump.isDemo) {
+      this.updateFrame({ playing: !!this.state.playing, frame: 0 });
+    } else {
+      this.updateFrame({ playing: false, frame: this.props.gameDump.frames.length - 1 });
     }
+
   }
 
   private statuses(frame: FrameDump, players: PlayersDump) {

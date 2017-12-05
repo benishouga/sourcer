@@ -54,12 +54,17 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
     );
   }
 
-  private makeBg(trees: Tree[], far: number) {
+  private computeViewInfo(far: number): { viewLeft: number; viewRight: number; viewTop: number; } {
     const screen = this.props.screen;
-
     const viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
     const viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
     const viewTop = (screen.height - 8) / screen.scale;
+    return { viewLeft, viewRight, viewTop };
+  }
+
+  private makeBg(trees: Tree[], far: number) {
+    const screen = this.props.screen;
+    const { viewLeft, viewRight, viewTop } = this.computeViewInfo(far);
     const treeTags = trees.filter(tree => viewLeft < tree.x + tree.size && tree.x - tree.size < viewRight).map((tree) => {
       return <TreeTag key={tree.id} model={tree} far={far} />;
     });
@@ -72,10 +77,8 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
 
   private makeDomeTags(domes: Dome[], far: number) {
     const screen = this.props.screen;
+    const { viewLeft, viewRight, viewTop } = this.computeViewInfo(far);
 
-    const viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
-    const viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
-    const viewTop = (screen.height - 8) / screen.scale;
     const domeTags = domes.filter(dome => viewLeft < dome.x + dome.size && dome.x - dome.size < viewRight).map((dome) => {
       return <DomeTag key={dome.id} model={dome} far={far} />;
     });

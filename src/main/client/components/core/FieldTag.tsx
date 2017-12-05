@@ -2,93 +2,90 @@ import * as React from 'react';
 import { SourcerDump, FrameDump, ResultDump, PlayersDump } from '../../../core/Dump';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
-import ShotTag from './ShotTag';
 import LaserTag from './LaserTag';
 import MissileTag from './MissileTag';
 import FxTag from './FxTag';
 import BackgroundTag from './BackgroundTag';
 
-export default class FieldTag extends React.Component<{
+interface FieldTagProps {
   height: number;
   width: number;
   scale: number;
   frame: FrameDump;
   players: PlayersDump;
-}, {}> {
-  public render() {
-    const frame = this.props.frame;
-    const players = this.props.players;
+}
 
-    const screen: Screen = {
-      height: this.props.height,
-      width: this.props.width,
-      viewScale: this.props.scale,
-      left: 0,
-      right: 0,
-      top: 0,
-      scale: 0,
-      center: 0
-    };
+export default function FieldTag({ frame, players, height, width, scale }: FieldTagProps) {
 
-    let maxLeft = Number.MAX_VALUE;
-    let maxRight = -Number.MAX_VALUE;
-    let maxTop = -Number.MAX_VALUE;
-    let sumX = 0;
+  const screen: Screen = {
+    height,
+    width,
+    viewScale: scale,
+    left: 0,
+    right: 0,
+    top: 0,
+    scale: 0,
+    center: 0
+  };
 
-    const sourcers: JSX.Element[] = frame.s.map((b) => {
-      sumX += b.p.x;
-      maxTop = Math.max(maxTop, b.p.y);
-      maxRight = Math.max(maxRight, b.p.x);
-      maxLeft = Math.min(maxLeft, b.p.x);
-      return <SourcerTag key={b.i} model={b} profile={players[b.i]} />;
-    });
+  let maxLeft = Number.MAX_VALUE;
+  let maxRight = -Number.MAX_VALUE;
+  let maxTop = -Number.MAX_VALUE;
+  let sumX = 0;
 
-    if (sourcers.length !== 0) {
-      screen.center = sumX / sourcers.length;
-    }
+  const sourcers: JSX.Element[] = frame.s.map((b) => {
+    sumX += b.p.x;
+    maxTop = Math.max(maxTop, b.p.y);
+    maxRight = Math.max(maxRight, b.p.x);
+    maxLeft = Math.min(maxLeft, b.p.x);
+    return <SourcerTag key={b.i} model={b} profile={players[b.i]} />;
+  });
 
-    screen.left = maxLeft - 100;
-    screen.right = maxRight + 100;
-    screen.top = maxTop + 100;
-
-    if (screen.width > screen.right - screen.left) {
-      screen.right = screen.center + screen.width / 2;
-      screen.left = screen.center - screen.width / 2;
-    }
-
-    screen.scale = Math.min(1, Math.min(screen.height / screen.top, screen.width / (screen.right - screen.left)));
-
-    const viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
-    const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
-    const viewTop = (screen.height - 8) / screen.scale;
-
-    const shots: JSX.Element[] = frame.b.filter((b) => {
-      const x = b.p.x;
-      const y = b.p.y;
-      return viewLeft < x && x < viewRight && y < viewTop;
-    }).map((b) => {
-      if (b.s === 'Missile') {
-        return <MissileTag key={b.i} model={b} profile={players[b.o]} />;
-      }
-      return <LaserTag key={b.i} model={b} profile={players[b.o]} />;
-    });
-
-    const fxs: JSX.Element[] = frame.x.map((b) => {
-      return <FxTag key={b.i} model={b} />;
-    });
-
-    return (
-      <g>
-        <BackgroundTag screen={screen} />
-
-        <g transform={`scale(${screen.scale}, ${screen.scale}) translate(${-screen.center},${viewTop}) scale(1, -1)`}>
-          <g>
-            {sourcers}
-            {shots}
-          </g>
-          {fxs}
-        </g>
-      </g>
-    );
+  if (sourcers.length !== 0) {
+    screen.center = sumX / sourcers.length;
   }
+
+  screen.left = maxLeft - 100;
+  screen.right = maxRight + 100;
+  screen.top = maxTop + 100;
+
+  if (screen.width > screen.right - screen.left) {
+    screen.right = screen.center + screen.width / 2;
+    screen.left = screen.center - screen.width / 2;
+  }
+
+  screen.scale = Math.min(1, Math.min(screen.height / screen.top, screen.width / (screen.right - screen.left)));
+
+  const viewLeft = (screen.left - screen.center) / screen.scale + screen.center;
+  const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
+  const viewTop = (screen.height - 8) / screen.scale;
+
+  const shots: JSX.Element[] = frame.b.filter((b) => {
+    const x = b.p.x;
+    const y = b.p.y;
+    return viewLeft < x && x < viewRight && y < viewTop;
+  }).map((b) => {
+    if (b.s === 'Missile') {
+      return <MissileTag key={b.i} model={b} profile={players[b.o]} />;
+    }
+    return <LaserTag key={b.i} model={b} profile={players[b.o]} />;
+  });
+
+  const fxs: JSX.Element[] = frame.x.map((b) => {
+    return <FxTag key={b.i} model={b} />;
+  });
+
+  return (
+    <g>
+      <BackgroundTag screen={screen} />
+
+      <g transform={`scale(${screen.scale}, ${screen.scale}) translate(${-screen.center},${viewTop}) scale(1, -1)`}>
+        <g>
+          {sourcers}
+          {shots}
+        </g>
+        {fxs}
+      </g>
+    </g>
+  );
 }
