@@ -15,18 +15,8 @@ interface FieldTagProps {
   players: PlayersDump;
 }
 
-export default function FieldTag({ frame, players, height, width, scale }: FieldTagProps) {
-
-  const screen: Screen = {
-    height,
-    width,
-    viewScale: scale,
-    left: 0,
-    right: 0,
-    top: 0,
-    scale: 0,
-    center: 0
-  };
+export default function FieldTag({ frame, players, height, width, scale: viewScale }: FieldTagProps) {
+  const screen: Screen = { height, width, viewScale, left: 0, right: 0, top: 0, scale: 0, center: 0 };
 
   let maxLeft = Number.MAX_VALUE;
   let maxRight = -Number.MAX_VALUE;
