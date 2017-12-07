@@ -10,7 +10,7 @@
     "build:client:statics": "cpx \"./src/statics/**/*.*\" ./docs",
     "build:client:css": "postcss \"src/css/main.css\" -o ./docs/main.css",
     "build:client:bundle:main": "browserify ./src/main/client/main.tsx --debug -p [ tsify --noImplicitAny ] -o ./docs/main.js",
-    "build:client:bundle:arena": "browserify ./src/main/client/arena.tsx --debug -p [ tsify --noImplicitAny ] -o ./docs/arena.js",
+    "build:client:bundle:arena": "browserify ./src/main/client/standalone.tsx --debug -p [ tsify --noImplicitAny ] -o ./docs/standalone.js",
     "build:client:bundle:arenaWorker": "browserify ./src/main/client/arenaWorker.ts --debug -p [ tsify --noImplicitAny ] -o ./docs/arenaWorker.js",
     "build:client:bundle": "npm-run-all -p build:client:bundle:*",
     "prebuild:client": "mkdirp ./docs",
