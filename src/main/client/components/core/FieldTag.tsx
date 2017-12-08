@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { SourcerDump, FrameDump, ResultDump, PlayersDump } from '../../../core/Dump';
+import { SourcerDump, FrameDump, ResultDump, PlayersDump, ShotDump } from '../../../core/Dump';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
 import LaserTag from './LaserTag';
 import MissileTag from './MissileTag';
 import FxTag from './FxTag';
 import BackgroundTag from './BackgroundTag';
+import Arc from './Arc';
 
 interface FieldTagProps {
   height: number;
@@ -65,16 +66,26 @@ export default function FieldTag({ frame, players, height, width, scale: viewSca
     return <FxTag key={b.i} model={b} />;
   });
 
+  const debugs: JSX.Element[] = [];
+  let index = 0;
+  const each = (actor: SourcerDump | ShotDump) => {
+    const debug = actor.debug;
+    if (debug) {
+      debug.arcs.forEach(arc => debugs.push(<Arc key={`arc${++index}`} x={actor.p.x} y={actor.p.y} {...arc} />));
+    }
+  };
+  frame.s.forEach(each);
+  frame.b.forEach(each);
+
   return (
     <g>
       <BackgroundTag screen={screen} />
 
       <g transform={`scale(${screen.scale}, ${screen.scale}) translate(${-screen.center},${viewTop}) scale(1, -1)`}>
-        <g>
-          {sourcers}
-          {shots}
-        </g>
+        {sourcers}
+        {shots}
         {fxs}
+        {debugs}
       </g>
     </g>
   );

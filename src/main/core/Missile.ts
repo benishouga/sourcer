@@ -9,7 +9,7 @@ import Configs from './Configs';
 import MissileCommand from './MissileCommand';
 import MissileController from './MissileController';
 import Consts from './Consts';
-import { DebugDump } from './Dump';
+import { DebugDump, ShotDump } from './Dump';
 
 export default class Missile extends Shot {
   public temperature = 10;
@@ -19,7 +19,7 @@ export default class Missile extends Shot {
 
   public command: MissileCommand;
   public controller: MissileController;
-  private debugDump: DebugDump = { logs: [] };
+  private debugDump: DebugDump;
 
   constructor(field: Field, owner: Sourcer, public bot: (controller: MissileController) => void) {
     super(field, owner, 'Missile');
@@ -40,7 +40,7 @@ export default class Missile extends Shot {
     try {
       this.command.accept();
       this.controller.preThink();
-      this.debugDump = { logs: [] };
+      this.debugDump = { logs: [], arcs: [] };
       this.controller.connectConsole(this.owner.scriptLoader.getExposedConsole());
       this.bot(this.controller);
       this.command.unaccept();
@@ -68,7 +68,15 @@ export default class Missile extends Shot {
     this.debugDump.logs.push(message);
   }
 
-  public dumpDebug(): DebugDump {
-    return this.debugDump;
+  public scanDebug(direction: number, angle: number, renge?: number) {
+    this.debugDump.arcs.push({ angle, renge, direction: -direction });
+  }
+
+  public dump(): ShotDump {
+    const superDump = super.dump();
+    if (this.owner.scriptLoader.isDebuggable) {
+      superDump.debug = this.debugDump;
+    }
+    return superDump;
   }
 }

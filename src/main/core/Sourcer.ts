@@ -31,7 +31,7 @@ export default class Sourcer extends Actor {
   public scriptLoader: ScriptLoader;
   private controller: SourcerController;
   private bot: ((controller: SourcerController) => void) | null = null;
-  private debugDump: DebugDump = { logs: [] };
+  private debugDump: DebugDump = { logs: [], arcs: [] };
 
   constructor(
     field: Field, x: number, y: number, public aiSource: string,
@@ -63,7 +63,7 @@ export default class Sourcer extends Actor {
     try {
       this.command.accept();
       this.controller.preThink();
-      this.debugDump = { logs: [] };
+      this.debugDump = { logs: [], arcs: [] };
       this.controller.connectConsole(this.scriptLoader.getExposedConsole());
       this.bot(this.controller);
     } catch (error) {
@@ -160,8 +160,12 @@ export default class Sourcer extends Actor {
     this.debugDump.logs.push(message);
   }
 
+  public scanDebug(direction: number, angle: number, renge?: number) {
+    this.debugDump.arcs.push({ direction, angle, renge });
+  }
+
   public dump(): SourcerDump {
-    return {
+    const dump: SourcerDump = {
       i: this.id,
       p: this.position.minimize(),
       d: this.direction,
@@ -170,9 +174,9 @@ export default class Sourcer extends Actor {
       a: this.missileAmmo,
       f: Math.ceil(this.fuel)
     };
-  }
-
-  public dumpDebug(): DebugDump {
-    return this.debugDump;
+    if (this.scriptLoader.isDebuggable) {
+      dump.debug = this.debugDump;
+    }
+    return dump;
   }
 }

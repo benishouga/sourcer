@@ -267,21 +267,14 @@ export default class Field {
     const sourcersDump: SourcerDump[] = [];
     const shotsDump: ShotDump[] = [];
     const fxDump: FxDump[] = [];
-    const debugDump: DebugDump = { logs: [] };
 
     this.sourcers.forEach((actor) => {
       sourcersDump.push(actor.dump());
-      if (actor.scriptLoader.isDebuggable) {
-        debugDump.logs = debugDump.logs.concat(actor.dumpDebug().logs);
-      }
     });
 
     const isThinkable = (x: Shot): x is Missile => x.type === 'Missile';
     this.shots.forEach((actor) => {
       shotsDump.push(actor.dump());
-      if (actor.owner.scriptLoader.isDebuggable && isThinkable(actor)) {
-        debugDump.logs = debugDump.logs.concat(actor.dumpDebug().logs);
-      }
     });
     this.fxs.forEach((fx) => {
       fxDump.push(fx.dump());
@@ -291,8 +284,7 @@ export default class Field {
       f: this.frame,
       s: sourcersDump,
       b: shotsDump,
-      x: fxDump,
-      debug: debugDump
+      x: fxDump
     };
   }
 }

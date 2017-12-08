@@ -13,6 +13,7 @@ export default class MissileController extends Controller {
   public turnLeft: () => void;
 
   public log: (...messages: any[]) => void;
+  public scanDebug: (direction: number, angle: number, renge?: number) => void;
 
   constructor(missile: Missile) {
     super(missile);
@@ -52,7 +53,12 @@ export default class MissileController extends Controller {
     };
     const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';
     this.log = (...message: any[]) => {
+      command.validate();
       missile.log(message.map(value => isString(value) ? value : JSON.stringify(value)).join(', '));
+    };
+    this.scanDebug = (direction, angle, renge) => {
+      command.validate();
+      missile.scanDebug(missile.opposite(direction), angle, renge);
     };
   }
 

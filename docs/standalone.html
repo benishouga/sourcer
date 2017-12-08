@@ -269,11 +269,11 @@ return bot;</pre>
               <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
                   <p>In case of rightward</p>
-                  <div class="arc" width="160" height="160" data-direction="-45" data-angle="360" data-distance="0" data-arrow="0"></div>
+                  <div class="arc" width="160" height="160" data-direction="-45" data-angle="60" data-distance="75" data-arrow="0"></div>
                 </div>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
                   <p>In case of leftward</p>
-                  <div class="arc" width="160" height="160" data-direction="-135" data-angle="370" data-distance="75" data-arrow="180"></div>
+                  <div class="arc" width="160" height="160" data-direction="-135" data-angle="60" data-distance="75" data-arrow="180"></div>
                 </div>
               </div>
               <pre class="code">controller.scanEnemy(-45, 120, 50);</pre>
@@ -337,6 +337,27 @@ return bot;</pre>
               <dl>
                 <dt>{function} source</dt>
                 <dd>Function for controlling missiles.</dd>
+              </dl>
+            </div>
+            <div class="method">
+              <h5>log(message)</h5>
+              <p>Show the message to the screen.</p>
+              <dl>
+                <dt>{string} message</dt>
+                <dd>Message to output</dd>
+              </dl>
+              <p>You can also use console.log()</p>
+            </div>
+            <div class="method">
+              <h5>scanDebug(direction, angle, renge)</h5>
+              <p>Show the circular sector for the specified direction, range and distance.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the circular sector. The direction of Sourcer is 0, the upward direction is a positive value, the downward direction is a negative value.</dd>
+                <dt>{number} angle</dt>
+                <dd>The width angle of the circular sector.</dd>
+                <dt>{number} renge</dt>
+                <dd>The distance renge of the circular sector. If omitted, It is filled with tentative value.</dd>
               </dl>
             </div>
           </div>
@@ -424,6 +445,27 @@ return bot;</pre>
             <div class="method">
               <h5>turnLeft()</h5>
               <p>Turn to the left.</p>
+            </div>
+            <div class="method">
+              <h5>log(message)</h5>
+              <p>Show the message to the screen.</p>
+              <dl>
+                <dt>{string} message</dt>
+                <dd>Message to output</dd>
+              </dl>
+              <p>You can also use console.log()</p>
+            </div>
+            <div class="method">
+              <h5>scanDebug(direction, angle, renge)</h5>
+              <p>Show the circular sector for the specified direction, range and distance.</p>
+              <dl>
+                <dt>{number} direction</dt>
+                <dd>Direction of the circular sector. The direction of Sourcer is 0, the upward direction is a positive value, the downward direction is a negative value.</dd>
+                <dt>{number} angle</dt>
+                <dd>The width angle of the circular sector.</dd>
+                <dt>{number} renge</dt>
+                <dd>The distance renge of the circular sector. If omitted, It is filled with tentative value.</dd>
+              </dl>
             </div>
           </div>
         </div>

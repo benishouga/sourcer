@@ -18,6 +18,8 @@ export interface SourcerDump extends ActorDump {
   a: number;
   /** Fuel */
   f: number;
+  /** for debugging on the client */
+  debug?: DebugDump;
 }
 
 export interface ShotDump extends ActorDump {
@@ -25,6 +27,8 @@ export interface ShotDump extends ActorDump {
   o: number;
   /** Shot type */
   s: string;
+  /** for debugging on the client */
+  debug?: DebugDump;
 }
 
 export interface FxDump {
@@ -47,8 +51,6 @@ export interface FrameDump {
   b: ShotDump[];
   /** fXs */
   x: FxDump[];
-  /** for debugging on the client */
-  debug?: DebugDump;
 }
 
 export interface GameDump {
@@ -81,4 +83,11 @@ export interface ResultDump {
 
 export interface DebugDump {
   logs: string[];
+  arcs: DebugArc[];
+}
+
+export interface DebugArc {
+  direction: number;
+  angle: number;
+  renge?: number;
 }

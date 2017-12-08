@@ -25,6 +25,7 @@ export default class SourcerController extends Controller {
   public fireMissile: (bot: (controller: MissileController) => void) => void;
 
   public log: (...messages: any[]) => void;
+  public scanDebug: (direction: number, angle: number, renge?: number) => void;
 
   constructor(sourcer: Sourcer) {
     super(sourcer);
@@ -85,7 +86,12 @@ export default class SourcerController extends Controller {
 
     const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';
     this.log = (...message: any[]) => {
+      command.validate();
       sourcer.log(message.map(value => isString(value) ? value : JSON.stringify(value)).join(', '));
+    };
+    this.scanDebug = (direction, angle, renge) => {
+      command.validate();
+      sourcer.scanDebug(sourcer.opposite(direction), angle, renge);
     };
   }
 

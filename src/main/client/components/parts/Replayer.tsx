@@ -6,7 +6,7 @@ import Configs from '../../../core/Configs';
 
 import FieldTag from '../core/FieldTag';
 import HudTag from '../core/HudTag';
-import { GameDump, FrameDump, ResultDump, ProfileDump, SourcerDump, PlayersDump } from '../../../core/Dump';
+import { GameDump, FrameDump, ResultDump, ProfileDump, SourcerDump, PlayersDump, ShotDump } from '../../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import { strings } from '../resources/Strings';
 
@@ -113,14 +113,17 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       }
 
       const debugLogs: JSX.Element[] = [];
+      let index = 0;
       if (this.props.error) {
         debugLogs.push(<span style={{ color: '#f00' }}>{this.props.error}<br /></span>);
       }
-      if (frame.debug) {
-        frame.debug.logs.forEach((log, index) => {
-          debugLogs.push(<span key={`log${index}`}>{log}<br /></span>);
-        });
-      }
+      const each = (actor: SourcerDump | ShotDump) => {
+        if (actor.debug) {
+          actor.debug.logs.forEach(log => debugLogs.push(<span key={`log${++index}`}>{log}<br /></span>));
+        }
+      };
+      frame.s.forEach(each);
+      frame.b.forEach(each);
 
       return (
         <div ref="root">
