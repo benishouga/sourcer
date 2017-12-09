@@ -45,7 +45,7 @@ Array.prototype.forEach.call(elements, (element: HTMLElement) => {
   const width = parseInt(l('width'), 10) || 160;
   const height = parseInt(l('height'), 10) || 160;
   const arrowDirection = parseInt(l('data-arrow'), 10) || 0;
-  const direction = parseInt(l('data-direction'), 10);
+  const direction = -parseInt(l('data-direction'), 10);
   const angle = parseInt(l('data-angle'), 10);
   const renge = parseInt(l('data-distance'), 10);
 

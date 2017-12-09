@@ -69,7 +69,7 @@ export default class Missile extends Shot {
   }
 
   public scanDebug(direction: number, angle: number, renge?: number) {
-    this.debugDump.arcs.push({ angle, renge, direction: -direction });
+    this.debugDump.arcs.push({ direction, angle, renge });
   }
 
   public dump(): ShotDump {

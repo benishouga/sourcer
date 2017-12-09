@@ -36,7 +36,7 @@ export default function Arc({ x = 0, y = 0, direction, angle, renge: argRenge = 
   `;
 
   return (
-    <g transform={`translate(${x},${y}) rotate(${-direction}, 0, 0)`}>
+    <g transform={`translate(${x},${y}) rotate(${direction}, 0, 0)`}>
       <path d={d} fill={color} />
       <line x1={0} y1={0} x2={renge} y2={0} strokeWidth="1" stroke={centerColor} />
     </g>
