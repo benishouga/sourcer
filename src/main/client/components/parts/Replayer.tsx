@@ -93,26 +93,30 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     const scaledWidth = width / scale;
     const scaledHeight = height / scale;
 
-    if (this.props.gameDump.frames) {
-      const result = this.props.gameDump.result;
-      const players = this.props.gameDump.players;
-      const frame = this.props.gameDump.frames[this.state.frame];
-      const demo = this.props.gameDump.isDemo;
+    if (!this.props.gameDump.frames) {
+      return null;
+    }
 
-      const playOrPause = this.state.playing ?
-        (<FABButton mini colored ripple onClick={this.onPause.bind(this)}><Icon name="pause" /></FABButton>) :
-        (<FABButton mini colored ripple onClick={this.onPlay.bind(this)}><Icon name="play_arrow" /></FABButton>);
+    const result = this.props.gameDump.result;
+    const players = this.props.gameDump.players;
+    const frame = this.props.gameDump.frames[this.state.frame];
+    const demo = this.props.gameDump.isDemo;
 
-      const statuses = demo || !frame ? null : this.statuses(frame, players);
+    const playOrPause = this.state.playing ?
+      (<FABButton mini colored ripple onClick={this.onPause.bind(this)}><Icon name="pause" /></FABButton>) :
+      (<FABButton mini colored ripple onClick={this.onPlay.bind(this)}><Icon name="play_arrow" /></FABButton>);
 
-      const field = !frame ? null : <FieldTag frame={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />;
+    const statuses = demo || !frame ? null : this.statuses(frame, players);
 
-      let hudTag: JSX.Element | null = null;
-      if (!demo) {
-        hudTag = <HudTag result={result} players={players} screenHeight={height} frame={this.state.frame} />;
-      }
+    const field = !frame ? null : <FieldTag frame={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />;
 
-      const debugLogs: JSX.Element[] = [];
+    let hudTag: JSX.Element | null = null;
+    if (!demo) {
+      hudTag = <HudTag result={result} players={players} screenHeight={height} frame={this.state.frame} />;
+    }
+
+    const debugLogs: JSX.Element[] = [];
+    if (frame) {
       let index = 0;
       if (this.props.error) {
         debugLogs.push(<span style={{ color: '#f00' }}>{this.props.error}<br /></span>);
@@ -124,34 +128,32 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       };
       frame.s.forEach(each);
       frame.b.forEach(each);
-
-      return (
-        <div ref="root">
-          <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }} onClick={this.onPlayPauseToggle.bind(this)}>
-            <div style={{ width, height, position: 'relative' }} >
-              <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000, fontFamily: 'monospace', fontSize: '80%' }}>{debugLogs}</div>
-              <svg width={width} height={height} viewBox={`${-width / 2} 0 ${width} ${height}`}>
-                <g transform={`scale(${scale}, ${scale})`}>
-                  {field}
-                  {hudTag}
-                </g>
-              </svg>
-            </div>
-          </div>
-          <div className="replay-controller">
-            <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this)}><Icon name="replay" /></FABButton></div>
-            <div className="replay-controller-button">{playOrPause}</div>
-            <div className="replay-slider">
-              <Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this)} />
-            </div>
-            <div className="replay-controller-frame">{this.state.frame} <span>(frame) </span></div>
-          </div>
-          {statuses}
-        </div>
-      );
     }
 
-    return null;
+    return (
+      <div ref="root">
+        <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }} onClick={this.onPlayPauseToggle.bind(this)}>
+          <div style={{ width, height, position: 'relative' }} >
+            <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000, fontFamily: 'monospace', fontSize: '80%' }}>{debugLogs}</div>
+            <svg width={width} height={height} viewBox={`${-width / 2} 0 ${width} ${height}`}>
+              <g transform={`scale(${scale}, ${scale})`}>
+                {field}
+                {hudTag}
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div className="replay-controller">
+          <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this)}><Icon name="replay" /></FABButton></div>
+          <div className="replay-controller-button">{playOrPause}</div>
+          <div className="replay-slider">
+            <Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this)} />
+          </div>
+          <div className="replay-controller-frame">{this.state.frame} <span>(frame) </span></div>
+        </div>
+        {statuses}
+      </div>
+    );
   }
 
   private adjustWidth() {
