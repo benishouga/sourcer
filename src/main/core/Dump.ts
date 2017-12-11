@@ -82,7 +82,7 @@ export interface ResultDump {
 }
 
 export interface DebugDump {
-  logs: string[];
+  logs: Message[];
   arcs: DebugArc[];
 }
 
@@ -90,4 +90,9 @@ export interface DebugArc {
   direction: number;
   angle: number;
   renge?: number;
+}
+
+export interface Message {
+  message: string;
+  color?: string;
 }

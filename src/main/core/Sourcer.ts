@@ -67,6 +67,7 @@ export default class Sourcer extends Actor {
       this.controller.connectConsole(this.scriptLoader.getExposedConsole());
       this.bot(this.controller);
     } catch (error) {
+      this.debugDump.logs.push({ message: `Sourcer function error: ${error.message}`, color: 'red' });
       this.command.reset();
     } finally {
       this.command.unaccept();
@@ -157,7 +158,7 @@ export default class Sourcer extends Actor {
   }
 
   public log(message: string) {
-    this.debugDump.logs.push(message);
+    this.debugDump.logs.push({ message });
   }
 
   public scanDebug(direction: number, angle: number, renge?: number) {

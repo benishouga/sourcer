@@ -43,9 +43,11 @@ export default class Missile extends Shot {
       this.debugDump = { logs: [], arcs: [] };
       this.controller.connectConsole(this.owner.scriptLoader.getExposedConsole());
       this.bot(this.controller);
-      this.command.unaccept();
     } catch (error) {
       this.command.reset();
+      this.debugDump.logs.push({ message: `Missile function error: ${error.message}`, color: 'red' });
+    } finally {
+      this.command.unaccept();
     }
   }
 
@@ -65,7 +67,7 @@ export default class Missile extends Shot {
   }
 
   public log(message: string) {
-    this.debugDump.logs.push(message);
+    this.debugDump.logs.push({ message });
   }
 
   public scanDebug(direction: number, angle: number, renge?: number) {

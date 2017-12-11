@@ -123,7 +123,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
       }
       const each = (actor: SourcerDump | ShotDump) => {
         if (actor.debug) {
-          actor.debug.logs.forEach(log => debugLogs.push(<span key={`log${++index}`}>{log}<br /></span>));
+          actor.debug.logs.forEach(log => debugLogs.push(<span key={`log${++index}`} style={{ color: log.color }}>{log.message}<br /></span>));
         }
       };
       frame.s.forEach(each);
