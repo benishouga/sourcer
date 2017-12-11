@@ -77,7 +77,7 @@ export default class Missile extends Shot {
 
   public dump(): ShotDump {
     const superDump = super.dump();
-    if (this.owner.scriptLoader.isDebuggable) {
+    if (this.owner.scriptLoader.isDebuggable()) {
       superDump.debug = this.debugDump;
     }
     return superDump;

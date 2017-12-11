@@ -6,5 +6,11 @@
     "out": true
   },
   "files.eol": "\n",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // Set the default
+  "editor.formatOnSave": false,
+  // Enable per-language
+  "[typescript]": {
+      "editor.formatOnSave": true
+  }
 }

@@ -31,7 +31,7 @@ export default class Sourcer extends Actor {
   public scriptLoader: ScriptLoader;
   private controller: SourcerController;
   private bot: ((controller: SourcerController) => void) | null = null;
-  private debugDump: DebugDump = { logs: [], arcs: [] };
+  private debugDump: DebugDump;
 
   constructor(
     field: Field,
@@ -180,7 +180,7 @@ export default class Sourcer extends Actor {
       a: this.missileAmmo,
       f: Math.ceil(this.fuel)
     };
-    if (this.scriptLoader.isDebuggable) {
+    if (this.scriptLoader.isDebuggable()) {
       dump.debug = this.debugDump;
     }
     return dump;
