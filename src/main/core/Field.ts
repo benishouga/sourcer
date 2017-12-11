@@ -31,7 +31,7 @@ export default class Field {
   }
 
   public registerSourcer(source: string, account: string, name: string, color: string) {
-    const side = (this.sourcers.length % 2 === 0) ? -1 : 1;
+    const side = this.sourcers.length % 2 === 0 ? -1 : 1;
     const x = Utils.rand(80) + 160 * side;
     const y = Utils.rand(160) + 80;
     this.addSourcer(new Sourcer(this, x, y, source, account, name, color));
@@ -97,7 +97,7 @@ export default class Field {
     // Think phase
     await this.process(listener, (sourcer: Sourcer) => {
       sourcer.think();
-      this.shots.filter((shot => shot.owner.id === sourcer.id)).forEach(shot => shot.think());
+      this.shots.filter(shot => shot.owner.id === sourcer.id).forEach(shot => shot.think());
     });
 
     // Action phase
@@ -138,7 +138,9 @@ export default class Field {
       return;
     }
 
-    this.sourcers.forEach((sourcer) => { sourcer.alive = 0 < sourcer.shield; });
+    this.sourcers.forEach(sourcer => {
+      sourcer.alive = 0 < sourcer.shield;
+    });
     const survivers = this.sourcers.filter(sourcer => sourcer.alive);
 
     if (1 < survivers.length) {
@@ -182,7 +184,8 @@ export default class Field {
       return;
     }
 
-    if (this.result.frame < this.frame - 90) { // Record some frames even after decided.
+    if (this.result.frame < this.frame - 90) {
+      // Record some frames even after decided.
       this.isFinished = true;
       listener.onEndOfGame();
     }
@@ -193,13 +196,13 @@ export default class Field {
       return radar(this.dummyEnemy);
     }
 
-    return this.sourcers.some((sourcer) => {
+    return this.sourcers.some(sourcer => {
       return sourcer.alive && sourcer !== owner && radar(sourcer.position);
     });
   }
 
   public scanAttack(owner: Sourcer, radar: (t: V) => boolean): boolean {
-    return this.shots.some((shot) => {
+    return this.shots.some(shot => {
       return shot.owner !== owner && radar(shot.position) && this.isIncoming(owner, shot);
     });
   }
@@ -216,17 +219,21 @@ export default class Field {
     const f = shot.position;
     const t = shot.position.add(shot.speed);
 
-    const collidedShot = this.shots.find((actor) => {
-      return actor.breakable && actor.owner !== shot.owner &&
-        Utils.calcDistance(f, t, actor.position) < shot.size + actor.size;
+    const collidedShot = this.shots.find(actor => {
+      return (
+        actor.breakable &&
+        actor.owner !== shot.owner &&
+        Utils.calcDistance(f, t, actor.position) < shot.size + actor.size
+      );
     });
     if (collidedShot) {
       return collidedShot;
     }
 
-    const collidedSourcer = this.sourcers.find((sourcer) => {
-      return sourcer.alive && sourcer !== shot.owner &&
-        Utils.calcDistance(f, t, sourcer.position) < shot.size + sourcer.size;
+    const collidedSourcer = this.sourcers.find(sourcer => {
+      return (
+        sourcer.alive && sourcer !== shot.owner && Utils.calcDistance(f, t, sourcer.position) < shot.size + sourcer.size
+      );
     });
     if (collidedSourcer) {
       return collidedSourcer;
@@ -253,7 +260,7 @@ export default class Field {
 
   public players() {
     const players: PlayersDump = {};
-    this.sourcers.forEach((sourcer) => {
+    this.sourcers.forEach(sourcer => {
       players[sourcer.id] = {
         name: sourcer.name || sourcer.account,
         account: sourcer.account,
@@ -268,15 +275,15 @@ export default class Field {
     const shotsDump: ShotDump[] = [];
     const fxDump: FxDump[] = [];
 
-    this.sourcers.forEach((actor) => {
+    this.sourcers.forEach(actor => {
       sourcersDump.push(actor.dump());
     });
 
     const isThinkable = (x: Shot): x is Missile => x.type === 'Missile';
-    this.shots.forEach((actor) => {
+    this.shots.forEach(actor => {
       shotsDump.push(actor.dump());
     });
-    this.fxs.forEach((fx) => {
+    this.fxs.forEach(fx => {
       fxDump.push(fx.dump());
     });
 

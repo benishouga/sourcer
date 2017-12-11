@@ -20,27 +20,44 @@ export interface RouteParams {
 }
 
 const PublishGamesRoute = ({ component: Component, ...rest }: any) => {
-  return <Route {...rest} render={props => (
-    Auth.status.authenticated || Config.values.publishGames ?
-      <Component {...props} /> :
-      <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-  )} />;
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        Auth.status.authenticated || Config.values.publishGames ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+        )
+      }
+    />
+  );
 };
 
 const RequireAuthRoute = ({ component: Component, ...rest }: any) => (
-  <Route {...rest} render={props => (
-    Auth.status.authenticated ?
-      <Component {...props} /> :
-      <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-  )} />
+  <Route
+    {...rest}
+    render={props =>
+      Auth.status.authenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+      )
+    }
+  />
 );
 
 const RequireAdminRoute = ({ component: Component, ...rest }: any) => (
-  <Route {...rest} render={props => (
-    Auth.status.admin ?
-      <Component {...props} /> :
-      <Redirect to={{ pathname: '/logout', state: { from: props.location } }} />
-  )} />
+  <Route
+    {...rest}
+    render={props =>
+      Auth.status.admin ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/logout', state: { from: props.location } }} />
+      )
+    }
+  />
 );
 
 const routes = (

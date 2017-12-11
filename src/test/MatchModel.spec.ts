@@ -10,7 +10,7 @@ import Env from '../main/server/Env';
 
 describe('Match', () => {
   let user: UserDocument | null = null;
-  before(async function () {
+  before(async function() {
     this.timeout(5000);
     const mongoDbUri = Env.mongoTest;
     if (!mongoDbUri) {
@@ -20,17 +20,20 @@ describe('Match', () => {
   });
 
   beforeEach(() => {
-    return TestUtils.clearDb().then(() => {
-      console.log('UserModel save start');
-      user = new UserModel();
-      user.account = 'account';
-      user.provider = {
-        service: 'twitter', account: '1234'
-      };
-      return user.save();
-    }).then(() => {
-      console.log('UserModel save successful');
-    });
+    return TestUtils.clearDb()
+      .then(() => {
+        console.log('UserModel save start');
+        user = new UserModel();
+        user.account = 'account';
+        user.provider = {
+          service: 'twitter',
+          account: '1234'
+        };
+        return user.save();
+      })
+      .then(() => {
+        console.log('UserModel save successful');
+      });
   });
 
   it('createAndRegisterToUser', async () => {

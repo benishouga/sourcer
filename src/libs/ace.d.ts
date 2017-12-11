@@ -1,5 +1,5 @@
 declare var Ace: Ace.Ace;
-declare module Ace {
+declare namespace Ace {
   interface Ace {
     edit(node: any): Editor;
   }
@@ -28,12 +28,12 @@ declare module Ace {
   interface Command {
     name: string;
     exec: (editor: Editor) => void;
-    bindKey: {win: string, mac: string};
+    bindKey: { win: string; mac: string };
     scrollIntoView?: string;
     readOnly: boolean;
   }
 }
 
-declare module "ace" {
+declare module 'ace' {
   export = Ace;
 }

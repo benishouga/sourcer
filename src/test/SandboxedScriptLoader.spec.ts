@@ -10,10 +10,13 @@ describe('SandboxedScriptLoader', () => {
 
   it('load return function', () => {
     const loader = new SandboxedScriptLoader();
-    assert.strictEqual(loader.load(`
+    assert.strictEqual(
+      loader.load(`
 return function() {
   return Math.max(1, 2);
 };
-    `)(), 2);
+    `)(),
+      2
+    );
   });
 });

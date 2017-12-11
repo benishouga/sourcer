@@ -15,11 +15,14 @@ export default class Auth {
     this.response = response;
   }
 
-  public static async login({ signal, account, password }: { signal?: AbortSignal, account?: string, password?: string } = {}) {
+  public static async login(
+    { signal, account, password }: { signal?: AbortSignal; account?: string; password?: string } = {}
+  ) {
     try {
-      this.status = !account && !password ?
-        await get<AuthResponse>('/api/session', { signal }) :
-        await post<AuthResponse>('/api/session', { signal, body: { account, password } });
+      this.status =
+        !account && !password
+          ? await get<AuthResponse>('/api/session', { signal })
+          : await post<AuthResponse>('/api/session', { signal, body: { account, password } });
     } catch (error) {
       this.status = { admin: false, authenticated: false };
     }

@@ -20,7 +20,9 @@ export default function ResultHudTag({ result, profile, screenHeight }: ResultHu
       <rect ry="4" y="0" x="0" height={HEIGHT} width={WIDTH} fill="#fff" />
       <rect ry="3" y="1" x="1" height={HEIGHT - 1 * 2} width={WIDTH - 1 * 2} fill={color} />
       <rect ry="1" y="3" x="3" height={HEIGHT - (1 + 2) * 2} width={WIDTH - (1 + 2) * 2} fill="#fff" />
-      <text x={WIDTH / 2} y={HEIGHT / 2} textAnchor="middle">{timeout || text}</text>
+      <text x={WIDTH / 2} y={HEIGHT / 2} textAnchor="middle">
+        {timeout || text}
+      </text>
     </g>
   );
 }

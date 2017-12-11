@@ -34,9 +34,14 @@ export default class Sourcer extends Actor {
   private debugDump: DebugDump = { logs: [], arcs: [] };
 
   constructor(
-    field: Field, x: number, y: number, public aiSource: string,
-    public account: string, public name: string, public color: string) {
-
+    field: Field,
+    x: number,
+    y: number,
+    public aiSource: string,
+    public account: string,
+    public name: string,
+    public color: string
+  ) {
     super(field, x, y);
 
     this.direction = Math.random() < 0.5 ? Consts.DIRECTION_RIGHT : Consts.DIRECTION_LEFT;
@@ -104,7 +109,7 @@ export default class Sourcer extends Actor {
 
     // go into the ground
     if (this.position.y < 0) {
-      this.shield -= (-this.speed.y * Configs.GROUND_DAMAGE_SCALE);
+      this.shield -= -this.speed.y * Configs.GROUND_DAMAGE_SCALE;
       this.position = new V(this.position.x, 0);
       this.speed = new V(this.speed.x, 0);
     }
@@ -113,11 +118,11 @@ export default class Sourcer extends Actor {
     this.temperature = Math.max(this.temperature, 0);
 
     // overheat
-    const overheat = (this.temperature - Configs.OVERHEAT_BORDER);
+    const overheat = this.temperature - Configs.OVERHEAT_BORDER;
     if (0 < overheat) {
       const linearDamage = overheat * Configs.OVERHEAT_DAMAGE_LINEAR_WEIGHT;
       const powerDamage = Math.pow(overheat * Configs.OVERHEAT_DAMAGE_POWER_WEIGHT, 2);
-      this.shield -= (linearDamage + powerDamage);
+      this.shield -= linearDamage + powerDamage;
     }
     this.shield = Math.max(0, this.shield);
 

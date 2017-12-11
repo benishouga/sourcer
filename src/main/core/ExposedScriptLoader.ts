@@ -15,9 +15,28 @@ export default class ExposedScriptLoader implements ScriptLoader {
   private console: ConsoleLike;
 
   constructor() {
-    this.console = { log: (...message) => { /* nothing.. */ } };
+    this.console = {
+      log: (...message) => {
+        /* nothing.. */
+      }
+    };
     const allowLibs = {
-      Object, String, Number, Boolean, Array, Date, Math, RegExp, JSON, NaN, Infinity, undefined, parseInt, parseFloat, isNaN, isFinite,
+      Object,
+      String,
+      Number,
+      Boolean,
+      Array,
+      Date,
+      Math,
+      RegExp,
+      JSON,
+      NaN,
+      Infinity,
+      undefined,
+      parseInt,
+      parseFloat,
+      isNaN,
+      isFinite,
       console: this.console
     };
 

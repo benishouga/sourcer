@@ -9,7 +9,7 @@ export type UserDocument = Document & {
   _id: Types.ObjectId;
   account: string;
   name: string;
-  provider: { service: string, account: string };
+  provider: { service: string; account: string };
   source: string;
   isClosedSource: boolean;
   members: string[];
@@ -34,7 +34,7 @@ const schema = new Schema({
   losses: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', (next) => {
+}).pre('save', next => {
   this.updated = new Date();
   next();
 });
@@ -64,13 +64,19 @@ export class UserService extends UserModel {
     return UserService.findOne({ _id: id }).exec();
   }
 
-  public static findByOAuthAccount(oauth: { service: string, account: string }) {
+  public static findByOAuthAccount(oauth: { service: string; account: string }) {
     const service = oauth.service;
     const account = oauth.account;
     return UserService.findOne({ provider: { service, account } }).exec();
   }
 
-  public static createFromAccount(account: string, name: string, members: string[], oauthService: string, oauthAccount: string) {
+  public static createFromAccount(
+    account: string,
+    name: string,
+    members: string[],
+    oauthService: string,
+    oauthAccount: string
+  ) {
     const user = new UserModel();
     user.account = account;
     user.name = name;
@@ -94,6 +100,9 @@ export class UserService extends UserModel {
   }
 
   public static hash(account: string, password: string) {
-    return crypto.createHash('sha256').update(account + '+' + password, 'utf8').digest('hex');
+    return crypto
+      .createHash('sha256')
+      .update(account + '+' + password, 'utf8')
+      .digest('hex');
   }
 }

@@ -79,7 +79,7 @@ export default class SourcerController extends Controller {
       command.fire = FireParam.laser(power, direction);
     };
 
-    this.fireMissile = (bot) => {
+    this.fireMissile = bot => {
       command.validate();
       command.fire = FireParam.missile(bot);
     };
@@ -87,7 +87,7 @@ export default class SourcerController extends Controller {
     const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';
     this.log = (...message: any[]) => {
       command.validate();
-      sourcer.log(message.map(value => isString(value) ? value : JSON.stringify(value)).join(', '));
+      sourcer.log(message.map(value => (isString(value) ? value : JSON.stringify(value))).join(', '));
     };
     this.scanDebug = (direction, angle, renge) => {
       command.validate();

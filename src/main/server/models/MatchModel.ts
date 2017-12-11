@@ -16,7 +16,7 @@ const schema = new Schema({
   dump: { type: String },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', (next) => {
+}).pre('save', next => {
   this.updated = new Date();
   next();
 });
@@ -26,15 +26,20 @@ const MatchModel = model<MatchDocument>('Match', schema);
 export default MatchModel;
 
 export class MatchService extends MatchModel {
-
   public static load(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
-    return this.findOne({ _id: id }, '-dump').populate('winner', '-source').populate('players', '-source').exec();
+    return this.findOne({ _id: id }, '-dump')
+      .populate('winner', '-source')
+      .populate('players', '-source')
+      .exec();
   }
 
   public static loadWithReplay(argId: Types.ObjectId | string) {
     const id = typeof argId === 'string' ? Types.ObjectId.createFromHexString(argId as string) : argId;
-    return this.findOne({ _id: id }).populate('winner', '-source').populate('players', '-source').exec();
+    return this.findOne({ _id: id })
+      .populate('winner', '-source')
+      .populate('players', '-source')
+      .exec();
   }
 
   public static async createAndRegisterToUser(match: MatchDocument) {
@@ -44,17 +49,24 @@ export class MatchService extends MatchModel {
     if (!loaded) {
       throw new Error();
     }
-    await Promise.all(loaded.players.map((player) => {
-      player._id.equals(match.winner._id) ? player.wins++ : player.losses++;
-      player.matches = player.matches || [];
-      player.matches.push(loaded);
-      return player.save();
-    }));
+    await Promise.all(
+      loaded.players.map(player => {
+        player._id.equals(match.winner._id) ? player.wins++ : player.losses++;
+        player.matches = player.matches || [];
+        player.matches.push(loaded);
+        return player.save();
+      })
+    );
     console.log('Players saved');
     return loaded;
   }
 
   public static async matches() {
-    return await this.find({}, '-dump').populate('winner', '-source').populate('players', '-source').sort({ updated: -1 }).limit(10).exec();
+    return await this.find({}, '-dump')
+      .populate('winner', '-source')
+      .populate('players', '-source')
+      .sort({ updated: -1 })
+      .limit(10)
+      .exec();
   }
 }

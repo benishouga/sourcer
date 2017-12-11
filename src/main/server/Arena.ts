@@ -7,7 +7,13 @@ import Utils from '../core/Utils';
 import TickEventListener from '../core/TickEventListener';
 import SandboxedScriptLoader from '../core/SandboxedScriptLoader';
 
-export type Data = PlayersCommand | PreThinkCommand | PostThinkCommand | FinishedCommand | EndOfGameCommand | LogCommand;
+export type Data =
+  | PlayersCommand
+  | PreThinkCommand
+  | PostThinkCommand
+  | FinishedCommand
+  | EndOfGameCommand
+  | LogCommand;
 
 interface PlayersCommand {
   command: Command.CONTESTANTS;
@@ -51,11 +57,15 @@ interface LogCommand {
     id: number;
     messages: any[];
   };
-
 }
 
 enum Command {
-  PRE_THINK, POST_THINK, FINISHED, END_OF_GAME, LOG, CONTESTANTS
+  PRE_THINK,
+  POST_THINK,
+  FINISHED,
+  END_OF_GAME,
+  LOG,
+  CONTESTANTS
 }
 
 const GAME_TIMEOUT_MILLS = 15 * 1000; // 15 sec
@@ -90,7 +100,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
 
     const thinkTimeout = () => {
       const timeoutedName = currentThink !== null ? game.players[currentThink].name : null;
-      const others = Object.keys(game.players).map(key => Number(key)).filter(key => key !== currentThink);
+      const others = Object.keys(game.players)
+        .map(key => Number(key))
+        .filter(key => key !== currentThink);
 
       if (others.length === 1) {
         game.result = {
@@ -123,7 +135,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
 
     let resolved: boolean = false;
     child.on('message', (message: Data) => {
-      if (resolved) { return; }
+      if (resolved) {
+        return;
+      }
 
       switch (message.command) {
         case Command.CONTESTANTS:
@@ -168,9 +182,10 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
 }
 
 if (cluster.isWorker) {
-
   process.on('message', (message: { sourcers: SourcerSource[] }) => {
-    if (!process.send) { return; }
+    if (!process.send) {
+      return;
+    }
     const field = new Field(SandboxedScriptLoader);
     message.sourcers.forEach((value, index) => {
       field.registerSourcer(value.source, value.account, value.name, value.color);
@@ -191,14 +206,18 @@ if (cluster.isWorker) {
     const listener: TickEventListener = {
       waitNextTick: () => new Promise<void>(resolve => setImmediate(resolve)),
       onPreThink: (sourcerId: number) => {
-        if (!process.send) { return; }
+        if (!process.send) {
+          return;
+        }
         process.send({
           command: Command.PRE_THINK,
           data: { id: sourcerId }
         });
       },
       onPostThink: (sourcerId: number) => {
-        if (!process.send) { return; }
+        if (!process.send) {
+          return;
+        }
         process.send({
           command: Command.POST_THINK,
           data: { id: sourcerId }
@@ -209,7 +228,9 @@ if (cluster.isWorker) {
       },
       onFinished: (result: ResultDump) => {
         console.log('arena', id, 'onFinished', new Date().getTime() - start);
-        if (!process.send) { return; }
+        if (!process.send) {
+          return;
+        }
         process.send({
           command: Command.FINISHED,
           data: { result }
@@ -217,13 +238,17 @@ if (cluster.isWorker) {
       },
       onEndOfGame: () => {
         console.log('arena', id, 'onEndOfGame', new Date().getTime() - start);
-        if (!process.send) { return; }
+        if (!process.send) {
+          return;
+        }
         process.send({
           command: Command.END_OF_GAME,
           data: { frames }
         });
       },
-      onError: (error: string) => { /* nothing */ }
+      onError: (error: string) => {
+        /* nothing */
+      }
     };
 
     setTimeout(async () => {

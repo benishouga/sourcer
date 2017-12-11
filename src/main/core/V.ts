@@ -2,8 +2,7 @@ export default class V {
   private calculatedLength: number;
   private calculatedAngle: number;
 
-  constructor(public x: number, public y: number) {
-  }
+  constructor(public x: number, public y: number) {}
 
   public add(v: V): V;
   public add(x: number, y: number): V;

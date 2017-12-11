@@ -10,7 +10,7 @@ import Env from '../main/server/Env';
 
 describe('User', () => {
   let user: UserDocument | null = null;
-  before(async function () {
+  before(async function() {
     this.timeout(5000);
     const mongoDbUri = Env.mongoTest;
     if (!mongoDbUri) {
@@ -25,7 +25,8 @@ describe('User', () => {
     user = new UserModel();
     user.account = 'account';
     user.provider = {
-      service: 'twitter', account: '1234'
+      service: 'twitter',
+      account: '1234'
     };
     await user.save();
     console.log('UserModel save successful');
@@ -51,7 +52,7 @@ describe('User', () => {
     assert.ok(loadedUser.provider.account === '1234', 'oauthAccount');
   });
 
-  it('loadWithMatchees', async function () {
+  it('loadWithMatchees', async function() {
     this.timeout(10000);
     const match = new MatchModel();
     if (!user) {

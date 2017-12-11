@@ -51,7 +51,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     }
   }
 
-  private updateFrame({ playing, frame }: { playing: boolean, frame: number }): void {
+  private updateFrame({ playing, frame }: { playing: boolean; frame: number }): void {
     this.startFrame = frame;
     this.startTime = performance.now();
     this.setState({ playing, frame });
@@ -102,13 +102,21 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     const frame = this.props.gameDump.frames[this.state.frame];
     const demo = this.props.gameDump.isDemo;
 
-    const playOrPause = this.state.playing ?
-      (<FABButton mini colored ripple onClick={this.onPause.bind(this)}><Icon name="pause" /></FABButton>) :
-      (<FABButton mini colored ripple onClick={this.onPlay.bind(this)}><Icon name="play_arrow" /></FABButton>);
+    const playOrPause = this.state.playing ? (
+      <FABButton mini colored ripple onClick={this.onPause.bind(this)}>
+        <Icon name="pause" />
+      </FABButton>
+    ) : (
+      <FABButton mini colored ripple onClick={this.onPlay.bind(this)}>
+        <Icon name="play_arrow" />
+      </FABButton>
+    );
 
     const statuses = demo || !frame ? null : this.statuses(frame, players);
 
-    const field = !frame ? null : <FieldTag frame={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />;
+    const field = !frame ? null : (
+      <FieldTag frame={frame} players={players} width={scaledWidth} height={scaledHeight} scale={scale} />
+    );
 
     let hudTag: JSX.Element | null = null;
     if (!demo) {
@@ -119,11 +127,23 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (frame) {
       let index = 0;
       if (this.props.error) {
-        debugLogs.push(<span style={{ color: '#f00' }}>{this.props.error}<br /></span>);
+        debugLogs.push(
+          <span style={{ color: '#f00' }}>
+            {this.props.error}
+            <br />
+          </span>
+        );
       }
       const each = (actor: SourcerDump | ShotDump) => {
         if (actor.debug) {
-          actor.debug.logs.forEach(log => debugLogs.push(<span key={`log${++index}`} style={{ color: log.color }}>{log.message}<br /></span>));
+          actor.debug.logs.forEach(log =>
+            debugLogs.push(
+              <span key={`log${++index}`} style={{ color: log.color }}>
+                {log.message}
+                <br />
+              </span>
+            )
+          );
         }
       };
       frame.s.forEach(each);
@@ -132,9 +152,24 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     return (
       <div ref="root">
-        <div className="mdl-card mdl-shadow--2dp" style={{ width: '100%', marginBottom: '8px' }} onClick={this.onPlayPauseToggle.bind(this)}>
-          <div style={{ width, height, position: 'relative' }} >
-            <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000, fontFamily: 'monospace', fontSize: '80%' }}>{debugLogs}</div>
+        <div
+          className="mdl-card mdl-shadow--2dp"
+          style={{ width: '100%', marginBottom: '8px' }}
+          onClick={this.onPlayPauseToggle.bind(this)}
+        >
+          <div style={{ width, height, position: 'relative' }}>
+            <div
+              style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                zIndex: 1000,
+                fontFamily: 'monospace',
+                fontSize: '80%'
+              }}
+            >
+              {debugLogs}
+            </div>
             <svg width={width} height={height} viewBox={`${-width / 2} 0 ${width} ${height}`}>
               <g transform={`scale(${scale}, ${scale})`}>
                 {field}
@@ -144,12 +179,23 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
           </div>
         </div>
         <div className="replay-controller">
-          <div className="replay-controller-button"><FABButton mini colored ripple onClick={this.onReload.bind(this)}><Icon name="replay" /></FABButton></div>
+          <div className="replay-controller-button">
+            <FABButton mini colored ripple onClick={this.onReload.bind(this)}>
+              <Icon name="replay" />
+            </FABButton>
+          </div>
           <div className="replay-controller-button">{playOrPause}</div>
           <div className="replay-slider">
-            <Slider min={0} max={this.props.gameDump.frames.length - 1} value={this.state.frame} onChange={this.onFrameChanged.bind(this)} />
+            <Slider
+              min={0}
+              max={this.props.gameDump.frames.length - 1}
+              value={this.state.frame}
+              onChange={this.onFrameChanged.bind(this)}
+            />
           </div>
-          <div className="replay-controller-frame">{this.state.frame} <span>(frame) </span></div>
+          <div className="replay-controller-frame">
+            {this.state.frame} <span>(frame) </span>
+          </div>
         </div>
         {statuses}
       </div>
@@ -187,7 +233,6 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     } else {
       this.updateFrame({ playing: false, frame: this.props.gameDump.frames.length - 1 });
     }
-
   }
 
   private statuses(frame: FrameDump, players: PlayersDump) {
@@ -196,8 +241,12 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     return (
       <Grid>
-        <Cell col={6} tablet={4} phone={4}>{player1Status}</Cell>
-        <Cell col={6} tablet={4} phone={4}>{player2Status}</Cell>
+        <Cell col={6} tablet={4} phone={4}>
+          {player1Status}
+        </Cell>
+        <Cell col={6} tablet={4} phone={4}>
+          {player2Status}
+        </Cell>
       </Grid>
     );
   }
@@ -205,7 +254,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   private status(model: SourcerDump, profile: ProfileDump) {
     const resource = strings();
 
-    const shield = (model.h / Configs.INITIAL_SHIELD) * 100;
+    const shield = model.h / Configs.INITIAL_SHIELD * 100;
 
     let backgroundColor: string;
     if (50 < shield) {
@@ -218,25 +267,55 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
     return (
       <Card shadow={0} style={{ backgroundColor, width: '100%', margin: 'auto' }}>
-        <CardTitle><div style={{ height: '32px', width: '16px', marginRight: '8px', backgroundColor: profile.color }} /> {profile.name}</CardTitle>
+        <CardTitle>
+          <div style={{ height: '32px', width: '16px', marginRight: '8px', backgroundColor: profile.color }} />{' '}
+          {profile.name}
+        </CardTitle>
         <CardText style={{ paddingTop: '0px' }}>
           <div>
-            <div className="status"><span className="title">{resource.shield}</span><span className="main">{model.h}</span> / {Configs.INITIAL_SHIELD}</div>
-            <div><ProgressBar className="progress-status progress-shield" progress={(model.h / Configs.INITIAL_SHIELD) * 100} /></div>
-          </div>
-          <div>
-            <div className="status"><span className="title">{resource.fuel}</span><span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}</div>
-            <div><ProgressBar className="progress-status progress-fuel" progress={(model.f / Configs.INITIAL_FUEL) * 100} /></div>
+            <div className="status">
+              <span className="title">{resource.shield}</span>
+              <span className="main">{model.h}</span> / {Configs.INITIAL_SHIELD}
+            </div>
+            <div>
+              <ProgressBar
+                className="progress-status progress-shield"
+                progress={model.h / Configs.INITIAL_SHIELD * 100}
+              />
+            </div>
           </div>
           <div>
             <div className="status">
-              <span className="title">{resource.temperature}</span><span className="main">{model.t}</span> / {Configs.OVERHEAT_BORDER}
+              <span className="title">{resource.fuel}</span>
+              <span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}
             </div>
-            <div><ProgressBar className="progress-status progress-temperature" progress={(model.t / Configs.OVERHEAT_BORDER) * 100} /></div>
+            <div>
+              <ProgressBar className="progress-status progress-fuel" progress={model.f / Configs.INITIAL_FUEL * 100} />
+            </div>
           </div>
           <div>
-            <div className="status"><span className="title">{resource.ammo}</span><span className="main">{model.a}</span> / {Configs.INITIAL_MISSILE_AMMO}</div>
-            <div><ProgressBar className="progress-status progress-ammo" progress={(model.a / Configs.INITIAL_MISSILE_AMMO) * 100} /></div>
+            <div className="status">
+              <span className="title">{resource.temperature}</span>
+              <span className="main">{model.t}</span> / {Configs.OVERHEAT_BORDER}
+            </div>
+            <div>
+              <ProgressBar
+                className="progress-status progress-temperature"
+                progress={model.t / Configs.OVERHEAT_BORDER * 100}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="status">
+              <span className="title">{resource.ammo}</span>
+              <span className="main">{model.a}</span> / {Configs.INITIAL_MISSILE_AMMO}
+            </div>
+            <div>
+              <ProgressBar
+                className="progress-status progress-ammo"
+                progress={model.a / Configs.INITIAL_MISSILE_AMMO * 100}
+              />
+            </div>
           </div>
         </CardText>
       </Card>

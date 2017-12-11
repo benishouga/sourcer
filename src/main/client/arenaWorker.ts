@@ -16,7 +16,14 @@ export interface InitialParameter {
   sources: PlayerInfo[];
 }
 
-export type Data = NextCommand | PlayersCommand | PreThinkCommand | PostThinkCommand | FinishedCommand | EndOfGameCommand | ErrorCommand;
+export type Data =
+  | NextCommand
+  | PlayersCommand
+  | PreThinkCommand
+  | PostThinkCommand
+  | FinishedCommand
+  | EndOfGameCommand
+  | ErrorCommand;
 
 interface NextCommand {
   command: 'Next';
@@ -58,7 +65,7 @@ declare function postMessage(message: Data): void;
 
 let issueId = 0;
 const issue = () => issueId++;
-const callbacks: { [id: number]: () => void; } = {};
+const callbacks: { [id: number]: () => void } = {};
 
 onmessage = ({ data }) => {
   if (data.issuedId !== undefined) {
@@ -72,7 +79,7 @@ onmessage = ({ data }) => {
   const frames: FrameDump[] = [];
   const listener: TickEventListener = {
     waitNextTick: async () => {
-      return new Promise<void>((resolve) => {
+      return new Promise<void>(resolve => {
         const issuedId = issue();
         callbacks[issuedId] = resolve;
         postMessage({

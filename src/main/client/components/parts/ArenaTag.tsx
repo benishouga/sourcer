@@ -15,7 +15,9 @@ class Arena {
   private thinking: number | null = null;
   private timeout = () => {
     const timeoutedName = this.thinking !== null ? this.game.players[this.thinking].name : null;
-    const others = Object.keys(this.game.players).map(key => Number(key)).filter(key => key !== this.thinking);
+    const others = Object.keys(this.game.players)
+      .map(key => Number(key))
+      .filter(key => key !== this.thinking);
 
     if (others.length === 1) {
       this.game.result = {
@@ -33,7 +35,7 @@ class Arena {
       };
     }
     this.cancel();
-  }
+  };
   private handler: NodeJS.Timer | null = null;
 
   public cancel() {
@@ -65,7 +67,9 @@ class Arena {
           break;
         case 'PreThink':
           this.thinking = data.id;
-          this.handler = setTimeout(() => { this.timeout(); }, 400); // 400 milliseconds think timeout
+          this.handler = setTimeout(() => {
+            this.timeout();
+          }, 400); // 400 milliseconds think timeout
           break;
         case 'PostThink':
           this.thinking = null;
@@ -164,16 +168,13 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
           scale={this.props.scale}
           gameDump={this.state.gameDump}
           error={this.state.error}
-          onReload={this.onReload.bind(this)} />
+          onReload={this.onReload.bind(this)}
+        />
       );
     }
 
     const loadedFrame = this.state.loadedFrame;
-    return (
-      <div ref="root">
-        {'Loading ...' + loadedFrame}
-      </div>
-    );
+    return <div ref="root">{'Loading ...' + loadedFrame}</div>;
   }
 
   public tick() {

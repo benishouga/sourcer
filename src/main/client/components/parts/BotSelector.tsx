@@ -70,13 +70,19 @@ export default class BotSelector extends React.Component<BotSelectorProps, BotSe
     return (
       <div style={{ marginBottom: '8px' }}>
         <div style={{ position: 'relative', textAlign: 'right' }}>
-          <Button raised ripple colored id="enemy-select-menu" style={leftButtonStyle}><Icon name="android" /> {this.state.selectButtonLabel}</Button>
+          <Button raised ripple colored id="enemy-select-menu" style={leftButtonStyle}>
+            <Icon name="android" /> {this.state.selectButtonLabel}
+          </Button>
           <Menu target="enemy-select-menu" align="right">
             <MenuItem onClick={this.onSelect.bind(this, fiddle, resource.fiddle)}>{resource.fiddle}</MenuItem>
             <MenuItem onClick={this.onSelect.bind(this, fewAttack, resource.fewAttack)}>{resource.fewAttack}</MenuItem>
-            <MenuItem onClick={this.onSelect.bind(this, fewMissile, resource.fewMissile)}>{resource.fewMissile}</MenuItem>
+            <MenuItem onClick={this.onSelect.bind(this, fewMissile, resource.fewMissile)}>
+              {resource.fewMissile}
+            </MenuItem>
             <MenuItem onClick={this.onSelect.bind(this, escape, resource.escape)}>{resource.escape}</MenuItem>
-            <MenuItem onClick={this.onSelect.bind(this, fixedBattery, resource.attacksFromLow)}>{resource.attacksFromLow}</MenuItem>
+            <MenuItem onClick={this.onSelect.bind(this, fixedBattery, resource.attacksFromLow)}>
+              {resource.attacksFromLow}
+            </MenuItem>
             <MenuItem onClick={this.onSelect.bind(this, standard, resource.standard)}>{resource.standard}</MenuItem>
           </Menu>
           <Tooltip label={resource.viewCode} position="bottom">
@@ -90,7 +96,8 @@ export default class BotSelector extends React.Component<BotSelectorProps, BotSe
             key={this.state.selectedSource /* HACK */}
             code={this.state.selectedSource || ''}
             className="mdl-shadow--4dp"
-            readOnly={true} />
+            readOnly={true}
+          />
         </div>
       </div>
     );

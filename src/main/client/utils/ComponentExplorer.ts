@@ -1,4 +1,3 @@
-
 export default class ComponentExplorer {
   public static extractInputValue(ref: any): string {
     return ref.inputRef.value as string;

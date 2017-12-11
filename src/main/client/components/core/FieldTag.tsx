@@ -24,7 +24,7 @@ export default function FieldTag({ frame, players, height, width, scale: viewSca
   let maxTop = -Number.MAX_VALUE;
   let sumX = 0;
 
-  const sourcers: JSX.Element[] = frame.s.map((b) => {
+  const sourcers: JSX.Element[] = frame.s.map(b => {
     sumX += b.p.x;
     maxTop = Math.max(maxTop, b.p.y);
     maxRight = Math.max(maxRight, b.p.x);
@@ -51,18 +51,20 @@ export default function FieldTag({ frame, players, height, width, scale: viewSca
   const viewRight = (screen.right - screen.center) / screen.scale + screen.center;
   const viewTop = (screen.height - 8) / screen.scale;
 
-  const shots: JSX.Element[] = frame.b.filter((b) => {
-    const x = b.p.x;
-    const y = b.p.y;
-    return viewLeft < x && x < viewRight && y < viewTop;
-  }).map((b) => {
-    if (b.s === 'Missile') {
-      return <MissileTag key={b.i} model={b} profile={players[b.o]} />;
-    }
-    return <LaserTag key={b.i} model={b} profile={players[b.o]} />;
-  });
+  const shots: JSX.Element[] = frame.b
+    .filter(b => {
+      const x = b.p.x;
+      const y = b.p.y;
+      return viewLeft < x && x < viewRight && y < viewTop;
+    })
+    .map(b => {
+      if (b.s === 'Missile') {
+        return <MissileTag key={b.i} model={b} profile={players[b.o]} />;
+      }
+      return <LaserTag key={b.i} model={b} profile={players[b.o]} />;
+    });
 
-  const fxs: JSX.Element[] = frame.x.map((b) => {
+  const fxs: JSX.Element[] = frame.x.map(b => {
     return <FxTag key={b.i} model={b} />;
   });
 

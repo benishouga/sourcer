@@ -23,42 +23,46 @@ if (!mongoDbUri) {
   throw new Error('env.MONGODB_URI is not defined.');
 }
 
-db(mongoDbUri).then((mongooseConnection) => {
-  const app = express();
+db(mongoDbUri)
+  .then(mongooseConnection => {
+    const app = express();
 
-  app.use((req, res, next) => {
-    console.log('--------------------------');
-    console.log(req.method, req.url);
-    console.log(req.headers);
-    return next();
-  });
-
-  app.use(express.static('docs'));
-
-  app.use(cookieParser());
-  app.use(bodyParser.json());
-
-  app.use(session({
-    secret: Env.sessionSecret || 'seecreeeeet',
-    resave: false,
-    saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection, collection: 'session' })
-  }));
-
-  apis(app);
-
-  app.use((req, res) => {
-    fs.readFile(__dirname + '/index.html', (error, text) => {
-      if (error) {
-        return res.status(503).end();
-      }
-      res.end(text);
+    app.use((req, res, next) => {
+      console.log('--------------------------');
+      console.log(req.method, req.url);
+      console.log(req.headers);
+      return next();
     });
-  });
 
-  const port = Env.port || 5000;
-  console.log('listening...' + port);
-  app.listen(port);
-}).catch((error) => {
-  console.log(error);
-});
+    app.use(express.static('docs'));
+
+    app.use(cookieParser());
+    app.use(bodyParser.json());
+
+    app.use(
+      session({
+        secret: Env.sessionSecret || 'seecreeeeet',
+        resave: false,
+        saveUninitialized: true,
+        store: new MongoStore({ mongooseConnection, collection: 'session' })
+      })
+    );
+
+    apis(app);
+
+    app.use((req, res) => {
+      fs.readFile(__dirname + '/index.html', (error, text) => {
+        if (error) {
+          return res.status(503).end();
+        }
+        res.end(text);
+      });
+    });
+
+    const port = Env.port || 5000;
+    console.log('listening...' + port);
+    app.listen(port);
+  })
+  .catch(error => {
+    console.log(error);
+  });

@@ -30,7 +30,9 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
       return;
     }
     const gameDump = await Match.replay({ signal, matchId }).catch(error => console.log(error));
-    if (gameDump) { this.setState({ gameDump }); }
+    if (gameDump) {
+      this.setState({ gameDump });
+    }
   }
 
   public componentWillUnmount() {
@@ -41,19 +43,25 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
     const resource = strings();
 
     if (!this.state.gameDump) {
-      return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
+      return (
+        <Grid>
+          <Cell col={12}>{resource.loading}</Cell>
+        </Grid>
+      );
     }
 
     return (
       <div>
         <Grid>
-          <Cell col={12}><Link to="/">{resource.returnTop}</Link></Cell>
+          <Cell col={12}>
+            <Link to="/">{resource.returnTop}</Link>
+          </Cell>
         </Grid>
 
         <div className="scr-match-show">
           <Replayer gameDump={this.state.gameDump} scale={1.2} />
         </div>
-      </div >
+      </div>
     );
   }
 }

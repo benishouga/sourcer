@@ -39,14 +39,14 @@ export default class Edit extends React.Component<{}, EditState> {
     if (this.state.playerInfo) {
       this.state.playerInfo.source = value;
     }
-  }
+  };
 
   private selectBot = (bot: string) => {
     if (this.state.enemyInfo) {
       this.state.enemyInfo.source = bot;
     }
     this.reload();
-  }
+  };
 
   private abortController: AbortController;
 
@@ -103,7 +103,6 @@ export default class Edit extends React.Component<{}, EditState> {
     const resource = strings();
 
     if (this.state.playerInfo !== null) {
-
       const players: PlayerInfo[] = [];
       players.push(this.state.playerInfo);
       if (this.state.enemyInfo) {
@@ -115,24 +114,46 @@ export default class Edit extends React.Component<{}, EditState> {
           <Cell col={6} tablet={12} phone={12}>
             <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
               <CardTitle>
-                <Button raised ripple colored onClick={this.save.bind(this)}><Icon name="save" /> {resource.save}</Button>
+                <Button raised ripple colored onClick={this.save.bind(this)}>
+                  <Icon name="save" /> {resource.save}
+                </Button>
                 <Spacer />
-                <Button raised ripple colored onClick={this.saveAndFindAgainst.bind(this)} style={{ marginLeft: '8px' }}>
+                <Button
+                  raised
+                  ripple
+                  colored
+                  onClick={this.saveAndFindAgainst.bind(this)}
+                  style={{ marginLeft: '8px' }}
+                >
                   <Icon name="whatshot" /> {resource.saveAndFindAgainst}
                 </Button>
-                <Button raised ripple colored onClick={this.reload.bind(this)} style={{ marginLeft: '8px' }}><Icon name="play_arrow" /> {resource.test}</Button>
+                <Button raised ripple colored onClick={this.reload.bind(this)} style={{ marginLeft: '8px' }}>
+                  <Icon name="play_arrow" /> {resource.test}
+                </Button>
               </CardTitle>
             </Card>
-            <AceEditor code={this.editingSource} onChange={this.onTextChange} onSave={this.save.bind(this)} className="mdl-shadow--2dp" readOnly={false} />
-            <Snackbar active={this.state.isSavedSnackbarActive || false} onTimeout={this.hideSavedSnackbar.bind(this)}>{resource.saved}</Snackbar>
+            <AceEditor
+              code={this.editingSource}
+              onChange={this.onTextChange}
+              onSave={this.save.bind(this)}
+              className="mdl-shadow--2dp"
+              readOnly={false}
+            />
+            <Snackbar active={this.state.isSavedSnackbarActive || false} onTimeout={this.hideSavedSnackbar.bind(this)}>
+              {resource.saved}
+            </Snackbar>
           </Cell>
           <Cell col={6} tablet={12} phone={12}>
             <BotSelector selected={fiddle} onSelect={this.selectBot} />
             <ArenaTag players={players} ref="arena" scale={1} isDemo={false} />
           </Cell>
-        </Grid >
+        </Grid>
       );
     }
-    return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
+    return (
+      <Grid>
+        <Cell col={12}>{resource.loading}</Cell>
+      </Grid>
+    );
   }
 }

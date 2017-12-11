@@ -20,7 +20,6 @@ interface UserShowState {
 }
 
 export default class UserShow extends React.Component<UserShowProps, UserShowState> {
-
   constructor(props: UserShowProps) {
     super(props);
     this.state = {};
@@ -33,7 +32,9 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     const signal = this.abortController.signal;
     this.setState({ user: undefined });
     const user = await User.select({ signal, account }).catch(error => console.log(error));
-    if (user) { this.setState({ user }); }
+    if (user) {
+      this.setState({ user });
+    }
   }
 
   public async componentDidMount() {
@@ -58,7 +59,11 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     const user = this.state.user;
 
     if (!user) {
-      return (<Grid><Cell col={12}>{resource.loading}</Cell></Grid>);
+      return (
+        <Grid>
+          <Cell col={12}>{resource.loading}</Cell>
+        </Grid>
+      );
     }
 
     return (

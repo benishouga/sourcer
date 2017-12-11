@@ -1,6 +1,18 @@
 import * as React from 'react';
 import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
-import { List, ListItem, ListItemContent, Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer } from 'react-mdl';
+import {
+  List,
+  ListItem,
+  ListItemContent,
+  Card,
+  CardTitle,
+  CardText,
+  CardActions,
+  Button,
+  Textfield,
+  Icon,
+  Spacer
+} from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
@@ -51,12 +63,20 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
           <CardText>
             <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" />
             <Textfield label={resource.fieldLabelPassword} floatingLabel ref="password" type="password" />
-            {this.state.error && (
-              <p>{resource.badRequest}</p>
-            )}
+            {this.state.error && <p>{resource.badRequest}</p>}
           </CardText>
-          <CardActions border style={{ borderColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', boxSizing: 'border-box', alignItems: 'center' }}>
-            <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>{resource.login}</Button>
+          <CardActions
+            border
+            style={{
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              boxSizing: 'border-box',
+              alignItems: 'center'
+            }}
+          >
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>
+              {resource.login}
+            </Button>
             <Spacer />
             <Icon name="account_box" />
           </CardActions>

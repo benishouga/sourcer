@@ -44,7 +44,7 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
   public componentDidMount() {
     const dialog = ReactDOM.findDOMNode(this.dialog) as any;
     if (!dialog.showModal) {
-      ((window as any).dialogPolyfill).registerDialog(dialog);
+      (window as any).dialogPolyfill.registerDialog(dialog);
     }
 
     this.abortController = new AbortController();
@@ -53,13 +53,17 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     // process in parallel...
     (async () => {
       const user = await User.select({ signal }).catch(error => console.log(error));
-      if (user) { this.setState({ user }); }
+      if (user) {
+        this.setState({ user });
+      }
     })();
 
     (async () => {
       const account = this.props.match.params.account;
       const against = await User.select({ signal, account }).catch(error => console.log(error));
-      if (against) { this.setState({ against }); }
+      if (against) {
+        this.setState({ against });
+      }
     })();
   }
 
@@ -76,42 +80,47 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
 
     let userCard: React.ReactElement<any>;
     if (this.state.user) {
-      userCard = (<ProfileCard user={this.state.user} />);
+      userCard = <ProfileCard user={this.state.user} />;
     } else {
-      userCard = (<span>{resource.loading}</span>);
+      userCard = <span>{resource.loading}</span>;
     }
 
     let againstCard: React.ReactElement<any>;
     if (this.state.against) {
-      againstCard = (<ProfileCard user={this.state.against} />);
+      againstCard = <ProfileCard user={this.state.against} />;
     } else {
-      againstCard = (<span>{resource.loading}</span>);
+      againstCard = <span>{resource.loading}</span>;
     }
 
     return (
       <div>
         <Grid>
-          <Cell col={12}><Link to="/">{resource.returnTop}</Link></Cell>
+          <Cell col={12}>
+            <Link to="/">{resource.returnTop}</Link>
+          </Cell>
         </Grid>
         <Grid>
-          <Cell col={5}>
-            {userCard}
-          </Cell>
+          <Cell col={5}>{userCard}</Cell>
           <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-            <div style={{ height: '120px' }}></div>
-            <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>{resource.fight}</Button>
-            <Dialog open={this.state.openDialog} ref={(dialog: any) => { this.dialog = dialog; }}>
+            <div style={{ height: '120px' }} />
+            <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>
+              {resource.fight}
+            </Button>
+            <Dialog
+              open={this.state.openDialog}
+              ref={(dialog: any) => {
+                this.dialog = dialog;
+              }}
+            >
               <DialogTitle>{resource.fighting}</DialogTitle>
               <DialogContent>
                 <ProgressBar indeterminate />
               </DialogContent>
             </Dialog>
           </Cell>
-          <Cell col={5}>
-            {againstCard}
-          </Cell>
+          <Cell col={5}>{againstCard}</Cell>
         </Grid>
-      </div >
+      </div>
     );
   }
 }

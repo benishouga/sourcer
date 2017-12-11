@@ -10,7 +10,7 @@ export default class Controller {
   private framesOfLife: number = 0;
   public preThink = () => {
     this.framesOfLife++;
-  }
+  };
 
   constructor(actor: Actor) {
     this.frame = () => this.framesOfLife;

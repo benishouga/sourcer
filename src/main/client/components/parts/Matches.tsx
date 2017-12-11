@@ -35,7 +35,9 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     const signal = this.abortController.signal;
     this.setState({ matches: undefined });
     const user = await User.select({ signal, account }).catch(error => console.log(error));
-    if (user) { this.setState({ matches: user.matches }); }
+    if (user) {
+      this.setState({ matches: user.matches });
+    }
   }
 
   public async componentDidMount() {
@@ -62,7 +64,9 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     const elements = this.elements();
     return (
       <div>
-        <h5>{resource.matchesTitle} {this.props.account}</h5>
+        <h5>
+          {resource.matchesTitle} {this.props.account}
+        </h5>
         {elements}
       </div>
     );
@@ -72,15 +76,23 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     const resource = strings();
     if (this.state.matches && this.state.matches.length !== 0) {
       return this.state.matches.map((match, index) => {
-        const subtitle = (<span className="updated">{resource.updatedAt} {moment(match.created).fromNow()}</span>);
+        const subtitle = (
+          <span className="updated">
+            {resource.updatedAt} {moment(match.created).fromNow()}
+          </span>
+        );
         return (
-          <ListItem key={index} twoLine >
+          <ListItem key={index} twoLine>
             <ListItemContent avatar="whatshot" subtitle={subtitle}>
               {this.players(match)}
             </ListItemContent>
             <ListItemAction>
               <Tooltip label={resource.viewMatch} position="right">
-                <Link to={`/match/${match._id}`}><FABButton mini ripple colored ><Icon name="play_arrow" /></FABButton></Link>
+                <Link to={`/match/${match._id}`}>
+                  <FABButton mini ripple colored>
+                    <Icon name="play_arrow" />
+                  </FABButton>
+                </Link>
               </Tooltip>
             </ListItemAction>
           </ListItem>
@@ -95,25 +107,34 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     if (!match.players) {
       return null;
     }
-    match.players.map((contestant, index) => {
-      let winOrLoseIcon = null;
-      if (match.winner) {
-        winOrLoseIcon = match.winner.account === contestant.account ?
-          (<span><Icon name="mood" className="inline" /> Win</span>) :
-          (<span><Icon name="sentiment_very_dissatisfied" className="inline" /> Lose</span>);
-      }
+    match.players
+      .map((contestant, index) => {
+        let winOrLoseIcon = null;
+        if (match.winner) {
+          winOrLoseIcon =
+            match.winner.account === contestant.account ? (
+              <span>
+                <Icon name="mood" className="inline" /> Win
+              </span>
+            ) : (
+              <span>
+                <Icon name="sentiment_very_dissatisfied" className="inline" /> Lose
+              </span>
+            );
+        }
 
-      return (
-        <span key={'contestant' + index}>
-          <Link to={`/user/${contestant.account}`}>{contestant.name}</Link> {winOrLoseIcon}
-        </span>
-      );
-    }).forEach((element, index) => {
-      if (players.length !== 0) {
-        players.push(<span key={index}> vs </span>);
-      }
-      players.push(element);
-    });
+        return (
+          <span key={'contestant' + index}>
+            <Link to={`/user/${contestant.account}`}>{contestant.name}</Link> {winOrLoseIcon}
+          </span>
+        );
+      })
+      .forEach((element, index) => {
+        if (players.length !== 0) {
+          players.push(<span key={index}> vs </span>);
+        }
+        players.push(element);
+      });
     return players;
   }
 }

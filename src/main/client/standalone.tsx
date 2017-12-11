@@ -17,25 +17,31 @@ Array.prototype.forEach.call(screens, (output: HTMLElement) => {
   const isDemo = output.hasAttribute('data-demo');
   const playerIdsText = output.getAttribute('data-players');
   if (playerIdsText) {
-    const players = playerIdsText.split(',').map((value, index) => {
-      const element = document.getElementById(value);
-      if (!element) {
-        return null;
-      }
-      if (element.tagName !== 'TEXTAREA') {
-        return { name: 'demo', color: COLORS[index], source: element.innerText };
-      }
-      const player = element as HTMLTextAreaElement;
-      const playerInfo = { name: value, color: COLORS[index], source: player.value } as PlayerInfo;
-      const polling = () => {
-        playerInfo.source = player.value;
-        setTimeout(polling, 500);
-      };
-      polling();
-      return playerInfo;
-    }).filter(playerInfo => playerInfo) as PlayerInfo[];
+    const players = playerIdsText
+      .split(',')
+      .map((value, index) => {
+        const element = document.getElementById(value);
+        if (!element) {
+          return null;
+        }
+        if (element.tagName !== 'TEXTAREA') {
+          return { name: 'demo', color: COLORS[index], source: element.innerText };
+        }
+        const player = element as HTMLTextAreaElement;
+        const playerInfo = { name: value, color: COLORS[index], source: player.value } as PlayerInfo;
+        const polling = () => {
+          playerInfo.source = player.value;
+          setTimeout(polling, 500);
+        };
+        polling();
+        return playerInfo;
+      })
+      .filter(playerInfo => playerInfo) as PlayerInfo[];
 
-    render(<ArenaTag width={width} height={height} scale={scale} players={players} isDemo={isDemo} path="arenaWorker.js" />, output);
+    render(
+      <ArenaTag width={width} height={height} scale={scale} players={players} isDemo={isDemo} path="arenaWorker.js" />,
+      output
+    );
   }
 });
 
@@ -64,12 +70,24 @@ Array.prototype.forEach.call(elements, (element: HTMLElement) => {
     lines.push(<line x1={halfWidth} y1={i} x2={-halfWidth} y2={i} strokeWidth="1" stroke="#ddd" />);
   }
 
-  render((
-    <svg transform={`scale(1, -1)`} width={width} height={height} viewBox={`${-width / 2 + 0.5} ${-height / 2 + 0.5} ${width} ${height}`} >
+  render(
+    <svg
+      transform={`scale(1, -1)`}
+      width={width}
+      height={height}
+      viewBox={`${-width / 2 + 0.5} ${-height / 2 + 0.5} ${width} ${height}`}
+    >
       <rect x={-halfWidth} y={-halfHeight} height={height} width={width} fill="#eee" />
       {lines}
       <Arc direction={direction} angle={angle} renge={renge} />
-      <path transform={`rotate(${arrowDirection}, 0, 0)`} d="M 10 0 L -10 6 L -4 0 L -10 -6 z" fill="#88f" stroke="#000" strokeWidth="1" />
-    </svg>
-  ), element);
+      <path
+        transform={`rotate(${arrowDirection}, 0, 0)`}
+        d="M 10 0 L -10 6 L -4 0 L -10 -6 z"
+        fill="#88f"
+        stroke="#000"
+        strokeWidth="1"
+      />
+    </svg>,
+    element
+  );
 });

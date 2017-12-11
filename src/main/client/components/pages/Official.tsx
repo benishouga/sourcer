@@ -1,7 +1,19 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
-import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar, List, ListItem, ListItemContent, Icon } from 'react-mdl';
+import {
+  Grid,
+  Cell,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  ProgressBar,
+  List,
+  ListItem,
+  ListItemContent,
+  Icon
+} from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
@@ -28,7 +40,7 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     this.state = {};
   }
 
-  private async  handleOpenDialog() {
+  private async handleOpenDialog() {
     this.setState({
       openDialog: true
     });
@@ -48,13 +60,15 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
   public async componentDidMount() {
     const dialog = ReactDOM.findDOMNode(this.dialog) as any;
     if (!dialog.showModal) {
-      ((window as any).dialogPolyfill).registerDialog(dialog);
+      (window as any).dialogPolyfill.registerDialog(dialog);
     }
 
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const users = await User.all({ signal }).catch(error => console.log(error));
-    if (users) { this.setState({ users }); }
+    if (users) {
+      this.setState({ users });
+    }
   }
 
   public componentWillUnmount() {
@@ -64,26 +78,30 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
   public userList(callback: (user: UserResponse) => void) {
     const resource = strings();
     if (!this.state.users) {
-      return (<span>{resource.loading}</span>);
+      return <span>{resource.loading}</span>;
     }
-    const lists = this.state.users.map((user) => {
+    const lists = this.state.users.map(user => {
       return (
         <ListItem key={user.account}>
-          <ListItemContent icon="person"><a onClick={() => { callback(user); }}>{user.name}</a></ListItemContent>
+          <ListItemContent icon="person">
+            <a
+              onClick={() => {
+                callback(user);
+              }}
+            >
+              {user.name}
+            </a>
+          </ListItemContent>
         </ListItem>
       );
     });
 
-    return (
-      <List>
-        {lists}
-      </List>
-    );
+    return <List>{lists}</List>;
   }
 
   private async onSelected(user: UserResponse) {
     const signal = this.abortController.signal;
-    return await User.select({ signal, account: user.account }).catch((error) => {
+    return await User.select({ signal, account: user.account }).catch(error => {
       console.log(error);
       return undefined;
     });
@@ -102,14 +120,21 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     } else if (this.state.player1) {
       player1 = (
         <div>
-          <Button raised ripple colored onClick={() => { this.setState({ player1: undefined }); }}>
+          <Button
+            raised
+            ripple
+            colored
+            onClick={() => {
+              this.setState({ player1: undefined });
+            }}
+          >
             <Icon name="cancel" /> {resource.reselect}
           </Button>
           <ProfileCard user={this.state.player1} />
         </div>
       );
     } else {
-      player1 = this.userList((user) => {
+      player1 = this.userList(user => {
         this.setState({ player1: undefined, player1Loading: true });
         this.onSelected(user).then(filledUser => this.setState({ player1: filledUser, player1Loading: false }));
       });
@@ -121,14 +146,21 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     } else if (this.state.player2) {
       player2 = (
         <div>
-          <Button raised ripple colored onClick={() => { this.setState({ player2: undefined }); }}>
+          <Button
+            raised
+            ripple
+            colored
+            onClick={() => {
+              this.setState({ player2: undefined });
+            }}
+          >
             <Icon name="cancel" /> {resource.reselect}
           </Button>
           <ProfileCard user={this.state.player2} />
         </div>
       );
     } else {
-      player2 = this.userList((user) => {
+      player2 = this.userList(user => {
         this.setState({ player2: undefined, player2Loading: true });
         this.onSelected(user).then(filledUser => this.setState({ player2: filledUser, player2Loading: false }));
       });
@@ -136,23 +168,31 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
 
     return (
       <Grid>
-        <Cell col={5}>
-          {player1}
-        </Cell>
+        <Cell col={5}>{player1}</Cell>
         <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-          <div style={{ height: '120px' }}></div>
-          <Button colored onClick={this.handleOpenDialog.bind(this)}
-            raised ripple disabled={!this.state.player1 || !this.state.player2}>{resource.fight}</Button>
-          <Dialog open={this.state.openDialog} ref={(dialog: any) => { this.dialog = dialog; }}>
+          <div style={{ height: '120px' }} />
+          <Button
+            colored
+            onClick={this.handleOpenDialog.bind(this)}
+            raised
+            ripple
+            disabled={!this.state.player1 || !this.state.player2}
+          >
+            {resource.fight}
+          </Button>
+          <Dialog
+            open={this.state.openDialog}
+            ref={(dialog: any) => {
+              this.dialog = dialog;
+            }}
+          >
             <DialogTitle>{resource.fighting}</DialogTitle>
             <DialogContent>
               <ProgressBar indeterminate />
             </DialogContent>
           </Dialog>
         </Cell>
-        <Cell col={5}>
-          {player2}
-        </Cell>
+        <Cell col={5}>{player2}</Cell>
       </Grid>
     );
   }

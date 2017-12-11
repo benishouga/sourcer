@@ -7,9 +7,11 @@ export default class TestUtils {
   }
 
   public static async clearDb() {
-    await Promise.all(Object.keys(mongoose.connection.collections).map((key) => {
-      return TestUtils.clearCollection(mongoose.connection.collections[key]);
-    }));
+    await Promise.all(
+      Object.keys(mongoose.connection.collections).map(key => {
+        return TestUtils.clearCollection(mongoose.connection.collections[key]);
+      })
+    );
     console.log('mongodb all cleard');
   }
 

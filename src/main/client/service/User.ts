@@ -13,7 +13,7 @@ interface SignUpParameter {
 export default class User {
   public static emitter = new EventEmitter();
 
-  public static select({ signal, account }: { signal?: AbortSignal, account?: string } = {}) {
+  public static select({ signal, account }: { signal?: AbortSignal; account?: string } = {}) {
     return get<UserResponse>(account ? `/api/user/${account}` : '/api/user', { signal });
   }
 
@@ -25,11 +25,11 @@ export default class User {
     return get<UserResponse[]>('/api/user/recent', { signal });
   }
 
-  public static async create({ signal, parameter }: { signal?: AbortSignal, parameter: SignUpParameter }) {
+  public static async create({ signal, parameter }: { signal?: AbortSignal; parameter: SignUpParameter }) {
     return await post<ErrorResponse>('/api/user', { signal, body: parameter });
   }
 
-  public static update({ signal, user }: { signal?: AbortSignal, user: UserResponse }) {
+  public static update({ signal, user }: { signal?: AbortSignal; user: UserResponse }) {
     return put('/api/user', { signal, body: user });
   }
 }

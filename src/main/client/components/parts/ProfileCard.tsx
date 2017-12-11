@@ -1,7 +1,19 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Grid, Cell, Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon } from 'react-mdl';
+import {
+  Grid,
+  Cell,
+  Card,
+  CardTitle,
+  CardText,
+  CardActions,
+  Button,
+  List,
+  ListItem,
+  ListItemContent,
+  Icon
+} from 'react-mdl';
 import { strings } from '../resources/Strings';
 
 import Auth from '../../service/Auth';
@@ -38,20 +50,23 @@ export default class ProfileCard extends React.Component<ProfileCardProps, {}> {
             &ensp;
             <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
           </p>
-          <List>
-            {members}
-          </List>
+          <List>{members}</List>
         </CardText>
         <CardActions border>
-          {
-            this.props.showWriteCode ?
-              <Link to="/edit"><Button ripple colored raised><Icon name="edit" /> {resource.writeCode}</Button></Link> :
-              null
-          }
-          {
-            this.props.showFight ?
-              <Link to={`/match/new/${user.account}`}><Button ripple colored raised><Icon name="whatshot" /> {resource.fight}</Button></Link> :
-              null}
+          {this.props.showWriteCode ? (
+            <Link to="/edit">
+              <Button ripple colored raised>
+                <Icon name="edit" /> {resource.writeCode}
+              </Button>
+            </Link>
+          ) : null}
+          {this.props.showFight ? (
+            <Link to={`/match/new/${user.account}`}>
+              <Button ripple colored raised>
+                <Icon name="whatshot" /> {resource.fight}
+              </Button>
+            </Link>
+          ) : null}
         </CardActions>
       </Card>
     );

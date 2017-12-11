@@ -10,7 +10,15 @@ interface ArcProps {
   centerColor?: string;
 }
 
-export default function Arc({ x = 0, y = 0, direction, angle, renge: argRenge = 0, fillColor = '#d448', centerColor = '#f00' }: ArcProps) {
+export default function Arc({
+  x = 0,
+  y = 0,
+  direction,
+  angle,
+  renge: argRenge = 0,
+  fillColor = '#d448',
+  centerColor = '#f00'
+}: ArcProps) {
   const norenge = argRenge <= 0;
   const renge = norenge ? 320 : argRenge;
 

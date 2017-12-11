@@ -165,7 +165,7 @@ describe('V', () => {
       const result1 = point.angleInRadians();
       const result2 = point.angleInRadians();
       assert.ok(result1 === result2);
-      assert.ok(result1 === (45 * Math.PI / 180));
+      assert.ok(result1 === 45 * Math.PI / 180);
     });
   });
 

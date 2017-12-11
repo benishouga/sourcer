@@ -17,9 +17,10 @@ export default function HudTag({ players, frame, result, screenHeight }: HudTagP
     return null;
   }
 
-  const readyHud = !result.timeout && frame === 0 ?
-    <ReadyHudTag screenHeight={screenHeight} player1={players[0]} player2={players[1]} /> :
-    null;
+  const readyHud =
+    !result.timeout && frame === 0 ? (
+      <ReadyHudTag screenHeight={screenHeight} player1={players[0]} player2={players[1]} />
+    ) : null;
 
   let resultHudTag: JSX.Element | null = null;
   if (result.winnerId !== null && result.frame <= frame) {

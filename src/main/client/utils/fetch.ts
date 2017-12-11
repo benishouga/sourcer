@@ -18,7 +18,7 @@ export class AbortController {
 }
 
 interface Option {
-  query?: { [key: string]: string; };
+  query?: { [key: string]: string };
   body?: any;
   signal?: AbortSignal;
 }
@@ -63,18 +63,24 @@ function send<T>(request: sa.Request, { query, body, signal }: Option = {}): Pro
   });
 }
 
-export function get<T>(url: string, options: { signal?: AbortSignal, query?: { [key: string]: string } } = {}) {
+export function get<T>(url: string, options: { signal?: AbortSignal; query?: { [key: string]: string } } = {}) {
   return send<T>(sa.get(url), { ...options });
 }
 
-export function post<T>(url: string, options: { signal?: AbortSignal, query?: { [key: string]: string }, body?: any } = {}) {
+export function post<T>(
+  url: string,
+  options: { signal?: AbortSignal; query?: { [key: string]: string }; body?: any } = {}
+) {
   return send<T>(sa.post(url), { ...options });
 }
 
-export function put<T>(url: string, options: { signal?: AbortSignal, query?: { [key: string]: string }, body?: any } = {}) {
+export function put<T>(
+  url: string,
+  options: { signal?: AbortSignal; query?: { [key: string]: string }; body?: any } = {}
+) {
   return send<T>(sa.put(url), { ...options });
 }
 
-export function del<T>(url: string, options: { signal?: AbortSignal, query?: { [key: string]: string } } = {}) {
+export function del<T>(url: string, options: { signal?: AbortSignal; query?: { [key: string]: string } } = {}) {
   return send<T>(sa.del(url), { ...options });
 }

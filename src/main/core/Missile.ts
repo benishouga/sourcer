@@ -33,7 +33,8 @@ export default class Missile extends Shot {
   public onThink() {
     this.command.reset();
 
-    if (this.fuel <= 0) { // Cancel thinking
+    if (this.fuel <= 0) {
+      // Cancel thinking
       return;
     }
 

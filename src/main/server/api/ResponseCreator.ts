@@ -26,12 +26,14 @@ export default class ResponseCreator {
   }
 
   public static match(match: MatchDocument): MatchResponse {
-    return this.inflated(match) ? {
-      _id: match._id.toHexString(),
-      winner: this.user(match.winner),
-      players: match.players ? match.players.map(v => this.user(v)) : [],
-      created: match.created
-    } : match as MatchResponse;
+    return this.inflated(match)
+      ? {
+          _id: match._id.toHexString(),
+          winner: this.user(match.winner),
+          players: match.players ? match.players.map(v => this.user(v)) : [],
+          created: match.created
+        }
+      : (match as MatchResponse);
   }
 
   public static auth(session: Express.Session): AuthResponse {

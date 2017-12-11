@@ -12,7 +12,6 @@ interface AceEditorProps {
 }
 
 export default class AceEditor extends React.Component<AceEditorProps, {}> {
-
   private editor: Ace.Editor | null;
   private silent: boolean = false;
 
@@ -38,7 +37,11 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     this.editor.on('change', this.onChange.bind(this));
     this.editor.commands.addCommand({
       name: 'Save',
-      exec: (editor) => { if (this.props.onSave) { this.props.onSave(); } },
+      exec: editor => {
+        if (this.props.onSave) {
+          this.props.onSave();
+        }
+      },
       bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
       readOnly: true
     });
@@ -63,6 +66,10 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
 
   public render() {
     const style = { fontSize: '14px !important', border: '1px solid lightgray' };
-    return (<div ref="root" style={style} className={this.props.className}>{this.props.code}</div>);
+    return (
+      <div ref="root" style={style} className={this.props.className}>
+        {this.props.code}
+      </div>
+    );
   }
 }

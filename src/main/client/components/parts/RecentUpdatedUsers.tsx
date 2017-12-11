@@ -29,7 +29,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const users = await User.recent({ signal }).catch(error => console.log(error));
-    if (users) { this.setState({ users }); }
+    if (users) {
+      this.setState({ users });
+    }
   }
 
   public componentWillUnmount() {
@@ -42,9 +44,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     return (
       <div>
         <h5>{resource.recentUpdatedUsersTitle}</h5>
-        <List>
-          {elements}
-        </List>
+        <List>{elements}</List>
       </div>
     );
   }
@@ -52,15 +52,19 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
   private elements() {
     const resource = strings();
     if (this.state.users && this.state.users.length !== 0) {
-      return this.state.users.map((user) => {
+      return this.state.users.map(user => {
         return (
-          <ListItem key={user.account} threeLine >
+          <ListItem key={user.account} threeLine>
             <ListItemContent avatar="person" subtitle={this.subtitle(user)}>
               <Link to={`/user/${user.account}`}>{user.name}</Link>
             </ListItemContent>
             <ListItemAction>
               <Tooltip label="Fight" position="right">
-                <Link to={`/match/new/${user.account}`}><FABButton mini ripple colored ><Icon name="whatshot" /></FABButton></Link>
+                <Link to={`/match/new/${user.account}`}>
+                  <FABButton mini ripple colored>
+                    <Icon name="whatshot" />
+                  </FABButton>
+                </Link>
               </Tooltip>
             </ListItemAction>
           </ListItem>
@@ -78,12 +82,15 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     const members = user.members.join(', ');
     return (
       <div>
-        {`${members}`}{members.length ? <br /> : null}
+        {`${members}`}
+        {members.length ? <br /> : null}
         <Icon name="mood" className="inline" /> {user.wins} {resource.wins}
         &ensp;
         <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
         &ensp;
-        <span className="updated">{resource.updatedAt} {moment(user.updated).fromNow()}</span>
+        <span className="updated">
+          {resource.updatedAt} {moment(user.updated).fromNow()}
+        </span>
       </div>
     );
   }
