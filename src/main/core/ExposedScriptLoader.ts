@@ -40,18 +40,8 @@ export default class ExposedScriptLoader implements ScriptLoader {
       console: this.console
     };
 
-    // tslint:disable-next-line:no-function-constructor-with-string-args
-    const global = new Function('return this')();
-    this.banlist = ['__proto__', 'prototype'];
-
-    // tslint:disable-next-line:forin
-    for (const target in global) {
-      this.banlist.push(target);
-    }
-    let argNames = Object.keys(allowLibs);
-    argNames = argNames.concat(this.banlist.filter(value => argNames.indexOf(value) >= 0));
-    this.argNames = argNames;
-    this.argValues = Object.keys(allowLibs).map(key => (allowLibs as any)[key]);
+    this.argNames = Object.keys(allowLibs);
+    this.argValues = this.argNames.map(key => (allowLibs as any)[key]);
   }
 
   public isDebuggable(): boolean {
