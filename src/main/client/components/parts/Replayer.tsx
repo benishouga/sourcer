@@ -57,17 +57,19 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     this.setState({ playing, frame });
   }
 
-  private onPlay() {
-    const isEndOfFrame = this.state.frame === this.props.gameDump.frames.length - 1;
-    this.updateFrame({ playing: true, frame: isEndOfFrame ? 0 : this.state.frame });
+  private onPlay(argFrame?: number) {
+    const frame = argFrame !== undefined ? argFrame : this.state.frame;
+    const isEndOfFrame = this.props.gameDump.frames.length - 1 <= frame;
+    this.updateFrame({ playing: true, frame: isEndOfFrame ? 0 : frame });
 
     if (!this.animationFrameHandler) {
       this.animationFrameHandler = requestAnimationFrame(() => this.tick());
     }
   }
 
-  private onPause() {
-    this.updateFrame({ playing: false, frame: this.state.frame });
+  private onPause(argFrame?: number) {
+    const frame = argFrame !== undefined ? argFrame : this.state.frame;
+    this.updateFrame({ frame, playing: false });
     if (this.animationFrameHandler) {
       cancelAnimationFrame(this.animationFrameHandler);
       this.animationFrameHandler = null;
@@ -78,7 +80,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     if (this.props.onReload) {
       this.props.onReload();
     } else {
-      this.updateFrame({ playing: true, frame: 0 });
+      this.onPlay(0);
     }
   }
 
@@ -103,11 +105,11 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     const demo = this.props.gameDump.isDemo;
 
     const playOrPause = this.state.playing ? (
-      <FABButton mini colored ripple onClick={this.onPause.bind(this)}>
+      <FABButton mini colored ripple onClick={() => this.onPause()}>
         <Icon name="pause" />
       </FABButton>
     ) : (
-      <FABButton mini colored ripple onClick={this.onPlay.bind(this)}>
+      <FABButton mini colored ripple onClick={() => this.onPlay()}>
         <Icon name="play_arrow" />
       </FABButton>
     );
@@ -155,7 +157,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         <div
           className="mdl-card mdl-shadow--2dp"
           style={{ width: '100%', marginBottom: '8px' }}
-          onClick={this.onPlayPauseToggle.bind(this)}
+          onClick={() => this.onPlayPauseToggle()}
         >
           <div style={{ width, height, position: 'relative' }}>
             <div
@@ -180,7 +182,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
         </div>
         <div className="replay-controller">
           <div className="replay-controller-button">
-            <FABButton mini colored ripple onClick={this.onReload.bind(this)}>
+            <FABButton mini colored ripple onClick={() => this.onReload()}>
               <Icon name="replay" />
             </FABButton>
           </div>
@@ -190,7 +192,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
               min={0}
               max={this.props.gameDump.frames.length - 1}
               value={this.state.frame}
-              onChange={this.onFrameChanged.bind(this)}
+              onChange={e => this.onFrameChanged(e)}
             />
           </div>
           <div className="replay-controller-frame">
@@ -231,7 +233,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
     } else if (this.props.gameDump.isDemo) {
       this.updateFrame({ playing: !!this.state.playing, frame: 0 });
     } else {
-      this.updateFrame({ playing: false, frame: this.props.gameDump.frames.length - 1 });
+      this.onPause(this.props.gameDump.frames.length - 1);
     }
   }
 
@@ -324,11 +326,33 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
   public componentDidMount() {
     this.adjustWidth();
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   public componentWillUnmount() {
     if (this.animationFrameHandler) {
       cancelAnimationFrame(this.animationFrameHandler);
     }
+    document.removeEventListener('keydown', this.onKeyDown);
   }
+
+  private onKeyDown = (event: KeyboardEvent) => {
+    switch (event.keyCode) {
+      case 32: // Space
+        this.onPlayPauseToggle();
+        event.preventDefault();
+        break;
+      case 37: // Arrow Left
+        this.updateFrame({ playing: !!this.state.playing, frame: Math.max(0, this.state.frame - 1) });
+        event.preventDefault();
+        break;
+      case 39: // Arrow Right
+        this.updateFrame({
+          playing: !!this.state.playing,
+          frame: Math.min(this.state.frame + 1, this.props.gameDump.frames.length - 1)
+        });
+        event.preventDefault();
+        break;
+    }
+  };
 }
