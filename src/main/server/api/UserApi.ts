@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserDocument, UserService } from '../models/UserModel';
+import UserModel, { UserDocument, UserService } from '../models/UserModel';
 import Validator from '../utils/Validator';
 import ResponseCreator from './ResponseCreator';
 import Normalizer from '../utils/Normalizer';
@@ -101,14 +101,13 @@ export async function update(req: Request, res: Response) {
   }
 
   const account = sessionUser.account;
-  const user = await UserService.loadWithMatches(account, false);
+  const source = req.body.source;
+  const user = await UserService.findOneAndUpdate({ account }, { source }).exec();
+
   if (!user) {
     return res.status(404).end('');
   }
 
-  user.source = req.body.source;
-  user.updated = new Date();
-  user.save();
   return res
     .status(200)
     .type('json')

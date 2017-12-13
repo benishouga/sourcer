@@ -1,5 +1,5 @@
 import { Types, Document, Schema, Model, model } from 'mongoose';
-import { UserDocument } from './UserModel';
+import { UserDocument, UserService } from './UserModel';
 
 export type MatchDocument = Document & {
   _id: Types.ObjectId;
@@ -51,10 +51,14 @@ export class MatchService extends MatchModel {
     }
     await Promise.all(
       loaded.players.map(player => {
-        player._id.equals(match.winner._id) ? player.wins++ : player.losses++;
-        player.matches = player.matches || [];
-        player.matches.push(loaded);
-        return player.save();
+        const win = player._id.equals(match.winner._id);
+        return UserService.findByIdAndUpdate(player._id, {
+          $inc: {
+            wins: win ? 1 : 0,
+            losses: win ? 0 : 1
+          },
+          $push: { matches: match }
+        }).exec();
       })
     );
     console.log('Players saved');
