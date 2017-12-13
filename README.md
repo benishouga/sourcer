@@ -1,9 +1,9 @@
 # Sourcer
-Match game that fights using JavaScript programs.
+Sourcer is a game that fights using JavaScript programs.
 
 ![pr](https://raw.githubusercontent.com/benishouga/sourcer/master/pr.gif)
 
-[Try it.](https://benishouga.github.io/sourcer/standalone.html) - Standalone version & API Document
+[Try it out](https://benishouga.github.io/sourcer/standalone.html) - Standalone version & API Document
 
 [Matching Server](https://sourcer.herokuapp.com/) - Please wait a moment for spin up.
 

@@ -24,8 +24,8 @@ export class En implements StringResource {
   public fight = 'Fight';
   public fighting = 'Fighting...';
   public members = 'Memembers';
-  public serviceDescription = 'Write A.I. using JavaScript.';
-  public serviceBenefit = 'Your skills get better by competing with the rival.';
+  public serviceDescription = 'A game that fights using JavaScript programs.';
+  public serviceBenefit = 'Your skills will be better by competing with others, maybe.';
   public wins = 'wins';
   public losses = 'losses';
   public matchesTitle = 'Matches';
