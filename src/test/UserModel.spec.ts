@@ -32,6 +32,10 @@ describe('User', () => {
     console.log('UserModel save successful');
   });
 
+  after(async () => {
+    await mongoose.connection.close();
+  });
+
   it('findByOAuthAccount', async () => {
     const findedUser = await UserService.findByOAuthAccount({ service: 'twitter', account: '1234' });
     if (!findedUser) {

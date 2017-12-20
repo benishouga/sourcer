@@ -19,21 +19,21 @@ describe('Match', () => {
     await db(mongoDbUri);
   });
 
-  beforeEach(() => {
-    return TestUtils.clearDb()
-      .then(() => {
-        console.log('UserModel save start');
-        user = new UserModel();
-        user.account = 'account';
-        user.provider = {
-          service: 'twitter',
-          account: '1234'
-        };
-        return user.save();
-      })
-      .then(() => {
-        console.log('UserModel save successful');
-      });
+  beforeEach(async () => {
+    await TestUtils.clearDb();
+    console.log('UserModel save start');
+    user = new UserModel();
+    user.account = 'account';
+    user.provider = {
+      service: 'twitter',
+      account: '1234'
+    };
+    await user.save();
+    console.log('UserModel save successful');
+  });
+
+  after(async () => {
+    await mongoose.connection.close();
   });
 
   it('createAndRegisterToUser', async () => {
