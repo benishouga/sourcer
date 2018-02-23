@@ -23,6 +23,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
   public componentDidMount() {
     const refs = this.refs as any;
     const node = ReactDOM.findDOMNode(refs.root);
+    node.addEventListener('keydown', this.onKeyDown);
     this.editor = Ace.edit(node);
     this.editor.$blockScrolling = Infinity;
     this.editor.setTheme('ace/theme/chrome');
@@ -62,6 +63,9 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
       this.editor.destroy();
       this.editor = null;
     }
+    const refs = this.refs as any;
+    const node = ReactDOM.findDOMNode(refs.root);
+    node.removeEventListener('keydown', this.onKeyDown);
   }
 
   public render() {
@@ -72,4 +76,12 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
       </div>
     );
   }
+
+  private onKeyDown = (event: KeyboardEvent) => {
+    switch (event.keyCode) {
+      case 32: // Space
+        event.stopPropagation();
+        break;
+    }
+  };
 }
