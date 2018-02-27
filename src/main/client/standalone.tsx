@@ -4,33 +4,36 @@ import ArenaTag from './components/parts/ArenaTag';
 import { PlayerInfo } from './arenaWorker';
 import Arc from './components/core/Arc';
 
+import * as Ace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/chrome';
+
 const COLORS = ['#866', '#262', '#c55', '#44b'];
 
 const attr = (element: HTMLElement, id: string) => element.getAttribute(id) || '';
 
-const screens = document.getElementsByClassName('sourcer-standalone');
-Array.prototype.forEach.call(screens, (output: HTMLElement) => {
-  const l = (id: string) => attr(output, id);
+Array.prototype.forEach.call(document.getElementsByClassName('sourcer-standalone'), (element: HTMLElement) => {
+  const l = (id: string) => attr(element, id);
   const width = parseInt(l('data-width'), 10) || -1;
   const height = parseInt(l('data-height'), 10) || 384;
   const scale = parseFloat(l('data-scale')) || 1.0;
-  const isDemo = output.hasAttribute('data-demo');
-  const playerIdsText = output.getAttribute('data-players');
+  const isDemo = element.hasAttribute('data-demo');
+  const playerIdsText = element.getAttribute('data-players');
   if (playerIdsText) {
     const players = playerIdsText
       .split(',')
       .map((value, index) => {
-        const element = document.getElementById(value);
-        if (!element) {
+        const playerElement = document.getElementById(value);
+        if (!playerElement) {
           return null;
         }
-        if (element.tagName !== 'TEXTAREA') {
-          return { name: 'demo', color: COLORS[index], source: element.innerText };
+        if (playerElement.tagName !== 'TEXTAREA') {
+          return { name: 'demo', color: COLORS[index], source: playerElement.innerText };
         }
-        const player = element as HTMLTextAreaElement;
-        const playerInfo = { name: value, color: COLORS[index], source: player.value } as PlayerInfo;
+        const playerTextArea = playerElement as HTMLTextAreaElement;
+        const playerInfo = { name: value, color: COLORS[index], source: playerTextArea.value } as PlayerInfo;
         const polling = () => {
-          playerInfo.source = player.value;
+          playerInfo.source = playerTextArea.value;
           setTimeout(polling, 500);
         };
         polling();
@@ -40,13 +43,12 @@ Array.prototype.forEach.call(screens, (output: HTMLElement) => {
 
     render(
       <ArenaTag width={width} height={height} scale={scale} players={players} isDemo={isDemo} path="arenaWorker.js" />,
-      output
+      element
     );
   }
 });
 
-const elements = document.querySelectorAll('.arc');
-Array.prototype.forEach.call(elements, (element: HTMLElement) => {
+Array.prototype.forEach.call(document.querySelectorAll('.arc'), (element: HTMLElement) => {
   const l = (id: string) => attr(element, id);
   const width = parseInt(l('width'), 10) || 160;
   const height = parseInt(l('height'), 10) || 160;
@@ -90,4 +92,43 @@ Array.prototype.forEach.call(elements, (element: HTMLElement) => {
     </svg>,
     element
   );
+});
+
+const preElements = document.querySelectorAll('pre.code');
+Array.prototype.forEach.call(preElements, (element: HTMLElement) => {
+  const editor = Ace.edit(element);
+  editor.setTheme('ace/theme/chrome');
+  editor.getSession().setMode('ace/mode/javascript');
+  editor.setOption('maxLines', 40);
+  editor.setReadOnly(true);
+});
+
+Array.prototype.forEach.call(document.querySelectorAll('textarea.code'), (element: HTMLTextAreaElement) => {
+  element.style.display = 'none';
+  const pre = document.createElement('pre');
+  pre.className = 'code';
+  const parent = element.parentNode;
+  if (parent) {
+    parent.insertBefore(pre, element);
+  }
+
+  setTimeout(() => {
+    pre.addEventListener('keydown', event => {
+      if (event.keyCode === 32) {
+        event.stopPropagation();
+      }
+    });
+    const editor = Ace.edit(pre);
+    editor.setTheme('ace/theme/chrome');
+    const session = editor.getSession();
+    session.setMode('ace/mode/javascript');
+    session.setTabSize(2);
+    editor.setOption('maxLines', 40);
+    editor.$blockScrolling = Infinity;
+    session.on('change', e => {
+      element.value = editor.getValue();
+    });
+    editor.setValue(element.value);
+    editor.gotoLine(0);
+  });
 });

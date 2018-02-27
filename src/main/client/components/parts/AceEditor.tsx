@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as Ace from 'ace';
+import * as Ace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/chrome';
 
 interface AceEditorProps {
   className?: string;
@@ -22,7 +24,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
 
   public componentDidMount() {
     const refs = this.refs as any;
-    const node = ReactDOM.findDOMNode(refs.root);
+    const node = ReactDOM.findDOMNode(refs.root) as HTMLElement;
     node.addEventListener('keydown', this.onKeyDown);
     this.editor = Ace.edit(node);
     this.editor.$blockScrolling = Infinity;
@@ -31,14 +33,14 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     session.setMode('ace/mode/javascript');
     session.setTabSize(2);
     this.editor.setShowPrintMargin(false);
-    this.editor.setFontSize(11);
+    this.editor.setFontSize('11');
     this.editor.setOptions({ minLines: 42, maxLines: 42 });
     this.editor.setValue(this.props.code || '', this.props.cursorStart);
     this.editor.setReadOnly(this.props.readOnly);
     this.editor.on('change', this.onChange.bind(this));
     this.editor.commands.addCommand({
       name: 'Save',
-      exec: editor => {
+      exec: (editor: Ace.Editor) => {
         if (this.props.onSave) {
           this.props.onSave();
         }
