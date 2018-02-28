@@ -11,9 +11,7 @@ export default function(uri: string): Promise<mongoose.Connection> {
   }
 
   return new Promise<mongoose.Connection>((resolve, reject) => {
-    mongoose.connect(uri, {
-      useMongoClient: true
-    });
+    mongoose.connect(uri);
 
     mongoose.connection.on('error', () => {
       console.log('MongoDB connection error. Please make sure MongoDB is running.');

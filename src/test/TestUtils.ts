@@ -17,9 +17,7 @@ export default class TestUtils {
 
   public static connect(dbUri: string) {
     return new Promise<mongoose.Connection>((resolve, reject) => {
-      const connection = mongoose.createConnection(dbUri, {
-        useMongoClient: true
-      });
+      const connection = mongoose.createConnection(dbUri);
 
       connection.on('connected', () => {
         console.log('Mongoose> connected: ' + dbUri);
