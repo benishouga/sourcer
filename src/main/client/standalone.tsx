@@ -60,16 +60,16 @@ Array.prototype.forEach.call(document.querySelectorAll('.arc'), (element: HTMLEl
   const halfWidth = width / 2;
   const halfHeight = height / 2;
   const lines: JSX.Element[] = [];
-
-  lines.push(<line x1={0} y1={halfHeight} x2={0} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
+  let index = 0;
+  lines.push(<line key={index++} x1={0} y1={halfHeight} x2={0} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
   for (let i = 10; i < halfWidth; i += 10) {
-    lines.push(<line x1={-i} y1={halfHeight} x2={-i} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
-    lines.push(<line x1={i} y1={halfHeight} x2={i} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
+    lines.push(<line key={index++} x1={-i} y1={halfHeight} x2={-i} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
+    lines.push(<line key={index++} x1={i} y1={halfHeight} x2={i} y2={-halfHeight} strokeWidth="1" stroke="#ddd" />);
   }
-  lines.push(<line x1={halfWidth} y1={0} x2={-halfWidth} y2={0} strokeWidth="1" stroke="#ddd" />);
+  lines.push(<line key={index++} x1={halfWidth} y1={0} x2={-halfWidth} y2={0} strokeWidth="1" stroke="#ddd" />);
   for (let i = 10; i < halfHeight; i += 10) {
-    lines.push(<line x1={halfWidth} y1={-i} x2={-halfWidth} y2={-i} strokeWidth="1" stroke="#ddd" />);
-    lines.push(<line x1={halfWidth} y1={i} x2={-halfWidth} y2={i} strokeWidth="1" stroke="#ddd" />);
+    lines.push(<line key={index++} x1={halfWidth} y1={-i} x2={-halfWidth} y2={-i} strokeWidth="1" stroke="#ddd" />);
+    lines.push(<line key={index++} x1={halfWidth} y1={i} x2={-halfWidth} y2={i} strokeWidth="1" stroke="#ddd" />);
   }
 
   render(
