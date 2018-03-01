@@ -1,6 +1,6 @@
 export default class V {
-  private calculatedLength: number;
-  private calculatedAngle: number;
+  private calculatedLength: number | null = null;
+  private calculatedAngle: number | null = null;
 
   constructor(public x: number, public y: number) {}
 
@@ -45,7 +45,7 @@ export default class V {
     return this.subtract(v).length();
   }
   public length(): number {
-    if (this.calculatedLength) {
+    if (this.calculatedLength !== null) {
       return this.calculatedLength;
     }
     this.calculatedLength = Math.sqrt(this.dot());
@@ -60,7 +60,7 @@ export default class V {
     return this.angleInRadians() * 180 / Math.PI;
   }
   public angleInRadians(): number {
-    if (this.calculatedAngle) {
+    if (this.calculatedAngle !== null) {
       return this.calculatedAngle;
     }
     this.calculatedAngle = Math.atan2(-this.y, this.x);

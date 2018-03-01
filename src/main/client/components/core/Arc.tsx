@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface ArcProps {
+export interface ArcProps {
   x?: number;
   y?: number;
   direction: number;

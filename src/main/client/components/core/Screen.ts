@@ -1,10 +1,10 @@
-export default class Screen {
-  public height: number;
-  public width: number;
-  public viewScale: number;
-  public left: number;
-  public right: number;
-  public top: number;
-  public scale: number;
-  public center: number;
-}
+export default interface Screen {
+  height: number;
+  width: number;
+  viewScale: number;
+  left: number;
+  right: number;
+  top: number;
+  scale: number;
+  center: number;
+};

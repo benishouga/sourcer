@@ -1,9 +1,10 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 export default class TestUtils {
-  public static clearCollection(collection: mongoose.Collection) {
+  public static async clearCollection(collection: mongoose.Collection) {
     console.log('clear collection: ' + collection.collectionName);
-    return collection.deleteMany({});
+    await collection.deleteMany({});
+    return;
   }
 
   public static async clearDb() {

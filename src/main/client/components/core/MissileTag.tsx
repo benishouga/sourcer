@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ShotDump, ProfileDump } from '../../../core/Dump';
 
-interface MissileTagProps {
+export interface MissileTagProps {
   profile: ProfileDump;
   model: ShotDump;
 }

@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 import './models/UserModel';
 import './models/MatchModel';
@@ -10,7 +10,7 @@ export default function(uri: string): Promise<mongoose.Connection> {
     throw new Error('MongoDB uri is undfined');
   }
 
-  return new Promise<mongoose.Connection>((resolve, reject) => {
+  return new Promise<mongoose.Connection>((resolve, _reject) => {
     mongoose.connect(uri);
 
     mongoose.connection.on('error', () => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 
 import { strings } from '../resources/Strings';
 
@@ -12,7 +12,6 @@ import {
   CardActions,
   Button,
   Textfield,
-  TextfieldProps,
   Icon,
   List,
   ListItem,
@@ -21,7 +20,7 @@ import {
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import Auth from '../../service/Auth';
 
-interface LoginState {
+export interface LoginState {
   errors: ResourceId[] | null;
   redirectTo?: string;
 }

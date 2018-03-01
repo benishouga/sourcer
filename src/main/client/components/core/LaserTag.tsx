@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ShotDump, ProfileDump } from '../../../core/Dump';
 
-interface LaserTagProps {
+export interface LaserTagProps {
   profile: ProfileDump;
   model: ShotDump;
 }

@@ -11,7 +11,7 @@ import Match from '../../service/Match';
 import { RouteParams } from '../routes';
 import ProfileCard from '../parts/ProfileCard';
 
-interface MatchNewState {
+export interface MatchNewState {
   user?: UserResponse;
   against?: UserResponse;
   openDialog?: boolean;
@@ -19,7 +19,7 @@ interface MatchNewState {
 }
 
 export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewState> {
-  private dialog: Dialog;
+  private dialog?: Dialog;
 
   constructor(props: RouteComponentProps<RouteParams>) {
     super(props);
@@ -40,14 +40,15 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     this.setState({ redirectTo: `/match/${match._id}` });
   }
 
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
   public componentDidMount() {
-    const dialog = ReactDOM.findDOMNode(this.dialog) as any;
-    if (!dialog.showModal) {
-      (window as any).dialogPolyfill.registerDialog(dialog);
+    if (this.dialog) {
+      const dialog = ReactDOM.findDOMNode(this.dialog) as any;
+      if (!dialog.showModal) {
+        (window as any).dialogPolyfill.registerDialog(dialog);
+      }
     }
 
-    this.abortController = new AbortController();
     const signal = this.abortController.signal;
 
     // process in parallel...
@@ -106,12 +107,7 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
             <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>
               {resource.fight}
             </Button>
-            <Dialog
-              open={this.state.openDialog}
-              ref={(dialog: any) => {
-                this.dialog = dialog;
-              }}
-            >
+            <Dialog open={this.state.openDialog} ref={(dialog: any) => (this.dialog = dialog)}>
               <DialogTitle>{resource.fighting}</DialogTitle>
               <DialogContent>
                 <ProgressBar indeterminate />

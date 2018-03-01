@@ -1,23 +1,27 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "outDir": "out",
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "jsx": "react",
-        "rootDir": "src"
-    },
-    "include": [
-        "src",
-        "test"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2015",
+    "outDir": "out",
+    "lib": ["es2015","dom"],
+    "strict": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "stripInternal": true,
+    "traceResolution": false,
+    "newLine": "LF",
+    "jsx": "react",
+    "rootDir": "src",
+    "inlineSources": true,
+    "sourceMap": true
+  },
+  "include": ["src", "test"],
+  "exclude": ["node_modules"]
 }

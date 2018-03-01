@@ -1,14 +1,13 @@
-import Consts from './Consts';
 import Field from './Field';
 import V from './V';
 import Configs from './Configs';
 import Shot from './Shot';
 
 export default class Actor {
-  public id: number;
+  public id: number = -1;
   public position: V;
   public speed: V;
-  public direction: number;
+  public direction: number = 0;
   public size = Configs.COLLISION_SIZE;
   public wait = 0;
 
@@ -39,7 +38,7 @@ export default class Actor {
     this.position = this.position.add(this.speed);
   }
 
-  public onHit(shot: Shot) {
+  public onHit(_shot: Shot) {
     // do nothing
   }
 

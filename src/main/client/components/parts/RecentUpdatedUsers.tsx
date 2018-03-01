@@ -1,19 +1,18 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip } from 'react-mdl';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { strings } from '../resources/Strings';
 
 import User from '../../service/User';
 import { AbortController } from '../../utils/fetch';
 
-interface RecentUpdatedUsersProps {
+export interface RecentUpdatedUsersProps {
   account?: string;
 }
 
-interface RecentUpdatedUsersState {
+export interface RecentUpdatedUsersState {
   users: UserResponse[] | null;
 }
 
@@ -23,10 +22,9 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     this.state = { users: null };
   }
 
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
 
   public async componentDidMount() {
-    this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const users = await User.recent({ signal }).catch(error => console.log(error));
     if (users) {

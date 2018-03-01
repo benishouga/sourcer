@@ -1,9 +1,7 @@
 import * as cluster from 'cluster';
-import { FrameDump, SourcerDump, GameDump, ResultDump, PlayersDump } from '../core/Dump';
+import { FrameDump, GameDump, ResultDump, PlayersDump } from '../core/Dump';
 
 import Field from '../core/Field';
-import Sourcer from '../core/Sourcer';
-import Utils from '../core/Utils';
 import TickEventListener from '../core/TickEventListener';
 import SandboxedScriptLoader from '../core/SandboxedScriptLoader';
 
@@ -15,21 +13,21 @@ export type Data =
   | EndOfGameCommand
   | LogCommand;
 
-interface PlayersCommand {
+export interface PlayersCommand {
   command: Command.CONTESTANTS;
   data: {
     players: PlayersDump;
   };
 }
 
-interface PreThinkCommand {
+export interface PreThinkCommand {
   command: Command.PRE_THINK;
   data: {
     id: number;
   };
 }
 
-interface PostThinkCommand {
+export interface PostThinkCommand {
   command: Command.POST_THINK;
   data: {
     id: number;
@@ -37,21 +35,21 @@ interface PostThinkCommand {
   };
 }
 
-interface FinishedCommand {
+export interface FinishedCommand {
   command: Command.FINISHED;
   data: {
     result: ResultDump;
   };
 }
 
-interface EndOfGameCommand {
+export interface EndOfGameCommand {
   command: Command.END_OF_GAME;
   data: {
     frames: FrameDump[];
   };
 }
 
-interface LogCommand {
+export interface LogCommand {
   command: Command.LOG;
   data: {
     id: number;
@@ -59,7 +57,7 @@ interface LogCommand {
   };
 }
 
-enum Command {
+export enum Command {
   PRE_THINK,
   POST_THINK,
   FINISHED,
@@ -80,7 +78,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
   cluster.setupMaster({ exec: __dirname + '/Arena' });
   const child = cluster.fork();
 
-  return new Promise<GameDump>((resolve, reject) => {
+  return new Promise<GameDump>((resolve, _reject) => {
     const game: GameDump = {
       isDemo: false,
       result: null,
@@ -187,7 +185,7 @@ if (cluster.isWorker) {
       return;
     }
     const field = new Field(SandboxedScriptLoader);
-    message.sourcers.forEach((value, index) => {
+    message.sourcers.forEach(value => {
       field.registerSourcer(value.source, value.account, value.name, value.color);
     });
 
@@ -246,7 +244,7 @@ if (cluster.isWorker) {
           data: { frames }
         });
       },
-      onError: (error: string) => {
+      onError: (_error: string) => {
         /* nothing */
       }
     };

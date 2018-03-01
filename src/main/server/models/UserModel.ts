@@ -1,4 +1,4 @@
-import { Schema, Document, model, Types } from 'mongoose';
+import { Schema, Document, model, Types, Model } from 'mongoose';
 
 import * as crypto from 'crypto';
 
@@ -34,14 +34,14 @@ const schema = new Schema({
   losses: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', next => {
+}).pre('save', function(this: UserDocument, next) {
   this.updated = new Date();
   next();
 });
 
 // tslint:disable-next-line:variable-name
-const UserModel = model<UserDocument>('User', schema);
-export default UserModel;
+export const UserModel = model<UserDocument>('User', schema);
+export default UserModel as Model<UserDocument>;
 
 export class UserService extends UserModel {
   public static loadByAccount(account: string, withSource: boolean) {

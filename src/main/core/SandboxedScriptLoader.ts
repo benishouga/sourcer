@@ -1,6 +1,6 @@
 import ScriptLoader, { ConsoleLike } from './ScriptLoader';
 
-import { VM, VMScript } from 'vm2';
+import { VM } from 'vm2';
 
 export default class SandboxedScriptLoader implements ScriptLoader {
   private vm: VM;

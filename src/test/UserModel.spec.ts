@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import db from '../main/server/db';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 import UserModel, { UserDocument, UserService } from '../main/server/models/UserModel';
 import MatchModel, { MatchService } from '../main/server/models/MatchModel';

@@ -1,24 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  Grid,
-  Cell,
-  Card,
-  CardTitle,
-  CardText,
-  CardActions,
-  Button,
-  List,
-  ListItem,
-  ListItemContent,
-  Icon
-} from 'react-mdl';
+import { Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon } from 'react-mdl';
 import { strings } from '../resources/Strings';
 
-import Auth from '../../service/Auth';
-
-interface ProfileCardProps {
+export interface ProfileCardProps {
   user: UserResponse;
   showWriteCode?: boolean;
   showFight?: boolean;

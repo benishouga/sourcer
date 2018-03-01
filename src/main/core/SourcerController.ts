@@ -1,11 +1,10 @@
 import Controller from './Controller';
 import Sourcer from './Sourcer';
-import Field from './Field';
 import Configs from './Configs';
 import Utils from './Utils';
-import FireParam from './FireParam';
 import MissileController from './MissileController';
 import { ConsoleLike } from './ScriptLoader';
+import { LaserParam, MissileParam } from './FireParam';
 
 export default class SourcerController extends Controller {
   public shield: () => number;
@@ -23,6 +22,8 @@ export default class SourcerController extends Controller {
 
   public fireLaser: (direction: number, power: number) => void;
   public fireMissile: (bot: (controller: MissileController) => void) => void;
+
+  public fuel: () => number;
 
   public log: (...messages: any[]) => void;
   public scanDebug: (direction: number, angle: number, renge?: number) => void;
@@ -76,12 +77,12 @@ export default class SourcerController extends Controller {
 
     this.fireLaser = (direction, power) => {
       command.validate();
-      command.fire = FireParam.laser(power, direction);
+      command.fire = new LaserParam(power, direction);
     };
 
     this.fireMissile = bot => {
       command.validate();
-      command.fire = FireParam.missile(bot);
+      command.fire = new MissileParam(bot);
     };
 
     const isString = (value: any): value is string => Object.prototype.toString.call(value) === '[object String]';

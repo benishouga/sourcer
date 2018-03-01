@@ -4,8 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import routes from './components/routes';
 import Auth from './service/Auth';
 import Config from './service/Config';
-import Match from './service/Match';
 
-Promise.all([Auth.login(), Config.load()]).then(([auth, config]) => {
+Promise.all([Auth.login(), Config.load()]).then(([_auth, _config]) => {
   render(<Router>{routes}</Router>, document.getElementById('app'));
 });

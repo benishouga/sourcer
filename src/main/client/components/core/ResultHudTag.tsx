@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { ResultDump, ProfileDump } from '../../../core/Dump';
-import Screen from './Screen';
 
-interface ResultHudTagProps {
+export interface ResultHudTagProps {
   result: ResultDump;
   profile: ProfileDump | null;
   screenHeight: number;

@@ -1,7 +1,7 @@
 import ScriptLoader, { ConsoleLike } from './ScriptLoader';
 
 function construct(constructor: any, args: string[]) {
-  function fun() {
+  function fun(this: any) {
     return constructor.apply(this, args);
   }
   fun.prototype = constructor.prototype;
@@ -11,12 +11,11 @@ function construct(constructor: any, args: string[]) {
 export default class ExposedScriptLoader implements ScriptLoader {
   private argValues: any[];
   private argNames: string[];
-  private banlist: string[];
   private console: ConsoleLike;
 
   constructor() {
     this.console = {
-      log: (...message) => {
+      log: (..._message) => {
         /* nothing.. */
       }
     };

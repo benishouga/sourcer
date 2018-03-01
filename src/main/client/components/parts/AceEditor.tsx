@@ -4,7 +4,7 @@ import * as Ace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/chrome';
 
-interface AceEditorProps {
+export interface AceEditorProps {
   className?: string;
   code: string;
   onChange?: (value: string) => void;
@@ -14,10 +14,10 @@ interface AceEditorProps {
 }
 
 export default class AceEditor extends React.Component<AceEditorProps, {}> {
-  private editor: Ace.Editor | null;
+  private editor: Ace.Editor | null = null;
   private silent: boolean = false;
 
-  private static defaultProps = {
+  public static defaultProps = {
     code: '//write your code here',
     cursorStart: 1
   };
@@ -40,7 +40,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     this.editor.on('change', this.onChange.bind(this));
     this.editor.commands.addCommand({
       name: 'Save',
-      exec: (editor: Ace.Editor) => {
+      exec: (_editor: Ace.Editor) => {
         if (this.props.onSave) {
           this.props.onSave();
         }
@@ -50,7 +50,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
     });
   }
 
-  public shouldComponentUpdate(nextProps: AceEditorProps) {
+  public shouldComponentUpdate(_nextProps: AceEditorProps) {
     return false;
   }
 
@@ -66,7 +66,7 @@ export default class AceEditor extends React.Component<AceEditorProps, {}> {
       this.editor = null;
     }
     const refs = this.refs as any;
-    const node = ReactDOM.findDOMNode(refs.root);
+    const node = ReactDOM.findDOMNode(refs.root) as HTMLElement;
     node.removeEventListener('keydown', this.onKeyDown);
   }
 

@@ -1,7 +1,6 @@
 import Shot from './Shot';
 import Field from './Field';
 import Sourcer from './Sourcer';
-import Utils from './Utils';
 import V from './V';
 import Configs from './Configs';
 

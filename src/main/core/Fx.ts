@@ -4,7 +4,7 @@ import { FxDump } from './Dump';
 
 export default class Fx {
   private frame: number;
-  public id: number;
+  public id: number = -1;
 
   constructor(public field: Field, public position: V, public speed: V, public length: number) {
     this.frame = 0;

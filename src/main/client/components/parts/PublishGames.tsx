@@ -1,16 +1,11 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemContent, ListItemAction, Button, Tooltip, FABButton, Icon } from 'react-mdl';
-import * as moment from 'moment';
+import { ListItem, ListItemContent, ListItemAction, Tooltip, FABButton, Icon } from 'react-mdl';
+import moment from 'moment';
 
 import { strings } from '../resources/Strings';
 
-import { AbortController } from '../../utils/fetch';
-import User from '../../service/User';
-import Config from '../../service/Config';
-
-interface PublishGamesProps {
+export interface PublishGamesProps {
   matches?: MatchResponse[];
 }
 

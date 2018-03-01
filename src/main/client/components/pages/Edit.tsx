@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Grid, Cell, Button, Icon, Card, CardTitle, CardMenu, Snackbar, Spacer, Menu, MenuItem } from 'react-mdl';
+import { Redirect } from 'react-router-dom';
+import { Grid, Cell, Button, Icon, Card, CardTitle, Snackbar, Spacer } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
@@ -10,11 +10,10 @@ import ArenaTag from '../parts/ArenaTag';
 import { PlayerInfo } from '../../arenaWorker';
 import BotSelector from '../parts/BotSelector';
 import User from '../../service/User';
-import Auth from '../../service/Auth';
 
 import { fiddle } from './fiddles/fiddle';
 
-interface EditState {
+export interface EditState {
   user?: UserResponse;
   playerInfo: PlayerInfo | null;
   enemyInfo?: PlayerInfo;
@@ -32,7 +31,7 @@ export default class Edit extends React.Component<{}, EditState> {
     };
   }
 
-  private editingSource: string;
+  private editingSource: string = '';
 
   private onTextChange = (value: string) => {
     this.editingSource = value;
@@ -48,10 +47,9 @@ export default class Edit extends React.Component<{}, EditState> {
     this.reload();
   };
 
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
 
   public async componentDidMount() {
-    this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const user = await User.select({ signal }).catch(error => console.log(error));
     if (!user || user.source === undefined) {
@@ -69,7 +67,7 @@ export default class Edit extends React.Component<{}, EditState> {
     this.abortController.abort();
   }
 
-  public async save(event?: React.FormEvent<{}>) {
+  public async save(_event?: React.FormEvent<{}>) {
     const signal = this.abortController.signal;
     await User.update({ signal, user: { source: this.editingSource } }).catch(error => console.log(error));
     this.showSavedSnackbar();
@@ -81,7 +79,7 @@ export default class Edit extends React.Component<{}, EditState> {
     this.setState({ redirectToTop: true });
   }
 
-  public reload(event?: React.FormEvent<{}>) {
+  public reload(_event?: React.FormEvent<{}>) {
     (this.refs.arena as ArenaTag).onReload();
   }
 

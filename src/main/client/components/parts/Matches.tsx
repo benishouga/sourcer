@@ -1,20 +1,19 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemContent, ListItemAction, Button, Tooltip, FABButton, Icon } from 'react-mdl';
-import * as moment from 'moment';
+import { ListItem, ListItemContent, ListItemAction, Tooltip, FABButton, Icon } from 'react-mdl';
+import moment from 'moment';
 
 import { strings } from '../resources/Strings';
 
 import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 
-interface MatchesProps {
+export interface MatchesProps {
   account?: string;
   matches?: MatchResponse[];
 }
 
-interface MatchesState {
+export interface MatchesState {
   matches?: MatchResponse[];
 }
 
@@ -24,7 +23,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     this.state = { matches: props.matches };
   }
 
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
 
   public componentWillReceiveProps(nextProps: MatchesProps) {
     this.setState({ matches: nextProps.matches });
@@ -52,7 +51,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     }
   }
 
-  public async componentWillUpdate(nextProps: MatchesProps, nextState: MatchesState) {
+  public async componentWillUpdate(nextProps: MatchesProps, _nextState: MatchesState) {
     if (!nextProps.matches) {
       this.abortController.abort();
       this.loadMatches(nextProps.account);

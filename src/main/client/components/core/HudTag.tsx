@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { PlayersDump, ResultDump, ProfileDump } from '../../../core/Dump';
-import V from '../../../core/V';
-import Screen from './Screen';
+import { PlayersDump, ResultDump } from '../../../core/Dump';
 import ResultHudTag from './ResultHudTag';
 import ReadyHudTag from './ReadyHudTag';
 
-interface HudTagProps {
+export interface HudTagProps {
   players: PlayersDump;
   frame: number;
   result: ResultDump | null;

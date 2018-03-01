@@ -7,7 +7,7 @@ export interface Tree {
   height: number;
 }
 
-interface TreeTagProps {
+export interface TreeTagProps {
   model: Tree;
   far: number;
 }

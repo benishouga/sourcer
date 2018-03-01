@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
@@ -14,7 +14,7 @@ import Config from '../../service/Config';
 import PublishGames from '../parts/PublishGames';
 import Match from '../../service/Match';
 
-interface TopState {
+export interface TopState {
   user?: UserResponse;
   matches?: MatchResponse[];
 }
@@ -24,10 +24,9 @@ export default class Top extends React.Component<{}, TopState> {
     super(props);
     this.state = {};
   }
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
 
   public async componentDidMount() {
-    this.abortController = new AbortController();
     if (Auth.status.authenticated) {
       const signal = this.abortController.signal;
       const user = await User.select({ signal }).catch(error => console.log(error));

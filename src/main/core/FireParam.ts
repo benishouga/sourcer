@@ -1,21 +1,25 @@
 import MissileController from './MissileController';
 
-export default class FireParam {
-  public static laser(power: number, direction: number): FireParam {
-    const result = new FireParam();
-    result.power = Math.min(Math.max(power || 8, 3), 8);
-    result.direction = direction;
-    result.shotType = 'Laser';
-    return result;
+export default abstract class FireParam {
+  constructor(private shotType: string) {}
+  public isLaser(): this is LaserParam {
+    return this.shotType === 'Laser';
   }
-  public static missile(bot: (controller: MissileController) => void) {
-    const result = new FireParam();
-    result.bot = bot;
-    result.shotType = 'Missile';
-    return result;
+  public isMissile(): this is MissileParam {
+    return this.shotType === 'Missile';
   }
-  public bot: (controller: MissileController) => void;
-  public direction: number;
-  public power: number;
-  public shotType: string;
+}
+
+export class MissileParam extends FireParam {
+  constructor(public bot: (controller: MissileController) => void) {
+    super('Missile');
+  }
+}
+
+export class LaserParam extends FireParam {
+  constructor(power: number, public direction: number) {
+    super('Laser');
+    this.power = Math.min(Math.max(power || 8, 3), 8);
+  }
+  public power: number = 0;
 }

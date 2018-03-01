@@ -1,8 +1,5 @@
 import * as assert from 'assert';
-import Utils from '../main/core/Utils';
-import V from '../main/core/V';
 import { arena } from '../main/server/Arena';
-import * as fs from 'fs';
 
 const botSource = `var missile = function(ctrl) {
   if(ctrl.scanEnemy(90, 180)) {
@@ -49,7 +46,6 @@ describe('NodeArena', () => {
   it('arena', function() {
     this.timeout(15000);
 
-    const startTime = new Date().getTime();
     return arena([
       { account: 'player1', name: 'player1', color: '#f00', source: botSource },
       { account: 'player2', name: 'player2', color: '#0f0', source: fiddleSource }
@@ -73,7 +69,6 @@ describe('NodeArena', () => {
       while(true);
     `;
 
-    const startTime = new Date().getTime();
     return arena([
       { account: 'player1', name: 'player1', color: '#f00', source: botSource },
       { account: 'player2', name: 'player2', color: '#0f0', source: code }
@@ -99,7 +94,6 @@ describe('NodeArena', () => {
       };
     `;
 
-    const startTime = new Date().getTime();
     return arena([
       { account: 'player1', name: 'player1', color: '#f00', source: code },
       { account: 'player2', name: 'player2', color: '#0f0', source: botSource }

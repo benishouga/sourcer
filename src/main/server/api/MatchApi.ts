@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { arena } from '../Arena';
-import { GameDump } from '../../core/Dump';
 import { UserDocument, UserService } from '../models/UserModel';
-import MatchModel, { MatchDocument, MatchService } from '../models/MatchModel';
+import MatchModel, { MatchService } from '../models/MatchModel';
 import ResponseCreator from './ResponseCreator';
 import Zip from '../utils/Zip';
 import Env from '../Env';

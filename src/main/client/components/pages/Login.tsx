@@ -1,26 +1,13 @@
 import * as React from 'react';
-import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
-import {
-  List,
-  ListItem,
-  ListItemContent,
-  Card,
-  CardTitle,
-  CardText,
-  CardActions,
-  Button,
-  Textfield,
-  Icon,
-  Spacer
-} from 'react-mdl';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { Card, CardTitle, CardText, CardActions, Button, Textfield, Icon, Spacer } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
 import Auth from '../../service/Auth';
 import ComponentExplorer from '../../utils/ComponentExplorer';
-import { AbortController } from '../../utils/fetch';
 
-interface LoginState {
+export interface LoginState {
   error?: boolean;
   redirectToReferrer: boolean;
   admin: boolean;

@@ -1,6 +1,6 @@
 import V from './V';
 
-interface ActorDump {
+export interface ActorDump {
   /** Id */
   i: number;
   /** Position */

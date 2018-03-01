@@ -1,10 +1,6 @@
-import Actor from './Actor';
 import Shot from './Shot';
 import Field from './Field';
 import Sourcer from './Sourcer';
-import Utils from './Utils';
-import V from './V';
-import Fx from './Fx';
 import Configs from './Configs';
 import MissileCommand from './MissileCommand';
 import MissileController from './MissileController';
@@ -19,7 +15,7 @@ export default class Missile extends Shot {
 
   public command: MissileCommand;
   public controller: MissileController;
-  private debugDump: DebugDump;
+  private debugDump: DebugDump = { logs: [], arcs: [] };
 
   constructor(field: Field, owner: Sourcer, public bot: (controller: MissileController) => void) {
     super(field, owner, 'Missile');
@@ -42,7 +38,9 @@ export default class Missile extends Shot {
       this.command.accept();
       this.controller.preThink();
       this.debugDump = { logs: [], arcs: [] };
-      this.controller.connectConsole(this.owner.scriptLoader.getExposedConsole());
+      if (this.owner.scriptLoader) {
+        this.controller.connectConsole(this.owner.scriptLoader.getExposedConsole());
+      }
       this.bot(this.controller);
     } catch (error) {
       this.command.reset();
@@ -77,7 +75,7 @@ export default class Missile extends Shot {
 
   public dump(): ShotDump {
     const superDump = super.dump();
-    if (this.owner.scriptLoader.isDebuggable()) {
+    if (this.owner.scriptLoader && this.owner.scriptLoader.isDebuggable()) {
       superDump.debug = this.debugDump;
     }
     return superDump;

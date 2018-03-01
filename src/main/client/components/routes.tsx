@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import App from './pages/App';
 import MatchNew from './pages/MatchNew';
 import MatchShow from './pages/MatchShow';
@@ -11,7 +11,6 @@ import Logout from './pages/Logout';
 import SignUp from './pages/SignUp';
 import Auth from '../service/Auth';
 import Official from './pages/Official';
-import PublishGames from './parts/PublishGames';
 import Config from '../service/Config';
 
 export interface RouteParams {
@@ -70,7 +69,7 @@ const routes = (
       <PublishGamesRoute path="/match/:matchId" component={MatchShow} />
       <RequireAuthRoute path="/edit" component={Edit} />
       <RequireAuthRoute path="/user/:account" component={UserShow} />
-      <RequireAuthRoute path="/official" component={Official} />
+      <RequireAdminRoute path="/official" component={Official} />
       <Route component={Top} />
     </Switch>
   </App>

@@ -1,23 +1,19 @@
-import * as express from 'express';
+import express from 'express';
 import * as fs from 'fs';
-import * as React from 'react';
-import { renderToString } from 'react-dom/server';
-import { match } from 'react-router-dom';
-import * as history from 'history';
 
 import apis from './api/apis';
 
 import * as bodyParser from 'body-parser';
-import * as session from 'express-session';
-import * as cookieParser from 'cookie-parser';
-import * as connectMongo from 'connect-mongo';
+import expressSession from 'express-session';
+import cookieParser from 'cookie-parser';
+import connectMongo from 'connect-mongo';
 
 import db from './db';
 import Env from './Env';
 
 (async () => {
   // tslint:disable-next-line:variable-name
-  const MongoStore = connectMongo(session);
+  const MongoStore = connectMongo(expressSession);
 
   const mongoDbUri = Env.mongodbUri;
   if (!mongoDbUri) {
@@ -27,7 +23,7 @@ import Env from './Env';
   const mongooseConnection = await db(mongoDbUri);
   const app = express();
 
-  app.use((req, res, next) => {
+  app.use((req, _res, next) => {
     console.log('--------------------------');
     console.log(req.method, req.url);
     console.log(req.headers);
@@ -40,7 +36,7 @@ import Env from './Env';
   app.use(bodyParser.json());
 
   app.use(
-    session({
+    expressSession({
       secret: Env.sessionSecret || 'seecreeeeet',
       resave: false,
       saveUninitialized: true,
@@ -50,7 +46,7 @@ import Env from './Env';
 
   apis(app);
 
-  app.use((req, res) => {
+  app.use((_req, res) => {
     fs.readFile(__dirname + '/index.html', (error, text) => {
       if (error) {
         return res.status(503).end();

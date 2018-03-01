@@ -6,7 +6,7 @@ export interface Dome {
   size: number;
 }
 
-interface DomeTagProps {
+export interface DomeTagProps {
   model: Dome;
   far: number;
 }

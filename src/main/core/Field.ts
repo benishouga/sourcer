@@ -2,12 +2,11 @@ import V from './V';
 import Actor from './Actor';
 import Sourcer from './Sourcer';
 import Shot from './Shot';
-import Missile from './Missile';
 import Fx from './Fx';
 import Utils from './Utils';
 import TickEventListener from './TickEventListener';
-import { FrameDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump, DebugDump } from './Dump';
-import ScriptLoader, { ScriptLoaderConstructor } from './ScriptLoader';
+import { FrameDump, ResultDump, SourcerDump, ShotDump, FxDump, PlayersDump } from './Dump';
+import { ScriptLoaderConstructor } from './ScriptLoader';
 
 const DEMO_FRAME_LENGTH = 128;
 
@@ -17,8 +16,8 @@ export default class Field {
   private shots: Shot[];
   private fxs: Fx[];
   private frame: number;
-  private result: ResultDump;
-  public center: number;
+  private result?: ResultDump;
+  public center: number = 0;
   public isFinished: boolean = false;
 
   private dummyEnemy: V = new V(0, 150);
@@ -279,7 +278,6 @@ export default class Field {
       sourcersDump.push(actor.dump());
     });
 
-    const isThinkable = (x: Shot): x is Missile => x.type === 'Missile';
     this.shots.forEach(actor => {
       shotsDump.push(actor.dump());
     });

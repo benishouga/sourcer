@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SourcerDump, FrameDump, ResultDump, PlayersDump, ShotDump } from '../../../core/Dump';
+import { SourcerDump, FrameDump, PlayersDump, ShotDump } from '../../../core/Dump';
 import Screen from './Screen';
 import SourcerTag from './SourcerTag';
 import LaserTag from './LaserTag';
@@ -8,7 +8,7 @@ import FxTag from './FxTag';
 import BackgroundTag from './BackgroundTag';
 import Arc from './Arc';
 
-interface FieldTagProps {
+export interface FieldTagProps {
   height: number;
   width: number;
   scale: number;

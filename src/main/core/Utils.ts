@@ -1,5 +1,4 @@
 import V from './V';
-import Consts from './Consts';
 
 const EPSILON = 10e-12;
 

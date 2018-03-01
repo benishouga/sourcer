@@ -4,10 +4,10 @@ import Configs from './Configs';
 import FireParam from './FireParam';
 
 export default class SourcerCommand extends Command {
-  public ahead: number;
-  public ascent: number;
-  public turn: boolean;
-  public fire: FireParam | null;
+  public ahead: number = 0;
+  public ascent: number = 0;
+  public turn: boolean = false;
+  public fire: FireParam | null = null;
 
   constructor(public sourcer: Sourcer) {
     super();

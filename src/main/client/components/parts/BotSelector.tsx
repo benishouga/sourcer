@@ -12,12 +12,12 @@ import { fewMissile } from '../pages/fiddles/fewMissile';
 import { fixedBattery } from '../pages/fiddles/fixedBattery';
 import { standard } from '../pages/fiddles/standard';
 
-interface BotSelectorProps {
+export interface BotSelectorProps {
   onSelect?: (source: string) => void;
   selected?: string;
 }
 
-interface BotSelectorState {
+export interface BotSelectorState {
   selectedSource?: string;
   isShowCode?: boolean;
   selectButtonLabel?: string;

@@ -1,11 +1,9 @@
-import Field from './Field';
 import Actor from './Actor';
 
 export default class Controller {
   public frame: () => number;
   public altitude: () => number;
   public wait: (frame: number) => void;
-  public fuel: () => number;
 
   private framesOfLife: number = 0;
   public preThink = () => {

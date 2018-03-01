@@ -1,5 +1,4 @@
 import Controller from './Controller';
-import Field from './Field';
 import Missile from './Missile';
 import Utils from './Utils';
 import { ConsoleLike } from './ScriptLoader';
@@ -11,6 +10,7 @@ export default class MissileController extends Controller {
   public speedDown: () => void;
   public turnRight: () => void;
   public turnLeft: () => void;
+  public fuel: () => number;
 
   public log: (...messages: any[]) => void;
   public scanDebug: (direction: number, angle: number, renge?: number) => void;
@@ -19,7 +19,6 @@ export default class MissileController extends Controller {
     super(missile);
     this.direction = () => missile.direction;
 
-    const field = missile.field;
     const command = missile.command;
 
     this.fuel = () => missile.fuel;

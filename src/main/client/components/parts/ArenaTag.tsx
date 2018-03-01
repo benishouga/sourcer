@@ -1,17 +1,14 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import Replayer from './Replayer';
 import { Data, PlayerInfo } from '../../arenaWorker';
-import { GameDump, ResultDump, PlayersDump } from '../../../core/Dump';
+import { GameDump } from '../../../core/Dump';
 
-const COLORS = ['#866', '#262', '#c55', '#44b'];
-
-class Arena {
+export class Arena {
   public worker: Worker;
   public game: GameDump;
-  public error: string;
+  public error: string | null = null;
   public endOfGame = false;
-  public loadedFrame: number;
+  public loadedFrame: number | null = null;
   private thinking: number | null = null;
   private timeout = () => {
     const timeoutedName = this.thinking !== null ? this.game.players[this.thinking].name : null;
@@ -99,7 +96,7 @@ class Arena {
   }
 }
 
-interface ArenaProps {
+export interface ArenaProps {
   width?: number;
   height?: number;
   scale: number;
@@ -108,7 +105,7 @@ interface ArenaProps {
   path?: string;
 }
 
-interface ArenaState {
+export interface ArenaState {
   arena: Arena | null;
   loadedFrame: number;
   dynamicWidth: number;
@@ -117,9 +114,9 @@ interface ArenaState {
 }
 
 export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
-  private animationFrameHandler: number | null;
+  private animationFrameHandler: number | null = null;
 
-  private static defaultProps = {
+  public static defaultProps = {
     width: -1,
     height: 384,
     scale: 1.0
@@ -154,12 +151,6 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
   }
 
   public render() {
-    const scale = this.props.scale;
-    const width = (this.props.width !== -1 ? this.props.width : this.state.dynamicWidth) || 512;
-    const height = this.props.height || 384;
-    const scaledWidth = width / scale;
-    const scaledHeight = height / scale;
-
     if (this.state.gameDump) {
       return (
         <Replayer

@@ -1,4 +1,4 @@
-import { Types, Document, Schema, Model, model } from 'mongoose';
+import { Types, Document, Schema, model, Model } from 'mongoose';
 import { UserDocument, UserService } from './UserModel';
 
 export type MatchDocument = Document & {
@@ -16,14 +16,14 @@ const schema = new Schema({
   dump: { type: String },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', next => {
+}).pre('save', function(this: MatchDocument, next) {
   this.updated = new Date();
   next();
 });
 
 // tslint:disable-next-line:variable-name
-const MatchModel = model<MatchDocument>('Match', schema);
-export default MatchModel;
+export const MatchModel = model<MatchDocument>('Match', schema);
+export default MatchModel as Model<MatchDocument>;
 
 export class MatchService extends MatchModel {
   public static load(argId: Types.ObjectId | string) {

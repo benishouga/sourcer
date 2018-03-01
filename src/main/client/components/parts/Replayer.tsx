@@ -6,11 +6,11 @@ import Configs from '../../../core/Configs';
 
 import FieldTag from '../core/FieldTag';
 import HudTag from '../core/HudTag';
-import { GameDump, FrameDump, ResultDump, ProfileDump, SourcerDump, PlayersDump, ShotDump } from '../../../core/Dump';
+import { GameDump, FrameDump, ProfileDump, SourcerDump, PlayersDump, ShotDump } from '../../../core/Dump';
 import ComponentExplorer from '../../utils/ComponentExplorer';
 import { strings } from '../resources/Strings';
 
-interface ReplayerProps {
+export interface ReplayerProps {
   gameDump: GameDump;
   error?: string | null;
   width?: number;
@@ -19,16 +19,16 @@ interface ReplayerProps {
   onReload?: () => void;
 }
 
-interface ReplayerState {
+export interface ReplayerState {
   playing?: boolean;
   frame: number;
   dynamicWidth?: number;
 }
 
 export default class Replayer extends React.Component<ReplayerProps, ReplayerState> {
-  private animationFrameHandler: number | null;
+  private animationFrameHandler: number | null = null;
 
-  private static defaultProps = {
+  public static defaultProps = {
     gameDump: {},
     width: -1,
     height: 384,

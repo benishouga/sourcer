@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserModel, { UserDocument, UserService } from '../models/UserModel';
+import { UserDocument, UserService } from '../models/UserModel';
 import Validator from '../utils/Validator';
 import ResponseCreator from './ResponseCreator';
 import Normalizer from '../utils/Normalizer';

@@ -1,8 +1,7 @@
 import { EventEmitter } from 'events';
-import Auth from './Auth';
 import { get, post, put, AbortSignal } from '../utils/fetch';
 
-interface SignUpParameter {
+export interface SignUpParameter {
   account: string;
   password: string;
   name: string;

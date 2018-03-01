@@ -125,7 +125,7 @@ Array.prototype.forEach.call(document.querySelectorAll('textarea.code'), (elemen
     session.setTabSize(2);
     editor.setOption('maxLines', 40);
     editor.$blockScrolling = Infinity;
-    session.on('change', e => {
+    session.on('change', _e => {
       element.value = editor.getValue();
     });
     editor.setValue(element.value);

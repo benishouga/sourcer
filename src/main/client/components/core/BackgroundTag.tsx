@@ -4,11 +4,11 @@ import DomeTag, { Dome } from './DomeTag';
 import Screen from './Screen';
 import Utils from '../../../core/Utils';
 
-interface BackgroundProps {
+export interface BackgroundProps {
   screen: Screen;
 }
 
-interface BackgroundState {
+export interface BackgroundState {
   trees1: Tree[];
   trees2: Tree[];
   trees3: Tree[];

@@ -1,6 +1,4 @@
 import Field from '../core/Field';
-import Sourcer from '../core/Sourcer';
-import Utils from '../core/Utils';
 import TickEventListener from '../core/TickEventListener';
 import { PlayersDump, FrameDump, ResultDump } from '../core/Dump';
 import ExposedScriptLoader from '../core/ExposedScriptLoader';
@@ -25,38 +23,38 @@ export type Data =
   | EndOfGameCommand
   | ErrorCommand;
 
-interface NextCommand {
+export interface NextCommand {
   command: 'Next';
   issuedId: number;
 }
 
-interface PlayersCommand {
+export interface PlayersCommand {
   command: 'Players';
   players: PlayersDump;
 }
 
-interface PreThinkCommand {
+export interface PreThinkCommand {
   command: 'PreThink';
   id: number;
 }
 
-interface PostThinkCommand {
+export interface PostThinkCommand {
   command: 'PostThink';
   id: number;
   loadedFrame: number;
 }
 
-interface FinishedCommand {
+export interface FinishedCommand {
   command: 'Finished';
   result: ResultDump;
 }
 
-interface EndOfGameCommand {
+export interface EndOfGameCommand {
   command: 'EndOfGame';
   frames: FrameDump[];
 }
 
-interface ErrorCommand {
+export interface ErrorCommand {
   command: 'Error';
   error: string;
 }
@@ -125,7 +123,7 @@ onmessage = ({ data }) => {
   };
 
   const field = new Field(ExposedScriptLoader, isDemo);
-  players.forEach((value, index) => {
+  players.forEach(value => {
     field.registerSourcer(value.source, value.name, value.name, value.color);
   });
 

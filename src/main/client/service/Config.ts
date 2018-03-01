@@ -1,5 +1,4 @@
-import { EventEmitter } from 'events';
-import { get, post, del, AbortSignal } from '../utils/fetch';
+import { get } from '../utils/fetch';
 
 export default class Config {
   private static response: ConfigResponse;

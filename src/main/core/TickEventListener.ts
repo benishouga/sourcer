@@ -1,4 +1,3 @@
-import Sourcer from './Sourcer';
 import { FrameDump, ResultDump } from './Dump';
 
 interface TickEventListener {

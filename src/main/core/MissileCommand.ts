@@ -1,13 +1,12 @@
 import Command from './Command';
 import Missile from './Missile';
-import Utils from './Utils';
 import Configs from './Configs';
 import V from './V';
 
 export default class MissileCommand extends Command {
-  public speedUp: number;
-  public speedDown: number;
-  public turn: number;
+  public speedUp: number = 0;
+  public speedDown: number = 0;
+  public turn: number = 0;
 
   constructor(public missile: Missile) {
     super();

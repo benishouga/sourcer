@@ -12,13 +12,7 @@ import Laser from './Laser';
 import Missile from './Missile';
 import { SourcerDump, DebugDump } from './Dump';
 import Fx from './Fx';
-import ScriptLoader, { ConsoleLike } from './ScriptLoader';
-
-interface ExportScope {
-  module: {
-    exports: ((controller: SourcerController) => void) | null;
-  };
-}
+import ScriptLoader from './ScriptLoader';
 
 export default class Sourcer extends Actor {
   public alive = true;
@@ -28,10 +22,10 @@ export default class Sourcer extends Actor {
   public fuel = Configs.INITIAL_FUEL;
 
   public command: SourcerCommand;
-  public scriptLoader: ScriptLoader;
+  public scriptLoader?: ScriptLoader;
   private controller: SourcerController;
   private bot: ((controller: SourcerController) => void) | null = null;
-  private debugDump: DebugDump;
+  private debugDump: DebugDump = { logs: [], arcs: [] };
 
   constructor(
     field: Field,
@@ -69,7 +63,9 @@ export default class Sourcer extends Actor {
       this.command.accept();
       this.controller.preThink();
       this.debugDump = { logs: [], arcs: [] };
-      this.controller.connectConsole(this.scriptLoader.getExposedConsole());
+      if (this.scriptLoader) {
+        this.controller.connectConsole(this.scriptLoader.getExposedConsole());
+      }
       this.bot(this.controller);
     } catch (error) {
       this.debugDump.logs.push({ message: `Sourcer function error: ${error.message}`, color: 'red' });
@@ -131,14 +127,14 @@ export default class Sourcer extends Actor {
   }
 
   public fire(param: FireParam) {
-    if (param.shotType === 'Laser') {
+    if (param.isLaser()) {
       const direction = this.opposite(param.direction);
       const shot = new Laser(this.field, this, direction, param.power);
       shot.reaction(this);
       this.field.addShot(shot);
     }
 
-    if (param.shotType === 'Missile') {
+    if (param.isMissile()) {
       if (0 < this.missileAmmo) {
         const missile = new Missile(this.field, this, param.bot);
         missile.reaction(this);
@@ -180,7 +176,7 @@ export default class Sourcer extends Actor {
       a: this.missileAmmo,
       f: Math.ceil(this.fuel)
     };
-    if (this.scriptLoader.isDebuggable()) {
+    if (this.scriptLoader && this.scriptLoader.isDebuggable()) {
       dump.debug = this.debugDump;
     }
     return dump;

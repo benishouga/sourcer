@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import {
   Grid,
   Cell,
@@ -22,7 +22,7 @@ import User from '../../service/User';
 import Match from '../../service/Match';
 import ProfileCard from '../parts/ProfileCard';
 
-interface OfficialState {
+export interface OfficialState {
   users?: UserResponse[];
   player1?: UserResponse;
   player1Loading?: boolean;
@@ -33,7 +33,7 @@ interface OfficialState {
 }
 
 export default class Official extends React.Component<RouteComponentProps<{}>, OfficialState> {
-  private dialog: Dialog;
+  private dialog?: Dialog;
 
   constructor(props: RouteComponentProps<{}>) {
     super(props);
@@ -56,14 +56,14 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     this.setState({ redirectTo: `/match/${match._id}` });
   }
 
-  private abortController: AbortController;
+  private abortController: AbortController = new AbortController();
   public async componentDidMount() {
-    const dialog = ReactDOM.findDOMNode(this.dialog) as any;
-    if (!dialog.showModal) {
-      (window as any).dialogPolyfill.registerDialog(dialog);
+    if (this.dialog) {
+      const dialog = ReactDOM.findDOMNode(this.dialog) as any;
+      if (!dialog.showModal) {
+        (window as any).dialogPolyfill.registerDialog(dialog);
+      }
     }
-
-    this.abortController = new AbortController();
     const signal = this.abortController.signal;
     const users = await User.all({ signal }).catch(error => console.log(error));
     if (users) {
