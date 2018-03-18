@@ -18,7 +18,7 @@
     },
     "ADMIN_PASSWORD": {
       "description": "Password of 'admin' with special authority.",
-      "required": true,
+      "required": false,
       "value": ""
     },
     "SESSION_SECRET": {

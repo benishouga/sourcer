@@ -8,7 +8,7 @@
     "build:common:resource": "npm-run-all -p build:common:resource:*",
     "build:common": "npm-run-all -p build:common:*",
     "build:client:statics": "cpx \"./src/statics/**/*.*\" ./docs",
-    "build:client:css": "postcss \"src/css/main.css\" -o ./docs/main.css",
+    "build:client:css": "postcss --no-map \"src/css/main.css\" -o ./docs/main.css",
     "build:client:bundle": "webpack --config=config/webpack.prod.js --mode=production",
     "build:debug:client:bundle": "webpack --config=config/webpack.dev.js --mode=development",
     "prebuild:debug:client": "mkdirp ./docs",

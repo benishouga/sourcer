@@ -37,7 +37,7 @@ export async function create(req: Request, res: Response) {
   }
 
   if (account === 'admin') {
-    if (password === Env.adminPassword) {
+    if (Env.adminPassword && password === Env.adminPassword) {
       req.session.authenticated = true;
       req.session.admin = true;
       req.session.user = null;
@@ -52,7 +52,7 @@ export async function create(req: Request, res: Response) {
     req.session.admin = false;
     req.session.user = null;
     return res
-      .status(200)
+      .status(403)
       .type('json')
       .send(ResponseCreator.auth(req.session))
       .end();
@@ -67,6 +67,7 @@ export async function create(req: Request, res: Response) {
     req.session.user = null;
     return res
       .status(403)
+      .type('json')
       .send(ResponseCreator.auth(req.session))
       .end();
   }
