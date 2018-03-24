@@ -94,7 +94,7 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     }
 
     return (
-      <div>
+      <div data-test="page-match-new">
         <Grid>
           <Cell col={12}>
             <Link to="/">{resource.returnTop}</Link>

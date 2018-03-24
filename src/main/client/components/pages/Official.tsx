@@ -167,7 +167,7 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     }
 
     return (
-      <Grid>
+      <Grid data-test="page-official">
         <Cell col={5}>{player1}</Cell>
         <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
           <div style={{ height: '120px' }} />

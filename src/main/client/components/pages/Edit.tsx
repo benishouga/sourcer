@@ -108,7 +108,7 @@ export default class Edit extends React.Component<{}, EditState> {
       }
 
       return (
-        <Grid>
+        <Grid data-test="page-edit">
           <Cell col={6} tablet={12} phone={12}>
             <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
               <CardTitle>

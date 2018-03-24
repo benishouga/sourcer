@@ -42,14 +42,20 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
 
     const resource = strings();
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit.bind(this)} data-test="page-login">
         <Card shadow={0} style={{ margin: 'auto' }}>
           <CardTitle expand style={{ alignItems: 'flex-start' }}>
             {resource.loginTitle}
           </CardTitle>
           <CardText>
-            <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" />
-            <Textfield label={resource.fieldLabelPassword} floatingLabel ref="password" type="password" />
+            <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" data-test="account" />
+            <Textfield
+              label={resource.fieldLabelPassword}
+              floatingLabel
+              ref="password"
+              type="password"
+              data-test="password"
+            />
             {this.state.error && <p>{resource.badRequest}</p>}
           </CardText>
           <CardActions
@@ -61,7 +67,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
               alignItems: 'center'
             }}
           >
-            <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this)} data-test="login">
               {resource.login}
             </Button>
             <Spacer />

@@ -11,8 +11,10 @@ export default class Logout extends React.Component<{}, {}> {
   public render() {
     const resource = strings();
     return (
-      <Grid>
-        <Cell col={12}>{resource.logoutMessage}</Cell>
+      <Grid data-test="page-logout">
+        <Cell col={12} data-test="logoutMessage">
+          {resource.logoutMessage}
+        </Cell>
       </Grid>
     );
   }

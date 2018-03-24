@@ -12,7 +12,7 @@ describe('User', () => {
   let user: UserDocument | null = null;
   before(async function() {
     this.timeout(5000);
-    const mongoDbUri = Env.mongoTest;
+    const mongoDbUri = Env.instance.mongoTest;
     if (!mongoDbUri) {
       throw new Error('env.MONGO_TEST is not defined.');
     }

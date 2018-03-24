@@ -89,7 +89,7 @@ export default class Top extends React.Component<{}, TopState> {
     }
 
     return (
-      <Grid>
+      <Grid data-test="page-top">
         <Cell col={4}>
           <ProfileCard user={user} showWriteCode={true} />
         </Cell>

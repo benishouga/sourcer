@@ -9,7 +9,7 @@ import Env from '../Env';
 const colors = ['#866', '#262', '#c55', '#44b'];
 
 export async function list(req: Request, res: Response) {
-  if (!req.session && !Env.isPublishGames) {
+  if (!req.session && !Env.instance.isPublishGames) {
     return res
       .status(400)
       .send('Bad Request')
@@ -28,7 +28,7 @@ export async function list(req: Request, res: Response) {
 }
 
 export async function show(req: Request, res: Response) {
-  if (!req.session && !Env.isPublishGames) {
+  if (!req.session && !Env.instance.isPublishGames) {
     return res
       .status(400)
       .send('Bad Request')
@@ -51,7 +51,7 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function replay(req: Request, res: Response) {
-  if (!req.session && !Env.isPublishGames) {
+  if (!req.session && !Env.instance.isPublishGames) {
     return res
       .status(400)
       .send('Bad Request')

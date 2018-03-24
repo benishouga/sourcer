@@ -45,10 +45,10 @@ export default class ResponseCreator {
 
   public static config(): ConfigResponse {
     return {
-      requireAppKey: !!Env.appKey,
-      teamGame: Env.isTeamGame,
-      envMessages: Env.envMessages,
-      publishGames: Env.isPublishGames
+      requireAppKey: !!Env.instance.appKey,
+      teamGame: Env.instance.isTeamGame,
+      envMessages: Env.instance.envMessages,
+      publishGames: Env.instance.isPublishGames
     };
   }
 

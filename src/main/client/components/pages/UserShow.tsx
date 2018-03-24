@@ -66,7 +66,7 @@ export default class UserShow extends React.Component<UserShowProps, UserShowSta
     }
 
     return (
-      <Grid>
+      <Grid data-test="page-user-show">
         <Cell col={4}>
           <ProfileCard user={user} showFight />
         </Cell>

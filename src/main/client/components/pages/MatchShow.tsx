@@ -50,7 +50,7 @@ export default class MatchShow extends React.Component<RouteComponentProps<Route
     }
 
     return (
-      <div>
+      <div data-test="page-match-show">
         <Grid>
           <Cell col={12}>
             <Link to="/">{resource.returnTop}</Link>

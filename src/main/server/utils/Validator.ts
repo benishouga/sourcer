@@ -23,11 +23,11 @@ export default class Validator {
 
   public static validateName(validationResults: ResourceId[], input: string): void {
     if (!input) {
-      validationResults.push(Env.isTeamGame ? 'invalidTeamNameEmpty' : 'invalidNameEmpty');
+      validationResults.push(Env.instance.isTeamGame ? 'invalidTeamNameEmpty' : 'invalidNameEmpty');
     }
 
     if (21 < input.length) {
-      validationResults.push(Env.isTeamGame ? 'invalidTeamNameTooLong' : 'invalidNameTooLong');
+      validationResults.push(Env.instance.isTeamGame ? 'invalidTeamNameTooLong' : 'invalidNameTooLong');
     }
   }
 }

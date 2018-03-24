@@ -37,7 +37,7 @@ export async function create(req: Request, res: Response) {
   }
 
   if (account === 'admin') {
-    if (Env.adminPassword && password === Env.adminPassword) {
+    if (Env.instance.adminPassword && password === Env.instance.adminPassword) {
       req.session.authenticated = true;
       req.session.admin = true;
       req.session.user = null;

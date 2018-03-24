@@ -66,18 +66,25 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
     const resource = strings();
 
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit.bind(this)} data-test="page-sign-up">
         <Card shadow={0} style={{ width: '400px', margin: 'auto' }}>
           <CardTitle expand style={{ alignItems: 'flex-start' }}>
             {resource.signUpTitle}
           </CardTitle>
           <CardText>
-            <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" />
-            <Textfield label={resource.fieldLabelPassword} floatingLabel ref="password" type="password" />
+            <Textfield label={resource.fieldLabelAccount} floatingLabel ref="account" data-test="account" />
+            <Textfield
+              label={resource.fieldLabelPassword}
+              floatingLabel
+              ref="password"
+              type="password"
+              data-test="password"
+            />
             <Textfield
               label={Config.values.teamGame ? resource.fieldLabelNameForTeamGame : resource.fieldLabelName}
               floatingLabel
               ref="name"
+              data-test="name"
             />
             <div className="headered-list" style={{ display: Config.values.teamGame ? '' : 'none' }}>
               <p>{resource.members}</p>
@@ -129,7 +136,7 @@ export default class Login extends React.Component<RouteComponentProps<{}>, Logi
               alignItems: 'center'
             }}
           >
-            <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this)} data-test="signUp">
               {resource.signUp}
             </Button>
             <div className="mdl-layout-spacer" />
