@@ -17,7 +17,6 @@
     "build:client": "npm-run-all -p build:client:statics build:client:css build:client:bundle",
     "build:debug": "npm-run-all -s build:common build:debug:client",
     "build": "npm-run-all -s build:common build:client",
-    "postinstall": "npm run build",
     "pretest": "npm run build:common",
     "test": "cross-env NODE_ENV=test mocha --bail out/test/**/*.spec.js",
     "cover": "nyc npm test",
@@ -31,7 +30,8 @@
     "predebug": "npm run build",
     "debug": "node --inspect --debug-brk out/main/server/index.js",
     "clean": "rimraf out coverage docs",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "heroku-postbuild": "npm run build"
   },
   "author": "benishouga",
   "license": "MIT",

@@ -40,11 +40,6 @@
       "description": "Display messages on some screens. (for Japanese)",
       "required": false,
       "value": "{ \"topMessage\": \"\" }"
-    },
-    "NPM_CONFIG_PRODUCTION": {
-      "description": "Do not change.",
-      "required": true,
-      "value": "false"
     }
   },
   "addons": [
