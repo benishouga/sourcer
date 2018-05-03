@@ -16,7 +16,7 @@ const schema = new Schema({
   dump: { type: String },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', function(this: MatchDocument, next) {
+}).pre<MatchDocument>('save', function(next) {
   this.updated = new Date();
   next();
 });

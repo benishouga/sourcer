@@ -5,6 +5,7 @@ import routes from './components/routes';
 import Auth from './service/Auth';
 import Config from './service/Config';
 
-Promise.all([Auth.login(), Config.load()]).then(([_auth, _config]) => {
+(async () => {
+  await Promise.all([Auth.login(), Config.load()]);
   render(<Router>{routes}</Router>, document.getElementById('app'));
-});
+})();

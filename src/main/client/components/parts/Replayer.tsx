@@ -206,7 +206,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
 
   private adjustWidth() {
     const refs = this.refs as any;
-    const node = ReactDOM.findDOMNode(refs.root);
+    const node = ReactDOM.findDOMNode(refs.root) as Element;
 
     if (this.props.width === -1) {
       this.setState({ dynamicWidth: node.clientWidth });

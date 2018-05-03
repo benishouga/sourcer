@@ -34,7 +34,7 @@ const schema = new Schema({
   losses: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now }
-}).pre('save', function(this: UserDocument, next) {
+}).pre<UserDocument>('save', function(next) {
   this.updated = new Date();
   next();
 });
