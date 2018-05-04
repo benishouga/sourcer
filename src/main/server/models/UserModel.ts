@@ -1,6 +1,6 @@
 import { Schema, Document, model, Types, Model } from 'mongoose';
 
-import * as crypto from 'crypto';
+import { createHash } from 'crypto';
 
 import { defaultBot } from './defaultBot';
 import { MatchDocument } from './MatchModel';
@@ -100,8 +100,7 @@ export class UserService extends UserModel {
   }
 
   public static hash(account: string, password: string) {
-    return crypto
-      .createHash('sha256')
+    return createHash('sha256')
       .update(account + '+' + password, 'utf8')
       .digest('hex');
   }
