@@ -1,5 +1,5 @@
 import express from 'express';
-import * as fs from 'fs';
+import * as path from 'path';
 
 import apis from './api/apis';
 
@@ -12,7 +12,6 @@ import db from './db';
 import Env from './Env';
 
 (async () => {
-  // tslint:disable-next-line:variable-name
   const MongoStore = connectMongo(expressSession);
 
   const mongoDbUri = Env.mongodbUri;
@@ -46,13 +45,8 @@ import Env from './Env';
 
   apis(app);
 
-  app.use((_req, res) => {
-    fs.readFile(__dirname + '/index.html', (error, text) => {
-      if (error) {
-        return res.status(503).end();
-      }
-      res.end(text);
-    });
+  app.get('/*', (_req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
   });
 
   const port = Env.port || 5000;
