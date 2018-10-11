@@ -76,7 +76,7 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
   const start = new Date().getTime();
   console.log('arena', id);
 
-  cluster.setupMaster({ exec: __dirname + '/Arena' });
+  cluster.setupMaster({ exec: `${__dirname}/Arena` });
   const child = cluster.fork();
 
   return new Promise<GameDump>((resolve, _reject) => {

@@ -101,7 +101,7 @@ export class UserService extends UserModel {
 
   public static hash(account: string, password: string) {
     return createHash('sha256')
-      .update(account + '+' + password, 'utf8')
+      .update(`${account}+${password}`, 'utf8')
       .digest('hex');
   }
 }

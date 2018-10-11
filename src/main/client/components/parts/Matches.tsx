@@ -124,7 +124,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         }
 
         return (
-          <span key={'contestant' + index}>
+          <span key={`contestant${index}`}>
             <Link to={`/user/${contestant.account}`}>{contestant.name}</Link> {winOrLoseIcon}
           </span>
         );

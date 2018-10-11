@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export default class TestUtils {
   public static async clearCollection(collection: mongoose.Collection) {
-    console.log('clear collection: ' + collection.collectionName);
+    console.log(`clear collection: ${collection.collectionName}`);
     await collection.deleteMany({});
     return;
   }
@@ -21,15 +21,15 @@ export default class TestUtils {
       const connection = mongoose.createConnection(dbUri);
 
       connection.on('connected', () => {
-        console.log('Mongoose> connected: ' + dbUri);
+        console.log(`Mongoose> connected: ${dbUri}`);
         resolve(connection);
       });
       connection.on('error', (err: any) => {
-        console.log('Mongoose> error: ' + err);
+        console.log(`Mongoose> error: ${err}`);
         reject(err);
       });
       connection.on('disconnected', () => console.log('Mongoose> disconnected'));
-      console.log('Mongoose> connect: ' + dbUri);
+      console.log(`Mongoose> connect: ${dbUri}`);
       process.on('SIGINT', () => {
         connection.close(() => {
           console.log('Mongoose> SIGINT - terminating...');

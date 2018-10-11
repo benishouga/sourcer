@@ -54,7 +54,8 @@ export default class ExposedScriptLoader implements ScriptLoader {
   public load(script: string): any {
     let argNames: string[] = [];
     argNames = argNames.concat(this.argNames);
-    argNames.push('"use strict";\n' + script);
+    const strictText = '"use strict";\n';
+    argNames.push(strictText + script);
     return construct(Function, argNames).apply(undefined, this.argValues);
   }
 }

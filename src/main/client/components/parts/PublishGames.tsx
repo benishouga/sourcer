@@ -77,7 +77,7 @@ export default class PublishGames extends React.Component<PublishGamesProps, {}>
             );
         }
         return (
-          <span key={'player' + index}>
+          <span key={`player${index}`}>
             {player.name} {winOrLoseIcon}
           </span>
         );

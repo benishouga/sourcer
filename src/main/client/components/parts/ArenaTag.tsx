@@ -165,7 +165,7 @@ export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
     }
 
     const loadedFrame = this.state.loadedFrame;
-    return <div ref="root">{'Loading ...' + loadedFrame}</div>;
+    return <div ref="root">{`Loading ...${loadedFrame}`}</div>;
   }
 
   public tick() {

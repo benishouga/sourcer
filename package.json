@@ -73,9 +73,9 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.0.5",
     "mkdirp": "^0.5.1",
-    "mocha": "^5.1.1",
+    "mocha": "^5.2.0",
     "npm-run-all": "^4.1.2",
-    "nyc": "^11.7.1",
+    "nyc": "^13.1.0",
     "postcss-cli": "^5.0.0",
     "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
@@ -87,7 +87,7 @@
     "typescript": "^2.8.3",
     "uglify-js": "^3.3.23",
     "webpack": "^4.6.0",
-    "webpack-cli": "^2.1.2",
+    "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.2"
   },
   "nyc": {

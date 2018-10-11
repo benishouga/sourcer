@@ -50,6 +50,6 @@ import Env from './Env';
   });
 
   const port = Env.port || 5000;
-  console.log('listening...' + port);
+  console.log(`http://localhost:${port}`);
   app.listen(port);
 })();
