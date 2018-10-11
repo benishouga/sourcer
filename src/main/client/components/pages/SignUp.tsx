@@ -2,6 +2,8 @@ import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 
 import { strings } from '../resources/Strings';
+import { ResourceId } from '../../../dts/StringResource';
+import { ErrorResponse } from '../../../dts/ErrorResponse';
 
 import User from '../../service/User';
 import Config from '../../service/Config';

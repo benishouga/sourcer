@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Card, CardTitle, CardText, CardActions, Button, List, ListItem, ListItemContent, Icon } from 'react-mdl';
 import { strings } from '../resources/Strings';
+import { UserResponse } from '../../../dts/UserResponse';
 
 export interface ProfileCardProps {
   user: UserResponse;

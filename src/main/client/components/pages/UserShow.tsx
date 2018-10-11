@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+import { UserResponse } from '../../../dts/UserResponse';
 
 import { AbortController } from '../../utils/fetch';
 import Matches from '../parts/Matches';

@@ -4,6 +4,7 @@ import { FrameDump, GameDump, ResultDump, PlayersDump } from '../core/Dump';
 import Field from '../core/Field';
 import TickEventListener from '../core/TickEventListener';
 import SandboxedScriptLoader from '../core/SandboxedScriptLoader';
+import { SourcerSource } from '../dts/SourcerSource';
 
 export type Data =
   | PlayersCommand

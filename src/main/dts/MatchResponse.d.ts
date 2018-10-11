@@ -1,4 +1,5 @@
-interface MatchResponse {
+import { UserResponse } from './UserResponse';
+export interface MatchResponse {
   _id?: string;
   winner?: UserResponse;
   players?: UserResponse[];

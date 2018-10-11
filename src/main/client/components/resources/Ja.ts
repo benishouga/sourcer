@@ -1,3 +1,4 @@
+import { StringResource } from '../../../dts/StringResource';
 export class Ja implements StringResource {
   public none = 'なし';
   public apiDocument = 'API ドキュメント';

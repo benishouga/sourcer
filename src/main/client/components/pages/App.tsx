@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { strings } from '../resources/Strings';
 
 import Auth from '../../service/Auth';
+import { AuthResponse } from '../../../dts/AuthResponse';
 
 import 'moment/locale/ja';
 moment.locale([navigator.language, 'en']);

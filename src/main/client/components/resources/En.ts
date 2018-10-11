@@ -1,3 +1,4 @@
+import { StringResource } from '../../../dts/StringResource';
 export class En implements StringResource {
   public none = 'none';
   public apiDocument = 'API documents';

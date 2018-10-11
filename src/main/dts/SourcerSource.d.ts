@@ -1,4 +1,4 @@
-interface SourcerSource {
+export interface SourcerSource {
   account: string;
   name: string;
   color: string;

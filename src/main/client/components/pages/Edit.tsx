@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Icon, Card, CardTitle, Snackbar, Spacer } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+import { UserResponse } from '../../../dts/UserResponse';
 
 import { AbortController } from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';

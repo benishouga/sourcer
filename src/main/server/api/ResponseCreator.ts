@@ -2,6 +2,12 @@ import { Types } from 'mongoose';
 import { UserDocument } from '../models/UserModel';
 import { MatchDocument } from '../models/MatchModel';
 import Env from '../Env';
+import { ResourceId } from '../../dts/StringResource';
+import { ErrorResponse } from '../../dts/ErrorResponse';
+import { ConfigResponse } from '../../dts/ConfigResponse';
+import { AuthResponse } from '../../dts/AuthResponse';
+import { MatchResponse } from '../../dts/MatchResponse';
+import { UserResponse } from '../../dts/UserResponse';
 
 export default class ResponseCreator {
   public static inflated(document: any): boolean {

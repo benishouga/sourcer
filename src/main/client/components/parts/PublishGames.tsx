@@ -4,6 +4,7 @@ import { ListItem, ListItemContent, ListItemAction, Tooltip, FABButton, Icon } f
 import moment from 'moment';
 
 import { strings } from '../resources/Strings';
+import { MatchResponse } from '../../../dts/MatchResponse';
 
 export interface PublishGamesProps {
   matches?: MatchResponse[];

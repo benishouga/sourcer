@@ -1,4 +1,5 @@
 import Env from '../Env';
+import { ResourceId } from '../../dts/StringResource';
 
 export default class Validator {
   public static validateAccount(validationResults: ResourceId[], input: string): void {

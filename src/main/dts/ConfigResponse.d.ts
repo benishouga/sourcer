@@ -1,4 +1,6 @@
-interface ConfigResponse {
+import { EnvMessage } from './StringResource';
+
+export interface ConfigResponse {
   requireAppKey: boolean;
   teamGame: boolean;
   envMessages: { [key: string]: EnvMessage };

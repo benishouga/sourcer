@@ -1,4 +1,6 @@
-interface UserResponse {
+import { MatchResponse } from './MatchResponse';
+
+export interface UserResponse {
   account?: string;
   name?: string;
   source?: string;

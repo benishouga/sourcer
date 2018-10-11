@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { get, post, del, AbortSignal } from '../utils/fetch';
+import { AuthResponse } from '../../dts/AuthResponse';
 
 export default class Auth {
   private static emitter = new EventEmitter();
@@ -15,9 +16,11 @@ export default class Auth {
     this.response = response;
   }
 
-  public static async login(
-    { signal, account, password }: { signal?: AbortSignal; account?: string; password?: string } = {}
-  ) {
+  public static async login({
+    signal,
+    account,
+    password
+  }: { signal?: AbortSignal; account?: string; password?: string } = {}) {
     try {
       this.status =
         !account && !password

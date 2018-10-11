@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { post, get, AbortSignal } from '../utils/fetch';
 import { GameDump } from '../../core/Dump';
+import { MatchResponse } from '../../dts/MatchResponse';
 
 export default class Match {
   public static emitter = new EventEmitter();

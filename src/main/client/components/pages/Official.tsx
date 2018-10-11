@@ -16,6 +16,7 @@ import {
 } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+import { UserResponse } from '../../../dts/UserResponse';
 
 import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';

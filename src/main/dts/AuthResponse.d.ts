@@ -1,4 +1,4 @@
-interface AuthResponse {
+export interface AuthResponse {
   authenticated: boolean;
   admin: boolean;
 }

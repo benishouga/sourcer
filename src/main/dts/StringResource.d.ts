@@ -1,4 +1,4 @@
-interface StringResource {
+export interface StringResource {
   none: string;
   apiDocument: string;
   writeCode: string;
@@ -64,6 +64,6 @@ interface StringResource {
 
 type ResourceId = keyof StringResource;
 
-interface EnvMessage {
+export interface EnvMessage {
   topMessage?: string;
 }

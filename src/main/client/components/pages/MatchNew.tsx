@@ -4,6 +4,7 @@ import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+import { UserResponse } from '../../../dts/UserResponse';
 
 import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';

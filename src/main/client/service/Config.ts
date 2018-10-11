@@ -1,4 +1,6 @@
 import { get } from '../utils/fetch';
+import { ConfigResponse } from '../../dts/ConfigResponse';
+import { EnvMessage } from '../../dts/StringResource';
 
 export default class Config {
   private static response: ConfigResponse;

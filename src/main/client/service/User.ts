@@ -1,5 +1,7 @@
 import { EventEmitter } from 'events';
 import { get, post, put, AbortSignal } from '../utils/fetch';
+import { ErrorResponse } from '../../dts/ErrorResponse';
+import { UserResponse } from '../../dts/UserResponse';
 
 export interface SignUpParameter {
   account: string;

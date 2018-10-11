@@ -1,3 +1,4 @@
+import { EnvMessage } from '../dts/StringResource';
 export default class Env {
   public static appKey = process.env.APP_KEY as string;
   public static isTeamGame = (!!process.env.TEAM_GAME &&

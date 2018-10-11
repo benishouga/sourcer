@@ -1,5 +1,6 @@
 import { En } from './En';
 import { Ja } from './Ja';
+import { StringResource } from '../../../dts/StringResource';
 
 const stringsMap: { [key: string]: StringResource } = {
   en: new En(),

@@ -4,6 +4,7 @@ import Validator from '../utils/Validator';
 import ResponseCreator from './ResponseCreator';
 import Normalizer from '../utils/Normalizer';
 import Env from '../Env';
+import { ResourceId } from '../../dts/StringResource';
 
 export async function show(req: Request, res: Response) {
   if (!req.session) {
