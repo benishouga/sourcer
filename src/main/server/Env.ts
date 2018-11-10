@@ -10,6 +10,7 @@ export default class Env {
   public static port = process.env.PORT as string;
   public static isPublishGames = (!!process.env.PUBLISH_GAMES &&
     (process.env.PUBLISH_GAMES as string).toUpperCase() === 'TRUE') as boolean;
+  public static displayLanguage = !!process.env.DISPLAY_LANGUAGE ? (process.env.DISPLAY_LANGUAGE as string) : 'auto';
   public static envMessages = {
     en: (process.env.ENV_MESSAGE_EN ? JSON.parse(process.env.ENV_MESSAGE_EN as string) : {}) as EnvMessage,
     ja: (process.env.ENV_MESSAGE_JA ? JSON.parse(process.env.ENV_MESSAGE_JA as string) : {}) as EnvMessage

@@ -33,6 +33,7 @@ ADMIN_PASSWORD | Password of 'admin' with special authority. 'admin' can select 
 SESSION_SECRET | Session cookie secret. | false | (none)
 MONGODB_URI | MongoDB connection string. | true | (none)
 PUBLISH_GAMES | Set it to 'true' to show the game to the guest. | false | false
+DISPLAY_LANGUAGE | Specify the display language. (support for 'auto', 'en', 'ja') | false | auto
 ENV_MESSAGE_EN | Display messages on some screens. | false | (none)
 ENV_MESSAGE_JA | Same as above. (for Japanese) | false | (none)
 

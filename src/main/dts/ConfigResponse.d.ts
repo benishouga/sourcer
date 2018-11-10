@@ -5,4 +5,5 @@ export interface ConfigResponse {
   teamGame: boolean;
   envMessages: { [key: string]: EnvMessage };
   publishGames: boolean;
+  displayLanguage: string;
 }
