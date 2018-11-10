@@ -21,7 +21,7 @@ You can set up a private matching server. You can use it in your community.
 git clone https://github.com/benishouga/sourcer.git
 cd sourcer
 npm install
-npm run app
+npm start
 ```
 
 ## env
