@@ -6,85 +6,70 @@ import moment from 'moment';
 import { strings } from '../resources/Strings';
 import { MatchResponse } from '../../../dts/MatchResponse';
 
-import { AbortController } from '../../utils/fetch';
-import User from '../../service/User';
-
 export interface MatchesProps {
-  account?: string;
   matches?: MatchResponse[];
+  arrowUserLink?: boolean;
 }
 
-export interface MatchesState {
-  matches?: MatchResponse[];
-}
+export default function Matches(props: MatchesProps) {
+  const resource = strings();
+  const arrowUserLink = props.arrowUserLink === undefined ? true : props.arrowUserLink;
+  const matches = props.matches;
 
-export default class Matches extends React.Component<MatchesProps, MatchesState> {
-  constructor(props: MatchesProps) {
-    super(props);
-    this.state = { matches: props.matches };
-  }
-
-  private abortController: AbortController = new AbortController();
-
-  public componentWillReceiveProps(nextProps: MatchesProps) {
-    this.setState({ matches: nextProps.matches });
-  }
-
-  private async loadMatches(account?: string) {
-    this.abortController = new AbortController();
-    const signal = this.abortController.signal;
-    this.setState({ matches: undefined });
-    const user = await User.select({ signal, account }).catch(error => console.log(error));
-    if (user) {
-      this.setState({ matches: user.matches });
-    }
-  }
-
-  public async componentDidMount() {
-    if (!this.props.matches) {
-      this.loadMatches(this.props.account);
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.abortController) {
-      this.abortController.abort();
-    }
-  }
-
-  public async componentWillUpdate(nextProps: MatchesProps, _nextState: MatchesState) {
-    if (!nextProps.matches) {
-      this.abortController.abort();
-      this.loadMatches(nextProps.account);
-    }
-  }
-
-  public render() {
-    const resource = strings();
-    const elements = this.elements();
+  if (!matches) {
     return (
-      <div>
-        <h5>
-          {resource.matchesTitle} {this.props.account}
-        </h5>
-        {elements}
-      </div>
+      <>
+        <h5>{resource.matchesTitle}</h5>
+        <p>{resource.loading}</p>
+      </>
     );
   }
 
-  private elements() {
-    const resource = strings();
-    if (this.state.matches && this.state.matches.length !== 0) {
-      return this.state.matches.map((match, index) => {
-        const subtitle = (
-          <span className="updated">
-            {resource.updatedAt} {moment(match.created).fromNow()}
-          </span>
-        );
+  if (!matches.length) {
+    return (
+      <>
+        <h5>{resource.matchesTitle}</h5>
+        <p>{resource.none}</p>
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <h5>{resource.matchesTitle}</h5>
+      {matches.map((match, index) => {
         return (
           <ListItem key={index} twoLine>
-            <ListItemContent avatar="whatshot" subtitle={subtitle}>
-              {this.players(match)}
+            <ListItemContent
+              avatar="whatshot"
+              subtitle={
+                <span className="updated">
+                  {resource.updatedAt} {moment(match.created).fromNow()}
+                </span>
+              }
+            >
+              {match.players &&
+                match.players.map((contestant, playerIndex) => (
+                  <>
+                    {playerIndex !== 0 && <span key={playerIndex}> vs </span>}
+                    <span key={`contestant${playerIndex}`}>
+                      {arrowUserLink ? (
+                        <Link to={`/user/${contestant.account}`}>{contestant.name}</Link>
+                      ) : (
+                        contestant.name
+                      )}
+                      {match.winner && match.winner.account === contestant.account ? (
+                        <span>
+                          <Icon name="mood" className="inline" /> Win
+                        </span>
+                      ) : (
+                        <span>
+                          <Icon name="sentiment_very_dissatisfied" className="inline" /> Lose
+                        </span>
+                      )}
+                    </span>
+                  </>
+                ))}
             </ListItemContent>
             <ListItemAction>
               <Tooltip label={resource.viewMatch} position="right">
@@ -97,44 +82,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
             </ListItemAction>
           </ListItem>
         );
-      });
-    }
-    return <p>{resource.none}</p>;
-  }
-
-  private players(match: MatchResponse) {
-    const players: (Element | React.ReactElement<{}> | null)[] = [];
-    if (!match.players) {
-      return null;
-    }
-    match.players
-      .map((contestant, index) => {
-        let winOrLoseIcon = null;
-        if (match.winner) {
-          winOrLoseIcon =
-            match.winner.account === contestant.account ? (
-              <span>
-                <Icon name="mood" className="inline" /> Win
-              </span>
-            ) : (
-              <span>
-                <Icon name="sentiment_very_dissatisfied" className="inline" /> Lose
-              </span>
-            );
-        }
-
-        return (
-          <span key={`contestant${index}`}>
-            <Link to={`/user/${contestant.account}`}>{contestant.name}</Link> {winOrLoseIcon}
-          </span>
-        );
-      })
-      .forEach((element, index) => {
-        if (players.length !== 0) {
-          players.push(<span key={index}> vs </span>);
-        }
-        players.push(element);
-      });
-    return players;
-  }
+      })}
+    </div>
+  );
 }

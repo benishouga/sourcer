@@ -13,7 +13,6 @@ import Matches from '../parts/Matches';
 import RecentUpdatedUsers from '../parts/RecentUpdatedUsers';
 import ProfileCard from '../parts/ProfileCard';
 import Config from '../../service/Config';
-import PublishGames from '../parts/PublishGames';
 import Match from '../../service/Match';
 
 export interface TopState {
@@ -57,8 +56,8 @@ export default class Top extends React.Component<{}, TopState> {
         <div dangerouslySetInnerHTML={{ __html: configStrings.topMessage }} />
       ) : null;
       let matches: JSX.Element | null = null;
-      if (this.state.matches && Config.values.publishGames) {
-        matches = <PublishGames matches={this.state.matches} />;
+      if (Config.values.publishGames) {
+        matches = <Matches matches={this.state.matches} arrowUserLink={false} />;
       }
 
       return (
