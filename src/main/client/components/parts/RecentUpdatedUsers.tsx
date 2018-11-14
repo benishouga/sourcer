@@ -4,57 +4,53 @@ import { List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Toolt
 import moment from 'moment';
 
 import { strings } from '../resources/Strings';
+import { useRecentUsers } from '../hooks/api-hooks';
+import WinsAndLoses from './WinsAndLoses';
 
-import User from '../../service/User';
-import { AbortController } from '../../utils/fetch';
-import { UserResponse } from '../../../dts/UserResponse';
+export default function RecentUpdatedUsers() {
+  const resource = strings();
+  const users = useRecentUsers();
 
-export interface RecentUpdatedUsersProps {
-  account?: string;
-}
-
-export interface RecentUpdatedUsersState {
-  users: UserResponse[] | null;
-}
-
-export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUsersProps, RecentUpdatedUsersState> {
-  constructor(props: RecentUpdatedUsersProps) {
-    super(props);
-    this.state = { users: null };
-  }
-
-  private abortController: AbortController = new AbortController();
-
-  public async componentDidMount() {
-    const signal = this.abortController.signal;
-    const users = await User.recent({ signal }).catch(error => console.log(error));
-    if (users) {
-      this.setState({ users });
-    }
-  }
-
-  public componentWillUnmount() {
-    this.abortController.abort();
-  }
-
-  public render() {
-    const resource = strings();
-    const elements = this.elements();
+  if (!users) {
     return (
-      <div>
+      <>
         <h5>{resource.recentUpdatedUsersTitle}</h5>
-        <List>{elements}</List>
-      </div>
+        <p>{resource.loading}</p>
+      </>
     );
   }
 
-  private elements() {
-    const resource = strings();
-    if (this.state.users && this.state.users.length !== 0) {
-      return this.state.users.map(user => {
-        return (
+  if (!users.length) {
+    return (
+      <>
+        <h5>{resource.recentUpdatedUsersTitle}</h5>
+        <p>{resource.none}</p>
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <h5>{resource.recentUpdatedUsersTitle}</h5>
+      <List>
+        {users.map(user => (
           <ListItem key={user.account} threeLine>
-            <ListItemContent avatar="person" subtitle={this.subtitle(user)}>
+            <ListItemContent
+              avatar="person"
+              subtitle={
+                !user.members ? null : (
+                  <div>
+                    {user.members.join(', ')}
+                    {user.members.length ? <br /> : null}
+                    <WinsAndLoses wins={user.wins} losses={user.losses} />
+                    &ensp;
+                    <span className="updated">
+                      {resource.updatedAt} {moment(user.updated).fromNow()}
+                    </span>
+                  </div>
+                )
+              }
+            >
               <Link to={`/user/${user.account}`}>{user.name}</Link>
             </ListItemContent>
             <ListItemAction>
@@ -67,30 +63,8 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
               </Tooltip>
             </ListItemAction>
           </ListItem>
-        );
-      });
-    }
-    return <p>{resource.none}</p>;
-  }
-
-  private subtitle(user: UserResponse) {
-    const resource = strings();
-    if (!user.members) {
-      return null;
-    }
-    const members = user.members.join(', ');
-    return (
-      <div>
-        {`${members}`}
-        {members.length ? <br /> : null}
-        <Icon name="mood" className="inline" /> {user.wins} {resource.wins}
-        &ensp;
-        <Icon name="sentiment_very_dissatisfied" className="inline" /> {user.losses} {resource.losses}
-        &ensp;
-        <span className="updated">
-          {resource.updatedAt} {moment(user.updated).fromNow()}
-        </span>
-      </div>
-    );
-  }
+        ))}
+      </List>
+    </div>
+  );
 }

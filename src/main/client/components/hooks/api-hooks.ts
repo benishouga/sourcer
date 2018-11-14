@@ -23,3 +23,18 @@ export function useUser(account?: string) {
   );
   return user;
 }
+
+export function useRecentUsers() {
+  const [users, setUsers] = React.useState<UserResponse[] | null>(null);
+
+  React.useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    User.recent({ signal })
+      .then(res => setUsers(res))
+      .catch(error => console.log(error));
+    return () => abortController.abort();
+  }, []);
+
+  return users;
+}
