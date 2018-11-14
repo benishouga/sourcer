@@ -8,9 +8,10 @@ const stringsMap: { [key: string]: StringResource } = {
   ja: new Ja()
 };
 
-export function strings(lang?: string): StringResource {
-  const envLang = Config.values.displayLanguage;
-  const stringsForLang = stringsMap[lang || envLang !== 'auto' ? envLang : navigator.language];
+export function strings(argLanguage?: string): StringResource {
+  const envLang = Config.values && Config.values.displayLanguage;
+  const language = argLanguage || (envLang && envLang !== 'auto') ? envLang : navigator.language.split('-')[0];
+  const stringsForLang = stringsMap[language];
   if (stringsForLang) {
     return stringsForLang;
   }
