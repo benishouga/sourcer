@@ -20,7 +20,7 @@ const DEFAULT_PROPS = {
 
 export default function AceEditor(arg: AceEditorProps) {
   const props: AceEditorProps = { ...DEFAULT_PROPS, ...arg };
-  const root = React.useRef<HTMLDivElement>(null);
+  const rootRef = React.useRef<HTMLDivElement>(null);
 
   function onChange(editor: Ace.Editor | null) {
     if (props.onChange && editor) {
@@ -37,11 +37,11 @@ export default function AceEditor(arg: AceEditorProps) {
   }
 
   React.useEffect(() => {
-    if (!root.current) {
+    if (!rootRef.current) {
       return;
     }
-    root.current.addEventListener('keydown', onKeyDown);
-    let editor: Ace.Editor | null = Ace.edit(root.current);
+    rootRef.current.addEventListener('keydown', onKeyDown);
+    let editor: Ace.Editor | null = Ace.edit(rootRef.current);
     editor.$blockScrolling = Infinity;
     editor.setTheme('ace/theme/chrome');
     const session = editor.getSession();
@@ -68,14 +68,14 @@ export default function AceEditor(arg: AceEditorProps) {
         editor.destroy();
         editor = null;
       }
-      if (root.current) {
-        root.current.removeEventListener('keydown', onKeyDown);
+      if (rootRef.current) {
+        rootRef.current.removeEventListener('keydown', onKeyDown);
       }
     };
   }, []);
 
   return (
-    <div ref={root} style={STYLE} className={props.className}>
+    <div ref={rootRef} style={STYLE} className={props.className}>
       {props.code}
     </div>
   );

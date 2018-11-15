@@ -4,120 +4,69 @@ import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Dialog, DialogTitle, DialogContent, ProgressBar } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
-import { UserResponse } from '../../../dts/UserResponse';
-
-import { AbortController } from '../../utils/fetch';
-import User from '../../service/User';
+import { useUser } from '../hooks/api-hooks';
 import Match from '../../service/Match';
 import { RouteParams } from '../routes';
 import ProfileCard from '../parts/ProfileCard';
 
-export interface MatchNewState {
-  user?: UserResponse;
-  against?: UserResponse;
-  openDialog?: boolean;
-  redirectTo?: string;
-}
+export default function MatchNew(props: RouteComponentProps<RouteParams>) {
+  const dialogRef = React.useRef<Dialog>(null);
 
-export default class MatchNew extends React.Component<RouteComponentProps<RouteParams>, MatchNewState> {
-  private dialog?: Dialog;
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const [redirectTo, setRedirectTo] = React.useState<string | null>(null);
 
-  constructor(props: RouteComponentProps<RouteParams>) {
-    super(props);
-    this.state = {};
-  }
+  const user = useUser();
+  const against = useUser(props.match.params.account);
 
-  public async handleOpenDialog() {
-    const against = this.props.match.params.account;
-    if (!against) {
-      console.log(`against: ${against}`);
-      return;
-    }
-
-    this.setState({
-      openDialog: true
-    });
-    const match = await Match.create({ against });
-    this.setState({ redirectTo: `/match/${match._id}` });
-  }
-
-  private abortController: AbortController = new AbortController();
-  public componentDidMount() {
-    if (this.dialog) {
-      const dialog = ReactDOM.findDOMNode(this.dialog) as any;
+  React.useEffect(() => {
+    if (dialogRef.current) {
+      const dialog = ReactDOM.findDOMNode(dialogRef.current) as any;
       if (!dialog.showModal) {
         (window as any).dialogPolyfill.registerDialog(dialog);
       }
     }
+  }, []);
 
-    const signal = this.abortController.signal;
-
-    // process in parallel...
-    (async () => {
-      const user = await User.select({ signal }).catch(error => console.log(error));
-      if (user) {
-        this.setState({ user });
-      }
-    })();
-
-    (async () => {
-      const account = this.props.match.params.account;
-      const against = await User.select({ signal, account }).catch(error => console.log(error));
-      if (against) {
-        this.setState({ against });
-      }
-    })();
+  async function handleOpenDialog() {
+    const param = props.match.params.account;
+    if (!param) {
+      console.log(`against: ${param}`);
+      return;
+    }
+    setOpenDialog(true);
+    const match = await Match.create({ against: param });
+    setRedirectTo(`/match/${match._id}`);
   }
 
-  public componentWillUnmount() {
-    this.abortController.abort();
+  if (redirectTo) {
+    return <Redirect to={redirectTo} />;
   }
 
-  public render() {
-    if (this.state.redirectTo) {
-      return <Redirect to={this.state.redirectTo} />;
-    }
+  const resource = strings();
 
-    const resource = strings();
-
-    let userCard: React.ReactElement<any>;
-    if (this.state.user) {
-      userCard = <ProfileCard user={this.state.user} />;
-    } else {
-      userCard = <span>{resource.loading}</span>;
-    }
-
-    let againstCard: React.ReactElement<any>;
-    if (this.state.against) {
-      againstCard = <ProfileCard user={this.state.against} />;
-    } else {
-      againstCard = <span>{resource.loading}</span>;
-    }
-
-    return (
-      <div>
-        <Grid>
-          <Cell col={12}>
-            <Link to="/">{resource.returnTop}</Link>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell col={5}>{userCard}</Cell>
-          <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-            <div style={{ height: '120px' }} />
-            <Button colored onClick={this.handleOpenDialog.bind(this)} raised ripple>
-              {resource.fight}
-            </Button>
-            <Dialog open={this.state.openDialog} ref={(dialog: any) => (this.dialog = dialog)}>
-              <DialogTitle>{resource.fighting}</DialogTitle>
-              <DialogContent>
-                <ProgressBar indeterminate />
-              </DialogContent>
-            </Dialog>
-          </Cell>
-          <Cell col={5}>{againstCard}</Cell>
-        </Grid>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Grid>
+        <Cell col={12}>
+          <Link to="/">{resource.returnTop}</Link>
+        </Cell>
+      </Grid>
+      <Grid>
+        <Cell col={5}>{user ? <ProfileCard user={user} /> : <span>{resource.loading}</span>}</Cell>
+        <Cell col={2} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+          <div style={{ height: '120px' }} />
+          <Button colored onClick={handleOpenDialog} raised ripple>
+            {resource.fight}
+          </Button>
+          <Dialog ref={dialogRef} open={openDialog}>
+            <DialogTitle>{resource.fighting}</DialogTitle>
+            <DialogContent>
+              <ProgressBar indeterminate />
+            </DialogContent>
+          </Dialog>
+        </Cell>
+        <Cell col={5}>{against ? <ProfileCard user={against} /> : <span>{resource.loading}</span>}</Cell>
+      </Grid>
+    </div>
+  );
 }
