@@ -3,17 +3,15 @@ import { strings } from '../resources/Strings';
 import Auth from '../../service/Auth';
 import { Cell, Grid } from 'react-mdl';
 
-export default class Logout extends React.Component<{}, {}> {
-  public componentDidMount() {
+export default function Logout() {
+  React.useEffect(() => {
     Auth.logout();
-  }
+  }, []);
 
-  public render() {
-    const resource = strings();
-    return (
-      <Grid>
-        <Cell col={12}>{resource.logoutMessage}</Cell>
-      </Grid>
-    );
-  }
+  const resource = strings();
+  return (
+    <Grid>
+      <Cell col={12}>{resource.logoutMessage}</Cell>
+    </Grid>
+  );
 }
