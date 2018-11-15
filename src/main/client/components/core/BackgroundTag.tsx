@@ -52,17 +52,12 @@ function makeBg(screen: Screen, trees: Tree[], far: number) {
 }
 
 function makeDomeTags(screen: Screen, domes: Dome[], far: number) {
-  console.log('makeDomeTags!!', screen, domes, far);
-
   const { viewLeft, viewRight, viewTop } = computeViewInfo(screen, far);
 
   return (
     <g transform={`scale(${screen.scale}, ${screen.scale}) translate(${-screen.center / far},${viewTop}) scale(1, -1)`}>
       {domes
-        .filter(dome => {
-          console.log(dome, viewLeft, viewRight, viewTop);
-          return viewLeft < dome.x + dome.size && dome.x - dome.size < viewRight;
-        })
+        .filter(dome => viewLeft < dome.x + dome.size && dome.x - dome.size < viewRight)
         .map(dome => <DomeTag key={dome.id} model={dome} far={far} />)}
     </g>
   );

@@ -50,9 +50,9 @@ export default function Matches(props: MatchesProps) {
             >
               {match.players &&
                 match.players.map((contestant, playerIndex) => (
-                  <>
-                    {playerIndex !== 0 && <span key={playerIndex}> vs </span>}
-                    <span key={`contestant${playerIndex}`}>
+                  <React.Fragment key={`contestant${playerIndex}`}>
+                    {playerIndex !== 0 && <span> vs </span>}
+                    <span>
                       {arrowUserLink ? (
                         <Link to={`/user/${contestant.account}`}>{contestant.name}</Link>
                       ) : (
@@ -68,7 +68,7 @@ export default function Matches(props: MatchesProps) {
                         </span>
                       )}
                     </span>
-                  </>
+                  </React.Fragment>
                 ))}
             </ListItemContent>
             <ListItemAction>
