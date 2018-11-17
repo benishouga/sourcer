@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { AbortController } from '../../utils/fetch';
-import User from '../../service/User';
 import { UserResponse } from '../../../dts/UserResponse';
+import { GameDump } from '../../../core/Dump';
+import User from '../../service/User';
 import Auth from '../../service/Auth';
+import Match from '../../service/Match';
 
 export function useUser(account?: string) {
   const [user, setUser] = React.useState<UserResponse | null>(null);
@@ -37,4 +39,27 @@ export function useRecentUsers() {
   }, []);
 
   return users;
+}
+
+export function useMatchDump(matchId?: string) {
+  const [gameDump, setGameDump] = React.useState<GameDump | null>(null);
+  React.useEffect(
+    () => {
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+      if (!matchId) {
+        console.log(`matchId: ${matchId}`);
+        return;
+      }
+      Match.replay({ signal, matchId })
+        .then(res => setGameDump(res))
+        .catch(error => console.log(error));
+
+      return () => {
+        abortController.abort();
+      };
+    },
+    [matchId]
+  );
+  return gameDump;
 }
