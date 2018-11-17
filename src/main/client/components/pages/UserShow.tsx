@@ -3,18 +3,12 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
-import { UserResponse } from '../../../dts/UserResponse';
-
 import { RouteParams } from '../routes';
 import { useUser } from '../hooks/api-hooks';
 import Matches from '../parts/Matches';
 import ProfileCard from '../parts/ProfileCard';
 
 export type UserShowProps = RouteComponentProps<RouteParams>;
-
-export interface UserShowState {
-  user?: UserResponse;
-}
 
 export default function UserShow(props: UserShowProps) {
   const user = useUser(props.match.params.account);
