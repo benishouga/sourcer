@@ -15,11 +15,7 @@ export class En implements StringResource {
   public fieldLabelPassword = 'Password...';
   public fieldLabelName = 'Player Name...';
   public fieldLabelNameForTeamGame = 'Team Name...';
-  public fieldLabelMember1 = 'Member 1...';
-  public fieldLabelMember2 = 'Member 2...';
-  public fieldLabelMember3 = 'Member 3...';
-  public fieldLabelMember4 = 'Member 4...';
-  public fieldLabelMember5 = 'Member 5...';
+  public fieldLabelMember = ['Member 1...', 'Member 2...', 'Member 3...', 'Member 4...', 'Member 5...'];
   public fieldLabelAppKey = 'App Key...';
   public logoutMessage = 'You have been logout.';
   public fight = 'Fight';
