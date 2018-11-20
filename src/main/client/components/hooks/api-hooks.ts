@@ -26,6 +26,23 @@ export function useUser(account?: string) {
   return user;
 }
 
+export function useAllUser() {
+  const [users, setUsers] = React.useState<UserResponse[] | null>(null);
+  React.useEffect(() => {
+    if (!Auth.status.authenticated) {
+      return;
+    }
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    setUsers(null);
+    User.all({ signal })
+      .then(res => setUsers(res))
+      .catch(error => console.log(error));
+    return () => abortController && abortController.abort();
+  }, []);
+  return users;
+}
+
 export function useRecentUsers() {
   const [users, setUsers] = React.useState<UserResponse[] | null>(null);
 

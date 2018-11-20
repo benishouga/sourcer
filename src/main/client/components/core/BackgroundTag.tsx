@@ -40,6 +40,7 @@ function computeViewInfo(screen: Screen, far: number): { viewLeft: number; viewR
   const viewTop = (screen.height - 8) / screen.scale;
   return { viewLeft, viewRight, viewTop };
 }
+
 function makeBg(screen: Screen, trees: Tree[], far: number) {
   const { viewLeft, viewRight, viewTop } = computeViewInfo(screen, far);
   return (
