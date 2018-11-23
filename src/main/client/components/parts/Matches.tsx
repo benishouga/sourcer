@@ -7,7 +7,7 @@ import { strings } from '../resources/Strings';
 import { MatchResponse } from '../../../dts/MatchResponse';
 
 export interface MatchesProps {
-  matches?: MatchResponse[];
+  matches?: MatchResponse[] | null;
   arrowUserLink?: boolean;
 }
 
