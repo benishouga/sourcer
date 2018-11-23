@@ -3,156 +3,131 @@ import { Redirect } from 'react-router-dom';
 import { Grid, Cell, Button, Icon, Card, CardTitle, Snackbar, Spacer } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
-import { UserResponse } from '../../../dts/UserResponse';
 
-import { AbortController } from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import ArenaTag from '../parts/ArenaTag';
 import { PlayerInfo } from '../../arenaWorker';
 import BotSelector from '../parts/BotSelector';
 import User from '../../service/User';
 
+import { useUser } from '../hooks/api-hooks';
+
 import { fiddle } from './fiddles/fiddle';
 
-export interface EditState {
-  user?: UserResponse;
-  playerInfo: PlayerInfo | null;
-  enemyInfo?: PlayerInfo;
-  isSavedSnackbarActive?: boolean;
-  redirectToTop: boolean;
-}
+export default function Edit() {
+  const [playerInfo, setPlayerInfo] = React.useState<PlayerInfo | null>(null);
+  const [enemyInfo, setEnemyInfo] = React.useState<PlayerInfo | null>(null);
+  const [isSavedSnackbarActive, setIsSavedSnackbarActive] = React.useState<boolean>(false);
+  const [redirectToTop, setRedirectToTop] = React.useState<boolean>(false);
+  const arenaRef = React.useRef<ArenaTag>(null);
 
-export default class Edit extends React.Component<{}, EditState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      playerInfo: null,
-      isSavedSnackbarActive: false,
-      redirectToTop: false
-    };
+  const user = useUser();
+
+  function onTextChange(value: string) {
+    if (playerInfo) {
+      playerInfo.source = value;
+    }
   }
 
-  private editingSource: string = '';
-
-  private onTextChange = (value: string) => {
-    this.editingSource = value;
-    if (this.state.playerInfo) {
-      this.state.playerInfo.source = value;
+  function selectBot(bot: string) {
+    if (enemyInfo) {
+      enemyInfo.source = bot;
     }
-  };
+    reload();
+  }
 
-  private selectBot = (bot: string) => {
-    if (this.state.enemyInfo) {
-      this.state.enemyInfo.source = bot;
-    }
-    this.reload();
-  };
-
-  private abortController: AbortController = new AbortController();
-
-  public async componentDidMount() {
-    const signal = this.abortController.signal;
-    const user = await User.select({ signal }).catch(error => console.log(error));
-    if (!user || user.source === undefined) {
+  async function save(_event?: React.FormEvent<{}>) {
+    if (!playerInfo) {
       return;
     }
-    this.editingSource = user.source;
-    this.setState({
-      user,
-      playerInfo: { name: 'You', source: user.source, color: '#866' },
-      enemyInfo: { name: 'Enemy', source: fiddle, color: '#262' }
-    });
+    await User.update({ user: { source: playerInfo.source } }).catch(error => console.log(error));
+    showSavedSnackbar();
   }
 
-  public componentWillUnmount() {
-    this.abortController.abort();
-  }
-
-  public async save(_event?: React.FormEvent<{}>) {
-    const signal = this.abortController.signal;
-    await User.update({ signal, user: { source: this.editingSource } }).catch(error => console.log(error));
-    this.showSavedSnackbar();
-  }
-
-  public async saveAndFindAgainst() {
-    const signal = this.abortController.signal;
-    await User.update({ signal, user: { source: this.editingSource } }).catch(error => console.log(error));
-    this.setState({ redirectToTop: true });
-  }
-
-  public reload(_event?: React.FormEvent<{}>) {
-    (this.refs.arena as ArenaTag).onReload();
-  }
-
-  public showSavedSnackbar() {
-    this.setState({ isSavedSnackbarActive: true });
-  }
-
-  public hideSavedSnackbar() {
-    this.setState({ isSavedSnackbarActive: false });
-  }
-
-  public render() {
-    const { redirectToTop } = this.state;
-
-    if (redirectToTop) {
-      return <Redirect to={'/'} />;
+  async function saveAndFindAgainst() {
+    if (!playerInfo) {
+      return;
     }
+    await User.update({ user: { source: playerInfo.source } }).catch(error => console.log(error));
+    setRedirectToTop(true);
+  }
 
-    const resource = strings();
+  function reload(_event?: React.FormEvent<{}>) {
+    if (arenaRef.current) {
+      arenaRef.current.onReload();
+    }
+  }
 
-    if (this.state.playerInfo !== null) {
-      const players: PlayerInfo[] = [];
-      players.push(this.state.playerInfo);
-      if (this.state.enemyInfo) {
-        players.push(this.state.enemyInfo);
+  function showSavedSnackbar() {
+    setIsSavedSnackbarActive(true);
+  }
+
+  function hideSavedSnackbar() {
+    setIsSavedSnackbarActive(false);
+  }
+
+  React.useMemo(
+    () => {
+      if (!user) {
+        return;
       }
+      setPlayerInfo({ name: 'You', source: user.source || '', color: '#866' });
+      setEnemyInfo({ name: 'Enemy', source: fiddle, color: '#262' });
+    },
+    [user]
+  );
 
-      return (
-        <Grid>
-          <Cell col={6} tablet={12} phone={12}>
-            <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
-              <CardTitle>
-                <Button raised ripple colored onClick={this.save.bind(this)}>
-                  <Icon name="save" /> {resource.save}
-                </Button>
-                <Spacer />
-                <Button
-                  raised
-                  ripple
-                  colored
-                  onClick={this.saveAndFindAgainst.bind(this)}
-                  style={{ marginLeft: '8px' }}
-                >
-                  <Icon name="whatshot" /> {resource.saveAndFindAgainst}
-                </Button>
-                <Button raised ripple colored onClick={this.reload.bind(this)} style={{ marginLeft: '8px' }}>
-                  <Icon name="play_arrow" /> {resource.test}
-                </Button>
-              </CardTitle>
-            </Card>
-            <AceEditor
-              code={this.editingSource}
-              onChange={this.onTextChange}
-              onSave={this.save.bind(this)}
-              className="mdl-shadow--2dp"
-              readOnly={false}
-            />
-            <Snackbar active={this.state.isSavedSnackbarActive || false} onTimeout={this.hideSavedSnackbar.bind(this)}>
-              {resource.saved}
-            </Snackbar>
-          </Cell>
-          <Cell col={6} tablet={12} phone={12}>
-            <BotSelector selected={fiddle} onSelect={this.selectBot} />
-            <ArenaTag players={players} ref="arena" scale={1} isDemo={false} />
-          </Cell>
-        </Grid>
-      );
-    }
+  if (redirectToTop) {
+    return <Redirect to={'/'} />;
+  }
+
+  const resource = strings();
+
+  if (playerInfo === null) {
     return (
       <Grid>
         <Cell col={12}>{resource.loading}</Cell>
       </Grid>
     );
   }
+
+  const players: PlayerInfo[] = [];
+  players.push(playerInfo);
+  if (enemyInfo) {
+    players.push(enemyInfo);
+  }
+  return (
+    <Grid>
+      <Cell col={6} tablet={12} phone={12}>
+        <Card shadow={0} style={{ width: '100%', marginBottom: '8px', minHeight: '53px' }}>
+          <CardTitle>
+            <Button raised ripple colored onClick={save}>
+              <Icon name="save" /> {resource.save}
+            </Button>
+            <Spacer />
+            <Button raised ripple colored onClick={saveAndFindAgainst} style={{ marginLeft: '8px' }}>
+              <Icon name="whatshot" /> {resource.saveAndFindAgainst}
+            </Button>
+            <Button raised ripple colored onClick={reload} style={{ marginLeft: '8px' }}>
+              <Icon name="play_arrow" /> {resource.test}
+            </Button>
+          </CardTitle>
+        </Card>
+        <AceEditor
+          code={playerInfo.source}
+          onChange={onTextChange}
+          onSave={save}
+          className="mdl-shadow--2dp"
+          readOnly={false}
+        />
+        <Snackbar active={isSavedSnackbarActive || false} onTimeout={hideSavedSnackbar}>
+          {resource.saved}
+        </Snackbar>
+      </Cell>
+      <Cell col={6} tablet={12} phone={12}>
+        <BotSelector initialBotSource={fiddle} onSelect={selectBot} />
+        <ArenaTag players={players} ref={arenaRef} scale={1} isDemo={false} />
+      </Cell>
+    </Grid>
+  );
 }

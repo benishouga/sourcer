@@ -74,9 +74,11 @@ export default function AceEditor(arg: AceEditorProps) {
     };
   }, []);
 
-  return (
-    <div ref={rootRef} style={STYLE} className={props.className}>
-      {props.code}
-    </div>
-  );
+  return React.useMemo(() => {
+    return (
+      <div ref={rootRef} style={STYLE} className={props.className}>
+        {props.code}
+      </div>
+    );
+  }, []);
 }

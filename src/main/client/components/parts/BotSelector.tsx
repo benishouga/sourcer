@@ -14,7 +14,7 @@ import { standard } from '../pages/fiddles/standard';
 
 export interface BotSelectorProps {
   onSelect?: (source: string) => void;
-  selected?: string;
+  initialBotSource?: string;
 }
 
 const LEFT_BUTTON_STYLE = {
@@ -33,13 +33,14 @@ const RIGHT_BUTTON_STYLE = {
 
 export default function BotSelector(props: BotSelectorProps) {
   const resource = strings();
-  const [selectedSource, setSelectedSource] = React.useState('');
-  const [selectButtonLabel, setSelectButtonLabel] = React.useState(resource.selectEnemy);
+  const [selectedBot, setSelectedBot] = React.useState({
+    label: resource.selectEnemy,
+    source: fiddle
+  });
   const [isShowCode, setIsShowCode] = React.useState(false);
 
   function onSelect(source: string, label: string) {
-    setSelectButtonLabel(label);
-    setSelectedSource(source);
+    setSelectedBot({ label, source });
     if (props.onSelect) {
       props.onSelect(source);
     }
@@ -53,7 +54,7 @@ export default function BotSelector(props: BotSelectorProps) {
     <div style={{ marginBottom: '8px' }}>
       <div style={{ position: 'relative', textAlign: 'right' }}>
         <Button raised ripple colored id="enemy-select-menu" style={LEFT_BUTTON_STYLE}>
-          <Icon name="android" /> {selectButtonLabel}
+          <Icon name="android" /> {selectedBot.label}
         </Button>
         <Menu target="enemy-select-menu" align="right">
           <MenuItem onClick={() => onSelect(fiddle, resource.fiddle)}>{resource.fiddle}</MenuItem>
@@ -71,8 +72,8 @@ export default function BotSelector(props: BotSelectorProps) {
       </div>
       <div style={{ display: isShowCode ? 'block' : 'none' }}>
         <AceEditor
-          key={selectedSource /* HACK */}
-          code={selectedSource || ''}
+          key={selectedBot.source /* HACK: Force refresh by selectedSource*/}
+          code={selectedBot.source || ''}
           className="mdl-shadow--4dp"
           readOnly={true}
         />
