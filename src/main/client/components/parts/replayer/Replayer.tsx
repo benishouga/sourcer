@@ -2,11 +2,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Grid, Cell } from 'react-mdl';
 
-import { GameDump, Message } from '../../../core/Dump';
-import FieldTag from '../core/FieldTag';
-import HudTag from '../core/HudTag';
-import Status from './replayer/Status';
-import Controller from './replayer/Controller';
+import { GameDump, Message } from '../../../../core/Dump';
+import FieldTag from '../../core/FieldTag';
+import HudTag from '../../core/HudTag';
+import Status from './Status';
+import Controller from './Controller';
 
 const FRAME_MILLS = 1000 / 60;
 

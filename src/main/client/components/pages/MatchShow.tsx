@@ -4,7 +4,7 @@ import { Grid, Cell } from 'react-mdl';
 import { strings } from '../resources/Strings';
 import { RouteParams } from '../routes';
 import { useMatchDump } from '../hooks/api-hooks';
-import Replayer from '../parts/Replayer';
+import Replayer from '../parts/replayer/Replayer';
 
 export default function MatchShow(props: RouteComponentProps<RouteParams>) {
   const gameDump = useMatchDump(props.match.params.matchId);

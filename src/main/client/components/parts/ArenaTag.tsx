@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Replayer from './Replayer';
+import Replayer from './replayer/Replayer';
 import { Data, PlayerInfo } from '../../arenaWorker';
 import { GameDump } from '../../../core/Dump';
 
