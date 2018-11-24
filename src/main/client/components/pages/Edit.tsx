@@ -19,7 +19,7 @@ export default function Edit() {
   const [enemyInfo, setEnemyInfo] = React.useState<PlayerInfo | null>(null);
   const [isSavedSnackbarActive, setIsSavedSnackbarActive] = React.useState<boolean>(false);
   const [redirectToTop, setRedirectToTop] = React.useState<boolean>(false);
-  const arenaRef = React.useRef<ArenaTag>(null);
+  const [reloadKey, setReloadKey] = React.useState<number>(0);
 
   const user = useUser();
 
@@ -53,9 +53,7 @@ export default function Edit() {
   }
 
   function reload(_event?: React.FormEvent<{}>) {
-    if (arenaRef.current) {
-      arenaRef.current.onReload();
-    }
+    setReloadKey(reloadKey + 1);
   }
 
   function showSavedSnackbar() {
@@ -126,7 +124,7 @@ export default function Edit() {
       </Cell>
       <Cell col={6} tablet={12} phone={12}>
         <BotSelector initialBotSource={fiddle} onSelect={selectBot} />
-        <ArenaTag players={players} ref={arenaRef} scale={1} isDemo={false} />
+        <ArenaTag key={reloadKey} players={players} scale={1} isDemo={false} />
       </Cell>
     </Grid>
   );
