@@ -66,7 +66,7 @@ export default function Edit() {
     setIsSavedSnackbarActive(false);
   }
 
-  React.useMemo(
+  React.useEffect(
     () => {
       if (!user) {
         return;
