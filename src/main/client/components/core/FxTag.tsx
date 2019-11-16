@@ -7,7 +7,7 @@ export interface FxTagProps {
 
 export default function FxTag({ model }: FxTagProps) {
   const frame = model.f;
-  const alpha = 255 * frame / model.l;
+  const alpha = (255 * frame) / model.l;
   return (
     <g>
       <g transform={`translate(${model.p.x},${model.p.y})`}>

@@ -59,7 +59,7 @@ export default class ResponseCreator {
     };
   }
 
-  public static error(errors: (ResourceId)[]): ErrorResponse {
+  public static error(errors: ResourceId[]): ErrorResponse {
     return { errors };
   }
 }

@@ -169,7 +169,9 @@ export function arena(players: SourcerSource[]): Promise<GameDump> {
           break;
         case Command.LOG:
           const player = players[message.data.id];
-          console.log.apply(console, message.data.messages.unshift(player.account));
+          const messages = message.data.messages;
+          messages.unshift(player.account);
+          console.log(...messages);
           break;
       }
     });

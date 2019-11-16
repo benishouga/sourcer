@@ -256,7 +256,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
   private status(model: SourcerDump, profile: ProfileDump) {
     const resource = strings();
 
-    const shield = model.h / Configs.INITIAL_SHIELD * 100;
+    const shield = (model.h / Configs.INITIAL_SHIELD) * 100;
 
     let backgroundColor: string;
     if (50 < shield) {
@@ -282,7 +282,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <div>
               <ProgressBar
                 className="progress-status progress-shield"
-                progress={model.h / Configs.INITIAL_SHIELD * 100}
+                progress={(model.h / Configs.INITIAL_SHIELD) * 100}
               />
             </div>
           </div>
@@ -292,7 +292,10 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
               <span className="main">{model.f}</span> / {Configs.INITIAL_FUEL}
             </div>
             <div>
-              <ProgressBar className="progress-status progress-fuel" progress={model.f / Configs.INITIAL_FUEL * 100} />
+              <ProgressBar
+                className="progress-status progress-fuel"
+                progress={(model.f / Configs.INITIAL_FUEL) * 100}
+              />
             </div>
           </div>
           <div>
@@ -303,7 +306,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <div>
               <ProgressBar
                 className="progress-status progress-temperature"
-                progress={model.t / Configs.OVERHEAT_BORDER * 100}
+                progress={(model.t / Configs.OVERHEAT_BORDER) * 100}
               />
             </div>
           </div>
@@ -315,7 +318,7 @@ export default class Replayer extends React.Component<ReplayerProps, ReplayerSta
             <div>
               <ProgressBar
                 className="progress-status progress-ammo"
-                progress={model.a / Configs.INITIAL_MISSILE_AMMO * 100}
+                progress={(model.a / Configs.INITIAL_MISSILE_AMMO) * 100}
               />
             </div>
           </div>

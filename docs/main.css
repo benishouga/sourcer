@@ -79,6 +79,7 @@ pre.code {
 }
 
 .replay-controller {
+  display: -webkit-box;
   display: flex;
 }
 
@@ -98,7 +99,8 @@ pre.code {
 }
 
 .replay-slider {
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+          flex-grow: 1;
 }
 
 .replay-slider .mdl-slider__container {
@@ -114,24 +116,28 @@ pre.code {
   background-color: #00c;
 }
 .progress-shield .bar2 {
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255,255,255,.7)), to(rgba(255,255,255,.7))), -webkit-gradient(linear, left top, right top, from(#00c), to(#00c));
   background-image: linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.7)), linear-gradient(to right, #00c, #00c);
 }
 .progress-fuel .bar1 {
   background-color: #f80;
 }
 .progress-fuel .bar2 {
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255,255,255,.7)), to(rgba(255,255,255,.7))), -webkit-gradient(linear, left top, right top, from(#f80), to(#f80));
   background-image: linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.7)), linear-gradient(to right, #f80, #f80);
 }
 .progress-temperature .bar1 {
   background-color: #f00;
 }
 .progress-temperature .bar2 {
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255,255,255,.7)), to(rgba(255,255,255,.7))), -webkit-gradient(linear, left top, right top, from(#f00), to(#f00));
   background-image: linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.7)), linear-gradient(to right, #f00, #f00);
 }
 .progress-ammo .bar1 {
   background-color: #080;
 }
 .progress-ammo .bar2 {
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255,255,255,.7)), to(rgba(255,255,255,.7))), -webkit-gradient(linear, left top, right top, from(#080), to(#080));
   background-image: linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.7)), linear-gradient(to right, #080, #080);
 }
 
