@@ -1,3 +1,5 @@
+import dialogPolyfill from 'dialog-polyfill';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
@@ -62,7 +64,7 @@ export default class Official extends React.Component<RouteComponentProps<{}>, O
     if (this.dialog) {
       const dialog = ReactDOM.findDOMNode(this.dialog) as any;
       if (!dialog.showModal) {
-        (window as any).dialogPolyfill.registerDialog(dialog);
+        dialogPolyfill.registerDialog(dialog);
       }
     }
     const signal = this.abortController.signal;

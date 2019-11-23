@@ -1,3 +1,5 @@
+import dialogPolyfill from 'dialog-polyfill';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Link, RouteComponentProps, Redirect } from 'react-router-dom';
@@ -46,7 +48,7 @@ export default class MatchNew extends React.Component<RouteComponentProps<RouteP
     if (this.dialog) {
       const dialog = ReactDOM.findDOMNode(this.dialog) as any;
       if (!dialog.showModal) {
-        (window as any).dialogPolyfill.registerDialog(dialog);
+        dialogPolyfill.registerDialog(dialog);
       }
     }
 
