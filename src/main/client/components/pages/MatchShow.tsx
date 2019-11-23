@@ -4,7 +4,6 @@ import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
 
-import { AbortController } from '../../utils/fetch';
 import { GameDump } from '../../../core/Dump';
 import { RouteParams } from '../routes';
 import Replayer from '../parts/Replayer';

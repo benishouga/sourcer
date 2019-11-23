@@ -6,7 +6,6 @@ import moment from 'moment';
 import { strings } from '../resources/Strings';
 
 import User from '../../service/User';
-import { AbortController } from '../../utils/fetch';
 import { UserResponse } from '../../../dts/UserResponse';
 
 export interface RecentUpdatedUsersProps {

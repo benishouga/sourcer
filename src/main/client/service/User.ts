@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { get, post, put, AbortSignal } from '../utils/fetch';
+import { get, post, put } from '../utils/fetch';
 import { ErrorResponse } from '../../dts/ErrorResponse';
 import { UserResponse } from '../../dts/UserResponse';
 

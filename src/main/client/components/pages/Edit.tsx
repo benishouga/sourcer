@@ -5,7 +5,6 @@ import { Grid, Cell, Button, Icon, Card, CardTitle, Snackbar, Spacer } from 'rea
 import { strings } from '../resources/Strings';
 import { UserResponse } from '../../../dts/UserResponse';
 
-import { AbortController } from '../../utils/fetch';
 import AceEditor from '../parts/AceEditor';
 import ArenaTag from '../parts/ArenaTag';
 import { PlayerInfo } from '../../arenaWorker';

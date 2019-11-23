@@ -50,7 +50,6 @@
     "react-dom": "^16.12.0",
     "react-mdl": "^1.11.0",
     "react-router-dom": "^5.1.2",
-    "superagent": "^5.1.0",
     "vm2": "^3.8.4"
   },
   "devDependencies": {
@@ -67,7 +66,6 @@
     "@types/react-dom": "^16.9.4",
     "@types/react-mdl": "^1.7.27",
     "@types/react-router-dom": "^5.1.2",
-    "@types/superagent": "^4.1.4",
     "autoprefixer": "^9.7.1",
     "cpx": "^1.5.0",
     "cross-env": "^6.0.3",

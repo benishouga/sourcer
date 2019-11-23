@@ -6,7 +6,6 @@ import moment from 'moment';
 import { strings } from '../resources/Strings';
 import { MatchResponse } from '../../../dts/MatchResponse';
 
-import { AbortController } from '../../utils/fetch';
 import User from '../../service/User';
 
 export interface MatchesProps {

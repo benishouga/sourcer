@@ -6,7 +6,6 @@ import { strings } from '../resources/Strings';
 import { UserResponse } from '../../../dts/UserResponse';
 import { MatchResponse } from '../../../dts/MatchResponse';
 
-import { AbortController } from '../../utils/fetch';
 import Auth from '../../service/Auth';
 import User from '../../service/User';
 import Matches from '../parts/Matches';
