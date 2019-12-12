@@ -36,6 +36,7 @@
   "author": "benishouga",
   "license": "MIT",
   "dependencies": {
+    "@deboxsoft/cpx": "^1.5.0",
     "@types/dialog-polyfill": "^0.5.0",
     "body-parser": "^1.19.0",
     "brace": "^0.11.1",
@@ -67,7 +68,6 @@
     "@types/react-mdl": "^1.7.27",
     "@types/react-router-dom": "^5.1.2",
     "autoprefixer": "^9.7.1",
-    "cpx": "^1.5.0",
     "cross-env": "^6.0.3",
     "css-mqpacker": "^7.0.0",
     "husky": "^3.0.9",
