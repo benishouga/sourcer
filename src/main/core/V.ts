@@ -57,7 +57,7 @@ export default class V {
     return this.multiply(scale);
   }
   public angle(): number {
-    return this.angleInRadians() * 180 / Math.PI;
+    return (this.angleInRadians() * 180) / Math.PI;
   }
   public angleInRadians(): number {
     if (this.calculatedAngle !== null) {

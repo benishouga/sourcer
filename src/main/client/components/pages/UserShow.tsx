@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+
 import { RouteParams } from '../routes';
 import { useUser } from '../hooks/api-hooks';
 import Matches from '../parts/Matches';

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { get, post, del, AbortSignal } from '../utils/fetch';
+import { get, post, del } from '../utils/fetch';
 import { AuthResponse } from '../../dts/AuthResponse';
 
 export default class Auth {

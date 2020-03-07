@@ -1,86 +1,55 @@
-import * as sa from 'superagent';
-import { EventEmitter } from 'events';
-
-export class AbortSignal extends EventEmitter {
-  public aborted = false;
-}
-
-export class AbortController {
-  public signal: AbortSignal;
-  constructor() {
-    this.signal = new AbortSignal();
-  }
-
-  public abort() {
-    this.signal.aborted = true;
-    this.signal.emit('abort');
-  }
-}
-
 interface Option {
   query?: { [key: string]: string };
   body?: any;
   signal?: AbortSignal;
 }
 
-function send<T>(request: sa.Request, { query, body, signal }: Option = {}): Promise<T> {
-  request.accept('application/json');
-  request.withCredentials();
-  if (query) {
-    request.query(query);
+function querystring(query?: { [key: string]: string }) {
+  if (!query) {
+    return '';
   }
+  const keyvalues = Object.keys(query)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+    .join('&');
+  return `?${keyvalues}`;
+}
+
+async function send<T>(method: string, url: string, { query, body, signal }: Option = {}): Promise<T> {
+  const headers: { [key: string]: string } = { Accept: 'application/json' };
 
   if (body) {
-    request.set({ 'Content-Type': 'application/json' });
-    request.send(body);
+    headers['Content-Type'] = 'application/json';
   }
 
-  return new Promise<T>((resolve, reject) => {
-    let abortHandler: () => void;
-    if (signal) {
-      if (signal.aborted) {
-        const error = new Error('Aborted');
-        error.name = 'AbortError';
-        return reject(error);
-      }
-
-      abortHandler = () => {
-        const error = new Error('Aborted');
-        error.name = 'AbortError';
-        reject(error);
-        request.abort();
-        signal.removeListener('abort', abortHandler);
-      };
-      signal.on('abort', abortHandler);
-    }
-
-    request.end((err, res) => {
-      if (signal) {
-        signal.removeListener('abort', abortHandler);
-      }
-      return err ? reject(err) : resolve(res.body);
-    });
+  const res = await fetch(url + querystring(query), {
+    method,
+    headers,
+    signal,
+    body: JSON.stringify(body),
+    mode: 'same-origin',
+    credentials: 'include'
   });
+  return await res.json();
 }
 
 export function get<T>(url: string, options: { signal?: AbortSignal; query?: { [key: string]: string } } = {}) {
-  return send<T>(sa.get(url), { ...options });
+  return send<T>('GET', url, options);
 }
 
 export function post<T>(
   url: string,
   options: { signal?: AbortSignal; query?: { [key: string]: string }; body?: any } = {}
 ) {
-  return send<T>(sa.post(url), { ...options });
+  return send<T>('POST', url, options);
 }
 
 export function put<T>(
   url: string,
   options: { signal?: AbortSignal; query?: { [key: string]: string }; body?: any } = {}
 ) {
-  return send<T>(sa.put(url), { ...options });
+  return send<T>('PUT', url, options);
 }
 
 export function del<T>(url: string, options: { signal?: AbortSignal; query?: { [key: string]: string } } = {}) {
-  return send<T>(sa.del(url), { ...options });
+  return send<T>('DELETE', url, options);
 }

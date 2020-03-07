@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import { strings } from '../resources/Strings';
+
 import Auth from '../../service/Auth';
 import Config from '../../service/Config';
 import { useUser } from '../hooks/api-hooks';

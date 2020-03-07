@@ -7,4 +7,4 @@ export default interface Screen {
   top: number;
   scale: number;
   center: number;
-};
+}

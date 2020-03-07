@@ -1,3 +1,5 @@
+import dialogPolyfill from 'dialog-polyfill';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom';
@@ -38,7 +40,7 @@ export default function Official() {
     if (dialogRef.current) {
       const dialog = ReactDOM.findDOMNode(dialogRef.current) as any;
       if (!dialog.showModal) {
-        (window as any).dialogPolyfill.registerDialog(dialog);
+        dialogPolyfill.registerDialog(dialog);
       }
     }
   }, []);

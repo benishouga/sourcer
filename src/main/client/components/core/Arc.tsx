@@ -33,7 +33,7 @@ export default function Arc({
   }
 
   const normalizedAngle = Math.max(0, angle);
-  const halfAngleRadian = normalizedAngle * Math.PI / 180 / 2;
+  const halfAngleRadian = (normalizedAngle * Math.PI) / 180 / 2;
   const angleX = renge * Math.cos(halfAngleRadian);
   const angleY = renge * Math.sin(halfAngleRadian);
   const d = `

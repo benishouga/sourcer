@@ -11,7 +11,7 @@ export default function(uri: string): Promise<mongoose.Connection> {
   }
 
   return new Promise<mongoose.Connection>((resolve, _reject) => {
-    mongoose.connect(uri);
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
     mongoose.connection.on('error', () => {
       console.log('MongoDB connection error. Please make sure MongoDB is running.');
