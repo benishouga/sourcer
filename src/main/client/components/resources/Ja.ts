@@ -15,11 +15,7 @@ export class Ja implements StringResource {
   public fieldLabelPassword = 'パスワード...';
   public fieldLabelName = 'プレイヤー名...';
   public fieldLabelNameForTeamGame = 'チーム名...';
-  public fieldLabelMember1 = 'メンバー１...';
-  public fieldLabelMember2 = 'メンバー２...';
-  public fieldLabelMember3 = 'メンバー３...';
-  public fieldLabelMember4 = 'メンバー４...';
-  public fieldLabelMember5 = 'メンバー５...';
+  public fieldLabelMember = ['メンバー１...', 'メンバー２...', 'メンバー３...', 'メンバー４...', 'メンバー５...'];
   public fieldLabelAppKey = 'アプリキー';
   public logoutMessage = 'ログアウトしました。';
   public fight = '対戦する';
