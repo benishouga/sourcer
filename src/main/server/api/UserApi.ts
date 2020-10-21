@@ -88,6 +88,7 @@ export async function create(req: Request, res: Response) {
   return res
     .status(201)
     .type('json')
+    .send('{}')
     .end();
 }
 
