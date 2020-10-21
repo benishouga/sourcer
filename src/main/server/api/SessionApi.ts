@@ -88,6 +88,10 @@ export function destroy(req: Request, res: Response) {
   }
 
   req.session.destroy(() => {
-    res.status(200).end();
+    res
+      .status(200)
+      .type('json')
+      .send('{}')
+      .end();
   });
 }
