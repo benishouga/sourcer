@@ -1,19 +1,19 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { strings } from '../resources/Strings';
 import Auth from '../../service/Auth';
 import { Cell, Grid } from 'react-mdl';
 
-export default class Logout extends React.Component<{}, {}> {
-  public componentDidMount() {
+const Logout: React.FC = () => {
+  useEffect(() => {
     Auth.logout();
-  }
+  }, []);
 
-  public render() {
-    const resource = strings();
-    return (
-      <Grid>
-        <Cell col={12}>{resource.logoutMessage}</Cell>
-      </Grid>
-    );
-  }
-}
+  const resource = strings();
+  return (
+    <Grid>
+      <Cell col={12}>{resource.logoutMessage}</Cell>
+    </Grid>
+  );
+};
+
+export default Logout;

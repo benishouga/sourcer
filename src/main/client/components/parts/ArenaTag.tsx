@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Replayer from './Replayer';
 import { Data, PlayerInfo } from '../../arenaWorker';
 import { GameDump } from '../../../core/Dump';
@@ -105,105 +105,79 @@ export interface ArenaProps {
   path?: string;
 }
 
-export interface ArenaState {
-  arena: Arena | null;
-  loadedFrame: number;
-  dynamicWidth: number;
-  gameDump: GameDump | null;
-  error: string | null;
-}
+const ArenaTag: React.FC<ArenaProps> = (props) => {
+  const [arena, setArena] = useState<Arena | null>(null);
+  const [loadedFrame, setLoadedFrame] = useState<number>(0);
+  const [dynamicWidth, setDynamicWidth] = useState<number>(512);
+  const [gameDump, setGameDump] = useState<GameDump | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-export default class ArenaTag extends React.Component<ArenaProps, ArenaState> {
-  private animationFrameHandler: number | null = null;
+  const animationFrameHandler = useRef<number | null>(null);
 
-  public static defaultProps = {
-    width: -1,
-    height: 384,
-    scale: 1.0
-  };
-
-  constructor(props: ArenaProps) {
-    super(props);
-    this.state = {
-      arena: null,
-      loadedFrame: 0,
-      dynamicWidth: 512,
-      gameDump: null,
-      error: null
-    };
-  }
-
-  private cancel() {
-    if (this.state.arena) {
-      this.state.arena.cancel();
+  const cancel = useCallback(() => {
+    if (arena) {
+      arena.cancel();
     }
-  }
+  }, [arena]);
 
-  public onReload() {
-    this.cancel();
-    this.setState({
-      gameDump: null,
-      arena: new Arena(this.props.players, this.props.isDemo, this.props.path)
-    });
-    if (!this.animationFrameHandler) {
-      this.animationFrameHandler = requestAnimationFrame(() => this.tick());
+  const onReload = useCallback(() => {
+    cancel();
+    setGameDump(null);
+    setArena(new Arena(props.players, props.isDemo, props.path));
+    if (!animationFrameHandler.current) {
+      animationFrameHandler.current = requestAnimationFrame(() => tick());
     }
-  }
+  }, [cancel, props.players, props.isDemo, props.path]);
 
-  public render() {
-    if (this.state.gameDump) {
-      return (
-        <Replayer
-          width={this.props.width}
-          height={this.props.height}
-          scale={this.props.scale}
-          gameDump={this.state.gameDump}
-          error={this.state.error}
-          onReload={this.onReload.bind(this)}
-        />
-      );
-    }
-
-    const loadedFrame = this.state.loadedFrame;
-    return <div ref="root">{`Loading ...${loadedFrame}`}</div>;
-  }
-
-  public tick() {
-    this.animationFrameHandler = requestAnimationFrame(() => this.tick());
-
-    const arena = this.state.arena;
+  const tick = useCallback(() => {
+    animationFrameHandler.current = requestAnimationFrame(() => tick());
 
     if (arena) {
       const error = arena.error;
-      if (this.state.error !== error) {
-        this.setState({ error });
+      if (error !== error) {
+        setError(error);
       }
 
       const loadedFrame = arena.loadedFrame || 0;
-      if (this.state.loadedFrame !== loadedFrame) {
-        this.setState({ loadedFrame });
+      if (loadedFrame !== loadedFrame) {
+        setLoadedFrame(loadedFrame);
       }
 
       if (arena.endOfGame) {
-        cancelAnimationFrame(this.animationFrameHandler);
-        this.animationFrameHandler = null;
-        this.setState({
-          gameDump: arena.game
-        });
+        cancelAnimationFrame(animationFrameHandler.current!);
+        animationFrameHandler.current = null;
+        setGameDump(arena.game);
       }
     }
+  }, [arena]);
+
+  useEffect(() => {
+    animationFrameHandler.current = requestAnimationFrame(() => tick());
+    setArena(new Arena(props.players, props.isDemo, props.path));
+
+    return () => {
+      if (animationFrameHandler.current) {
+        cancelAnimationFrame(animationFrameHandler.current);
+        animationFrameHandler.current = null;
+      }
+      cancel();
+    };
+  }, [props.players, props.isDemo, props.path, tick, cancel]);
+
+  if (gameDump) {
+    return (
+      <Replayer
+        width={props.width}
+        height={props.height}
+        scale={props.scale}
+        gameDump={gameDump}
+        error={error}
+        onReload={onReload}
+      />
+    );
   }
 
-  public componentDidMount() {
-    this.animationFrameHandler = requestAnimationFrame(() => this.tick());
-    this.setState({ arena: new Arena(this.props.players, this.props.isDemo, this.props.path) });
-  }
+  return <div>{`Loading ...${loadedFrame}`}</div>;
+};
 
-  public componentWillUnmount() {
-    if (this.animationFrameHandler) {
-      cancelAnimationFrame(this.animationFrameHandler);
-      this.animationFrameHandler = null;
-    }
-    this.cancel();
-  }
-}
+export default ArenaTag;

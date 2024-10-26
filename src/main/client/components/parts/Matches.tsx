@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ListItem, ListItemContent, ListItemAction, Tooltip, FABButton, Icon } from 'react-mdl';
 import moment from 'moment';
@@ -13,68 +13,52 @@ export interface MatchesProps {
   matches?: MatchResponse[];
 }
 
-export interface MatchesState {
-  matches?: MatchResponse[];
-}
+const Matches: React.FC<MatchesProps> = (props) => {
+  const [matches, setMatches] = useState<MatchResponse[] | undefined>(props.matches);
 
-export default class Matches extends React.Component<MatchesProps, MatchesState> {
-  constructor(props: MatchesProps) {
-    super(props);
-    this.state = { matches: props.matches };
-  }
+  const abortController = new AbortController();
 
-  private abortController: AbortController = new AbortController();
+  useEffect(() => {
+    if (!props.matches) {
+      loadMatches(props.account);
+    }
 
-  public componentWillReceiveProps(nextProps: MatchesProps) {
-    this.setState({ matches: nextProps.matches });
-  }
+    return () => {
+      abortController.abort();
+    };
+  }, [props.matches, props.account]);
 
-  private async loadMatches(account?: string) {
-    this.abortController = new AbortController();
-    const signal = this.abortController.signal;
-    this.setState({ matches: undefined });
+  const loadMatches = async (account?: string) => {
+    const signal = abortController.signal;
+    setMatches(undefined);
     const user = await User.select({ signal, account }).catch(error => console.log(error));
     if (user) {
-      this.setState({ matches: user.matches });
+      setMatches(user.matches);
     }
-  }
+  };
 
-  public async componentDidMount() {
-    if (!this.props.matches) {
-      this.loadMatches(this.props.account);
+  useEffect(() => {
+    if (!props.matches) {
+      loadMatches(props.account);
     }
-  }
+  }, [props.matches, props.account]);
 
-  public componentWillUnmount() {
-    if (this.abortController) {
-      this.abortController.abort();
-    }
-  }
+  const resource = strings();
+  const elements = elements();
 
-  public async componentWillUpdate(nextProps: MatchesProps, _nextState: MatchesState) {
-    if (!nextProps.matches) {
-      this.abortController.abort();
-      this.loadMatches(nextProps.account);
-    }
-  }
+  return (
+    <div>
+      <h5>
+        {resource.matchesTitle} {props.account}
+      </h5>
+      {elements}
+    </div>
+  );
 
-  public render() {
+  function elements() {
     const resource = strings();
-    const elements = this.elements();
-    return (
-      <div>
-        <h5>
-          {resource.matchesTitle} {this.props.account}
-        </h5>
-        {elements}
-      </div>
-    );
-  }
-
-  private elements() {
-    const resource = strings();
-    if (this.state.matches && this.state.matches.length !== 0) {
-      return this.state.matches.map((match, index) => {
+    if (matches && matches.length !== 0) {
+      return matches.map((match, index) => {
         const subtitle = (
           <span className="updated">
             {resource.updatedAt} {moment(match.created).fromNow()}
@@ -83,7 +67,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
         return (
           <ListItem key={index} twoLine>
             <ListItemContent avatar="whatshot" subtitle={subtitle}>
-              {this.players(match)}
+              {players(match)}
             </ListItemContent>
             <ListItemAction>
               <Tooltip label={resource.viewMatch} position="right">
@@ -101,7 +85,7 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
     return <p>{resource.none}</p>;
   }
 
-  private players(match: MatchResponse) {
+  function players(match: MatchResponse) {
     const players: (Element | React.ReactElement<{}> | null)[] = [];
     if (!match.players) {
       return null;
@@ -136,4 +120,6 @@ export default class Matches extends React.Component<MatchesProps, MatchesState>
       });
     return players;
   }
-}
+};
+
+export default Matches;

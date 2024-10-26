@@ -1,21 +1,36 @@
+import { useState, useEffect } from 'react';
 import { get } from '../utils/fetch';
 import { ConfigResponse } from '../../dts/ConfigResponse';
 import { EnvMessage } from '../../dts/StringResource';
 
-export default class Config {
-  private static response: ConfigResponse;
-  public static get values() {
-    return this.response;
-  }
-  public static strings(lang?: string): EnvMessage {
-    const v = this.values;
+const useConfig = () => {
+  const [response, setResponse] = useState<ConfigResponse>({
+    requireAppKey: false,
+    teamGame: false,
+    envMessages: {},
+    publishGames: false,
+    displayLanguage: 'en'
+  });
+
+  const load = async () => {
+    const configResponse = await get<ConfigResponse>('/api/config');
+    setResponse(configResponse);
+  };
+
+  const strings = (lang?: string): EnvMessage => {
+    const v = response;
     const stringsForLang = v.envMessages[lang || navigator.language];
     if (stringsForLang) {
       return stringsForLang;
     }
     return v.envMessages.en; // default 'en'
-  }
-  public static async load() {
-    this.response = await get<ConfigResponse>('/api/config');
-  }
-}
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  return { response, strings };
+};
+
+export default useConfig;

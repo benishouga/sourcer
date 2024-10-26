@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Cell } from 'react-mdl';
 
@@ -15,65 +15,55 @@ export interface UserShowProps extends RouteComponentProps<RouteParams> {
   user?: UserResponse;
 }
 
-export interface UserShowState {
-  user?: UserResponse;
-}
+const UserShow: React.FC<UserShowProps> = (props) => {
+  const [user, setUser] = useState<UserResponse | undefined>(undefined);
 
-export default class UserShow extends React.Component<UserShowProps, UserShowState> {
-  constructor(props: UserShowProps) {
-    super(props);
-    this.state = {};
-  }
+  const abortController = new AbortController();
 
-  private abortController: AbortController = new AbortController();
-
-  private async loadUser(account?: string) {
-    this.abortController = new AbortController();
-    const signal = this.abortController.signal;
-    this.setState({ user: undefined });
+  const loadUser = async (account?: string) => {
+    const signal = abortController.signal;
+    setUser(undefined);
     const user = await User.select({ signal, account }).catch(error => console.log(error));
     if (user) {
-      this.setState({ user });
+      setUser(user);
     }
-  }
+  };
 
-  public async componentDidMount() {
-    this.loadUser(this.props.match.params.account);
-  }
+  useEffect(() => {
+    loadUser(props.match.params.account);
 
-  public componentWillUnmount() {
-    this.abortController.abort();
-  }
+    return () => {
+      abortController.abort();
+    };
+  }, [props.match.params.account]);
 
-  public async componentWillUpdate(nextProps: UserShowProps) {
-    if (Auth.status.authenticated && nextProps.match.params.account !== this.props.match.params.account) {
-      this.abortController.abort();
-      this.loadUser(nextProps.match.params.account);
+  useEffect(() => {
+    if (Auth.status.authenticated && props.match.params.account !== props.match.params.account) {
+      abortController.abort();
+      loadUser(props.match.params.account);
     }
-  }
+  }, [props.match.params.account]);
 
-  public render() {
-    const resource = strings();
+  const resource = strings();
 
-    const user = this.state.user;
-
-    if (!user) {
-      return (
-        <Grid>
-          <Cell col={12}>{resource.loading}</Cell>
-        </Grid>
-      );
-    }
-
+  if (!user) {
     return (
       <Grid>
-        <Cell col={4}>
-          <ProfileCard user={user} showFight />
-        </Cell>
-        <Cell col={8}>
-          <Matches matches={user.matches} />
-        </Cell>
+        <Cell col={12}>{resource.loading}</Cell>
       </Grid>
     );
   }
-}
+
+  return (
+    <Grid>
+      <Cell col={4}>
+        <ProfileCard user={user} showFight />
+      </Cell>
+      <Cell col={8}>
+        <Matches matches={user.matches} />
+      </Cell>
+    </Grid>
+  );
+};
+
+export default UserShow;

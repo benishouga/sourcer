@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ListItem, ListItemContent, ListItemAction, Tooltip, FABButton, Icon } from 'react-mdl';
 import moment from 'moment';
@@ -10,26 +10,20 @@ export interface PublishGamesProps {
   matches?: MatchResponse[];
 }
 
-export default class PublishGames extends React.Component<PublishGamesProps, {}> {
-  constructor(props: PublishGamesProps) {
-    super(props);
-  }
+const PublishGames: React.FC<PublishGamesProps> = ({ matches }) => {
+  const resource = strings();
+  const elements = elements();
 
-  public render() {
-    const resource = strings();
-    const elements = this.elements();
-    return (
-      <div>
-        <h5>{resource.matchesTitle}</h5>
-        {elements}
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h5>{resource.matchesTitle}</h5>
+      {elements}
+    </div>
+  );
 
-  private elements() {
-    const resource = strings();
-    if (this.props.matches && this.props.matches.length !== 0) {
-      return this.props.matches.map((match, index) => {
+  function elements() {
+    if (matches && matches.length !== 0) {
+      return matches.map((match, index) => {
         const subtitle = (
           <span className="updated">
             {resource.updatedAt} {moment(match.created).fromNow()}
@@ -38,7 +32,7 @@ export default class PublishGames extends React.Component<PublishGamesProps, {}>
         return (
           <ListItem key={index} twoLine>
             <ListItemContent avatar="whatshot" subtitle={subtitle}>
-              {this.players(match)}
+              {players(match)}
             </ListItemContent>
             <ListItemAction>
               <Tooltip label={resource.viewMatch} position="right">
@@ -56,7 +50,7 @@ export default class PublishGames extends React.Component<PublishGamesProps, {}>
     return <p>{resource.none}</p>;
   }
 
-  private players(match: MatchResponse) {
+  function players(match: MatchResponse) {
     const players: (Element | React.ReactElement<{}>)[] = [];
     if (!match.players) {
       return null;
@@ -90,4 +84,6 @@ export default class PublishGames extends React.Component<PublishGamesProps, {}>
       });
     return players;
   }
-}
+};
+
+export default PublishGames;

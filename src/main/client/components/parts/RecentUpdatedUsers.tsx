@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemContent, ListItemAction, Icon, FABButton, Tooltip } from 'react-mdl';
 import moment from 'moment';
@@ -12,48 +12,44 @@ export interface RecentUpdatedUsersProps {
   account?: string;
 }
 
-export interface RecentUpdatedUsersState {
-  users: UserResponse[] | null;
-}
+const RecentUpdatedUsers: React.FC<RecentUpdatedUsersProps> = (props) => {
+  const [users, setUsers] = useState<UserResponse[] | null>(null);
 
-export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUsersProps, RecentUpdatedUsersState> {
-  constructor(props: RecentUpdatedUsersProps) {
-    super(props);
-    this.state = { users: null };
-  }
+  useEffect(() => {
+    const abortController = new AbortController();
 
-  private abortController: AbortController = new AbortController();
+    const fetchUsers = async () => {
+      const signal = abortController.signal;
+      const users = await User.recent({ signal }).catch(error => console.log(error));
+      if (users) {
+        setUsers(users);
+      }
+    };
 
-  public async componentDidMount() {
-    const signal = this.abortController.signal;
-    const users = await User.recent({ signal }).catch(error => console.log(error));
-    if (users) {
-      this.setState({ users });
-    }
-  }
+    fetchUsers();
 
-  public componentWillUnmount() {
-    this.abortController.abort();
-  }
+    return () => {
+      abortController.abort();
+    };
+  }, []);
 
-  public render() {
+  const resource = strings();
+  const elements = elements();
+
+  return (
+    <div>
+      <h5>{resource.recentUpdatedUsersTitle}</h5>
+      <List>{elements}</List>
+    </div>
+  );
+
+  function elements() {
     const resource = strings();
-    const elements = this.elements();
-    return (
-      <div>
-        <h5>{resource.recentUpdatedUsersTitle}</h5>
-        <List>{elements}</List>
-      </div>
-    );
-  }
-
-  private elements() {
-    const resource = strings();
-    if (this.state.users && this.state.users.length !== 0) {
-      return this.state.users.map(user => {
+    if (users && users.length !== 0) {
+      return users.map(user => {
         return (
           <ListItem key={user.account} threeLine>
-            <ListItemContent avatar="person" subtitle={this.subtitle(user)}>
+            <ListItemContent avatar="person" subtitle={subtitle(user)}>
               <Link to={`/user/${user.account}`}>{user.name}</Link>
             </ListItemContent>
             <ListItemAction>
@@ -72,7 +68,7 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
     return <p>{resource.none}</p>;
   }
 
-  private subtitle(user: UserResponse) {
+  function subtitle(user: UserResponse) {
     const resource = strings();
     if (!user.members) {
       return null;
@@ -92,4 +88,6 @@ export default class RecentUpdatedUsers extends React.Component<RecentUpdatedUse
       </div>
     );
   }
-}
+};
+
+export default RecentUpdatedUsers;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import TreeTag, { Tree } from './TreeTag';
 import DomeTag, { Dome } from './DomeTag';
 import Screen from './Screen';
@@ -8,56 +8,28 @@ export interface BackgroundProps {
   screen: Screen;
 }
 
-export interface BackgroundState {
-  trees1: Tree[];
-  trees2: Tree[];
-  trees3: Tree[];
-  domes1: Dome[];
-}
+const BackgroundTag: React.FC<BackgroundProps> = ({ screen }) => {
+  const [trees1, setTrees1] = useState<Tree[]>([]);
+  const [trees2, setTrees2] = useState<Tree[]>([]);
+  const [trees3, setTrees3] = useState<Tree[]>([]);
+  const [domes1, setDomes1] = useState<Dome[]>([]);
 
-export default class BackgroundTag extends React.Component<BackgroundProps, BackgroundState> {
-  constructor(props: BackgroundProps) {
-    super(props);
-    this.state = {
-      trees1: this.makeTrees(),
-      trees2: this.makeTrees(),
-      trees3: this.makeTrees(),
-      domes1: this.makeDomes()
-    };
-  }
+  useEffect(() => {
+    setTrees1(makeTrees());
+    setTrees2(makeTrees());
+    setTrees3(makeTrees());
+    setDomes1(makeDomes());
+  }, []);
 
-  public render() {
-    const screen = this.props.screen;
-
-    const ground = <rect fill="#888" width={screen.width} height={1} x={-screen.width / 2} y={screen.height - 6} />;
-
-    const bg1 = this.makeBg(this.state.trees1, 2);
-    const bg2 = this.makeBg(this.state.trees2, 3);
-    const bg3 = this.makeBg(this.state.trees3, 4);
-    const bg4 = this.makeDomeTags(this.state.domes1, 6);
-
-    return (
-      <g>
-        {bg4}
-        {bg3}
-        {bg2}
-        {bg1}
-        {ground}
-      </g>
-    );
-  }
-
-  private computeViewInfo(far: number): { viewLeft: number; viewRight: number; viewTop: number } {
-    const screen = this.props.screen;
+  const computeViewInfo = (far: number): { viewLeft: number; viewRight: number; viewTop: number } => {
     const viewLeft = ((screen.left - screen.center) / (screen.scale / far) + screen.center) / far;
     const viewRight = ((screen.right - screen.center) / (screen.scale / far) + screen.center) / far;
     const viewTop = (screen.height - 8) / screen.scale;
     return { viewLeft, viewRight, viewTop };
-  }
+  };
 
-  private makeBg(trees: Tree[], far: number) {
-    const screen = this.props.screen;
-    const { viewLeft, viewRight, viewTop } = this.computeViewInfo(far);
+  const makeBg = (trees: Tree[], far: number) => {
+    const { viewLeft, viewRight, viewTop } = computeViewInfo(far);
     const treeTags = trees
       .filter(tree => viewLeft < tree.x + tree.size && tree.x - tree.size < viewRight)
       .map(tree => {
@@ -70,11 +42,10 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
         {treeTags}
       </g>
     );
-  }
+  };
 
-  private makeDomeTags(domes: Dome[], far: number) {
-    const screen = this.props.screen;
-    const { viewLeft, viewRight, viewTop } = this.computeViewInfo(far);
+  const makeDomeTags = (domes: Dome[], far: number) => {
+    const { viewLeft, viewRight, viewTop } = computeViewInfo(far);
 
     const domeTags = domes
       .filter(dome => viewLeft < dome.x + dome.size && dome.x - dome.size < viewRight)
@@ -89,9 +60,9 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
         {domeTags}
       </g>
     );
-  }
+  };
 
-  private makeTrees() {
+  const makeTrees = () => {
     const trees: Tree[] = [];
     const wide = 1024 * 4;
     for (let i = 0; i < 32; i++) {
@@ -104,9 +75,9 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
       trees.push(tree);
     }
     return trees;
-  }
+  };
 
-  private makeDomes() {
+  const makeDomes = () => {
     const domes: Dome[] = [];
     const wide = 1024 * 4;
     for (let i = 0; i < 2; i++) {
@@ -118,5 +89,24 @@ export default class BackgroundTag extends React.Component<BackgroundProps, Back
       domes.push(dome);
     }
     return domes;
-  }
-}
+  };
+
+  const ground = <rect fill="#888" width={screen.width} height={1} x={-screen.width / 2} y={screen.height - 6} />;
+
+  const bg1 = makeBg(trees1, 2);
+  const bg2 = makeBg(trees2, 3);
+  const bg3 = makeBg(trees3, 4);
+  const bg4 = makeDomeTags(domes1, 6);
+
+  return (
+    <g>
+      {bg4}
+      {bg3}
+      {bg2}
+      {bg1}
+      {ground}
+    </g>
+  );
+};
+
+export default BackgroundTag;
