@@ -1,0 +1,68 @@
+{
+  "name": "sourcer",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.15.4",
+  "author": "benishouga",
+  "license": "MIT",
+  "scripts": {
+    "build": "pnpm run build:core && pnpm run build:api && pnpm run build:client",
+    "build:core": "pnpm --filter @sourcer/core run build",
+    "build:api": "pnpm --filter @sourcer/api run build",
+    "build:common": "pnpm run build:api",
+    "build:client": "pnpm --filter @sourcer/web run build",
+    "build:debug": "pnpm --filter @sourcer/api run build:debug && pnpm --filter @sourcer/web run build:debug",
+    "build:debug:client": "pnpm --filter @sourcer/web run build:debug",
+    "dev": "pnpm -r --parallel --filter @sourcer/api --filter @sourcer/web run dev",
+    "dev:client": "pnpm --filter @sourcer/web run dev",
+    "lint": "tslint -c tslint.json \"apps/**/*.ts\" \"apps/**/*.tsx\" \"packages/**/*.ts\" \"packages/**/*.tsx\"",
+    "format": "prettier --parser typescript --write --single-quote \"apps/**/*.ts\" \"apps/**/*.tsx\" \"packages/**/*.ts\" \"packages/**/*.tsx\"",
+    "test": "pnpm run test:core && pnpm run test:api && pnpm run test:web",
+    "test:core": "pnpm --filter @sourcer/core run test",
+    "test:api": "pnpm --filter @sourcer/api run test",
+    "test:web": "pnpm --filter @sourcer/web run test",
+    "cover": "pnpm --filter @sourcer/api run cover",
+    "start": "pnpm --filter @sourcer/api run start",
+    "start:debug": "pnpm --filter @sourcer/api run dev",
+    "prestart": "pnpm run build",
+    "prestart:debug": "pnpm run build",
+    "app": "node apps/api/dist/index.js",
+    "clean": "rimraf apps\\api\\dist apps\\web\\dist packages\\core\\dist coverage .nyc_output",
+    "precommit": "lint-staged",
+    "heroku-postbuild": "pnpm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.3",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1"
+  },
+  "lint-staged": {
+    "apps/**/*.ts": [
+      "prettier --parser typescript --write",
+      "git add"
+    ],
+    "apps/**/*.tsx": [
+      "prettier --parser typescript --write",
+      "git add"
+    ],
+    "packages/**/*.ts": [
+      "prettier --parser typescript --write",
+      "git add"
+    ],
+    "packages/**/*.tsx": [
+      "prettier --parser typescript --write",
+      "git add"
+    ]
+  },
+  "overrides": {
+    "mocha": {
+      "diff": "8.0.3"
+    }
+  }
+}

@@ -1,6 +1,11 @@
-out
 node_modules
-*.log
-.DS_Store
+apps/api/dist
+apps/web/dist
+packages/core/dist
 coverage
 .nyc_output
+*.log
+.DS_Store
+.env
+
+_tmp_*

@@ -1,0 +1,9 @@
+dist/
+node_modules/
+docs/
+out/
+coverage/
+apps/api/dist/
+apps/web/dist/
+packages/core/dist/
+**/*.d.ts

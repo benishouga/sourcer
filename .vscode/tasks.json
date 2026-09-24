@@ -1,43 +1,53 @@
 {
-  "version": "0.1.0",
+  "version": "2.0.0",
   "command": "npm",
-  "isShellCommand": true,
-  "showOutput": "always",
-  "suppressTaskName": true,
   "tasks": [
     {
-      "taskName": "install",
+      "label": "install",
+      "type": "shell",
       "args": [
         "install"
-      ]
+      ],
+      "problemMatcher": []
     },
     {
-      "taskName": "compile",
+      "label": "compile",
+      "type": "shell",
       "args": [
         "run",
         "compile"
-      ]
+      ],
+      "problemMatcher": []
     },
     {
-      "taskName": "_compile",
-      "showOutput": "never",
+      "label": "_compile",
+      "type": "shell",
       "args": [
         "run",
         "compile"
-      ]
+      ],
+      "problemMatcher": []
     },
     {
-      "taskName": "update",
+      "label": "update",
+      "type": "shell",
       "args": [
         "update"
-      ]
+      ],
+      "problemMatcher": []
     },
     {
-      "taskName": "test",
+      "label": "test",
+      "type": "shell",
       "args": [
         "run",
         "test"
-      ]
+      ],
+      "problemMatcher": [],
+      "group": {
+        "_id": "test",
+        "isDefault": false
+      }
     }
   ]
 }

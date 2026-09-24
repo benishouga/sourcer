@@ -1,7 +1,1 @@
-module.exports = (ctx) => ({
-  map: ctx.options.map,
-  plugins: [
-    require('css-mqpacker'),
-    require('autoprefixer')
-  ]
-});
+module.exports = require('./apps/web/postcss.config.cjs');

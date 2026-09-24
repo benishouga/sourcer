@@ -1,0 +1,36 @@
+{
+  "name": "@sourcer/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare:docs": "mkdirp ../../docs",
+    "dev": "vite",
+    "build": "pnpm run prepare:docs && pnpm run build:vite && pnpm run build:css",
+    "build:vite": "vite build",
+    "build:debug": "pnpm run prepare:docs && vite build --mode development --minify=false && pnpm run build:css",
+    "build:css": "postcss --no-map src/styles/main.css -o ../../docs/main.css",
+    "preview": "vite preview",
+    "test": "echo \"(web has no tests yet)\""
+  },
+  "dependencies": {
+    "brace": "^0.11.1",
+    "dialog-polyfill": "^0.5.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-mdl": "^1.11.0",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@types/dialog-polyfill": "^0.5.0",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-mdl": "^1.7.27",
+    "@types/react-router-dom": "^5.1.2",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.24",
+    "mkdirp": "^0.5.1",
+    "postcss-cli": "^11.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^5.1.6"
+  }
+}

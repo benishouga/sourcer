@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "inlineSources": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "lib": ["ES2019", "DOM"],
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@sourcer/core": ["packages/core/src/index.ts"],
+      "@sourcer/core/*": ["packages/core/src/*"]
+    },
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
+  }
+}

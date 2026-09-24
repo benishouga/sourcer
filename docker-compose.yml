@@ -1,0 +1,16 @@
+#
+# Helper file for local development. It only starts MongoDB so the app can
+# connect with the default MONGODB_URI from .env.example.
+#
+services:
+  mongo:
+    image: mongo:7
+    container_name: sourcer-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

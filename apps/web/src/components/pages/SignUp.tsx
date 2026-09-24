@@ -1,0 +1,147 @@
+import * as React from 'react';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
+
+import { strings } from '../resources/Strings';
+import { ResourceId } from '../../../dts/StringResource';
+import { ErrorResponse } from '../../../dts/ErrorResponse';
+
+import User from '../../service/User';
+import Config from '../../service/Config';
+import {
+  Card,
+  CardTitle,
+  CardText,
+  CardActions,
+  Button,
+  Textfield,
+  Icon,
+  List,
+  ListItem,
+  ListItemContent
+} from 'react-mdl';
+import ComponentExplorer from '../../utils/ComponentExplorer';
+import Auth from '../../service/Auth';
+
+export interface LoginState {
+  errors: ResourceId[] | null;
+  redirectTo?: string;
+}
+
+export default class Login extends React.Component<RouteComponentProps<{}>, LoginState> {
+  constructor(props: RouteComponentProps<{}>) {
+    super(props);
+    this.state = { errors: null };
+  }
+
+  private accountRef = React.createRef<Textfield>();
+  private passwordRef = React.createRef<Textfield>();
+  private nameRef = React.createRef<Textfield>();
+  private appKeyRef = React.createRef<Textfield>();
+  private memberRefs: Array<React.RefObject<Textfield>> = Array.from({ length: 5 }, () => React.createRef<Textfield>());
+
+  private async handleSubmit(event: React.FormEvent<{}>) {
+    event.preventDefault();
+
+    const account = ComponentExplorer.extractInputValue(this.accountRef.current);
+    const password = ComponentExplorer.extractInputValue(this.passwordRef.current);
+    const name = ComponentExplorer.extractInputValue(this.nameRef.current);
+    const appKey = ComponentExplorer.extractInputValue(this.appKeyRef.current);
+    const members = this.memberRefs
+      .map(ref => ComponentExplorer.extractInputValue(ref.current))
+      .map(v => v.trim())
+      .filter(v => !!v);
+
+    try {
+      await User.create({ parameter: { account, password, name, members, appKey } });
+    } catch (error) {
+      console.error(error);
+      const responseErrors = (error as { response?: { body?: ErrorResponse } }).response?.body?.errors ?? [];
+      this.setState({ errors: responseErrors });
+      return;
+    }
+    await Auth.login();
+    this.setState({ redirectTo: '/' });
+  }
+
+  public render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+
+    const resource = strings();
+
+    return (
+      <form onSubmit={this.handleSubmit.bind(this)}>
+        <Card shadow={0} style={{ width: '400px', margin: 'auto' }}>
+          <CardTitle expand style={{ alignItems: 'flex-start' }}>
+            {resource.signUpTitle}
+          </CardTitle>
+          <CardText>
+            <Textfield label={resource.fieldLabelAccount} floatingLabel ref={this.accountRef} />
+            <Textfield label={resource.fieldLabelPassword} floatingLabel ref={this.passwordRef} type="password" />
+            <Textfield
+              label={Config.values.teamGame ? resource.fieldLabelNameForTeamGame : resource.fieldLabelName}
+              floatingLabel
+              ref={this.nameRef}
+            />
+            <div className="headered-list" style={{ display: Config.values.teamGame ? '' : 'none' }}>
+              <p>{resource.members}</p>
+              <List className="list-text-fields">
+                <ListItem>
+                  <ListItemContent icon="person">
+                    <Textfield label={resource.fieldLabelMember1} floatingLabel ref={this.memberRefs[0]} />
+                  </ListItemContent>
+                </ListItem>
+                <ListItem>
+                  <ListItemContent icon="person">
+                    <Textfield label={resource.fieldLabelMember2} floatingLabel ref={this.memberRefs[1]} />
+                  </ListItemContent>
+                </ListItem>
+                <ListItem>
+                  <ListItemContent icon="person">
+                    <Textfield label={resource.fieldLabelMember3} floatingLabel ref={this.memberRefs[2]} />
+                  </ListItemContent>
+                </ListItem>
+                <ListItem>
+                  <ListItemContent icon="person">
+                    <Textfield label={resource.fieldLabelMember4} floatingLabel ref={this.memberRefs[3]} />
+                  </ListItemContent>
+                </ListItem>
+                <ListItem>
+                  <ListItemContent icon="person">
+                    <Textfield label={resource.fieldLabelMember5} floatingLabel ref={this.memberRefs[4]} />
+                  </ListItemContent>
+                </ListItem>
+              </List>
+            </div>
+            <Textfield
+              label={resource.fieldLabelAppKey}
+              floatingLabel
+              ref={this.appKeyRef}
+              style={{ display: Config.values.requireAppKey ? '' : 'none' }}
+            />
+            {this.state.errors &&
+              this.state.errors.map(error => {
+                return <p key={error}>{resource[error]}</p>;
+              })}
+          </CardText>
+          <CardActions
+            border
+            style={{
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              boxSizing: 'border-box',
+              alignItems: 'center'
+            }}
+          >
+            <Button raised colored ripple onClick={this.handleSubmit.bind(this)}>
+              {resource.signUp}
+            </Button>
+            <div className="mdl-layout-spacer" />
+            <Icon name="account_box" />
+          </CardActions>
+        </Card>
+      </form>
+    );
+  }
+}
